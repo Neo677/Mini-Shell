@@ -21,5 +21,19 @@
 
 # include "libft_v.2.0/libft.h"
 
+//https://segfault42.github.io/posts/minishell/
+
+typedef struct ms_arg_s
+{
+
+	struct ms_arg_s *next;
+}				ms_arg_t;
+
+typedef struct ms_node_arg_s
+{
+	
+	struct ms_node_arg_s *next;
+}				ms_node_arg_t;
+
 
 #endif // ! MINISHELL_H

@@ -18,12 +18,13 @@
 	 parser lentree :  [ls -la /] == [ls] [-la] [/]
 		split et strtok
 
+	une nouvelle approche pourrais etre les liste chainess.
 */
 
 #include "minishell.h"
 
 // usless fonction for split
-static void	ft_free_array(char **tab)
+void	ft_free_array(char **tab)
 {
 	int i;
 
@@ -99,7 +100,7 @@ char ft_split_this(char const **tab_str, char delim)
 	return (cmd);
 }
 
-static void	exec_cmd(char **cmd)
+void	exec_cmd(char **cmd)
 {
 	pid_t pid = 0;
 	int	status = 0;
@@ -141,25 +142,39 @@ void	get_path(char **cmd)
 	int i;
 
 	path = ft_strdup(getenv("PATH"));
-	if (path == NULL) // si le path et null on doit le cree
+	if (path == NULL) // si le path et null on doit le cree ??? you sure about this ?
 		path = ft_strdup("/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin");
 	if (cmd[0][0] != '/' && ft_strncmp(cmd[0], "./", 2) != 0)
 	{
 		path_split = ft_split_this(path, ":");
 		free(path);
 		path = NULL;
+		i = 0;
+		while (path_split[i])
+		{
+			bin = (char *)calloc(sizeof(char), (ft_strlen(path_split[i]) + 1 + ft_strlen(cmd[0]) + 1));
+			if (!bin)
+				break;
+			ft_strcat(bin, path_split[i]);
+			ft_strcat(bin, "/");
+			ft_strcat(bin, cmd[0]);
+				//			F_OK == Le mode indique la (les) vérification(s) d'accessibilité à effectuer 
+				//			et est soit la valeur F_OK, soit un masque constitué par un OU binaire « | » 
+				//			entre les valeurs R_OK, W_OK et X_OK. F_OK R_OK, W_OK et X_OK servent à tester respectivement, 
+				//			si le fichier existe, la lecture, l'écriture et l'exécution du fichier.
+			if (access(bin, F_OK) == 0)
+				break;
+			free(bin);
+			bin = NULL;
+		}
+		ft_free_array(path_split);
+		free(cmd[0]);
+		cmd[0] = bin;
 	}
-	i = 0;
-	while (path_split[i])
+	else
 	{
-		bin = (char *)calloc(sizeof(char), (ft_strlen(path_split[i]) + 1 + ft_strlen(cmd[0]) + 1));
-		if (!bin)
-			break;
-		ft_strcat(bin, path_split[i]);
-		ft_strcat(bin, "/");
-		ft_strcat(bin, cmd[0]);
-			//			F_OK == 
-		if (access(bin, F_OK) == 0)
+		free(path);
+		path = NULL;
 	}
 }
 
@@ -168,19 +183,27 @@ int main()
 {
 	char *buffer;
 	size_t buf_size;
+	char **cmd = NULL;
 
 	buffer = NULL;
 	buf_size = 2048;
 
-	buffer = calloc(sizeof(char), buf_size);
+	buffer = (char *)calloc(sizeof(char), buf_size);
 	if (!buffer)
 		return(perror("Erreur in read_this_line"), EXIT_FAILURE);
-	printf("$>");
+	
+	printf("$> ");
+
 	while(getline(&buffer, &buf_size, stdin) > 0)
 	{
-		printf("cmd = %s\n", buffer);
-		printf("buffer size = %zu\n", buf_size);
+		cmd = ft_split(buffer, " \n\t");
+		get_path(cmd);
+		if (cmd[0] == NULL)
+			printf("command not found\n");
+		else
+			exec_cmd(cmd);
 		printf("$> ");
+		ft_free_array(cmd);
 	}
 	printf("Bye \n");
 	free(buffer);
