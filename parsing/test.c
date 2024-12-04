@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+
 /*
 	so pour le parseur :
 	1er etapes :
@@ -20,9 +22,6 @@
 
 	une nouvelle approche pourrais etre les liste chainess.
 */
-
-#include "minishell.h"
-
 
 // tokenisation : (decoupe la commande en token)
 // [ls -la /] == [ls] [-la] [/]
