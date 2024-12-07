@@ -21,7 +21,7 @@ int ft_valid_pipes(t_token *token, t_token *prev)
 }
 
 
-char *ft_handle_quotes(char **current, char quote_type)
+char *ft_valid_quotes(char **current, char quote_type)
 {
     char *start;
     char *value;
@@ -86,7 +86,7 @@ int ft_valid_token(t_token *token)
         // Vérifier les quotes
         if (token->type == TOKEN_QUOTE || token->type == TOKEN_DBL_QUOTE)
         {
-            if (!ft_handle_quotes(&token->value, token->type))
+            if (!ft_valid_quotes(&token->value, token->type))
                 return (0); // Gestion des quotes échouée
         }
         prev = token; // Mettre à jour le token précédent

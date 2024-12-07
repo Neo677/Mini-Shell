@@ -46,7 +46,7 @@ t_command *ft_parse_token(t_token *token)
             if (!ft_add_redirections(command, current->type, current->value))
             {
                 printf("Erreur : echec de l'ajout d'une de redirections\n");
-                ft_free_command(command); // todo // 6.
+                ft_free_commande(command); // todo // 6.
                 return (NULL);
             }
         }
@@ -56,14 +56,14 @@ t_command *ft_parse_token(t_token *token)
             if (!ft_add_arguments(command, current->value))
             {
                 printf("Erreur : echec de l'ajout d'un argument\n");
-                ft_free_command(command); // todo // 6.
+                ft_free_commande(command); // todo // 6.
                 return (NULL);
             }
         }
         else
         {
             printf("Erreur : token inconnue\n");
-            ft_free_command(command); // todo // 6.
+            ft_free_commande(command); // todo // 6.
             return (NULL);
         }
         current = current->next;

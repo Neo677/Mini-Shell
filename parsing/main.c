@@ -4,21 +4,49 @@
 
 //int main(int ac, char **av, char **env)
 
-int main(int ac, char **av)
+void    ft_intro(void)
+{
+    ft_printf("     #########################################\n");
+    ft_printf("     #        WELCOME TO MINISHELL LAND      #\n");
+    ft_printf("     #        LEXER PART BY thobenel         #\n");
+    ft_printf("     #########################################\n");
+    ft_printf("     #########################################\n\n");
+    ft_printf("  Enter command below for tokenize that shit 🧑‍🍳 \n");
+    ft_printf("  type 'exit' to quit this shell dude  \n");
+}
+
+void    ft_print_token(t_token *token)
+{
+    t_token *current;
+
+    printf("\n Token genere: \n");
+    printf("-----------------------------------\n");
+    current = token;
+    while(current)
+    {
+        ft_printf(" 👀 type = %d, value = %s\n", token->type, token->value);
+        token = token->next;
+    }
+    printf("-----------------------------------\n\n");
+
+}
+
+
+int main(int ac, char **av, char **env)
 {
     char *input;
     t_token *token;
-    int valid;
 
     (void)ac;
     (void)av;
-    printf("Welcome to minishell\n");
+    (void)env;
+    ft_intro();
     while (1)
     {
         input = readline("minishell > ");
         if (!input)
         {
-            printf("exit\n");
+            printf("[INFO]  exiting mini-shell  😔 \n");
             break;
         }
         if (*input)
@@ -26,25 +54,26 @@ int main(int ac, char **av)
         if (ft_strcmp(input, "exit") == 0)
         {
             free(input);
-            printf("exit\n");
+            printf("[INFO]  Bye Bye ! \n");
             break;
         }
-        // token = (input);
+        ft_printf("[INFO]  Tokenizing input: '%s'\n", input);
+        token = ft_split_token(input);
         if (!token)
         {
             printf("🚨  Error token  🚨\n");
-            free(input);
             continue;
         }
-        valid = ft_valid_token(token);
-        if (!valid)
+        printf("🤑  Token generated successfully\n");
+        ft_print_token(token);
+        if (!ft_valid_token(token))
         {
             printf("🚨  Error syntax  🚨\n");
             ft_free_token(token);
-            free(input);
             continue;
         }
-        ft_print_token(token);
+        printf("🤑  [sucess] token validated successfully\n");
+        // ft_print_token(token);
 
         // todo : Appeler la fonction de parsing pour transformer en structure de commandes
 
@@ -52,7 +81,6 @@ int main(int ac, char **av)
 
         // Libérer les ressources
         ft_free_token(token);
-        free(input);
     }
     return (0);
 }

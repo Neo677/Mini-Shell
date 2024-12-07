@@ -30,7 +30,7 @@
 */
 
 //         handle the case if in input there is == "" or ''
-char *ft_handle_quote(char **input, char quote)
+char *ft_handle_quote(const char **input, char quote)
 {
     const char  *start;
     char        *token;
@@ -40,10 +40,11 @@ char *ft_handle_quote(char **input, char quote)
     {
         (*input)++;
     }
-    if (*input == quote)
+    if (**input == quote)
     {
         token = ft_strndup(start, *input - start);
         (*input)++; // skip la fermeture de la quote 
+        return (token);
     }
     return (NULL); // quote non fermée
 }

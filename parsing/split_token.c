@@ -3,7 +3,7 @@
 #include "minishell.h"
 
 /*
-                    🚨    🚨    🚨
+
     separe input brut en morceaux de texte interpreter comme des tokens
     1) ignorer les white space
     2) handle quote (simple ou double)
@@ -11,27 +11,32 @@
     4) handle word (arg, command)
 */
 
-void    ft_split_token(t_token **head, const char *input)
+t_token    *ft_split_token(const char *input)
 {
+    t_token *head;
     char *quote;
 
+    head = NULL;
+    if (!input || !*input)
+        return (NULL);
     while (*input)
     {
         if (*input == ' ' || *input == '\t')
             input++;
         else if (*input == '\'' || *input == '\"')
         {
-            quote = ft_handle_quote(&input, *input);
+            quote = ft_handle_quote(&input, *quote);
             if (!quote)
             {
                 printf("Erreurs : quote non ferme.\n");
-                return;
+                return (NULL);
             }
-            ft_add_token(head, ft_create_token(TOKEN_WORD, quote));
+            ft_add_token(&head, ft_create_token(TOKEN_WORD, quote));
         }
         else if (*input == '>' || *input == '<' || *input == '|')
-            ft_handle_operator(head, &input);
+            ft_handle_operator(&head, &input);
         else
-            ft_handle_word(head, &input);
+            ft_handle_word(&head, &input);
     }
+    return (head);
 }

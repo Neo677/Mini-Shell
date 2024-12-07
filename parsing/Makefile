@@ -13,7 +13,7 @@ SRCS = error_token.c \
        free.c \
        main.c \
        prompt.c \
-       toke_handle.c \
+       token_handle.c \
        utils.c \
 	   token_utils.c \
 	   add_arguments.c \

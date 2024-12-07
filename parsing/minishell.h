@@ -70,7 +70,7 @@ typedef struct s_redirections
 typedef struct s_command
 {
 	char **arg;			// tab de tab for the arguments of the command
-	t_token *redirections; // list of redirections associed to the command
+	t_redirections *redirections; // list of redirections associed to the command
 	int 				p_pipe; // 1 si un pipe suit cette commande
 	struct s_command *next; // ptr for the next command (pipeline)
 }				t_command;
@@ -78,23 +78,22 @@ typedef struct s_command
 
 //				printf fonction
 void    ft_print_token(t_token *token);
-char *ft_handle_quotes(char **current, char quote_type);
+char *ft_valid_quotes(char **current, char quote_type);
 
 //				Token segmentation
-char *ft_handle_quote(char **input, char quote);
+char *ft_handle_quote(const char **input, char quote);
 void    ft_handle_operator(t_token **head, const char **input);
 void ft_handle_word(t_token **head, const char **input);
 
-
 //				Token creations
-t_token_arg ft_identify_token(const char *str);
+t_token_arg ft_identify_token(char *str);
 t_token *ft_create_token(t_token_arg type, char *value);
 void    ft_add_token(t_token **head, t_token *add);
-void    ft_split_token(t_token **head, const char *input);
+t_token    *ft_split_token(const char *input);
 
 t_command *ft_create_command(void);
 int ft_add_redirections(t_command *cmd, int type, const char *file);
-void     ft_add_arguments(t_command *cmd, char *args);
+int     ft_add_arguments(t_command *cmd, char *args);
 
 //				Utils for token
 int     ft_is_redirections(t_token *token);
@@ -105,10 +104,14 @@ char *ft_get_next_token(const char **input);
 //				Handle free and error 
 void	ft_free_token(t_token *token);
 void	error_exit(const char *error);
+void	ft_free_redirection(t_redirections *redir);
+void	ft_free_commande(t_command *command);
 
 //				Utils
 char *ft_strndup(const char *src, size_t size);
 int ft_strcmp(char *s1, char *s2);
+
+
 
 
 
