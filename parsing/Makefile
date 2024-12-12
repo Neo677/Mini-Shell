@@ -1,7 +1,6 @@
 # header
 
-
-
+# Variables principales
 NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I include
@@ -9,22 +8,27 @@ LIBFT_DIR = ../libft_v.2.0
 LIBFT = $(LIBFT_DIR)/libft.a
 READLINE = -lreadline
 
-SRCS = error_token.c \
-       free.c \
-       main.c \
-       prompt.c \
-       token_handle.c \
-       utils.c \
-	   token_utils.c \
-	   add_arguments.c \
-	   add_redirections.c \
-	   create_command.c \
-	   split_token.c \
-	   parse_token.c \
-	   
+# Sources et objets
+SRCS =  add_arguments.c \
+        add_redirections.c \
+        create_command.c \
+		env_var_dct.c \
+        free.c \
+		handler_errors.c \
+        main.c \
+		matrix.c \
+        parse_token.c \
+        prompt.c \
+        split_token.c \
+        token_handle.c \
+        token_utils.c \
+        utils_main.c \
+        utils.c \
+		valid_token.c 
 
 OBJS = $(SRCS:.c=.o)
 
+# Règles principales
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)

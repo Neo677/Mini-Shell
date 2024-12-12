@@ -4,11 +4,11 @@
 
 /*
                     🚨    🚨    🚨
-    07/12/24
-        Now that i finish to take an input / split it / check for every carac / set in an enum struct 
-        for reference it for the parser can regnoize the commande.
-        Now i can add the arg, redirections, pipe in a struct cmd.
-                ⛓️⛓️⛓️
+            07/12/24
+    Now that i finish to take an input / split it / check for every carac / set in an enum struct 
+    for reference it for the parser can regnoize the commande.
+    Now i can add the arg, redirections, pipe in a struct cmd.
+                        ⛓️⛓️⛓️
     1) Crée une commande vide 
     2) Gestions de lerreur d'alloc (leak safe)
     3) marque la commande qui contient un pipe
@@ -19,54 +19,28 @@
     8) free
 */
 
-t_command *ft_parse_token(t_token *token)
+t_token *ft_parse_token(const char *input)
 {
-    t_command *command;
-    t_token *current;
+    t_token *token;
+    t_command *cmd_lst;
 
-    command = ft_create_command(); // 1.
-    if (!command)
-        return (NULL); // 2. 
-    current = token;
-    while (current)
+    cmd_lst = NULL;
+    token = NULL;
+    if (!(input) || !(*input))
     {
-        if (current->type == TOKEN_PIPE)
-        {
-                // 3.
-            command->p_pipe = 1;
-            current = current->next;
-            break; // 4. 
-        }
-        else if (current->type == TOKEN_IN ||
-                current->type == TOKEN_OUT ||
-                current->type == TOKEN_HEREDOC ||
-                current->type == TOKEN_APPEND)
-        {
-            // 5.
-            if (!ft_add_redirections(command, current->type, current->value))
-            {
-                printf("Erreur : echec de l'ajout d'une de redirections\n");
-                ft_free_commande(command); // todo // 6.
-                return (NULL);
-            }
-        }
-        else if (current->type == TOKEN_WORD)
-        {
-            // 7.
-            if (!ft_add_arguments(command, current->value))
-            {
-                printf("Erreur : echec de l'ajout d'un argument\n");
-                ft_free_commande(command); // todo // 6.
-                return (NULL);
-            }
-        }
-        else
-        {
-            printf("Erreur : token inconnue\n");
-            ft_free_commande(command); // todo // 6.
-            return (NULL);
-        }
-        current = current->next;
+        printf("[ERROR]  entrer vide\n");
+        return (NULL);
     }
-    return (command);
+    ft_split_token(&token, input);
+    if (!token)
+        printf("[ERROR]  aucun token valide trouvee\n");
+    if (ft_valid_token(token) == 0)
+    {
+        ft_free_token(token);
+        printf("[ERROR] Token invalid detected\n");
+        return (NULL);
+    }
+    ft_create_command_lst(token, &cmd_lst);
+    //ft_free_token(token);
+    return (token);
 }

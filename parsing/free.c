@@ -14,19 +14,19 @@
 
 void	error_exit(const char *error)
 {
-	ft_printf("🚨  %s  🚨\n", error);
+	ft_printf("[🚨ERROR🚨] minishell = %s\n", error);
 	exit(EXIT_FAILURE);
 }
 
-void	ft_free_token(t_token *token)
+void	ft_free_token(t_token *head)
 {
 	t_token *tmp;
-	while(token)
+	while(head)
 	{ 
-		tmp = token->next;
-		free(token->value);
-		free(token);
-		token = tmp;
+		tmp = head->next;
+		free(head->value);
+		free(head);
+		head = tmp;
 	}
 }
 

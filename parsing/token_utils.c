@@ -26,22 +26,25 @@
     need to return the name of the heredoc
         (For my favorite executeur 💪)
 */
-t_token_arg     ft_identify_token(char *str)
+t_token_arg ft_identify_token(char *str)
 {
+    t_token_arg type;
+
     if (ft_strcmp(str, "|") == 0)
-        return (TOKEN_PIPE);
+        type = TOKEN_PIPE;
     else if (ft_strcmp(str, "<") == 0)
-        return (TOKEN_IN);
+        type = TOKEN_IN;
     else if (ft_strcmp(str, ">") == 0)
-        return (TOKEN_OUT);
+        type = TOKEN_OUT;
     else if (ft_strcmp(str, ">>") == 0)
-        return (TOKEN_APPEND);
+        type = TOKEN_APPEND;
     else if (ft_strcmp(str, "<<") == 0)
-        return (TOKEN_HEREDOC);
+        type = TOKEN_HEREDOC;
     else if (str[0] == '$')
-        return (TOKEN_ENV_VAR);
+        type = TOKEN_ENV_VAR;
     else
-        return (TOKEN_WORD);
+        type = TOKEN_WORD;
+    return (type);
 }
 
 /*
@@ -65,17 +68,23 @@ t_token *ft_create_token(t_token_arg type, char *value)
 }
 
 /*
-    ici on peut allours un token et remplir avec les champs type, value, next
+    ici on peut allours un token et remplir avec les 2 champs type, value
 */
 void    ft_add_token(t_token **head, t_token *new_token)
 {
+    t_token *tmp;
+
     if (!new_token || !new_token->value)
-    {
-        printf("Erreur : token invalide ignore\n");
         return;
+    if (*head == NULL)
+        *head = new_token; // ???
+    else
+    {
+        tmp = *head;
+        while(tmp->next)
+            tmp = tmp->next;
+        tmp->next = new_token; // ????
     }
-    new_token->next = *head;
-    *head = new_token;
 }
 
 //      find the limits of a token base on spaces or delim
@@ -84,8 +93,7 @@ char *ft_get_next_token(const char **input)
     const char *start;
 
     start = *input;
-    while (**input && **input != ' ' && **input != '\t'
-            && **input != '|' && **input != '<' && **input != '>')
+    while (**input && **input != ' ' && **input != '\t' && **input != '|' && **input != '<' && **input != '>')
         (*input)++;
     return (ft_strndup(start, *input - start));
 }

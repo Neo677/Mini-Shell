@@ -29,40 +29,92 @@
 
 */
 
-//         handle the case if in input there is == "" or ''
+/*
+    Utils for the lexer :
+    the purpsoe of the fonction is to extract the quote at the begining and
+    create a new node on the chain list or signal an error that mean is not closed  
+    utility :
+    1) detect a quote open et search for the closing
+    2) if a quote close is missing, return (NULL)
+    3) allocate memory dynamicilly to a chain list wo can 
+        contain the str betwin the quote
+        ex = input = "hello my name is tom"
+                      0------------------\0
+*/
 char *ft_handle_quote(const char **input, char quote)
 {
     const char  *start;
-    char        *token;
 
-    start = ++(*input);
+    (*input)++;
+    start = *input;
     while (**input && **input != quote)
-    {
         (*input)++;
-    }
-    if (**input == quote)
+    if (**input != quote || **input == '\0')
     {
-        token = ft_strndup(start, *input - start);
-        (*input)++; // skip la fermeture de la quote 
-        return (token);
+        ft_error_quote();
+        return (NULL);
     }
-    return (NULL); // quote non fermée
+    (*input)++;
+    return (ft_strndup(start, *input - start - 1));
 }
 
-void    ft_handle_operator(t_token **head, const char **input)
+int ft_is_redirection(t_token *token)
 {
-    char op[3];
+    if (token->type == TOKEN_IN ||
+        token->type == TOKEN_OUT ||
+        token->type == TOKEN_APPEND ||
+        token->type == TOKEN_HEREDOC)
+        return (1);
+    return (0);
+}
 
-    op[0] = **input;
-    (*input)++;
-    op[1] = '\0';
-    if ((**input == '>' || **input == '<') && op[0] == **input)
+//                      problem we need to check if the input is == ">" we need to return an error
+
+/*
+    here we gonna need to split this fonction in 3 way 
+    1) handle the pipe error and use fonction in ft_validay_pipes
+    2) handle redirection in or out (still use the tab op[3])
+    3) also add the handle word in the main 
+        handle fonction
+C’est à ce moment que chaque fragment de l’entrée utilisateur est classé en un type de token (ex. TOKEN_PIPE, TOKEN_WORD, etc.).
+*/
+
+void ft_handle_operator(t_token **head, const char **input)
+{
+    char operateur[3]; // pourquoi 3 
+
+    if (**input == '|')
     {
-        op[1] = **input;
+        if (*(*input + 1 ) == '|')
+        {
+            ft_error_pipe("||");
+            (*input) += 2;
+            return;
+        }
         (*input)++;
+        ft_add_token(head, ft_create_token(TOKEN_PIPE, "|"));
     }
-    op[2] = '\0';
-    ft_add_token(head, ft_create_token(ft_identify_token(op), ft_strdup(op)));
+    else if (**input == '>' || **input == '<')
+    {
+        operateur[0] = **input; // ex : input = < 
+        operateur[1] = 0;
+        operateur[2] = 0;
+        (*input)++;
+        if (**input == operateur[0]) // si input [0] == < es ce que input[1] = < 
+        {
+            operateur[1] = **input; // input = <<
+            (*input)++;
+        }
+        if (**input == operateur[0])
+        {
+            ft_error_redirections(operateur);
+            while (**input == operateur[0]) // ex input = <<<<<<<<<<<<<< on passe tout
+                (*input)++;
+            ft_add_token(head, ft_create_token(TOKEN_ERROR, "invalid redirections"));
+            return;
+        }
+        ft_add_token(head, ft_create_token(ft_identify_token(operateur), operateur));
+    }
 }
 
 void ft_handle_word(t_token **head, const char **input)
@@ -73,7 +125,12 @@ void ft_handle_word(t_token **head, const char **input)
     ft_add_token(head, ft_create_token(TOKEN_WORD, token));
 }
 
+void    ft_handle_env_var(t_token **head, const char **input)
+{
+    char *env_var;
 
-
-
-
+    env_var = ft_extract_env_var(input);
+    if (!env_var)
+        return;
+    ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, env_var));
+}
