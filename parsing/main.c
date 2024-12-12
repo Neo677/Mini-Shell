@@ -2,57 +2,32 @@
 
 #include "minishell.h"
 
-//int main(int ac, char **av, char **env)
-
-int main(int ac, char **av)
+int main(int ac, char **av, char **env)
 {
     char *input;
     t_token *token;
-    int valid;
 
     (void)ac;
     (void)av;
-    printf("Welcome to minishell\n");
+    (void)env;
+   //ft_intro();
+    printf("\033[?25l"); // Cache le curseur
+    //matrix_effect();
+    printf("\033[?25h"); // Affiche le curseur
     while (1)
     {
-        input = readline("minishell > ");
+        input = readline("$> "); // posibilite de leak (readline)
         if (!input)
         {
-            printf("exit\n");
+            error_exit("Bye bye ! 👋 \n");
             break;
         }
-        if (*input)
-            add_history(input);
-        if (ft_strcmp(input, "exit") == 0)
-        {
-            free(input);
-            printf("exit\n");
-            break;
-        }
-        // token = (input);
-        if (!token)
-        {
-            printf("🚨  Error token  🚨\n");
-            free(input);
-            continue;
-        }
-        valid = ft_valid_token(token);
-        if (!valid)
-        {
-            printf("🚨  Error syntax  🚨\n");
-            ft_free_token(token);
-            free(input);
-            continue;
-        }
-        ft_print_token(token);
-
-        // todo : Appeler la fonction de parsing pour transformer en structure de commandes
-
-        // todo : Executer les commandes une fois le parsing terminer
-
-        // Libérer les ressources
-        ft_free_token(token);
-        free(input);
+        ft_printf("[INFO]  Tokenizing input: '%s'\n", input);
+        ft_handle_exit(input);
+        token = ft_parse_token(input);
+        ft_print_tokens(token);
+        ft_clean_up(&token, &input);
     }
     return (0);
 }
+

@@ -4,4 +4,49 @@
 Juste ici on peut trouver un exemple du prompt qu'il faut afficher avant chaque nouvelle commande :
 ![terminal-shell-prompt-commande](https://github.com/user-attachments/assets/0b1883eb-6fed-41c2-91b1-8842fb6fa066)
 
-![alt text](https://file%2B.vscode-resource.vscode-cdn.net/Users/benelgorch/Desktop/Capture%20d%E2%80%99e%CC%81cran%202024-12-07%20a%CC%80%2018.04.32.png?version%3D1733591105865)
+todo :
+
+          Seg fault a ➜  parsing git:(parsing) ✗ ./minishell
+               #########################################
+               #        WELCOME TO MINISHELL LAND      #
+               #      BY  Thobenel  AND  Dpascal       #
+               #        LEXER PART BY thobenel         #
+               #########################################
+
+               Enter command below for tokenize that shit 🧑‍🍳
+               type 'exit' to quit this shell, dude
+          $> ^D[INFO]  Tokenizing input: '(null)'
+          [2]    71942 segmentation fault  ./minishell
+          CTRL-D == segfault
+
+10/12
+Here some idea we can improve in my parsing :
+1)        create a handle error system wo track every foncion how use it like
+               the handle operator or the pipe handler
+          if an error is detected we can print message of every case 
+          and of course the message will be the man return error of course 
+          we can add emojis or bullshit like that
+
+2)        also i was thinkin of a lauch screen like we can play with carac°
+          ans also with the VERTICAL TAB we can move it from the bottom to the top
+           
+11/12
+okayy so i now fix the issue with the pipe spend a day on it
+also i add the detection of the environement variable so now if you try to print a varibale it now regnosize the word behind i stock in TOKEN_WORD ($VAR == '$' 'VAR')
+
+so now i need to fix another issue with pipe if you do 
+ex = 'ls |' it say you have a syntax error and leave the program for now im not sure if i have to quit or not
+in bash when you have synntax error it not quit so i just follow the same logic
+
+          weird test of the pipe :
+          do i need to fix this ?
+     
+➜  ~ | ls
+zsh: parse error near `|'
+➜  ~ ls |
+pipe>
+pipe>
+pipe>
+pipe>
+pipe>
+pipe>

@@ -21,6 +21,8 @@
     5) return a true (1) 
 */
 
+//          for now not use
+
 int ft_add_redirections(t_command *cmd, int type, const char *file)
 {
     t_redirections *new_redir;
