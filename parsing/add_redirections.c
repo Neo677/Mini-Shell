@@ -1,4 +1,14 @@
-//      header
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   add_redirections.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/12 17:24:23 by thobenel          #+#    #+#             */
+/*   Updated: 2024/12/12 17:24:24 by thobenel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -23,29 +33,29 @@
 
 //          for now not use
 
-int ft_add_redirections(t_command *cmd, int type, const char *file)
+int	ft_add_redirections(t_command *cmd, int type, const char *file)
 {
-    t_redirections *new_redir;
-    t_redirections *current;
+	t_redirections	*new_redir;
+	t_redirections	*current;
 
-    if (!cmd || !file)
-        return (0);
-    new_redir = malloc(sizeof(t_redirections));
-    if (!new_redir)
-        return (0);
-    new_redir->type = type;
-    new_redir->file = ft_strdup(file);
-    if (!new_redir->file)
-        return (free(new_redir), 0);
-    new_redir->next = NULL;
-    if (!cmd->redirections)
-        cmd->redirections = new_redir;
-    else
-    {
-        current = cmd->redirections;
-        while(current->next)
-            current = current->next;
-        current->next = new_redir;
-    }
-    return (1);
+	if (!cmd || !file)
+		return (0);
+	new_redir = malloc(sizeof(t_redirections));
+	if (!new_redir)
+		return (0);
+	new_redir->type = type;
+	new_redir->file = ft_strdup(file);
+	if (!new_redir->file)
+		return (free(new_redir), 0);
+	new_redir->next = NULL;
+	if (!cmd->redirections)
+		cmd->redirections = new_redir;
+	else
+	{
+		current = cmd->redirections;
+		while (current->next)
+			current = current->next;
+		current->next = new_redir;
+	}
+	return (1);
 }

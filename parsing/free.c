@@ -20,9 +20,10 @@ void	error_exit(const char *error)
 
 void	ft_free_token(t_token *head)
 {
-	t_token *tmp;
-	while(head)
-	{ 
+	t_token	*tmp;
+
+	while (head)
+	{
 		tmp = head->next;
 		free(head->value);
 		free(head);
@@ -32,7 +33,7 @@ void	ft_free_token(t_token *head)
 
 void	ft_free_redirection(t_redirections *redir)
 {
-	t_redirections *tmp;
+	t_redirections	*tmp;
 
 	while (redir)
 	{
@@ -45,8 +46,8 @@ void	ft_free_redirection(t_redirections *redir)
 
 void	ft_free_commande(t_command *command)
 {
-	t_command *tmp;
-	int i;
+	t_command	*tmp;
+	int			i;
 
 	while (command)
 	{

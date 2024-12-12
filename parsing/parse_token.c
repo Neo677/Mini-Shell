@@ -1,11 +1,24 @@
-// header
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_token.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/12 17:25:08 by thobenel          #+#    #+#             */
+/*   Updated: 2024/12/12 17:25:09 by thobenel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
                     🚨    🚨    🚨
             07/12/24
-    Now that i finish to take an input / split it / check for every carac / set in an enum struct 
+    Now that i finish to take an input / 
+								split it / 
+								check for every carac / 
+								set in an enum struct 
     for reference it for the parser can regnoize the commande.
     Now i can add the arg, redirections, pipe in a struct cmd.
                         ⛓️⛓️⛓️
@@ -19,28 +32,27 @@
     8) free
 */
 
-t_token *ft_parse_token(const char *input)
+t_token	*ft_parse_token(const char *input)
 {
-    t_token *token;
-    t_command *cmd_lst;
+	t_token		*token;
+	t_command	*cmd_lst;
 
-    cmd_lst = NULL;
-    token = NULL;
-    if (!(input) || !(*input))
-    {
-        printf("[ERROR]  entrer vide\n");
-        return (NULL);
-    }
-    ft_split_token(&token, input);
-    if (!token)
-        printf("[ERROR]  aucun token valide trouvee\n");
-    if (ft_valid_token(token) == 0)
-    {
-        ft_free_token(token);
-        printf("[ERROR] Token invalid detected\n");
-        return (NULL);
-    }
-    ft_create_command_lst(token, &cmd_lst);
-    //ft_free_token(token);
-    return (token);
+	cmd_lst = NULL;
+	token = NULL;
+	if (!(input) || !(*input))
+	{
+		printf("[ERROR]  entrer vide\n");
+		return (NULL);
+	}
+	ft_split_token(&token, input);
+	if (!token)
+		printf("[ERROR]  aucun token valide trouvee\n");
+	if (ft_valid_token(token) == 0)
+	{
+		ft_free_token(token);
+		printf("[ERROR] Token invalid detected\n");
+		return (NULL);
+	}
+	ft_create_command_lst(token, &cmd_lst);
+	return (token);
 }
