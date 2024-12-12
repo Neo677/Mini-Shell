@@ -1,4 +1,14 @@
-// header
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   add_arguments.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/12 17:24:18 by thobenel          #+#    #+#             */
+/*   Updated: 2024/12/12 17:24:20 by thobenel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -13,36 +23,33 @@
     1) initialise the cmd->arg if he as no space in memory
     2) the first while is use to calcul the size of the arguments
     3) after we got the size we can add it as a node
-        
 */
 
-//          for now not use
-
-int     ft_add_arguments(t_command *cmd, char *args)
+int	ft_add_arguments(t_command *cmd, char *args)
 {
-    int i;
+	int			i;
 
-    if (!cmd || !args)
-        return (0);
-    i = 0;
-    if (!cmd->arg)
-    {
-        cmd->arg = malloc(sizeof(char *) * 2);
-        if (!cmd->arg)
-            return (0);
-        cmd->arg[0] = ft_strdup(args);
-        cmd->arg[1] = NULL;
-        return(cmd->arg[0] != NULL);
-    }
-    else
-    {
-        while(cmd->arg[i])
-            i++;
-        cmd->arg = ft_realloc(cmd->arg, sizeof(char *) * (i + 2));
-        cmd->arg[i] = ft_strdup(args);
-        if (!cmd->arg || !cmd->arg[i])
-            return (0);
-        cmd->arg[i + 1] = NULL;
-    }
-    return (1);
+	if (!cmd || !args)
+		return (0);
+	i = 0;
+	if (!cmd->arg)
+	{
+		cmd->arg = malloc(sizeof(char *) * 2);
+		if (!cmd->arg)
+			return (0);
+		cmd->arg[0] = ft_strdup(args);
+		cmd->arg[1] = NULL;
+		return (cmd->arg[0] != NULL);
+	}
+	else
+	{
+		while (cmd->arg[i])
+			i++;
+		cmd->arg = ft_realloc(cmd->arg, sizeof(char *) * (i + 2));
+		cmd->arg[i] = ft_strdup(args);
+		if (!cmd->arg || !cmd->arg[i])
+			return (0);
+		cmd->arg[i + 1] = NULL;
+	}
+	return (1);
 }
