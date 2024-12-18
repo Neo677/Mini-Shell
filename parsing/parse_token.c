@@ -41,18 +41,22 @@ t_token	*ft_parse_token(const char *input)
 	token = NULL;
 	if (!(input) || !(*input))
 	{
-		printf("[ERROR]  entrer vide\n");
+		printf("[ERROR] entrer empty \n");
 		return (NULL);
 	}
+	printf("1");
 	ft_split_token(&token, input);
+	printf("2");
 	if (!token)
 		printf("[ERROR]  aucun token valide trouvee\n");
-	if (ft_valid_token(token) == 0)
+	printf("3");
+	if (!ft_valid_token(token))
 	{
 		ft_free_token(token);
 		printf("[ERROR] Token invalid detected\n");
 		return (NULL);
 	}
+	printf("4");
 	ft_create_command_lst(token, &cmd_lst);
 	return (token);
 }

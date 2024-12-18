@@ -26,7 +26,6 @@ SRCS =  add_arguments.c \
         free.c \
 		handler_errors.c \
         main.c \
-		matrix.c \
         parse_token.c \
         prompt.c \
         split_token.c \

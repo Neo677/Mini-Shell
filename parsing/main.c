@@ -12,6 +12,21 @@
 
 #include "minishell.h"
 
+void ft_intro(void)
+{
+    const char *intro[] = {
+        "#########################################",
+        "#         🎉 WELCOME TO MINISHELL 🎉     #",
+        "#  (Build)Dpascal AND Thobenel(parsing) #",
+        "#        LEXER PART BY thobenel         #",
+        "#########################################",
+        "Enter command below for tokenize that shit 🧑‍🍳",
+        "type 'exit' to quit this shell, dude",
+        NULL
+    };
+	ft_printf("%s", intro);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*input;
@@ -21,9 +36,6 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	(void)env;
 	//ft_intro();
-	printf("\033[?25l"); // Cache le curseur
-	matrix_effect();
-	printf("\033[?25h"); // Affiche le curseur
 	while (1)
 	{
 		input = readline("$> "); // posibilite de leak (readline)

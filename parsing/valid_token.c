@@ -102,23 +102,20 @@ int ft_validay_quotes(t_token *token)
 
 int ft_validay_pipes(t_token *token)
 {
-    t_token *prev = NULL;
+    t_token *prev;
 
+    prev = NULL;
     while(token)
     {
-        if (token->type == TOKEN_PIPE)
-        {
-            if (prev == NULL)
-                return (0);
-            if (prev->type == TOKEN_PIPE)
-                return (0);
-            if (!token->next)
-                return(0);
-        }
-        prev = token;
+        // if (!prev)
+        //     ft_error_pipe("syntax error  near '|' ");
+        if (prev->type == TOKEN_PIPE)
+            ft_error_pipe("syntax error consecutive pipe");
+        if (!token->next)
+            ft_error_pipe("syntax error nothing after pipe");
         token = token->next;
     }
-    return (1);
+    return (1); 
 }
 
 int ft_valid_env_var(t_token *token)
@@ -143,12 +140,11 @@ int ft_valid_token(t_token *token)
 {
     while (token)
     {
-        if (ft_validay_pipes(token) == 0)
+        if (!ft_validay_pipes(token))
         {
             ft_error_pipe("validay issue");
             return (0);
         }
-            
         if (!ft_valid_redirections(token))
         {
             ft_error_redirections(token->value);

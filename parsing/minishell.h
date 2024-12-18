@@ -23,9 +23,9 @@
 # include <time.h>
 # include "../libft_v.2.0/libft.h"
 
-// #define WIDTH 80    // Largeur du terminal (colonnes)
-// #define HEIGHT 24   // Hauteur du terminal (lignes)
-// #define DELAY 80000 // Délai entre chaque rafraîchissement (en microsecondes)
+ #define WIDTH 80     // Largeur du terminal (colonnes)
+ #define HEIGHT 24    // Hauteur du terminal (lignes)
+ #define DELAY 80000  //Délai entre chaque rafraîchissement (en microsecondes)
 
 /*
 	https://segfault42.github.io/posts/minishell/
@@ -79,6 +79,7 @@ typedef struct s_token
 	t_token_arg		type;
 	char			*value;
 	struct s_token	*next;
+	struct s_token	*prev;
 }		t_token;
 
 typedef struct s_redirections
@@ -110,10 +111,9 @@ void		ft_handle_exit(char *input);
 //			prompt
 void		ft_intro(void);
 void		ft_print_tokens(t_token *head);
-void		matrix_effect(void);
 
 //				error handler for different message
-void		ft_error_pipe(const char *context);
+int		ft_error_pipe(const char *context);
 int			ft_error_redirections(const char *context);
 int			ft_error_quote(void);
 int			ft_error_general(const char *context);

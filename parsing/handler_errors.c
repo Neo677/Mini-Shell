@@ -12,9 +12,10 @@
 
 #include "minishell.h"
 
-void	ft_error_pipe(const char *context)
+int	ft_error_pipe(const char *context)
 {
-	printf(" [🚨ERROR 🚨] pipe error minishell = '%s'\n", context);
+	printf(" [🚨ERROR 🚨] pipe error = '%s'\n", context);
+	return (0);
 }
 
 int	ft_error_redirections(const char *context)
