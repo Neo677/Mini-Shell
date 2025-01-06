@@ -41,12 +41,12 @@ in bash when you have synntax error it not quit so i just follow the same logic
           weird test of the pipe :
           do i need to fix this ?
      
-➜  ~ | ls
-zsh: parse error near `|'
-➜  ~ ls |
-pipe>
-pipe>
-pipe>
-pipe>
-pipe>
-pipe>
+20 / 12 / 2024
+
+bug encounter or need do be fix like norm error/message
+     1) display space instaed of error when there is a space or tab
+     2) fix there is a double message when the token take a redirections wihout file
+     3) multiple message with many pipe
+     4) cat Makefile | grep pr | head -n 5 | cd file_not_exist 
+          issue with some hard input
+     5) 

@@ -12,46 +12,109 @@
 
 #include "minishell.h"
 
-/*
-    separe input brut en morceaux de texte interpreter comme des tokens
-    1) ignorer les white space
-    2) handle quote (simple ou double)
-    3) hande operator (pipe, redirections)
-    4) handle word (arg, command)
+/* 
+    Sépare l'input brut en morceaux interprétés comme des tokens :
+    1) Ignore les espaces et tabulations.
+    2) Gère les quotes (simples ou doubles).
+    3) Gère les opérateurs (pipes, redirections).
+    4) Gère les arguments et commandes.
+    5) Arrête si une erreur de syntaxe est détectée.
 */
 
-void	ft_split_token(t_token **head, const char *input)
-{
-	char			*token_value;
-	t_token_arg		token_type;
 
-	while (*input)
-	{
-		if (*input == ' ' || *input == '\t')
-			input++;
-		else if (*input == '\'' || *input == '\"')
-		{
-			token_value = ft_handle_quote(&input, *input);
-			if (!token_value)
-				error_exit("Erreur : quote non fermée.\n");
-			ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
-		}
-		else if (*input == '|' || *input == '>' || *input == '<')
-			ft_handle_operator(head, &input);
-		// condtion pour gerer les variables 
-		// environnements == eviter les '$$$$$'
-		else if (*input == '$')
-			ft_handle_env_var(head, &input);
-		else
-		{
-			token_value = ft_get_next_token(&input); // ???
-			if (token_value && *token_value != '\0')
-			{
-				token_type = TOKEN_WORD;
-				ft_add_token(head, ft_create_token(token_type, token_value));
-			}
-		}
-	}
-	if (ft_valid_token(*head) == 0)
-		printf("error detected\n");
+void ft_split_token(t_token **head, const char *input)
+{
+    char *token_value;
+
+
+    if (!ft_check_syntax(input))
+        return;
+    while (*input)
+    {
+        if (*input == ' ' || *input == '\t') // Ignore les espaces et tabulations
+        {
+            input++;
+            continue;
+        }
+        else if (*input == '\'' || *input == '\"') // Gestion des quotes
+        {
+            token_value = ft_handle_quote(&input, *input);
+            if (!token_value)
+            {
+                printf("[🚨 ERROR 🚨] Syntax error: unclosed quote\n");
+                ft_free_token(*head);
+                *head = NULL;
+                return;
+            }
+            ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
+        }
+        else if (*input == '|' || *input == '>' || *input == '<') // Gestion des opérateurs
+        {
+            ft_handle_operator(head, &input);
+            if (*head == NULL) // Vérifie si une erreur a été détectée
+                return;
+        }
+        else // Gestion des mots
+        {
+            token_value = ft_get_next_token(&input);
+            if (token_value && *token_value != '\0')
+                ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
+        }
+    }
+    if (!ft_valid_token(*head)) // Vérification finale des tokens
+    {
+        ft_free_token(*head);
+        *head = NULL;
+    }
+    ft_print_tokens(*head);
+}
+
+void ft_split_token(t_token **head, const char *input)
+{
+    char *token_value;
+    t_command *cmd_lst;
+    t_command *current;
+
+    cmd_lst = NULL;
+    current = NULL;
+    if (!ft_check_syntax(input))
+        return;
+    while (*input)
+    {
+        if (*input == ' ' || *input == '\t') // Ignore les espaces et tabulations
+        {
+            input++;
+            continue;
+        }
+        else if (*input == '\'' || *input == '\"') // Gestion des quotes
+        {
+            token_value = ft_handle_quote(&input, *input);
+            if (!token_value)
+            {
+                printf("[🚨 ERROR 🚨] Syntax error: unclosed quote\n");
+                ft_free_token(*head);
+                *head = NULL;
+                return;
+            }
+            ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
+        }
+        else if (*input == '|' || *input == '>' || *input == '<') // Gestion des opérateurs
+        {
+            ft_handle_operator(head, &input);
+            if (*head == NULL) // Vérifie si une erreur a été détectée
+                return;
+        }
+        else // Gestion des mots
+        {
+            token_value = ft_get_next_token(&input);
+            if (token_value && *token_value != '\0')
+                ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
+        }
+    }
+    if (!ft_valid_token(*head)) // Vérification finale des tokens
+    {
+        ft_free_token(*head);
+        *head = NULL;
+    }
+    ft_print_tokens(*head);
 }

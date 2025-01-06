@@ -12,21 +12,23 @@
 
 #include "minishell.h"
 
-int     ft_valid_redirections(t_token *token)
+int ft_valid_redirections(const t_token *token)
 {
     while (token)
     {
-        if (token->type == TOKEN_IN|| token->type == TOKEN_OUT || token->type == TOKEN_APPEND || token->type == TOKEN_HEREDOC)
+        if (token->type == TOKEN_IN || token->type == TOKEN_OUT ||
+            token->type == TOKEN_APPEND || token->type == TOKEN_HEREDOC)
         {
+            // Vérifiez que la redirection est suivie d'un fichier/argument valide
             if (!token->next || token->next->type != TOKEN_WORD)
             {
-                printf("🚨 Error: Redirections wihout valid file/arguments\n");
-                return (0);
+                printf("[🚨 ERROR 🚨] Syntax error: incomplete redirection\n");
+                return (0); // Erreur détectée
             }
         }
         token = token->next;
     }
-    return (1);
+    return (1); // Aucune erreur détectée
 }
 
 /*
@@ -47,7 +49,7 @@ char *ft_valid_quotes(char **current, char quote_type)
         (*current)++;
     if (**current == '\0')
     {
-        ft_printf(" Error : Unclosed quote\n");
+        ft_error_quote();
         return (NULL);
     }
     value = ft_strndup(start, *current - start);
@@ -91,35 +93,45 @@ int ft_validay_quotes(t_token *token)
     if (token->type == TOKEN_QUOTE || token->type == TOKEN_DBL_QUOTE)
     {
         parsed_value = ft_valid_quotes(&token->value, token->type);
-        if (!parsed_value)
-            return (0);
+        if (!parsed_value) // Si une quote est non fermée
+        {
+            printf("[🚨 ERROR 🚨] quote syntax = unclosed quote\n");
+            return (0); // Signale une erreur
+        }
+        free(parsed_value);
     }
-    return (1);
+    return (1); // Quote valide
 }
 
 //              probleme = when input is == '| ls | ls ||'
 //                                infinite loop
 
-int ft_validay_pipes(t_token *token)
+int ft_validate_pipes(t_token *token)
 {
     t_token *prev = NULL;
 
-    while(token)
-    {
-        if (token->type == TOKEN_PIPE)
-        {
-            if (prev == NULL)
+    if (!token || token->type == TOKEN_PIPE) {
+        ft_error_pipe("syntax error near unexpected token '|'");
+        return (0);
+    }
+
+    while (token) {
+        if (token->type == TOKEN_PIPE) {
+            if (!prev || prev->type == TOKEN_PIPE) {
+                ft_error_pipe("syntax error near unexpected token '|'");
                 return (0);
-            if (prev->type == TOKEN_PIPE)
+            }
+            if (!token->next) {
+                ft_error_pipe("syntax error: pipe at the end");
                 return (0);
-            if (!token->next)
-                return(0);
+            }
         }
         prev = token;
         token = token->next;
     }
     return (1);
 }
+
 
 int ft_valid_env_var(t_token *token)
 {
@@ -141,28 +153,26 @@ int ft_valid_env_var(t_token *token)
 
 int ft_valid_token(t_token *token)
 {
-    while (token)
+    // Vérifie les pipes
+    if (!ft_validate_pipes(token))
+        return (0);
+
+    // Vérifie les redirections
+    if (!ft_valid_redirections(token))
+        return (0);
+
+    // Vérifie les variables d'environnement
+    if (!ft_valid_env_var(token))
+        return (0);
+
+    // Vérifie les quotes
+    t_token *current = token;
+    while (current)
     {
-        if (ft_validay_pipes(token) == 0)
-        {
-            ft_error_pipe("validay issue");
+        if (!ft_validay_quotes(current)) // Vérifie chaque token pour les quotes
             return (0);
-        }
-            
-        if (!ft_valid_redirections(token))
-        {
-            ft_error_redirections(token->value);
-            return (0);
-        }
-        if (!ft_valid_env_var(token))
-            return (0);
-        if ((token->type == TOKEN_QUOTE || token->type == TOKEN_DBL_QUOTE)
-            && (!ft_valid_quotes(&token->value, token->type)))
-        {
-            ft_error_quote();
-            return (0);
-        }
-        token = token->next;
+        current = current->next;
     }
-    return (1); // Valide si toutes les vérifications passent
+
+    return (1); // Tous les tokens sont valides
 }

@@ -12,31 +12,32 @@
 
 #include "minishell.h"
 
-void	ft_error_pipe(const char *context)
+int	ft_error_pipe(const char *context)
 {
-	printf(" [🚨ERROR 🚨] pipe error minishell = '%s'\n", context);
+	printf(" [🚨 ERROR 🚨] pipe = '%s'\n", context);
+	return (0);
 }
 
 int	ft_error_redirections(const char *context)
 {
-	printf(" [🚨ERROR🚨]redirec syntax error unexpected token '%s'\n", context);
+	printf(" [🚨ERROR🚨]redirection syntax = '%s'\n", context);
 	return (0);
 }
 
 int	ft_error_quote(void)
 {
-	printf(" [🚨ERROR🚨] quote minishell : syntax error = unclosed quote\n");
+	printf(" [🚨ERROR🚨] quote syntax = unclosed quote\n");
 	return (0);
 }
 
 int	ft_error_general(const char *context)
 {
-	printf(" [🚨ERROR🚨] gen minishell : error = %s\n", context);
+	printf(" [🚨ERROR🚨] general = %s\n", context);
 	return (0);
 }
 
 int	ft_error_env(const char *context)
 {
-	printf(" [🚨ERROR🚨] gen minishell : error = %s\n", context);
+	printf(" [🚨ERROR🚨] env_var minishell = %s\n", context);
 	return (0);
 }
