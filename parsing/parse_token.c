@@ -32,6 +32,7 @@
     8) free
 */
 
+
 t_token *ft_parse_token(const char *input)
 {
     t_token *token;

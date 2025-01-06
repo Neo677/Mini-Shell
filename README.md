@@ -39,3 +39,19 @@ bug encounter or need do be fix like norm error/message
 For now i finish the token part and handle the syntax 
 in mostly every situations
 Now i need to add in a struct command if there is a pipe
+So for now i re think the split fonction for my token
+
+
+I need to check for the variable environnements
+1) the syntax
+2) the name how can accept it
+3) Maybe number are allowed and i only accept MAJ
+
+		➜  parsing git:(parsing) ✗ echo $A1  
+
+		➜  parsing git:(parsing) ✗ echo $1A
+		A
+		➜  parsing git:(parsing) ✗ 
+
+	Weird caractere is add to the end of each token ???
+	

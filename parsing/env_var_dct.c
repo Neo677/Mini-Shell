@@ -28,7 +28,7 @@
         good context
 */
 
-int	ft_detect_env_var(const char *str)
+int		ft_detect_env_var(const char *str)
 {
 	if (*str == '$' && *(str + 1) && ft_isalpha(*(str + 1)))
 		return (1);
@@ -46,7 +46,7 @@ char	*ft_extract_env_var(const char **input)
 		(*input)++;
 	if (start == *input)
 	{
-		ft_error_env("invalid env variable :(");
+		ft_error_env("[ERROR] invalid env variable :(");
 		return (NULL);
 	}
 	env_var = ft_strndup(start, *input - start);

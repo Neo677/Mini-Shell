@@ -19,7 +19,7 @@ t_command	*ft_create_command(t_command **lst)
 
 	new = malloc(sizeof(t_command));
 	if (!new)
-		return (NULL);
+		return (free(new), NULL);
 	new->arg = NULL;
 	new->redirections = NULL;
 	new->next = NULL;
