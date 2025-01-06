@@ -71,7 +71,7 @@ void ft_split_token(t_token **head, const char *input)
 
 void ft_split_token(t_token **head, const char *input)
 {
-    char *token_value;
+    char *token_value; 		// need it ?
     t_command *cmd_lst;
     t_command *current;
 
@@ -91,27 +91,57 @@ void ft_split_token(t_token **head, const char *input)
             token_value = ft_handle_quote(&input, *input);
             if (!token_value)
             {
-                printf("[🚨 ERROR 🚨] Syntax error: unclosed quote\n");
+                ft_error_quote();
                 ft_free_token(*head);
                 *head = NULL;
+				ft_free_commande_lst(cmd_lst);
                 return;
             }
             ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
+			if (!current)
+				current = ft_add_arguments(cmd_lst, current);
+			
         }
+
         else if (*input == '|' || *input == '>' || *input == '<') // Gestion des opérateurs
         {
-            ft_handle_operator(head, &input);
-            if (*head == NULL) // Vérifie si une erreur a été détectée
-                return;
+			// si un pipe est detecter on cree une nouvelle commande
+			if (*input == '|')
+			{
+				current = ft_create_command(cmd_lst);
+				if (!current)
+				{
+					ft_printf("[ERROR] failed to create command\n");
+					ft_free_token(*head);
+					*head = NULL;
+					ft_free_commande_lst(cmd_lst);
+					return;
+				}
+				input++;
+			}
+			else
+			{
+				if (ft_handle_operator(&head, *input))
+				{
+					
+				}
+			}
         }
+
+		else if (ft_detect_env_var(input))
+		{
+			ft_handle_env_var(&head, input);
+		}
+
         else // Gestion des mots
         {
-            token_value = ft_get_next_token(&input);
-            if (token_value && *token_value != '\0')
-                ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
+			if ()
+            // token_value = ft_get_next_token(&input);
+            // if (token_value && *token_value != '\0')
+            //     ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
         }
     }
-    if (!ft_valid_token(*head)) // Vérification finale des tokens
+    if (ft_valid_token(*head) == 0) // Vérification finale des tokens
     {
         ft_free_token(*head);
         *head = NULL;

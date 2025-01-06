@@ -39,13 +39,16 @@
 
 char *ft_handle_quote(const char **input, char quote_type)
 {
-    const char *start = ++(*input);
+    const char *start;
+	char *quote_content;
+	
+	start = ++(*input);
     while (**input && **input != quote_type)
         (*input)++;
-    if (**input != quote_type) // Erreur si la quote n'est pas fermée
+    if (**input != quote_type) 		// Erreur si la quote n'est pas fermée
         return (NULL);
-    char *quote_content = ft_strndup(start, *input - start);
-    (*input)++; // Skip the closing quote
+    quote_content = ft_strndup(start, *input - start);
+    (*input)++; 					// Skip the closing quote
     return (quote_content);
 }
 
@@ -60,39 +63,39 @@ int ft_is_redirection(t_token *token)
     return (0);
 }
 
-//          problem we need to check if the input is == ">" we need to return an error
 /*
-    here we gonna need to split this fonction in 3 way 
-    1) handle the pipe error and use fonction in ft_validay_pipes
-    2) handle redirection in or out (still use the tab op[3])
-    3) also add the handle word in the main 
-        handle fonction
-C’est à ce moment que chaque fragment de l’entrée utilisateur est classé en un type de token (ex. TOKEN_PIPE, TOKEN_WORD, etc.).
+    Here we gonna need to split this fonction in 3 way :
+		1) handle the pipe error and use fonction in ft_validay_pipes
+		2) handle redirection in or out (still use the tab op[3])
+		3) also add the handle word in the main 
+
+	At this moment we break into fragment the input of the user 
+	and put it in the enum token (ex. TOKEN_PIPE, TOKEN_WORD, etc...)
 */
 
 void ft_handle_operator(t_token **head, const char **input)
 {
     char operateur[3];
 
-    if (**input == '|') // Gestion des pipes
+    if (**input == '|') 			 // Gestion des pipes
     {
-        if (*(*input + 1) == '|') // Double pipe (||)
+        if (*(*input + 1) == '|')	 // Double pipe (||)
         {
             ft_error_pipe("||");
             (*input) += 2;
-            ft_free_token(*head); // Libère les tokens déjà créés
-            *head = NULL; // Réinitialise la liste
-            return; // Arrête immédiatement
+            ft_free_token(*head);	 // Libère les tokens déjà créés
+            *head = NULL;			 // Réinitialise la liste
+            return;					 // Arrête immédiatement
         }
         (*input)++;
         ft_add_token(head, ft_create_token(TOKEN_PIPE, "|"));
     }
-    else if (**input == '>' || **input == '<') // Gestion des redirections (<, >, <<, >>)
+    else if (**input == '>' || **input == '<')  // Gestion des redirections (<, >, <<, >>)
     {
         operateur[0] = **input;
         operateur[1] = 0;
         (*input)++;
-        if (**input == operateur[0]) // Double redirection (<< ou >>)
+        if (**input == operateur[0]) 			// Double redirection (<< ou >>)
         {
             operateur[1] = **input;
             (*input)++;
@@ -100,9 +103,9 @@ void ft_handle_operator(t_token **head, const char **input)
         if (!**input || **input == '|' || **input == '<' || **input == '>')
         {
             ft_error_redirections(operateur);
-            ft_free_token(*head); // Libère les tokens créés
-            *head = NULL; // Réinitialise la liste
-            return; // Arrête immédiatement
+            ft_free_token(*head); 				// Libère les tokens créés
+            *head = NULL; 						// Réinitialise la liste
+            return; 							// Arrête immédiatement
         }
         ft_add_token(head, ft_create_token(ft_identify_token(operateur), operateur));
     }

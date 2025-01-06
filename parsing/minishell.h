@@ -81,13 +81,6 @@ typedef struct s_token
 	struct s_token	*next;
 }		t_token;
 
-typedef struct s_redirections
-{
-	int						type;
-	char					*file;
-	struct s_redirections	*next;
-}		t_redirections;
-
 /*
 		main structure for the command
 	char **arg == tab de tab for the arguments of the command
@@ -95,6 +88,14 @@ typedef struct s_redirections
 	int 	p_pipe ==  1 si un pipe suit cette commande
 	struct s_command *next == ptr for the next command (pipeline)
 */
+
+typedef struct s_redirections
+{
+	int						type;
+	char					*file;
+	struct s_redirections	*next;
+}		t_redirections;
+
 typedef struct s_command
 {
 	char				**arg;
@@ -102,6 +103,8 @@ typedef struct s_command
 	int					p_pipe;
 	struct s_command	*next;
 }			t_command;
+
+
 
 //			main utils
 void		ft_start_minishell(void);
@@ -122,7 +125,7 @@ int			ft_error_env(const char *context);
 //				env detection and syntax
 int			ft_detect_env_var(const char *str);
 char		*ft_extract_env_var(const char **input);
-int		ft_handle_env_var(t_token **head, const char **input);
+int			ft_handle_env_var(t_token **head, const char **input);
 
 //				Token handler
 char		*ft_handle_quote(const char **input, char quote);
@@ -137,7 +140,7 @@ t_token		*ft_create_token(t_token_type type, char *value);
 void		ft_add_token(t_token **head, t_token *add);
 void		ft_split_token(t_token **head, const char *input);
 
-//				done
+//				placement in struct (case of pipe check Read me)
 t_command	*ft_create_command(t_command **lst);
 int	ft_create_command_lst(t_token *token, t_command **lst);
 int			ft_add_redirections(t_command *cmd, int type, const char *file);
@@ -155,7 +158,7 @@ char		*ft_get_next_token(const char **input);
 void		ft_free_token(t_token *token);
 void		error_exit(const char *error);
 void		ft_free_redirection(t_redirections *redir);
-void		ft_free_commande(t_command *command);
+void		ft_free_commande_lst(t_command *command);
 
 //			syntax 
 int ft_check_syntax(const char *input);

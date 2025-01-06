@@ -44,7 +44,7 @@ void	ft_free_redirection(t_redirections *redir)
 	}
 }
 
-void	ft_free_commande(t_command *command)
+void	ft_free_commande_lst(t_command *command)
 {
 	t_command	*tmp;
 	int			i;

@@ -38,7 +38,7 @@ int	ft_add_arguments(t_command *cmd, char *args)
 	{
 		cmd->arg = malloc(sizeof(char *) * 2);
 		if (!cmd->arg)
-			return (0);
+			return (free(cmd->arg), 0);
 		cmd->arg[0] = ft_strdup(args);
 		cmd->arg[1] = NULL;
 		return (cmd->arg[0] != NULL);
@@ -50,7 +50,7 @@ int	ft_add_arguments(t_command *cmd, char *args)
 		cmd->arg = ft_realloc(cmd->arg, sizeof(char *) * (i + 2));
 		cmd->arg[i] = ft_strdup(args);
 		if (!cmd->arg || !cmd->arg[i])
-			return (0);
+			return ((free(cmd->arg), free(cmd->arg[i])) ,0);
 		cmd->arg[i + 1] = NULL;
 	}
 	return (1);

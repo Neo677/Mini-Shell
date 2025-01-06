@@ -33,7 +33,6 @@ void ft_start_minishell(void)
             free(input); // printf("[ERROR] Invalid syntax\n"); // Message d'erreur informatif
             continue;
         }
-        
         ft_clean_up(&token, &input); // Autres étapes (par exemple, exécution de la commande)
     }
 }

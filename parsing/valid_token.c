@@ -153,6 +153,7 @@ int ft_valid_env_var(t_token *token)
 
 int ft_valid_token(t_token *token)
 {
+	t_token *current;
     // Vérifie les pipes
     if (!ft_validate_pipes(token))
         return (0);
@@ -166,7 +167,7 @@ int ft_valid_token(t_token *token)
         return (0);
 
     // Vérifie les quotes
-    t_token *current = token;
+	current = token;
     while (current)
     {
         if (!ft_validay_quotes(current)) // Vérifie chaque token pour les quotes

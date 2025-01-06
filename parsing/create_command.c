@@ -48,7 +48,7 @@ int ft_create_command_lst(t_token *token, t_command **lst)
             current = ft_create_command(lst);
             if (!current)
             {
-                printf("[ERROR] Échec de création de commande\n");
+                ft_printf("[ERROR] Échec de création de commande\n");
                 return (0);
             }
         }
@@ -58,7 +58,7 @@ int ft_create_command_lst(t_token *token, t_command **lst)
                 current = ft_create_command(lst);
             if (!ft_add_arguments(current, token->value))
             {
-                printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token->value);
+                ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token->value);
                 return (0);
             }
         }
@@ -68,14 +68,14 @@ int ft_create_command_lst(t_token *token, t_command **lst)
                 current = ft_create_command(lst);
             if (!token->next || token->next->type != TOKEN_WORD)
             {
-                printf("[ERROR] Redirection sans fichier ou argument valide\n");
+                ft_printf("[ERROR] Redirection sans fichier ou argument valide\n");
                 return (0);
             }
             file = token->next->value;
             redir_type = token->type;
             if (!ft_add_redirections(current, redir_type, file))
             {
-                printf("[ERROR] Impossible d'ajouter la redirection : %s\n", token->value);
+                ft_printf("[ERROR] Impossible d'ajouter la redirection : %s\n", token->value);
                 return (0);
             }
         }
