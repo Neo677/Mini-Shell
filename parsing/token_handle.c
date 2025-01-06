@@ -21,7 +21,6 @@
     2) identify word
     3) identify Heredoc
 
-
     (at the begining i've got a main fonction for handle the token 
     (in the utils you can find the utils fonction for add the token to 
     the chain list), but i have to split in 3 fonction form the norm and also 
@@ -38,34 +37,30 @@
                       0------------------\0
 */
 
-char	*ft_handle_quote(const char **input, char quote)
+char *ft_handle_quote(const char **input, char quote_type)
 {
-	const char	*start;
-
-	(*input)++;
-	start = *input;
-	while (**input && **input != quote)
-		(*input)++;
-	if (**input != quote || **input == '\0')
-	{
-		ft_error_quote();
-		return (NULL);
-	}
-	(*input)++;
-	return (ft_strndup(start, *input - start - 1));
+    const char *start = ++(*input);
+    while (**input && **input != quote_type)
+        (*input)++;
+    if (**input != quote_type) // Erreur si la quote n'est pas fermée
+        return (NULL);
+    char *quote_content = ft_strndup(start, *input - start);
+    (*input)++; // Skip the closing quote
+    return (quote_content);
 }
 
-int	ft_is_redirection(t_token *token)
+
+int ft_is_redirection(t_token *token)
 {
-	if (token->type == TOKEN_IN ||
-		token->type == TOKEN_OUT ||
-		token->type == TOKEN_APPEND ||
-		token->type == TOKEN_HEREDOC)
-		return (1);
-	return (0);
+    if (token->type == TOKEN_IN ||
+        token->type == TOKEN_OUT ||
+        token->type == TOKEN_APPEND ||
+        token->type == TOKEN_HEREDOC)
+        return (1);
+    return (0);
 }
 
-//                      problem we need to check if the input is == ">" we need to return an error
+//          problem we need to check if the input is == ">" we need to return an error
 /*
     here we gonna need to split this fonction in 3 way 
     1) handle the pipe error and use fonction in ft_validay_pipes
@@ -75,58 +70,61 @@ int	ft_is_redirection(t_token *token)
 C’est à ce moment que chaque fragment de l’entrée utilisateur est classé en un type de token (ex. TOKEN_PIPE, TOKEN_WORD, etc.).
 */
 
-void	ft_handle_operator(t_token **head, const char **input)
+void ft_handle_operator(t_token **head, const char **input)
 {
-	char	operateur[3]; // pourquoi 3 
+    char operateur[3];
 
-	if (**input == '|')
-	{
-		if (*(*input + 1 ) == '|')
-		{
-			ft_error_pipe("||");
-			(*input) += 2;
-			return;
-		}
-		(*input)++;
-		ft_add_token(head, ft_create_token(TOKEN_PIPE, "|"));
-	}
-	else if (**input == '>' || **input == '<')
-	{
-		operateur[0] = **input; // ex : input = < 
-		operateur[1] = 0;
-		operateur[2] = 0;
-		(*input)++;
-		if (**input == operateur[0]) // si input [0] == < es ce que input[1] = < 
-		{
-			operateur[1] = **input; // input = <<
-			(*input)++;
-		}
-		if (**input == operateur[0])
-		{
-			ft_error_redirections(operateur);
-			while (**input == operateur[0]) // ex input = <<<<<<<<<<<<<< on passe tout
-				(*input)++;
-			ft_add_token(head, ft_create_token(TOKEN_ERROR, "invalid redirections"));
-			return;
-		}
-		ft_add_token(head, ft_create_token(ft_identify_token(operateur), operateur));
-	}
+    if (**input == '|') // Gestion des pipes
+    {
+        if (*(*input + 1) == '|') // Double pipe (||)
+        {
+            ft_error_pipe("||");
+            (*input) += 2;
+            ft_free_token(*head); // Libère les tokens déjà créés
+            *head = NULL; // Réinitialise la liste
+            return; // Arrête immédiatement
+        }
+        (*input)++;
+        ft_add_token(head, ft_create_token(TOKEN_PIPE, "|"));
+    }
+    else if (**input == '>' || **input == '<') // Gestion des redirections (<, >, <<, >>)
+    {
+        operateur[0] = **input;
+        operateur[1] = 0;
+        (*input)++;
+        if (**input == operateur[0]) // Double redirection (<< ou >>)
+        {
+            operateur[1] = **input;
+            (*input)++;
+        }
+        if (!**input || **input == '|' || **input == '<' || **input == '>')
+        {
+            ft_error_redirections(operateur);
+            ft_free_token(*head); // Libère les tokens créés
+            *head = NULL; // Réinitialise la liste
+            return; // Arrête immédiatement
+        }
+        ft_add_token(head, ft_create_token(ft_identify_token(operateur), operateur));
+    }
 }
 
-void	ft_handle_word(t_token **head, const char **input)
-{
-	char	*token;
 
-	token = ft_get_next_token(input);
-	ft_add_token(head, ft_create_token(TOKEN_WORD, token));
+void ft_handle_word(t_token **head, const char **input)
+{
+    char *token;
+
+    token = ft_get_next_token(input);
+    ft_add_token(head, ft_create_token(TOKEN_WORD, token));
 }
 
-void	ft_handle_env_var(t_token **head, const char **input)
+/* Gestion des variables d'environnement */
+int ft_handle_env_var(t_token **head, const char **input)
 {
-	char	*env_var;
+    char *env_var;
 
-	env_var = ft_extract_env_var(input);
-	if (!env_var)
-		return;
-	ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, env_var));
+    env_var = ft_extract_env_var(input);
+    if (!env_var) // Variable d'environnement mal formée
+        return (1);
+    ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, env_var));
+    return (0);
 }

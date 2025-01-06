@@ -12,43 +12,33 @@
 
 #include "minishell.h"
 
-void ft_intro(void)
+void	ft_intro(void)
 {
-    const char *intro[] = {
-        "#########################################",
-        "#         🎉 WELCOME TO MINISHELL 🎉     #",
-        "#  (Build)Dpascal AND Thobenel(parsing) #",
-        "#        LEXER PART BY thobenel         #",
-        "#########################################",
-        "Enter command below for tokenize that shit 🧑‍🍳",
-        "type 'exit' to quit this shell, dude",
-        NULL
-    };
-	ft_printf("%s", intro);
+	ft_printf("\033[32m");
+	ft_printf("\n  ███╗   ███╗██╗███╗   ██╗██╗\
+	███████╗██╗  ██╗███████╗██╗     ██╗     \n");
+	ft_printf("  ████╗ ████║██║████╗  ██║██║\
+	██╔════╝██║  ██║██╔════╝██║     ██║\n");
+	ft_printf("  ██╔████╔██║██║██╔██╗ ██║██║\
+	███████╗███████║█████╗  ██║     ██║\n");
+	ft_printf("  ██║╚██╔╝██║██║██║╚██╗██║██║\
+	╚════██║██╔══██║██╔══╝  ██║     ██║\n");
+	ft_printf("  ██║ ╚═╝ ██║██║██║ ╚████║██║\
+	███████║██║  ██║███████╗███████╗███████╗\n");
+	ft_printf("  ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝\
+	╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
+	ft_printf("\033[0m\n");
+    ft_printf("Bienvenue dans Minishell 🎉 (Par Dpascal--Thobenel)\n");
+    ft_printf("Tapez 'exit' pour quitter.\n\n");
 }
 
-int	main(int ac, char **av, char **env)
+int main(int ac, char **av, char **env)
 {
-	char	*input;
-	t_token	*token;
+    (void)ac;
+    (void)av;
+    (void)env;
 
-	(void)ac;
-	(void)av;
-	(void)env;
-	//ft_intro();
-	while (1)
-	{
-		input = readline("$> "); // posibilite de leak (readline)
-		if (!input)
-		{
-			error_exit("Bye bye ! 👋 \n");
-			break ;
-		}
-		ft_printf("[INFO]  Tokenizing input: '%s'\n", input);
-		ft_handle_exit(input);
-		token = ft_parse_token(input);
-		ft_print_tokens(token);
-		ft_clean_up(&token, &input);
-	}
-	return (0);
+    ft_intro(); // Afficher l'intro
+    ft_start_minishell(); // Lancer Minishell
+    return (0);
 }

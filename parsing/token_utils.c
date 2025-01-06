@@ -36,9 +36,9 @@
     need to return the name of the heredoc
         (For my favorite executeur 💪)
 */
-t_token_arg ft_identify_token(char *str)
+t_token_type ft_identify_token(char *str)
 {
-    t_token_arg type;
+    t_token_type type;
 
     if (ft_strcmp(str, "|") == 0)
         type = TOKEN_PIPE;
@@ -64,7 +64,7 @@ t_token_arg ft_identify_token(char *str)
     3) put the value in
     4) add the next and of course put it on NULL (chain list)
 */
-t_token *ft_create_token(t_token_arg type, char *value)
+t_token *ft_create_token(t_token_type type, char *value)
 {
     t_token *token;
 
@@ -78,7 +78,7 @@ t_token *ft_create_token(t_token_arg type, char *value)
 }
 
 /*
-    ici on peut allours un token et remplir avec les 2 champs type, value
+    ici on alloue un token et remplir avec les 2 champs type, value
 */
 void    ft_add_token(t_token **head, t_token *new_token)
 {

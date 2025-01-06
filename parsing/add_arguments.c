@@ -23,6 +23,8 @@
     1) initialise the cmd->arg if he as no space in memory
     2) the first while is use to calcul the size of the arguments
     3) after we got the size we can add it as a node
+
+		for now not use 
 */
 
 int	ft_add_arguments(t_command *cmd, char *args)

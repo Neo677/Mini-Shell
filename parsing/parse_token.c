@@ -32,31 +32,16 @@
     8) free
 */
 
-t_token	*ft_parse_token(const char *input)
+t_token *ft_parse_token(const char *input)
 {
-	t_token		*token;
-	t_command	*cmd_lst;
-
-	cmd_lst = NULL;
+    t_token *token;
+	
 	token = NULL;
-	if (!(input) || !(*input))
-	{
-		printf("[ERROR] entrer empty \n");
-		return (NULL);
-	}
-	printf("1");
-	ft_split_token(&token, input);
-	printf("2");
-	if (!token)
-		printf("[ERROR]  aucun token valide trouvee\n");
-	printf("3");
-	if (!ft_valid_token(token))
-	{
-		ft_free_token(token);
-		printf("[ERROR] Token invalid detected\n");
-		return (NULL);
-	}
-	printf("4");
-	ft_create_command_lst(token, &cmd_lst);
-	return (token);
+    if (!(input) || !(*input))
+    {
+        printf("[ERROR] Entrée vide\n");
+        return (NULL);
+    }
+    ft_split_token(&token, input);
+    return (token); // Retourne les tokens si tout est valide
 }
