@@ -54,7 +54,7 @@
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,	
+	TOKEN_WORD,
 	TOKEN_PIPE,
 	TOKEN_IN,
 	TOKEN_OUT,
@@ -76,7 +76,7 @@ typedef enum e_token_type
 
 typedef struct s_token
 {
-	t_token_type		type;
+	t_token_type	type;
 	char			*value;
 	struct s_token	*next;
 }		t_token;
@@ -109,11 +109,14 @@ typedef struct s_command
 //			main utils
 void		ft_start_minishell(void);
 void		ft_clean_up(t_token **token, char **input);
-void		ft_handle_exit(char *input);
+int		ft_handle_exit(char *input);
 
 //			prompt
 void		ft_intro(void);
 void		ft_print_tokens(t_token *head);
+void		ft_print_tab(char **tab);
+void		ft_print_redirections(t_redirections *head);
+void		ft_print_command_lst(t_command *head);
 
 //				error handler for different message
 int			ft_error_pipe(const char *context);
@@ -143,8 +146,8 @@ void		ft_split_token(t_token **head, const char *input);
 //				placement in struct (case of pipe check Read me)
 t_command	*ft_create_command(t_command **lst);
 int	ft_create_command_lst(t_token *token, t_command **lst);
-int			ft_add_redirections(t_command *cmd, int type, const char *file);
-int			ft_add_arguments(t_command *cmd, char *args);
+int			ft_add_redirections_struct(t_command *cmd, int type, const char *file);
+int			ft_add_arguments(t_command *cmd, const char *args);
 
 //				Utils for token
 int ft_valid_redirections(const t_token *token);
@@ -159,9 +162,10 @@ void		ft_free_token(t_token *token);
 void		error_exit(const char *error);
 void		ft_free_redirection(t_redirections *redir);
 void		ft_free_commande_lst(t_command *command);
+void	ft_free_split(t_token *head, t_command *cmd_lst);
 
 //			syntax 
-int ft_check_syntax(const char *input);
+int			ft_check_syntax(const char *input);
 
 //				Utils
 char		*ft_strndup(const char *src, size_t size);

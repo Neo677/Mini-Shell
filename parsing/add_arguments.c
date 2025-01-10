@@ -23,35 +23,35 @@
     1) initialise the cmd->arg if he as no space in memory
     2) the first while is use to calcul the size of the arguments
     3) after we got the size we can add it as a node
-
-		for now not use 
 */
 
-int	ft_add_arguments(t_command *cmd, char *args)
+int ft_add_arguments(t_command *cmd, const char *arg)
 {
-	int			i;
+    int i;
+    char **new_arg;
 
-	if (!cmd || !args)
-		return (0);
-	i = 0;
-	if (!cmd->arg)
-	{
-		cmd->arg = malloc(sizeof(char *) * 2);
-		if (!cmd->arg)
-			return (free(cmd->arg), 0);
-		cmd->arg[0] = ft_strdup(args);
-		cmd->arg[1] = NULL;
-		return (cmd->arg[0] != NULL);
-	}
-	else
-	{
-		while (cmd->arg[i])
-			i++;
-		cmd->arg = ft_realloc(cmd->arg, sizeof(char *) * (i + 2));
-		cmd->arg[i] = ft_strdup(args);
-		if (!cmd->arg || !cmd->arg[i])
-			return ((free(cmd->arg), free(cmd->arg[i])) ,0);
-		cmd->arg[i + 1] = NULL;
-	}
-	return (1);
+    if (!cmd || !arg)
+        return (0);
+    i = 0;
+    if (cmd->arg)
+        while(cmd->arg[i])
+            i++;
+    new_arg = malloc(sizeof(char *) * (i + 2));
+    if (!new_arg)
+        return (0);
+    if (cmd->arg)
+    {
+        while (cmd->arg[i])
+        {
+            new_arg[i] = cmd->arg[i];
+            i++;
+        }
+    }
+    new_arg[i] = ft_strdup(arg);
+    if (!new_arg)
+        return(free(new_arg), 0);
+    new_arg[i + 1] = NULL;
+    free(cmd->arg);
+    cmd->arg = new_arg;
+    return (1);
 }

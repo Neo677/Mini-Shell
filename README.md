@@ -52,6 +52,7 @@ I need to check for the variable environnements
 		➜  parsing git:(parsing) ✗ echo $1A
 		A
 		➜  parsing git:(parsing) ✗ 
-
+			(ONLY ON 42 COMPUTER !!!)
+	(the version of the code can act different on the 42 pc and my mac)
 	Weird caractere is add to the end of each token ???
-	
+
