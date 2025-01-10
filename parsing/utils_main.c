@@ -20,11 +20,12 @@ void    ft_clean_up(t_token **token, char **input)
         free(*input);
 }
 
-void    ft_handle_exit(char *input)
+int    ft_handle_exit(char *input)
 {
     if (ft_strcmp(input, "exit") == 0)
     {
         printf("Bye Bye !! 👋\n");
-        exit(0);
+        return(0);
     }
+    return (1);
 }

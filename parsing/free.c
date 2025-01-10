@@ -18,6 +18,7 @@ void	error_exit(const char *error)
 	exit(EXIT_FAILURE);
 }
 
+
 void	ft_free_token(t_token *head)
 {
 	t_token	*tmp;
@@ -44,10 +45,10 @@ void	ft_free_redirection(t_redirections *redir)
 	}
 }
 
-void	ft_free_commande(t_command *command)
+void	ft_free_commande_lst(t_command *command)
 {
 	t_command	*tmp;
-	int			i;
+	int	i;
 
 	while (command)
 	{
@@ -66,4 +67,13 @@ void	ft_free_commande(t_command *command)
 		free(command);
 		command = tmp;
 	}
+}
+
+void	ft_free_split(t_token *head, t_command *cmd_lst)
+{
+	ft_printf("[ERROR] Token invalid !\n");
+	ft_free_token(head);
+	head = NULL;
+	ft_free_commande_lst(cmd_lst);
+	return;
 }

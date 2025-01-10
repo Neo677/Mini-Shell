@@ -3,12 +3,10 @@
 #include "minishell.h"
 
 /*
-    the purpose of the syntax fonction
-    is to check the syntax global of the input, 
-    before every single operations,
-    She check if a big syntax error like quote or anything else ...
-    if an error is detected is unusless to keep going the parsing
-    because the entry is globaly Wrong
+    the purpose of the syntax fonction :
+    1) is to check the syntax global of the input before every single operations,
+    2) She check if a big syntax error like quote not closed or anything else ...
+    3) if an error is detected is unusless to keep going the lexing
 */
 
 int ft_check_syntax(const char *input)

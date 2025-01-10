@@ -15,21 +15,21 @@
 /*
                     🚨    🚨    🚨
             07/12/24
-    Now that i finish to take an input / 
-								split it / 
-								check for every carac / 
-								set in an enum struct 
-    for reference it for the parser can regnoize the commande.
-    Now i can add the arg, redirections, pipe in a struct cmd.
+    Now that I have finished taking an input / 
+                                splitting it / 
+                                checking every character / 
+                                setting it in an enum struct 
+    for reference so the parser can recognize the command.
+    Now I can add the arguments, redirections, and pipe in a cmd struct.
                         ⛓️⛓️⛓️
-    1) Crée une commande vide 
-    2) Gestions de lerreur d'alloc (leak safe)
-    3) marque la commande qui contient un pipe
-    4) arrete le parsing pour laisser un pipe gerer les commande suivante
-    5) add une redicretions a la commande
-    6) free
-    7) add un arguments a la commande
-    8) free
+    1) Create an empty command 
+    2) Handle allocation errors (leak safe)
+    3) Mark the command that contains a pipe
+    4) Stop parsing to let a pipe handle the following commands
+    5) Add a redirection to the command
+    6) Free
+    7) Add an argument to the command
+    8) Free
 */
 
 t_token *ft_parse_token(const char *input)
@@ -43,5 +43,10 @@ t_token *ft_parse_token(const char *input)
         return (NULL);
     }
     ft_split_token(&token, input);
+	if (!(input) || !(*input) || !token)
+	{
+		ft_printf("[ERROR] split token error render deteced\n");
+		return (NULL);
+	}
     return (token); // Retourne les tokens si tout est valide
 }

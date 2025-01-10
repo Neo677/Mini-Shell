@@ -28,7 +28,7 @@ int ft_valid_redirections(const t_token *token)
         }
         token = token->next;
     }
-    return (1); // Aucune erreur détectée
+    return (1);
 }
 
 /*
@@ -78,12 +78,13 @@ char *ft_valid_quotes(char **current, char quote_type)
 
     🧑‍💻  for a certain visiblity and of course norm i need to
     🧑‍💻  split this fonction but the purpose is the same
-*/
 
-/*
     utils for the parsing :
     chekc if the quote is correctly closed for 
     avoid a syntax error in the token
+    1)  Si une quote est non fermée
+    2) Signale une erreur
+    3) Quote valide
 */
 
 int ft_validay_quotes(t_token *token)
@@ -93,38 +94,34 @@ int ft_validay_quotes(t_token *token)
     if (token->type == TOKEN_QUOTE || token->type == TOKEN_DBL_QUOTE)
     {
         parsed_value = ft_valid_quotes(&token->value, token->type);
-        if (!parsed_value) // Si une quote est non fermée
+        if (!parsed_value)
         {
             printf("[🚨 ERROR 🚨] quote syntax = unclosed quote\n");
-            return (0); // Signale une erreur
+            return (0);
         }
         free(parsed_value);
     }
-    return (1); // Quote valide
+    return (1);
 }
-
-//              probleme = when input is == '| ls | ls ||'
-//                                infinite loop
 
 int ft_validate_pipes(t_token *token)
 {
-    t_token *prev = NULL;
-
-    if (!token || token->type == TOKEN_PIPE) {
+    t_token *prev;
+    
+    prev = NULL;
+    if (!token || token->type == TOKEN_PIPE)
+    {
         ft_error_pipe("syntax error near unexpected token '|'");
         return (0);
     }
-
-    while (token) {
-        if (token->type == TOKEN_PIPE) {
-            if (!prev || prev->type == TOKEN_PIPE) {
-                ft_error_pipe("syntax error near unexpected token '|'");
-                return (0);
-            }
-            if (!token->next) {
-                ft_error_pipe("syntax error: pipe at the end");
-                return (0);
-            }
+    while (token) 
+    {
+        if (token->type == TOKEN_PIPE) 
+        {
+            if (!prev || prev->type == TOKEN_PIPE) 
+                return(ft_error_pipe("syntax error near unexpected token '|'"), 0);
+            if (!token->next)
+                return(ft_error_pipe("syntax error: pipe at the end"), 0);
         }
         prev = token;
         token = token->next;
@@ -138,41 +135,37 @@ int ft_valid_env_var(t_token *token)
     while (token)
     {
         if (token->type == TOKEN_ENV_VAR)
-        {
             if (!ft_strlen(token->value))
-            {
-                ft_error_env("invalid env var syntax :(");
-                return (0);
-            }
-        }
+                return(ft_error_env("invalid env var syntax :("), 0);
         token = token->next;
     }
     return (1);
 }
-
+/*
+    1) Vérifie les pipes
+    2) Vérifie les redirections
+    3) Vérifie les variables d'environnement
+    4) Vérifie les quotes
+    5) Vérifie chaque token pour les quotes
+    6) Tous les tokens sont valides
+*/
 
 int ft_valid_token(t_token *token)
 {
-    // Vérifie les pipes
+	t_token *current;
+   
     if (!ft_validate_pipes(token))
         return (0);
-
-    // Vérifie les redirections
     if (!ft_valid_redirections(token))
         return (0);
-
-    // Vérifie les variables d'environnement
     if (!ft_valid_env_var(token))
         return (0);
-
-    // Vérifie les quotes
-    t_token *current = token;
+	current = token;
     while (current)
     {
-        if (!ft_validay_quotes(current)) // Vérifie chaque token pour les quotes
+        if (!ft_validay_quotes(current))
             return (0);
         current = current->next;
     }
-
-    return (1); // Tous les tokens sont valides
+    return (1);
 }

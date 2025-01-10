@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 /*
-    11/12/2024
+    11/12/2024 :
     Now that i almost fix the pipe issue i can attack 
     the env variables : 
     i need to check in my parsing if i find a '$'
@@ -28,27 +28,49 @@
         good context
 */
 
-int	ft_detect_env_var(const char *str)
+// unusless
+
+int ft_detect_env_var(const char *str)
 {
-	if (*str == '$' && *(str + 1) && ft_isalpha(*(str + 1)))
-		return (1);
-	return (0);
+    if (str && *str == '$' && *(str + 1) != '\0')
+        return (1);
+    return (0);
 }
 
-char	*ft_extract_env_var(const char **input)
-{
-	const char	*start;
-	char		*env_var;
+/*
+    Extracts the environment variable name from the input string.
+    - Skips the '$' character.
+    - Checks if the next character is a digit (Bash treats `$1` as a positional parameter).
+    - Reads a single digit if it's a positional parameter.
+    - Reads a standard identifier (alphanumeric + '_') otherwise.
+    - Returns the literal "$" if no valid variable name is found.
+    - Duplicates and returns the variable name.
+*/
 
-	(*input)++;
-	start = *input;
-	while (**input && (ft_isalnum(**input) || **input == '_'))
-		(*input)++;
-	if (start == *input)
-	{
-		ft_error_env("invalid env variable :(");
-		return (NULL);
-	}
-	env_var = ft_strndup(start, *input - start);
-	return (env_var);
+char *ft_extract_env_var(const char **input)
+{
+    const char  *start;
+    char        *var_name;
+    int          is_digit_param;
+
+    (*input)++;
+    if (ft_isdigit(**input))
+        is_digit_param = 1;
+    else
+        is_digit_param = 0;
+    start = *input;
+    if (is_digit_param)
+    {
+        if (ft_isdigit(**input))
+            (*input)++;
+    }
+    else
+    {
+        while (**input && (ft_isalnum(**input) || **input == '_'))
+            (*input)++;
+    }
+    if (start == *input)
+        return (ft_strdup("$"));
+    var_name = ft_strndup(start, (*input - start));
+    return (var_name);
 }

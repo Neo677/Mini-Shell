@@ -28,7 +28,8 @@ void	ft_intro(void)
 	ft_printf("  ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝\
 	╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
 	ft_printf("\033[0m\n");
-    ft_printf("Bienvenue dans Minishell 🎉 (Par Dpascal--Thobenel)\n");
+    ft_printf("Bienvenue dans Minishell 🎉\n");
+	ft_printf("Par Dpascal--Thobenel\n");
     ft_printf("Tapez 'exit' pour quitter.\n\n");
 }
 

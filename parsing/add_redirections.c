@@ -31,9 +31,7 @@
     5) return a true (1) 
 */
 
-//          for now not use
-
-int	ft_add_redirections(t_command *cmd, int type, const char *file)
+int	ft_add_redirections_struct(t_command *cmd, int type, const char *file)
 {
 	t_redirections	*new_redir;
 	t_redirections	*current;
@@ -42,7 +40,7 @@ int	ft_add_redirections(t_command *cmd, int type, const char *file)
 		return (0);
 	new_redir = malloc(sizeof(t_redirections));
 	if (!new_redir)
-		return (0);
+		return (free(new_redir), 0);
 	new_redir->type = type;
 	new_redir->file = ft_strdup(file);
 	if (!new_redir->file)
