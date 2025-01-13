@@ -68,12 +68,3 @@ void	ft_free_commande_lst(t_command *command)
 		command = tmp;
 	}
 }
-
-void	ft_free_split(t_token *head, t_command *cmd_lst)
-{
-	ft_printf("[ERROR] Token invalid !\n");
-	ft_free_token(head);
-	head = NULL;
-	ft_free_commande_lst(cmd_lst);
-	return;
-}

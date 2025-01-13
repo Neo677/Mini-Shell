@@ -70,7 +70,11 @@ t_token	*ft_create_token(t_token_type type, char *value)
 
 	token = malloc(sizeof(t_token));
 	if (!token)
+	{
+		free(token);
 		error_exit("Memory allocations failed for token\n");
+	}
+		
 	token->type = type;
 	token->value = ft_strdup(value);
 	token->next = NULL;

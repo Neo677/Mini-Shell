@@ -25,6 +25,7 @@ int    ft_handle_exit(char *input)
     if (ft_strcmp(input, "exit") == 0)
     {
         printf("Bye Bye !! 👋\n");
+        free(input);
         return(0);
     }
     return (1);

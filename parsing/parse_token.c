@@ -45,8 +45,9 @@ t_token *ft_parse_token(const char *input)
     ft_split_token(&token, input);
 	if (!(input) || !(*input) || !token)
 	{
-		ft_printf("[ERROR] split token error render deteced\n");
+		// ft_printf("[ERROR] split token error render deteced\n");
 		return (NULL);
 	}
     return (token); // Retourne les tokens si tout est valide
 }
+
