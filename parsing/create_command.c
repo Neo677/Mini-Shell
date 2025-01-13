@@ -35,7 +35,7 @@ t_command *ft_create_command(t_command **lst)
 
     new_cmd = malloc(sizeof(t_command));
     if (!new_cmd)
-        return (free(new_cmd), NULL);
+        return (NULL);
     new_cmd->arg = NULL;
     new_cmd->redirections = NULL;
     new_cmd->p_pipe = 0;
@@ -78,6 +78,8 @@ int ft_create_command_lst(t_token *token, t_command **lst)
     {
         if (token->type == TOKEN_PIPE)
         {
+            if (current)
+                current->p_pipe = 1;
             current = NULL;
             token = token->next;
             continue;
@@ -87,7 +89,7 @@ int ft_create_command_lst(t_token *token, t_command **lst)
             if (!current)
                 current = ft_create_command(lst);
             if (!current || !ft_add_arguments(current, token->value))
-                return (ft_printf("[DEBUG] failed to add arguments = %d\n", token->value), 0);
+                return (ft_printf("[DEBUG] failed to add arguments = %s\n", token->value), free(current), 0);
             token = token->next;
         }
         else if (ft_is_redirection(token))
@@ -95,15 +97,89 @@ int ft_create_command_lst(t_token *token, t_command **lst)
             if (!current)
                 current = ft_create_command(lst);
             if (!current || !token->next || token->next->type != TOKEN_WORD)
-                return (ft_printf("[DEBUG] redirection wihout valid arguemnts = %d\n", token->value), 0);
+                return (ft_printf("[DEBUG] redirection without valid arguments = %s\n", token->value), free(current), 0);
             file = token->next->value;
             if (!ft_add_redirections_struct(current, token->type, file))
-                return (ft_printf("[DEBUG] failed to add redirections = %d\n", token->value), 0);
+                return (ft_printf("[DEBUG] failed to add redirections = %s\n", token->value), free(current), 0);
             token = token->next->next;
         }
+        else if (token->type == TOKEN_ENV_VAR)
+        {
+            if (!current)
+                current = ft_create_command(lst);
+            if (!current || !ft_add_arguments(current, token->value))
+                return (ft_printf("[DEBUG] failed to add env var = %s\n", token->value), free(current), 0);
+            token = token->next;
+        }
         else
-            return (ft_printf("[DEBUG] Unexepted token type = %d\n", token->type),0);
+            return (ft_printf("[DEBUG] Unexpected token type = %d\n", token->type), 0);
     }
-    //ft_print_command_lst(current);
-    return(1);
+    return (1);
 }
+
+
+//              old V.
+// int ft_create_command_lst(t_token *token, t_command **lst)
+// {
+//     t_command *current;
+//     const char *file;
+
+//     current = NULL;
+//     while (token)
+//     {
+//         if (token->type == TOKEN_PIPE)
+//         {
+//             if (current)
+//                 current->p_pipe = 1;
+//             current = NULL;
+//             token = token->next;
+//             continue;
+//         }
+//         else if (token->type == TOKEN_WORD)
+//         {
+//             if (!current)
+//                 current = ft_create_command(lst);
+//             if (!current || !ft_add_arguments(current, token->value))
+//             {
+//                 ft_free_command(current);
+//                 return (ft_printf("[DEBUG] failed to add arguments = %s\n", token->value), 0);
+//             }
+//             token = token->next;
+//         }
+//         else if (ft_is_redirection(token))
+//         {
+//             if (!current)
+//                 current = ft_create_command(lst);
+//             if (!current || !token->next || token->next->type != TOKEN_WORD)
+//             {
+//                 ft_free_command(current);
+//                 return (ft_printf("[DEBUG] redirection without valid arguments = %s\n", token->value), 0);
+//             }
+//             file = token->next->value;
+//             if (!ft_add_redirections_struct(current, token->type, file))
+//             {
+//                 ft_free_command(current);
+//                 return (ft_printf("[DEBUG] failed to add redirections = %s\n", token->value), 0);
+//             }
+//             token = token->next->next;
+//         }
+//         else if (token->type == TOKEN_ENV_VAR)
+//         {
+//             if (!current)
+//                 current = ft_create_command(lst);
+//             if (!current || !ft_add_arguments(current, token->value))
+//             {
+//                 ft_free_command(current);
+//                 return (ft_printf("[DEBUG] failed to add env var = %s\n", token->value), 0);
+//             }
+//             token = token->next;
+//         }
+//         else
+//         {
+//             ft_free_command(current);
+//             return (ft_printf("[DEBUG] Unexpected token type = %d\n", token->type), 0);
+//         }
+//     }
+//     return (1);
+// }
+

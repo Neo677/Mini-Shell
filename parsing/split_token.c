@@ -12,32 +12,55 @@
 
 #include "minishell.h"
 
+/*
+    cmd = Liste des commandes
+    current = Commande courante
+
+    1) Vérification de la syntaxe globale
+    2) Parcours de la chaîne d'entrée
+        A) ignorer les espaces et les tab
+        B) gestions des quotes -> (ft_handle_quotes)
+            a) ajout des token de type WORD 
+                ↘️
+                  check fontions -> (ft_handle_quotes)
+            b) creation de commande si necessaires, puis
+                ajout en arguments
+        C) Gestion des operateurs (pipe, redirections)
+            a) appel de fonctions auxiliaire pour cree le token correcpondant
+            b) gestion d'erreur dans la fonction
+            c) si c'est un pipe, cree une nouvelle commande
+            d) si c'est une redirections, on gere le fichier
+                1) recupere le nom du fichier
+                2) creation de la commande si necessaire
+                3) ajout de la redirections
+        D) Gestion des variables d'environnement
+            a) extrait le nom de la varibale
+            b) lit la variables (ou un seul digit si c'est "$1")
+            c) ajout des token de type ENV_VAR 
+            d) ajout en arguments de la commande courante
+                    on traite '$VAR' comme un arguments
+            (Pas de lookup reel, pas expansion 
+                => on se contente de parser et stocker "VAR" ou "1" si c'est $1)
+    3) Verification finale des tokens
+        ↘️ 
+         2 fonctions d'affichage (DEBUG) et nettoyage (libere la liste de commandes)
+*/
+
 void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
 {
     char *token_value;
     
     token_value = ft_handle_quote(input, **input);
     if (!token_value)
-    {
-        ft_error_quote();
-        ft_free_token(*head);
-        *head = NULL;
-        ft_free_commande_lst(*cmd_lst);
-        return;
-    }
-
+        return (ft_err_split(*cmd_lst, *head));
     ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
-
     if (!*current)
         *current = ft_create_command(cmd_lst);
 
     if (!ft_add_arguments(*current, token_value))
     {
         ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);
-        ft_free_token(*head);
-        *head = NULL;
-        ft_free_commande_lst(*cmd_lst);
-        return;
+        return (ft_err_split(*cmd_lst, *head));
     }
 }
 
@@ -46,46 +69,26 @@ void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst
     char *file;
 
     ft_handle_operator(head, input);
-    if (*head == NULL) // Erreur signale par handle_operator
+    if (*head == NULL)
         return;
-
-    if (*(input[-1]) == '|') // pipe : nouvelle commande
+    if (*(input[-1]) == '|')
     {
         *current = ft_create_command(cmd_lst);
         if (!*current)
-        {
-            ft_printf("[ERROR] Échec de création de commande\n");
-            ft_free_token(*head);
-            *head = NULL;
-            ft_free_commande_lst(*cmd_lst);
-            return;
-        }
+            return (ft_err_split_ope(*cmd_lst, *head));
     }
     else if (*(input[-1]) == '>' || *(input[-1]) == '<') // redrirec
     {
         file = ft_get_next_token(input);
         if (!file)
-        {
-            ft_printf("[ERROR] Redirection sans fichier valide\n");
-            ft_free_token(*head);
-            *head = NULL;
-            ft_free_commande_lst(*cmd_lst);
-            return;
-        }
-
+            return (ft_err_bad_redirec(*cmd_lst, *head));
         if (!*current)
             *current = ft_create_command(cmd_lst);
-
         if (!ft_add_redirections_struct(*current, ft_identify_token((char *)(*input - 1)), file))
-        {
-            ft_printf("[ERROR] Échec de l'ajout de la redirection : %s\n", file);
-            ft_free_token(*head);
-            *head = NULL;
-            ft_free_commande_lst(*cmd_lst);
-            return;
-        }
+            return (ft_err_split_ope(*cmd_lst, *head));
     }
 }
+
 
 void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
 {
@@ -95,10 +98,7 @@ void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst,
     if (!var_name)
     {
         ft_printf("[ERROR] Variable d'environnement invalide\n");
-        ft_free_token(*head);
-        *head = NULL;
-        ft_free_commande_lst(*cmd_lst);
-        return;
+        return (ft_err_split(*cmd_lst, *head));
     }
     ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, var_name));
 
@@ -107,10 +107,7 @@ void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst,
     if (!ft_add_arguments(*current, var_name))
     {
         ft_printf("[ERROR] Impossible d'ajouter la variable en argument : %s\n", var_name);
-        ft_free_token(*head);
-        *head = NULL;
-        ft_free_commande_lst(*cmd_lst);
-        return;
+        return (ft_err_split(*cmd_lst, *head));
     }
 }
 
@@ -122,25 +119,21 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
     if (token_value && *token_value != '\0')
     {
         ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
-
         if (!*current)
             *current = ft_create_command(cmd_lst);
-
         if (!ft_add_arguments(*current, token_value))
         {
             ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);
-            ft_free_token(*head);
-            *head = NULL;
-            ft_free_commande_lst(*cmd_lst);
-            return;
+            return (ft_err_split(*cmd_lst, *head));
         }
     }
+    free(token_value);
 }
 
 void ft_split_token(t_token **head, const char *input)
 {
-    t_command *cmd_lst;// Liste des commandes
-    t_command *current;// Commande courante
+    t_command *cmd_lst; // Liste des commandes
+    t_command *current; // Commande courante
 
     cmd_lst = NULL;
     current = NULL;
@@ -156,15 +149,13 @@ void ft_split_token(t_token **head, const char *input)
             ft_handle_operators(&input, head, &cmd_lst, &current);
         else if (*input == '$')
             ft_handle_env_vars(&input, head, &cmd_lst, &current);
-        else
+        else // so its a word
             ft_handle_words(&input, head, &cmd_lst, &current);
     }
     if (!ft_valid_token(*head))
         ft_free_split(*head, cmd_lst);
-    ft_free_commande_lst(cmd_lst);
+    // ft_free_commande_lst(cmd_lst);
 }
-
-
 
 // void	ft_split_token(t_token **head, const char *input)
 // {

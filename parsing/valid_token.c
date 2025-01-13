@@ -110,10 +110,7 @@ int ft_validate_pipes(t_token *token)
     
     prev = NULL;
     if (!token || token->type == TOKEN_PIPE)
-    {
-        ft_error_pipe("syntax error near unexpected token '|'");
-        return (0);
-    }
+        return(ft_error_pipe("syntax error near unexpected token '|'"), 0);
     while (token) 
     {
         if (token->type == TOKEN_PIPE) 
@@ -153,15 +150,15 @@ int ft_valid_env_var(t_token *token)
 int ft_valid_token(t_token *token)
 {
 	t_token *current;
-   
+
+	current = token;
     if (!ft_validate_pipes(token))
         return (0);
     if (!ft_valid_redirections(token))
         return (0);
     if (!ft_valid_env_var(token))
         return (0);
-	current = token;
-    while (current)
+    while (current != NULL)
     {
         if (!ft_validay_quotes(current))
             return (0);

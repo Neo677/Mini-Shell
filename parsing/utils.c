@@ -12,14 +12,40 @@
 
 #include "minishell.h"
 
+size_t ft_strnlen(const char *s, size_t max)
+{
+    size_t i;
+
+    i = 0;
+    while (s[i] && i < max)
+        i++;
+    return (i);
+}
+
+char *ft_strncpy(char *dst, const char *src, size_t len)
+{
+    size_t i;
+
+    i = 0;
+    while (src[i] && i < len)
+    {
+        dst[i] = src[i];
+        i++;
+    }
+    dst[i] = '\0';
+    return (dst);
+}
+
 char *ft_strndup(const char *src, size_t size)
 {
     char *dst;
+    size_t len = ft_strnlen(src, size);
 
-    if (!(dst = (char *)malloc(size + 1)))
-        return (0);
-    ft_memcpy(dst, src, size);
-    dst[size + 1] = 0;
+    dst = (char *)malloc(len + 1);
+    if (!dst)
+        return (free(dst), NULL);
+    ft_strncpy(dst, src, len);
+    dst[len] = '\0';
     return (dst);
 }
 

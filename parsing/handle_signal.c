@@ -1,4 +1,14 @@
-// header
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_signal.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/13 13:19:37 by thobenel          #+#    #+#             */
+/*   Updated: 2025/01/13 13:19:39 by thobenel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -33,11 +43,11 @@ void ft_handle_sig_quit(int sig)
     ft_handle_sig_quit = (CTRL-\)
 */
 
-void ft_set_signal_handler(int sig)
-{
-    struct sigaction sa_int;
-    struct sigaction sa_quit;
+// void ft_set_signal_handler(int sig)
+// {
+//     struct sigaction sa_int;
+//     struct sigaction sa_quit;
 
-    sigemptyset(&sa_int.sa_mask);
-    sa_int.sa_flags = SA_RESTART;
-}
+//     sigemptyset(&sa_int.sa_mask);
+//     sa_int.sa_flags = SA_RESTART;
+// }

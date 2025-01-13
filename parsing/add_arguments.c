@@ -28,6 +28,7 @@
 int ft_add_arguments(t_command *cmd, const char *arg)
 {
     int i;
+    int j;
     char **new_arg;
 
     if (!cmd || !arg)
@@ -41,10 +42,11 @@ int ft_add_arguments(t_command *cmd, const char *arg)
         return (0);
     if (cmd->arg)
     {
-        while (cmd->arg[i])
+        j = 0;
+        while (cmd->arg[j])
         {
-            new_arg[i] = cmd->arg[i];
-            i++;
+            new_arg[j] = cmd->arg[j];
+            j++;
         }
     }
     new_arg[i] = ft_strdup(arg);

@@ -13,7 +13,7 @@
 # Variables principales
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I include
+CFLAGS = -Wall -Wextra -Werror -I include #-fsanitize=leak
 LIBFT_DIR = ../libft_2.0
 LIBFT = $(LIBFT_DIR)/libft.a
 READLINE = -lreadline
@@ -24,7 +24,8 @@ SRCS =  add_arguments.c \
         create_command.c \
 		env_var_dct.c \
         free.c \
-		handler_errors.c \
+		handle_error.c \
+		handle_error_2.c \
         main.c \
         parse_token.c \
         prompt.c \
