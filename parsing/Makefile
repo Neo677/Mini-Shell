@@ -14,7 +14,7 @@
 NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I include
-LIBFT_DIR = ../libft_v.2.0
+LIBFT_DIR = ../libft_2.0
 LIBFT = $(LIBFT_DIR)/libft.a
 READLINE = -lreadline
 

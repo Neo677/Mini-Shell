@@ -25,7 +25,7 @@
 # include <time.h>
 # include <signal.h>
 
-# include "../libft_v.2.0/libft.h"
+# include "../libft_2.0/libft.h"
 
 /*
 	https://segfault42.github.io/posts/minishell/
