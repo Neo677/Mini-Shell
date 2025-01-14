@@ -72,5 +72,7 @@ char *ft_extract_env_var(const char **input)
     if (start == *input)
         return (ft_strdup("$"));
     var_name = ft_strndup(start, (*input - start));
+    if (!var_name)
+        return(free(var_name), NULL);
     return (var_name);
 }

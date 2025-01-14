@@ -60,12 +60,6 @@ void	ft_start_minishell(void)
 			continue ; // ✅
 		}
 		token = ft_parse_token(input);
-		if (!token)
-		{
-			printf("[ERROR] Invalid syntax\n");
-			free(input);
-			continue ; // ✅
-		}
 		ft_print_tokens(token); // ✅
 		add_history(input); // ✅
 		if (!ft_create_command_lst(token, &cmd_lst))

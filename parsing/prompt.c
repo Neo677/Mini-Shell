@@ -24,7 +24,7 @@ void	ft_print_tab(char **tab)
 	i = 0;
 	while (tab[i])
 	{
-		ft_printf("arg[%s]\n", tab[i]);
+		ft_printf("[DEBUG] arg = [%s]\n", tab[i]);
 		i++;
 	}
 }
@@ -34,72 +34,42 @@ void	ft_print_redirections(t_redirections *head)
 	t_redirections	*current;
 
 	current = head;
-	if (current == NULL)
-	{
-		printf("redirections is not here\n");
-		return;
-	}
-	while (current)
+	while (current != NULL)
 	{
 		if (current->type == TOKEN_IN)
-		{
-			ft_printf("redirec file = TOKEN_IN '<'\n");
-		}
+			ft_printf("[DEBUG] redirec file = TOKEN_IN = %s '<'\n", current->file);
 		else if (current->type == TOKEN_OUT)
-		{
-			ft_printf("redirec file = TOKEN_OUT '>'\n");
-		}
+			ft_printf("[DEBUG] redirec file = TOKEN_OUT = %s '>'\n", current->file);
 		else if (current->type == TOKEN_APPEND)
-		{
-			ft_printf("redirec file = TOKEN APPEND '>>'\n");
-		}
+			ft_printf("[DEBUG] redirec file = TOKEN APPEND  = %s '>>'\n", current->file);
 		else if (current->type == TOKEN_HEREDOC)
-		{
-			ft_printf("redirec file = TOKEN_HEREDOC '<<'\n");
-		}
+			ft_printf("[DEBUG] redirec file = TOKEN_HEREDOC  = %s '<<'\n", current->file);
 		if (current->file)
-		{
-			ft_printf("filename = %s\n", current->file);
-		}
-		//ft_printf("Type = %s\n", redirections_str[current->type]);
-		//ft_printf("Redirec file = %s\n", current->type);
+			ft_printf("[DEBUG] filename = %s\n", current->file);
+		else
+			ft_printf("[DEBUG] redirections is not here\n");
 		current = current->next;
 	}
 }
 
 void	ft_print_command_lst(t_command *head)
 {
-	int	i;
 	t_command *current;
 
 	current = head;
 	if (current == NULL)
-	{
-		ft_printf("no command\n");
-		return ;
-	}
-	i = 0;
+		ft_printf("\n[DEBUG] no command\n");
+	ft_printf("\n-------------[DEBUG]---------------\n");
 	while (current)
 	{
-		if (head->arg)
-		{
-			i = 0;
-			while (head->arg[i])
-			{
-				ft_printf("arg[%d]\n", head->arg[i]);
-				i++;
-			}
-		}
 		//ft_printf("head = %s\n", head->arg);
-		ft_printf("t_command = pipe: %d\n", current->p_pipe); // Si on l’utilises
-		ft_printf("args: \n");
+		ft_printf("\n[DEBUG] t_command = pipe: %d\n", current->p_pipe); // Si on l’utilises
 		ft_print_tab(current->arg);          // Affiche arg[]
-		ft_printf("redirections: \n");
 		ft_print_redirections(current->redirections);
-		ft_printf("----------------------------------\n");
 		current = current->next;
-		i++;
 	}
+	ft_printf("----------------------------------\n");
+	ft_free_commande_lst(current);
 }
 
 void	ft_print_tokens(t_token *head)
@@ -119,7 +89,7 @@ void	ft_print_tokens(t_token *head)
 	};
 
 	current = head;
-	ft_printf(" 👨‍🍳     LEXER PART     👨‍🍳 \n");
+	// ft_printf(" 👨‍🍳     LEXER PART     👨‍🍳 \n");
 	while (current)
 	{
 		printf("Type: %s, Value: '%s'\n", token_type_name[current->type],

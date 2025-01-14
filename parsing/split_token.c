@@ -55,7 +55,7 @@ void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t
         return (ft_err_split(*cmd_lst, *head));
     ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
     if (!*current)
-        *current = ft_create_command(cmd_lst);
+        *current = ft_init_command(cmd_lst);
 
     if (!ft_add_arguments(*current, token_value))
     {
@@ -73,7 +73,7 @@ void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst
         return;
     if (*(input[-1]) == '|')
     {
-        *current = ft_create_command(cmd_lst);
+        *current = ft_init_command(cmd_lst);
         if (!*current)
             return (ft_err_split_ope(*cmd_lst, *head));
     }
@@ -83,7 +83,7 @@ void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst
         if (!file)
             return (ft_err_bad_redirec(*cmd_lst, *head));
         if (!*current)
-            *current = ft_create_command(cmd_lst);
+            *current = ft_init_command(cmd_lst);
         if (!ft_add_redirections_struct(*current, ft_identify_token((char *)(*input - 1)), file))
             return (ft_err_split_ope(*cmd_lst, *head));
     }
@@ -103,7 +103,7 @@ void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst,
     ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, var_name));
 
     if (!*current)
-        *current = ft_create_command(cmd_lst);
+        *current = ft_init_command(cmd_lst);
     if (!ft_add_arguments(*current, var_name))
     {
         ft_printf("[ERROR] Impossible d'ajouter la variable en argument : %s\n", var_name);
@@ -120,10 +120,11 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
     {
         ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
         if (!*current)
-            *current = ft_create_command(cmd_lst);
+            *current = ft_init_command(cmd_lst);
         if (!ft_add_arguments(*current, token_value))
         {
             ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);
+            free(token_value);
             return (ft_err_split(*cmd_lst, *head));
         }
     }
@@ -154,8 +155,12 @@ void ft_split_token(t_token **head, const char *input)
     }
     if (!ft_valid_token(*head))
         ft_free_split(*head, cmd_lst);
-    // ft_free_commande_lst(cmd_lst);
 }
+
+
+
+
+
 
 // void	ft_split_token(t_token **head, const char *input)
 // {
@@ -193,7 +198,7 @@ void ft_split_token(t_token **head, const char *input)
 // 			ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
 // 			// Création de commande si nécessaire, puis ajout en arguments
 // 			if (!current)
-// 				current = ft_create_command(&cmd_lst);
+// 				current = ft_init_command(&cmd_lst);
 // 			if (!ft_add_arguments(current, token_value))
 // 			{
 // 				ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n",
@@ -214,7 +219,7 @@ void ft_split_token(t_token **head, const char *input)
 // 			// Si c'est un pipe, on crée une nouvelle commande
 // 			if (*(input - 1) == '|')
 // 			{
-// 				current = ft_create_command(&cmd_lst);
+// 				current = ft_init_command(&cmd_lst);
 // 				if (!current)
 // 				{
 // 					ft_printf("[ERROR] Échec de création de commande\n");
@@ -239,7 +244,7 @@ void ft_split_token(t_token **head, const char *input)
 // 				}
 // 				// Création de commande si nécessaire
 // 				if (!current)
-// 					current = ft_create_command(&cmd_lst);
+// 					current = ft_init_command(&cmd_lst);
 // 				// Ajout de la redirection
 // 				if (!ft_add_redirections_struct(current,
 // 						ft_identify_token((char *)(input - 1)), file))
@@ -272,7 +277,7 @@ void ft_split_token(t_token **head, const char *input)
 // 			// 3) Optionnel : Ajout en argument de la commande courante
 // 			//    Si vous traitez `$VAR` comme un argument
 // 			if (!current)
-// 				current = ft_create_command(&cmd_lst);
+// 				current = ft_init_command(&cmd_lst);
 // 			if (!ft_add_arguments(current, var_name))
 // 			{
 // 				ft_printf("[ERROR] Impossible d'ajouter la variable en argument : %s\n", var_name);
@@ -292,7 +297,7 @@ void ft_split_token(t_token **head, const char *input)
 // 			{
 // 				ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
 // 				if (!current)
-// 					current = ft_create_command(&cmd_lst);
+// 					current = ft_init_command(&cmd_lst);
 // 				if (!ft_add_arguments(current, token_value))
 // 				{
 // 					ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n",

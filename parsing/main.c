@@ -53,8 +53,9 @@ int main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	(void)env; // the exec need it (tmp)
+	// env = NULL;
 	cmd_lst = NULL;
-	ft_intro();
+	// ft_intro();
 	while (1)
 	{
 		input = readline("$> ");
@@ -63,31 +64,12 @@ int main(int ac, char **av, char **env)
 			ft_printf("\n Bye bye ! 👋 \n");
 			break ; // ✅
 		}
-			//return (ft_clean_up(&token, &input), ft_free_commande_lst(cmd_lst), 0);
-		if (ft_handle_exit(input) == 0)
-		{
-			break;
-		}
+		// if (ft_handle_exit(input) == 0)
+		// 	break;
 		if (input[0] == '\0')
-		{
-			free(input);
-			continue;
-		}
+			ft_main_free(cmd_lst, cmd_lst->redirections, token);
 		token = ft_parse_token(input);
-		if (!token)
-		{
-			ft_abort_parse(input);
-			continue;
-		}
-		ft_print_tokens(token); // optionnal
 		add_history(input);
-		if (!ft_create_command_lst(token, &cmd_lst))
-		{
-			ft_free_commande_lst(cmd_lst);
-			return (0);
-		}
-			// return (ft_abort_cmd(input, token), 0);
-		
 	}
 	rl_clear_history();
 }

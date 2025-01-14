@@ -28,14 +28,14 @@
      A) Set the new command as the first command in the list.
  */
 
-t_command *ft_create_command(t_command **lst)
+t_command *ft_init_command(t_command **lst)
 {
     t_command *new_cmd;
     t_command *last;
 
     new_cmd = malloc(sizeof(t_command));
     if (!new_cmd)
-        return (NULL);
+        return (free(new_cmd), NULL);
     new_cmd->arg = NULL;
     new_cmd->redirections = NULL;
     new_cmd->p_pipe = 0;
@@ -87,7 +87,7 @@ int ft_create_command_lst(t_token *token, t_command **lst)
         else if (token->type == TOKEN_WORD)
         {
             if (!current)
-                current = ft_create_command(lst);
+                current = ft_init_command(lst);
             if (!current || !ft_add_arguments(current, token->value))
                 return (ft_printf("[DEBUG] failed to add arguments = %s\n", token->value), free(current), 0);
             token = token->next;
@@ -95,7 +95,7 @@ int ft_create_command_lst(t_token *token, t_command **lst)
         else if (ft_is_redirection(token))
         {
             if (!current)
-                current = ft_create_command(lst);
+                current = ft_init_command(lst);
             if (!current || !token->next || token->next->type != TOKEN_WORD)
                 return (ft_printf("[DEBUG] redirection without valid arguments = %s\n", token->value), free(current), 0);
             file = token->next->value;
@@ -106,7 +106,7 @@ int ft_create_command_lst(t_token *token, t_command **lst)
         else if (token->type == TOKEN_ENV_VAR)
         {
             if (!current)
-                current = ft_create_command(lst);
+                current = ft_init_command(lst);
             if (!current || !ft_add_arguments(current, token->value))
                 return (ft_printf("[DEBUG] failed to add env var = %s\n", token->value), free(current), 0);
             token = token->next;
@@ -138,7 +138,7 @@ int ft_create_command_lst(t_token *token, t_command **lst)
 //         else if (token->type == TOKEN_WORD)
 //         {
 //             if (!current)
-//                 current = ft_create_command(lst);
+//                 current = ft_init_command(lst);
 //             if (!current || !ft_add_arguments(current, token->value))
 //             {
 //                 ft_free_command(current);
@@ -149,7 +149,7 @@ int ft_create_command_lst(t_token *token, t_command **lst)
 //         else if (ft_is_redirection(token))
 //         {
 //             if (!current)
-//                 current = ft_create_command(lst);
+//                 current = ft_init_command(lst);
 //             if (!current || !token->next || token->next->type != TOKEN_WORD)
 //             {
 //                 ft_free_command(current);
@@ -166,7 +166,7 @@ int ft_create_command_lst(t_token *token, t_command **lst)
 //         else if (token->type == TOKEN_ENV_VAR)
 //         {
 //             if (!current)
-//                 current = ft_create_command(lst);
+//                 current = ft_init_command(lst);
 //             if (!current || !ft_add_arguments(current, token->value))
 //             {
 //                 ft_free_command(current);
