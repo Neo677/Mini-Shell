@@ -97,11 +97,21 @@ typedef struct s_redirections
 	struct s_redirections	*next;
 }		t_redirections;
 
+// typedef struct s_command
+// {
+// 	char				**arg;
+// 	t_redirections		*redirections;
+// 	int					p_pipe;
+// 	struct s_command	*next;
+// }			t_command;
+
 typedef struct s_command
 {
 	char				**arg;
 	t_redirections		*redirections;
 	int					p_pipe;
+	int					single_quote;
+	int					double_quote;
 	struct s_command	*next;
 }			t_command;
 
