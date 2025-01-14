@@ -56,7 +56,6 @@ void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t
     ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
     if (!*current)
         *current = ft_init_command(cmd_lst);
-
     if (!ft_add_arguments(*current, token_value))
     {
         ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);

@@ -76,6 +76,7 @@ void	ft_main_free(t_command *cmd, t_redirections *redir, t_token *head)
 		ft_free_redirection(redir);
 	if (head)
 		ft_free_token(head);
-	rl_clear_history();
+	clear_history();
+	// rl_clear_history();
 	return;
 }

@@ -71,5 +71,7 @@ int main(int ac, char **av, char **env)
 		token = ft_parse_token(input);
 		add_history(input);
 	}
-	rl_clear_history();
+
+	clear_history();
+	// rl_clear_history();
 }
