@@ -35,13 +35,13 @@ int ft_check_syntax(const char *input)
         }
         if (*input == '|')
             if (*(input + 1) == '|' || *(input + 1) == '\0')
-                return(printf("[🚨 ERROR 🚨] Syntax error: empty pipe\n"), 0);
+                return(ft_printf("minishell: syntax error near unexpected toke '|'\n"), 0);
         if (*input == '<' || *input == '>')
             if (*(input + 1) == '\0' || (*(input + 1) != ' ' && *(input + 1) != '<' && *(input + 1) != '>'))
-                return(printf("[🚨 ERROR 🚨] Syntax error: incomplete redirections\n"), 0);
+                return(ft_printf("minishell: parse error near `\\n' \n"), 0);
         input++;
     }
     if (quote != 0)
-        return (printf("[🚨 ERROR 🚨] Syntax error: unclosed quote\n"), 0);
+        return (printf("[🚨 ERROR 🚨] Syntax error: unclosed quote \n"), 0);
     return (1);
 }

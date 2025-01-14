@@ -22,7 +22,7 @@ int ft_valid_redirections(const t_token *token)
             // Vérifiez que la redirection est suivie d'un fichier/argument valide
             if (!token->next || token->next->type != TOKEN_WORD)
             {
-                printf("[🚨 ERROR 🚨] Syntax error: incomplete redirection\n");
+                ft_printf("minishell: parse error near `\n' \n");
                 return (0); // Erreur détectée
             }
         }
@@ -53,6 +53,8 @@ char *ft_valid_quotes(char **current, char quote_type)
         return (NULL);
     }
     value = ft_strndup(start, *current - start);
+    if (!value)
+        free(value);
     (*current)++;
     return (value);
 }
@@ -96,7 +98,7 @@ int ft_validay_quotes(t_token *token)
         parsed_value = ft_valid_quotes(&token->value, token->type);
         if (!parsed_value)
         {
-            printf("[🚨 ERROR 🚨] quote syntax = unclosed quote\n");
+            printf("quote syntax = unclosed quote\n");
             return (0);
         }
         free(parsed_value);
@@ -110,7 +112,7 @@ int ft_validate_pipes(t_token *token)
     
     prev = NULL;
     if (!token || token->type == TOKEN_PIPE)
-        return(ft_error_pipe("syntax error near unexpected token '|'"), 0);
+        return(ft_error_pipe("syntax error near unexpected token '|' \n"), 0);
     while (token) 
     {
         if (token->type == TOKEN_PIPE) 

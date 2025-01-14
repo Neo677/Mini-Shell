@@ -18,7 +18,6 @@ void	error_exit(const char *error)
 	exit(EXIT_FAILURE);
 }
 
-
 void	ft_free_token(t_token *head)
 {
 	t_token	*tmp;
@@ -67,4 +66,16 @@ void	ft_free_commande_lst(t_command *command)
 		free(command);
 		command = tmp;
 	}
+}
+
+void	ft_main_free(t_command *cmd, t_redirections *redir, t_token *head)
+{
+	if (cmd)
+		ft_free_commande_lst(cmd);
+	if (redir)
+		ft_free_redirection(redir);
+	if (head)
+		ft_free_token(head);
+	rl_clear_history();
+	return;
 }

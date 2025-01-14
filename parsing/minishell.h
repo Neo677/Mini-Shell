@@ -53,7 +53,6 @@ the easyes way to split the input is :
 		TOKEN_END,		 =====     fin de commande ou d'entrée 
 */
 
-
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -148,7 +147,7 @@ void			ft_add_token(t_token **head, t_token *add);
 void			ft_split_token(t_token **head, const char *input);
 
 //				placement in struct (case of pipe check Read me)
-t_command		*ft_create_command(t_command **lst);
+t_command		*ft_init_command(t_command **lst);
 int				ft_create_command_lst(t_token *token, t_command **lst);
 int				ft_add_redirections_struct(t_command *cmd, int type, const char *file);
 int				ft_add_arguments(t_command *cmd, const char *args);
@@ -162,10 +161,11 @@ int				ft_valid_token(t_token *token);
 char			*ft_get_next_token(const char **input);
 
 //				Handle free and error 
-void			ft_free_token(t_token *token);
 void			error_exit(const char *error);
+void			ft_free_token(t_token *token);
 void			ft_free_redirection(t_redirections *redir);
 void			ft_free_commande_lst(t_command *command);
+void			ft_main_free(t_command *cmd, t_redirections *redir, t_token *head);
 
 //				split error message and free
 void			ft_free_split(t_token *head, t_command *cmd_lst);
