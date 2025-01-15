@@ -47,18 +47,18 @@ void	ft_intro(void)
 int main(int ac, char **av, char **env)
 {
 	char *input;
-	t_command *cmd_lst;
+	// t_command *cmd_lst;
 	t_token *token;
 
 	(void)ac;
 	(void)av;
 	(void)env; // the exec need it (tmp)
 	// env = NULL;
-	cmd_lst = NULL;
+	// cmd_lst = NULL;
 	// ft_intro();
 	while (1)
 	{
-		input = readline("$> ");
+		input = readline("minishell> ");
 		if (!input)
 		{
 			ft_printf("\n Bye bye ! 👋 \n");
@@ -66,12 +66,15 @@ int main(int ac, char **av, char **env)
 		}
 		// if (ft_handle_exit(input) == 0)
 		// 	break;
-		if (input[0] == '\0')
-			ft_main_free(cmd_lst, cmd_lst->redirections, token);
+		// if (input[0] == '\0')
+		// {
+		// 	ft_main_free(cmd_lst, cmd_lst->redirections, token);
+		// }
+			
 		token = ft_parse_token(input);
 		add_history(input);
 	}
-
-	clear_history();
-	// rl_clear_history();
+	// clear_history(); // (MACOS)
+	ft_free_token(token);
+	rl_clear_history(); // (LINUX)
 }

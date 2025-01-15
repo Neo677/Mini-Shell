@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdlib.h>
+#include <string.h>
 
 /*
                     🚨    🚨    🚨
@@ -40,18 +42,21 @@
 char *ft_handle_quote(const char **input, char quote_type)
 {
     const char *start;
-	char *quote_content;
-	
-	start = ++(*input);
-    while (**input && **input != quote_type)
-        (*input)++;
-    if (**input != quote_type) 		// Erreur si la quote n'est pas fermée
-        return (NULL);
-    quote_content = ft_strndup(start, *input - start);
-    (*input)++; 					// Skip the closing quote
-    return (quote_content);
-}
+    char *content;
+    size_t i;
 
+    i = 0;
+    start = ++(*input);
+    while ((*input)[i] && (*input)[i] != quote_type)
+        i++;
+    if ((*input)[i] != quote_type)
+        return (NULL);
+    content = ft_strndup(start, i);
+    if (!content)
+        return (free(content), NULL);
+    (*input) += i + 1; // Increment input pointer to skip the closing quote
+    return (content);
+}
 
 int ft_is_redirection(t_token *token)
 {

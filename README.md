@@ -1,18 +1,19 @@
-# Mini-Shell
- Dpascal--Thobenel 42.nice
+# Mini-Shell 
+#  Dpascal--Thobenel 42.nice
 
- Bienvenue sur notre Minishell (Parsing part (for now ... ))
+Bienvenue sur notre Minishell (Parsing part (for now ... ))
 
-                    Juste ici on peut trouver un exemple du prompt qu'il faut afficher avant chaque nouvelle commande :
-
+Juste ici on peut trouver un exemple du prompt qu'il faut afficher avant chaque nouvelle commande :
 
 ![terminal-shell-prompt-commande](https://github.com/user-attachments/assets/0b1883eb-6fed-41c2-91b1-8842fb6fa066)
 
-Vous pouvez trouver ici divers schema cree sur draw.io :
+Vous pouvez aussi trouver un pdf qui details le projet, c'etait notre 1er semaine de documentation avant de commencer le projet : 
 
-[SCHEMA]parsing/adding_struct_cmd.drawio.png
+⬇️⬇️⬇️
 
-# asset_schema
+![WELCOME](minishell.pdf)
+
+# schéma parsing part create on (draw.io):
 
 ![WELCOME](adding_struct_cmd.drawio.png)
 
@@ -33,9 +34,8 @@ Here some idea we can improve in my parsing :
           c4r2p1% echo "hello world" > file.txt | cat file.txt
           hello world
 
+Updates:
 
-
-           
      11/12/2024:
 okayy so i now fix the issue with the pipe spend a day on it
 also i add the detection of the environement variable so now if you try to print a varibale it now regnosize the word behind i stock in TOKEN_WORD ($VAR == '$' 'VAR')
@@ -45,14 +45,21 @@ ex = 'ls |' it say you have a syntax error and leave the program for now im not 
 in bash when you have synntax error it not quit so i just follow the same logic
      
      20/12/2024 :
-                                                                            ᡕᠵデ气亠 Ak47 ✓
+                                                                           
+ ᡕᠵデ气亠 Ak47 ✓
+
+
 bug encounter or need do be fix like norm error/message
-     1) display space instaed of error when there is a space or tab
-               NEED TO FIXXXXX
+
+     1) display space instead of error when there is a space or tab
+               FIXXXXX (Well done soldier 🪖)
+
      2) fix there is a double message when the token take a redirections wihout file
                FIXXXXX (Well done soldier 🪖)
+
      3) multiple message with many pipe
                FIXXXXX (Well done soldier 🪖)
+
      4) cat Makefile | grep pr | head -n 5 | cd file_not_exist (if the file do not exist, this is the exec part to check this with 'execve')
           issue with some hard input
                FIXXXXX (Well done soldier 🪖)
@@ -68,24 +75,25 @@ So for now i re think the split fonction for my token
 I need to check for the variable environnements
 1) the syntax
 2) the name how can accept it
-3) Maybe number are allowed and i only accept MAJ
-          FIXXXXXX (Well done soldier 🪖)
-     ➜  parsing git:(parsing) ✗ echo $A1  
+3) Maybe number are allowed and i only accept MAJ 
+FIXXXXXX (Well done soldier 🪖)
 
-     ➜  parsing git:(parsing) ✗ echo $1A
-     A
-     ➜  parsing git:(parsing) ✗ 
-          (ONLY ON 42 COMPUTER !!!)
+          ➜  parsing git:(parsing) ✗ echo $A1  
 
-          FIXXXXXX (Well done soldier 🪖)
-	(the version of the code can act different on the 42 pc and my mac)
-	Weird caractere is add to the end of each token ???
+          ➜  parsing git:(parsing) ✗ echo $1A
+          A
+          ➜  parsing git:(parsing) ✗ 
+               (ONLY ON 42 COMPUTER !!!)
+
+               FIXXXXXX (Well done soldier 🪖)
+          (the version of the code can act different on the 42 pc and my mac)
+          Weird caractere is add to the end of each token ???
 
 ![WELCOME](Minishell_diag_token.png)
 
      13/01/2025 :
- add header (norm)
- handle auxiliaire fonctions (split etc ...)
+          -add header (norm)
+          -handle auxiliaire fonctions (split etc ...)
 
 need to fix :
      $> cat ''hello world''
@@ -109,34 +117,35 @@ LEAK SUMMARY: (wihout the ft_clean_up at the end of main)
 ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 
 
-HEAP SUMMARY:
-    in use at exit: 204,149 bytes in 221 blocks
-  total heap usage: 434 allocs, 214 frees, 224,484 bytes allocated
+     HEAP SUMMARY:
+     in use at exit: 204,149 bytes in 221 blocks
+     total heap usage: 434 allocs, 214 frees, 224,484 bytes allocated
 
-LEAK SUMMARY: (add the ft_clean_up at the end of main)
-   definitely lost: 0 bytes in 0 blocks
-   indirectly lost: 0 bytes in 0 blocks
-     possibly lost: 0 bytes in 0 blocks
-   still reachable: 204,149 bytes in 221 blocks
-        suppressed: 0 bytes in 0 blocks
-Rerun with --leak-check=full to see details of leaked memory
+     LEAK SUMMARY: (add the ft_clean_up at the end of main)
+     definitely lost: 0 bytes in 0 blocks
+     indirectly lost: 0 bytes in 0 blocks
+          possibly lost: 0 bytes in 0 blocks
+     still reachable: 204,149 bytes in 221 blocks
+          suppressed: 0 bytes in 0 blocks
+     Rerun with --leak-check=full to see details of leaked memory
 
-ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+     ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+
+Updates:
 
      14/01/2025 :
-- Centraliser la gestion de sortie (free etc ...) 🐴🐴 
+     - Centraliser la gestion de sortie (free etc ...) 🐴🐴 
+     - Debug fonction (need to be repair 🔨🔨)    🔨
+     - change message error put the real one      🔨
+     - Signal
 
-- Debug fonction (need to be repair 🔨🔨)    🔨
-- change message error put the real one      🔨
-- Signal
+# Pre-visualalisation des fonctions de debug: 
 
-          Previsualalisation des fonction DEBUG: 
+A activer ou desactiver dans ft_parse_token(const char *input)
 
-          A activer ou desactiver dans ft_parse_token(const char *input)
+ft_split_token(&token, input);
 
-           ft_split_token(&token, input);
-
-            ft_print_command_lst(cmd_lst);
+ft_print_command_lst(cmd_lst);
 
      $> 1 >> 2 > 3 < 4
 
@@ -157,7 +166,7 @@ ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
 
      -------------[DEBUG]---------------
 
-     ----------------------------------
+
 
      [DEBUG] t_command = pipe: 0
 
@@ -177,7 +186,41 @@ ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
 
      [DEBUG] filename = 4
 
-     -------------[DEBUG]---------------
+     15/01/2024:
 
-     ----------------------------------
+#Gestions des quotes :
+Bash parses single- and double-quotes slightly differently. Single-quotes are simpler, so I'll cover them first.
 
+A single-quoted string (or single-quoted section of a string -- I'll get to that) runs from a single-quote to the next single-quote. Anything other than a single-quote (including double-quotes, backslashes, newlines, etc) is just a literal character in the string. But the next single-quote ends the single-quoted section. There is no way to put a single-quote inside a single-quoted string, because the next single-quote will end the single-quoted section.
+
+You can have differently-quoted sections within a single "word" (or string, or whatever you want to call it). So, for example, ''hello'' will be parsed as a zero-length single-quoted section, the unquoted section hello, then another zero-length single-quoted section. Since there's no whitespace between them, they're all treated as part of the same word (and since the single-quoted sections are zero-length, they have no effect at all on the resulting word/string).
+
+Double-quotes are slightly different, in that some characters within them retain their special meanings. For example, $ can introduce variable or command substitution, etc (although the result won't be subject to word-splitting like it would be without the double-quotes). Backslashes also function as escapes inside double-quotes, so \$ will be treated as a literal dollar-sign, not as the start of a variable expansion or anything. Other characters that can have their special meaning removed by backslash-escaping are backslashes themselves, and... double-quotes! You can include a double-quote in a double-quote by escaping it. The double-quoted section ends a the next non-escaped double-quote.
+
+So compare:
+
+     echo ""hello""    # just prints hello
+     echo "\"hello\""  # prints "hello", because the escaped
+                    # quotes are part of the string
+     echo "$PATH"      # prints the value of the PATH variable
+     echo "\$PATH"     # prints $PATH
+     echo ""'$PATH'""  # prints $PATH, because it's in
+                    # single-quotes (with zero-lenght
+                    # double-quoted sections on each side
+                    
+     Also, single- and double-quotes have no special meaning within the other type of quote. So:
+
+     echo "'hello'"    # prints 'hello', because the single-quotes
+                    # are just ordinary characters in a
+                    # double-quoted string
+     echo '"hello"'    # similarly, prints "hello"
+     echo "'$PATH'"    # prints the PATH variable with
+                    # single-quotes around it (because
+                    # $variable expands in double-quotes)
+
+     NOT fix for now
+
+New handle to do :   
+     bash> $$ == PID
+     bash> $$$ == PID$
+     bash> $$$$ == PIDPID

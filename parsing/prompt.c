@@ -18,7 +18,7 @@ void	ft_print_tab(char **tab)
 
 	if (!tab)
 	{
-		ft_printf("[ERROR] tab est NULL\n");
+		ft_printf("[DEBUG] tab est NULL\n");
 		return;
 	}
 	i = 0;
