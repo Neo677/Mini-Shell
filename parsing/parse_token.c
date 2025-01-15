@@ -41,8 +41,8 @@ t_token *ft_parse_token(const char *input)
 	token = NULL;
     if (!(input) || !(*input))
     {
-        return(ft_printf("[ERROR] Entrée vide\n"), NULL);
-        //return (NULL);
+        //return(ft_printf("[ERROR] Entrée vide\n"), NULL);
+        return (NULL);
     }
     ft_split_token(&token, input);
 	if (!(input) || !(*input) || !token)

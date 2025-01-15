@@ -22,6 +22,8 @@
 
 */
 
+// ft_handle_sig_int = (CTRL-C)
+
 void ft_handle_sig_int(int sig)
 {
     (void)sig;
@@ -39,15 +41,14 @@ void ft_handle_sig_quit(int sig)
 /*  
     Here we need to config the handler for the signal
     on the top i do 2 fonction :
-    ft_handle_sig_int = (CTRL-C)
     ft_handle_sig_quit = (CTRL-\)
 */
 
-// void ft_set_signal_handler(int sig)
-// {
-//     struct sigaction sa_int;
-//     struct sigaction sa_quit;
+void ft_set_signal_handler(int sig)
+{
+    struct sigaction sa_int;
+    struct sigaction sa_quit;
 
-//     sigemptyset(&sa_int.sa_mask);
-//     sa_int.sa_flags = SA_RESTART;
-// }
+    sigemptyset(&sa_int.sa_mask);
+    sa_int.sa_flags = SA_RESTART;
+}

@@ -51,16 +51,22 @@ void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t
     char *token_value;
     
     token_value = ft_handle_quote(input, **input);
+
     if (!token_value)
         return (ft_err_split(*cmd_lst, *head));
+
     ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
+
     if (!*current)
         *current = ft_init_command(cmd_lst);
+
+
     if (!ft_add_arguments(*current, token_value))
     {
         ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);
         return (ft_err_split(*cmd_lst, *head));
     }
+    free(token_value);
 }
 
 void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
@@ -142,7 +148,7 @@ void ft_split_token(t_token **head, const char *input)
     while (*input)
     {
         if (*input == ' ' || *input == '\t')
-            input++; // Ignore les espaces
+            input++;
         else if (*input == '\'' || *input == '\"')
             ft_handle_quotes(&input, head, &cmd_lst, &current);
         else if (*input == '|' || *input == '>' || *input == '<')
@@ -155,9 +161,6 @@ void ft_split_token(t_token **head, const char *input)
     if (!ft_valid_token(*head))
         ft_free_split(*head, cmd_lst);
 }
-
-
-
 
 
 
