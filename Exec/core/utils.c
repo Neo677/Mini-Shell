@@ -1,5 +1,6 @@
 
-#include "pipex.h"
+
+#include "../include/pipex.h"
 
 int	str_search(char *big, char *little, int len)
 {

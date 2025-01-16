@@ -11,8 +11,9 @@ core/init.c \
 core/init_var.c \
 core/utils_error.c \
 core/here_doc.c \
-libft/get_next_line/get_next_line.c \
-libft/get_next_line/get_next_line_utils.c \
+core/check_file.c \
+# libft/get_next_line/get_next_line.c \
+# libft/get_next_line/get_next_line_utils.c \
 
 
 OBJS = $(SRCS:.c=.o)

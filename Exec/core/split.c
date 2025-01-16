@@ -1,5 +1,6 @@
 
-#include "pipex.h"
+
+#include "../include/pipex.h"
 
 int	ft_count(char *s, char c)
 {

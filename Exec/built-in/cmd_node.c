@@ -1,20 +1,5 @@
 #include "built_in.h"
 
-// t_env    *create_node(char *key, char *value)
-// {
-//     t_env *node;
-
-//     node = malloc(sizeof(t_env));
-//     if (!node)
-//         return (NULL);
-//     node->key = ft_strdup(key);
-//     node->value = ft_strdup(value);
-//     if (value[0] == '\0')
-//         node->val = 1;
-//     node->next = NULL;
-//     return (node);
-// }
-
 t_env    *create_node(char *key, char *value)
 {
     t_env *node;

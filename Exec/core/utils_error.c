@@ -1,5 +1,6 @@
 
-#include "pipex.h"
+
+#include "../include/pipex.h"
 
 char	*ft_join(char *join, char *s1, char *s2)
 {

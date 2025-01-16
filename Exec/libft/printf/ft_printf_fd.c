@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 00:04:55 by dpascal           #+#    #+#             */
-/*   Updated: 2024/11/12 19:36:15 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/01/15 11:52:30 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_written(const char *format, va_list args, int len, t_data *data)
 	return (len);
 }
 
-int	ft_printf(int fd, const char *format, ...)
+int	ft_printf_fd(int fd, const char *format, ...)
 {
 	int		len;
 	va_list	args;
@@ -63,13 +63,3 @@ int	ft_printf(int fd, const char *format, ...)
 	va_end(args);
 	return (len);
 }
-/*
-#include <stdio.h>
-
-int	main(void)
-{
-	ft_printf(1, "Salut\n");
-	printf("Salut\n");
-	return (0);
-}
-*/

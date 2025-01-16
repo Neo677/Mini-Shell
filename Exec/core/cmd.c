@@ -1,5 +1,6 @@
 
-#include "pipex.h"
+
+#include "../include/pipex.h"
 
 char	*find_cmd(t_pipex *pipex, char *cmd, char **paths)
 {
@@ -40,9 +41,9 @@ char	*find_path(t_pipex *pipex, char *cmd, char **envp)
 	return (pipex->path_cmd);
 }
 
-void	execute_cmd(t_pipex *pipex, char *argv, char **envp)
+void	execute_cmd(t_pipex *pipex, char *arg, char **envp)
 {
-	pipex->cmd = ft_split(pipex, argv, ' ');
+	pipex->cmd = ft_split(pipex, arg, ' ');
 	pipex->path = find_path(pipex, pipex->cmd[0], envp);
 	if (access("temp_null", F_OK) == 0)
 		unlink("temp_null");
