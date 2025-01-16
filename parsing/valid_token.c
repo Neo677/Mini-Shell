@@ -78,7 +78,7 @@ char *ft_valid_quotes(char **current, char quote_type)
     5) Updates the previous and the next token.
     6) return (1) if the token are good
 
-    🧑‍💻  for a certain visiblity and of course norm i need to
+    🧑‍💻  for a certain visiblity and of course norm i need to do
     🧑‍💻  split this fonction but the purpose is the same
 
     utils for the parsing :

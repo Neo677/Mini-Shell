@@ -26,6 +26,7 @@ SRCS =  add_arguments.c \
         free.c \
 		handle_error.c \
 		handle_error_2.c \
+		handle_quotes.c \
         main.c \
         parse_token.c \
         prompt.c \
@@ -36,7 +37,7 @@ SRCS =  add_arguments.c \
         utils.c \
 		syntax_before.c \
 		start_minishell.c \
-		valid_token.c 
+		valid_token.c \
 
 OBJS = $(SRCS:.c=.o)
 
