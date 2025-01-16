@@ -205,8 +205,9 @@ So compare:
      echo "$PATH"      # prints the value of the PATH variable
      echo "\$PATH"     # prints $PATH
      echo ""'$PATH'""  # prints $PATH, because it's in
-                    # single-quotes (with zero-lenght
+                    # single-quotes (with zero-lenght)
                     # double-quoted sections on each side
+
                     
      Also, single- and double-quotes have no special meaning within the other type of quote. So:
 
@@ -220,7 +221,19 @@ So compare:
 
      NOT fix for now
 
-New handle to do :   
+New handle to do :
      bash> $$ == PID
-     bash> $$$ == PID$
+     bash> $$$ == 'PID'=getpid '$'==carac
      bash> $$$$ == PIDPID
+
+
+     16/01/2025:
+alright so i'm done with the handling of the env-var if it is on double quote, but now
+i need to refresh the input if another double quote is here
+
+3. declare -p
+While this doesn’t directly show the lexical analysis, declare -p can be useful for inspecting how Bash interprets and stores variables. You can see how a variable's content is stored, which might help in understanding how Bash processes input.
+
+#Help full for drawing *https://excalidraw.com/*
+
+

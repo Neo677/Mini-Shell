@@ -75,6 +75,10 @@ t_token	*ft_create_token(t_token_type type, char *value)
 	token->value = ft_strdup(value);
 	if (!token->value)
 		return(free(token->value), NULL);
+	
+	token->double_quote = false;
+	token->single_quote = false;
+
 	token->next = NULL;
 	return (token);
 }

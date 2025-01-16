@@ -79,6 +79,8 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
+	bool			double_quote;
+	bool			single_quote;
 	struct s_token	*next;
 }		t_token;
 
@@ -136,7 +138,7 @@ char			*ft_extract_env_var(const char **input);
 int				ft_handle_env_var(t_token **head, const char **input);
 
 //				Token handler
-char			*ft_handle_quote(const char **input, char quote);
+// char			*ft_handle_quote(const char **input, char quote);
 void			ft_handle_operator(t_token **head, const char **input);
 int				ft_is_redirection(t_token *token);
 void			ft_handle_word(t_token **head, const char **input);
@@ -183,6 +185,9 @@ char			*ft_strndup(const char *src, size_t size);
 int				ft_strcmp(char *s1, char *s2);
 
 //				Signal
+
+//				handle quote
+char *ft_handle_quote(const char **input);
 
 
 #endif

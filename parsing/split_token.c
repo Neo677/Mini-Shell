@@ -49,11 +49,22 @@
 void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
 {
     char *token_value;
+    char quote_type = **input;
     
-    token_value = ft_handle_quote(input, **input);
+    token_value = ft_handle_quote(input);
 
     if (!token_value)
         return (ft_err_split(*cmd_lst, *head));
+
+
+    const char *tmp = *input;
+    while (*tmp) 
+    {
+
+        if (*tmp == quote_type)
+            return (ft_err_split(*cmd_lst, *head));
+        tmp++;
+    }
 
     ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
 
@@ -149,7 +160,7 @@ void ft_split_token(t_token **head, const char *input)
     {
         if (*input == ' ' || *input == '\t')
             input++;
-        else if (*input == '\'' || *input == '\"')
+        if (*input == '\'' || *input == '\"')
             ft_handle_quotes(&input, head, &cmd_lst, &current);
         else if (*input == '|' || *input == '>' || *input == '<')
             ft_handle_operators(&input, head, &cmd_lst, &current);
