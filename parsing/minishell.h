@@ -136,6 +136,7 @@ int				ft_error_env(const char *context);
 int				ft_detect_env_var(const char *str);
 char			*ft_extract_env_var(const char **input);
 int				ft_handle_env_var(t_token **head, const char **input);
+void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current);
 
 //				Token handler
 // char			*ft_handle_quote(const char **input, char quote);
@@ -187,7 +188,7 @@ int				ft_strcmp(char *s1, char *s2);
 //				Signal
 
 //				handle quote
-char *ft_handle_quote(const char **input);
+char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current);
 
 
 #endif

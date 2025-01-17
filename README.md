@@ -236,4 +236,23 @@ While this doesn’t directly show the lexical analysis, declare -p can be usefu
 
 #Help full for drawing *https://excalidraw.com/*
 
+Need to be fix :
 
+probleme :
+-handle error in ft_handle_quote and ft_check_syntax
+-les sequence espaced  (\\, \") only do for the double quote 
+make sure to not broke the parsing 
+-quote simple et double badly implement
+
+To fix:
+-check que closing quote in ft_check_syntax
+-add a better handling of the espaced in ft_handle_double_quote
+-make sure for ft_handle_single_quote
+
+
+- some case like = ">" or "ls | | wc" need to be fix 
+-in ft_check syntax make sur for every operator is follow by a valid token
+-handle space around operator
+-Space problem 
+-redirec wihout file can crash
+- check for the env var
