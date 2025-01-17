@@ -38,24 +38,42 @@ int ft_valid_redirections(const t_token *token)
     3) sauter la fermeture de la quote
 
 */
-char *ft_valid_quotes(char **current, char quote_type)
-{
+
+char *ft_valid_quotes(char **current, char quote_type) {
     char *start;
     char *value;
+    size_t len = 0;
 
-    (*current)++;
-    start = *current;
-    while (**current && **current != quote_type)
-        (*current)++;
-    if (**current == '\0')
-    {
+    if (!current || !*current || !**current) {
         ft_error_quote();
         return (NULL);
     }
-    value = ft_strndup(start, *current - start);
-    if (!value)
-        free(value);
-    (*current)++;
+
+    (*current)++; // Sauter la quote ouvrante
+    start = *current;
+
+    while (**current && **current != quote_type) {
+        if (**current == '\\' && (quote_type == '\"') &&
+            (*(*current + 1) == quote_type || *(*current + 1) == '\\')) {
+            (*current)++; // Ignorer le caractère échappé
+        }
+        (*current)++;
+        len++;
+    }
+
+    if (**current == '\0') { // Erreur si quote fermante absente
+        ft_error_quote();
+        return (NULL);
+    }
+
+    // Copie du contenu entre les quotes
+    value = ft_strndup(start, len);
+    if (!value) {
+        ft_printf("[ERROR] Memory allocation failed in ft_valid_quotes.\n");
+        return (NULL);
+    }
+
+    (*current)++; // Sauter la quote fermante
     return (value);
 }
 

@@ -74,7 +74,7 @@ int main(int ac, char **av, char **env)
 		token = ft_parse_token(input);
 		add_history(input);
 	}
-	// clear_history(); // (MACOS)
+	clear_history(); // (MACOS)
 	ft_free_token(token);
-	rl_clear_history(); // (LINUX)
+	//	rl_clear_history(); // (LINUX)
 }
