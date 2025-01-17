@@ -46,30 +46,22 @@
          2 fonctions d'affichage (DEBUG) et nettoyage (libere la liste de commandes)
 */
 
-void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current) {
-    char *content;
-
-    content = ft_handle_quote(input, head, cmd_lst, current);
-    if (!content) {
-        ft_err_split(*cmd_lst, *head);
-        return;
-    }
-
-    // Ajouter uniquement le contenu entre les quotes comme token
-    ft_add_token(head, ft_create_token(TOKEN_WORD, content));
-
-    // Initialiser une commande si nécessaire
-    if (!*current) {
+void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
+{
+    char *token_value;
+    
+    token_value = ft_handle_quote(input, head, cmd_lst, current);
+    if (!token_value)
+        return (ft_err_split(*cmd_lst, *head));
+    ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
+    if (!*current)
         *current = ft_init_command(cmd_lst);
+    if (!ft_add_arguments(*current, token_value))
+    {
+        ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);
+        return (ft_err_split(*cmd_lst, *head));
     }
-
-    // Ajouter le contenu comme argument à la commande
-    if (!ft_add_arguments(*current, content)) {
-        ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", content);
-        ft_err_split(*cmd_lst, *head);
-    }
-
-    free(content); // Libération après ajout
+    free(token_value);
 }
 
 void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
@@ -139,26 +131,31 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
     free(token_value);
 }
 
-void ft_split_token(t_token **head, const char *input) {
-    t_command *cmd_lst = NULL; // Liste des commandes
-    t_command *current = NULL; // Commande courante
+void ft_split_token(t_token **head, const char *input)
+{
+    t_command *cmd_lst; // Liste des commandes
+    t_command *current; // Commande courante
 
-    while (*input) {
-        if (*input == ' ' || *input == '\t') {
-            input++; // Ignorer les espaces
-        } else if (*input == '\'' || *input == '\"') {
+    cmd_lst = NULL;
+    current = NULL;
+    if (!ft_check_syntax(input))
+        return;
+    while (*input)
+    {
+        if (*input == ' ' || *input == '\t')
+            input++;
+        else if (*input == '\'' || *input == '\"')
             ft_handle_quotes(&input, head, &cmd_lst, &current);
-        } else {
+        else if (*input == '|' || *input == '>' || *input == '<')
+            ft_handle_operators(&input, head, &cmd_lst, &current);
+        else if (*input == '$')
+            ft_handle_env_vars(&input, head, &cmd_lst, &current);
+        else
             ft_handle_words(&input, head, &cmd_lst, &current);
-        }
     }
-
-    if (!ft_valid_token(*head)) {
-        ft_printf("[ERROR] Invalid tokens\n");
+    if (!ft_valid_token(*head))
         ft_free_split(*head, cmd_lst);
-    }
 }
-
 
 
 // void	ft_split_token(t_token **head, const char *input)

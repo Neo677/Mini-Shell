@@ -12,122 +12,109 @@
 
 #include "minishell.h"
 
-static char *ft_handle_single_quote(const char **input) {
+static char *ft_handle_single_quote(const char **input) 
+{
     const char *start;
     char *content;
-    size_t i = 0;
+    size_t i;
 
-    if (**input != '\'') {
+    i = 0;
+    if (**input != '\'')
         return (NULL);
-    }
-
-    start = ++(*input); // Sauter la quote ouvrante
-
-    // Parcourir jusqu'à la quote fermante
-    while ((*input)[i] && (*input)[i] != '\'') {
+    start = ++(*input);
+    while ((*input)[i] && (*input)[i] != '\'')
         i++;
-    }
-
-    if ((*input)[i] != '\'') { // Erreur si quote fermante absente
-        ft_printf("[ERROR] Unclosed single quote\n");
-        return (NULL);
-    }
-
-    // Copier le contenu entre les quotes
+    if ((*input)[i] != '\'')
+        return(ft_printf("[ERROR] Unclosed single quote\n"), NULL);
     content = ft_strndup(start, i);
-    if (!content) {
-        ft_printf("[ERROR] Memory allocation failed in ft_handle_single_quote\n");
-        return (NULL);
-    }
-
-    (*input) += i + 1; // Sauter la quote fermante
+    if (!content)
+        return (ft_printf("[ERROR] Memory allocation failed in ft_handle_single_quote\n"), NULL);
+    (*input) += i + 1;
     return (content);
 }
 
-static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current) {
+/*
+    - Double quote non trouvée
+    - Sauter la quote ouvrante
+    - Parcourir jusqu'à la prochaine quote fermante ou caractère spécial
+    - Sauter les caractères échappés
+    - Gestion des variables d'environnement
+    -  Avancer jusqu'au `$`
+        - Réinitialiser après le traitement
+        - Réinitialiser le début
+    - Vérifier si une quote fermante est trouvée
+    - Concaténer les contenus si nécessaire
+    - Sauter la quote fermante
+    - Vérifier si une autre quote suit immédiatement
+    - Sauter l'ouverture de la prochaine quote
+    - Reprendre l'analyse
+    - Fin de l'analyse des quotes
+*/
+
+static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current) 
+{
     const char *start;
-    char *content = NULL;
-    char *temp_content;
-    size_t i = 0;
+    char *content;
+    char *tmp;
+    size_t i;
 
-    if (**input != '\"') {
-        return (NULL); // Double quote non trouvée
-    }
-
-    (*input)++; // Sauter la quote ouvrante
+    if (**input != '\"') 
+        return (NULL);
+    i  = 0;
+    content = NULL;
+    (*input)++;
     start = *input;
-
-    while (**input) {
-        // Parcourir jusqu'à la prochaine quote fermante ou caractère spécial
-        while ((*input)[i] && (*input)[i] != '\"') {
-            if ((*input)[i] == '\\' && ((*input)[i + 1] == '\"' || (*input)[i + 1] == '\\' || (*input)[i + 1] == '$')) {
-                i += 2; // Sauter les caractères échappés
-            } else if ((*input)[i] == '$') {
-                // Gestion des variables d'environnement
-                *input += i; // Avancer jusqu'au `$`
+    while (**input) 
+    {
+        while ((*input)[i] && (*input)[i] != '\"') 
+        {
+            if ((*input)[i] == '$') 
+            {
+                *input += i;
                 ft_handle_env_vars(input, head, cmd_lst, current);
-                i = 0; // Réinitialiser après le traitement
-                start = *input; // Réinitialiser le début
-            } else {
-                i++;
-            }
-        }
-
-        // Vérifier si une quote fermante est trouvée
-        if ((*input)[i] == '\"') {
-            temp_content = ft_strndup(start, i);
-            if (!temp_content) {
-                ft_printf("[ERROR] Memory allocation failed in ft_handle_double_quote\n");
-                return (NULL);
-            }
-
-            // Concaténer les contenus si nécessaire
-            if (content) {
-                char *new_content = ft_strjoin(content, temp_content);
-                free(content);
-                free(temp_content);
-                if (!new_content) {
-                    ft_printf("[ERROR] Memory allocation failed during concatenation\n");
-                    return (NULL);
-                }
-                content = new_content;
-            } else {
-                content = temp_content;
-            }
-
-            (*input) += i + 1; // Sauter la quote fermante
-
-            // Vérifier si une autre quote suit immédiatement
-            if (**input == '\"') {
-                (*input)++; // Sauter l'ouverture de la prochaine quote
+                i = 0;
                 start = *input;
-                continue; // Reprendre l'analyse
-            }
-            break; // Fin de l'analyse des quotes
-        } else {
-            ft_printf("[ERROR] Unclosed double quote\n");
-            return (NULL);
+            } 
+            else 
+                i++;
         }
+        if ((*input)[i] == '\"')
+        {
+            tmp = ft_extract_quotent(start, i);
+            if (!tmp)
+                return(ft_printf("[ERROR] Memory allocation failed in ft_handle_double_quote\n"), NULL);
+            content = ft_concatent_content(content, tmp);
+            if (!content)
+                return (NULL);
+            if (ft_update_ptr_input(input, &i, &start))
+                continue;
+            break;
+        }
+        else
+            return (ft_printf("[ERROR] Unclosed double quote\n"), NULL);
     }
-
     return (content);
 }
+
+
 
 
 char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current) {
     char *content = NULL;
 
-    if (**input == '\'') {
+    if (**input == '\'') 
+    {
         content = ft_handle_single_quote(input);
-    } else if (**input == '\"') {
+    } 
+    else if (**input == '\"')
+    {
         content = ft_handle_double_quote(input, head, cmd_lst, current);
     }
-
-    if (!content) {
+    if (!content) 
+    {
         ft_printf("[DEBUG] Error while handling quote content\n");
         return (NULL);
     }
-
     return (content);
 }
 

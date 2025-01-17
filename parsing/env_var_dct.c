@@ -26,18 +26,7 @@
         and allocate is value brut for the parseur
     4) assure myself that the env var is use in a 
         good context
-*/
 
-// unusless
-
-int ft_detect_env_var(const char *str)
-{
-    if (str && *str == '$' && *(str + 1) != '\0')
-        return (1);
-    return (0);
-}
-
-/*
     Extracts the environment variable name from the input string.
     - Skips the '$' character.
     - Checks if the next character is a digit (Bash treats `$1` as a positional parameter).
@@ -47,17 +36,49 @@ int ft_detect_env_var(const char *str)
     - Duplicates and returns the variable name.
 */
 
+char *ft_detec_var(const char **input)
+{
+    char *var_name;
+
+    var_name = ft_strndup(*input, 1);
+    (*input)++;
+    return (var_name);
+}
+
+int     ft_detec_digit(int is_digit_param, const char **input)
+{
+        if (ft_isdigit(**input))
+            is_digit_param = 1;
+        return (is_digit_param);
+}
+
 char *ft_extract_env_var(const char **input)
 {
     const char  *start;
     char        *var_name;
     int          is_digit_param;
 
-    (*input)++;
-    if (ft_isdigit(**input))
-        is_digit_param = 1;
-    else
-        is_digit_param = 0;
+    is_digit_param = 0;
+    if (*input)
+        (*input)++;
+
+
+    if (**input == '?' || **input == '$')
+    {
+        var_name = ft_detec_var(input);
+        // var_name = ft_strndup(*input, 1);
+        // (*input)++;
+        // return (var_name);
+    }
+
+
+    is_digit_param = ft_detec_digit(is_digit_param, input);
+    // if (ft_isdigit(**input))
+    //     is_digit_param = 1;
+    // else
+    //     is_digit_param = 0;
+
+    
     start = *input;
     if (is_digit_param)
     {

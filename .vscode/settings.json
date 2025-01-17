@@ -2,6 +2,7 @@
     "files.associations": {
         "minishell.h": "c",
         "readline.h": "c",
-        "string_view": "c"
+        "string_view": "c",
+        "libft.h": "c"
     }
 }

@@ -99,8 +99,6 @@ typedef struct s_redirections
 	struct s_redirections	*next;
 }		t_redirections;
 
-
-
 typedef struct s_command
 {
 	char				**arg;
@@ -109,7 +107,7 @@ typedef struct s_command
 	struct s_command	*next;
 }			t_command;
 
-//			main utils
+//				main utils
 void			ft_start_minishell(void);
 void			ft_abort(char *input);
 void			ft_abort_parse(char *input);
@@ -118,7 +116,7 @@ void			ft_abort_cmd(char *input, t_token *token);
 void			ft_clean_up(t_token **token, char **input);
 int				ft_handle_exit(char *input);
 
-//			prompt
+//				prompt
 void			ft_intro(void);
 void			ft_print_tokens(t_token *head);
 void			ft_print_tab(char **tab);
@@ -133,13 +131,11 @@ int				ft_error_general(const char *context);
 int				ft_error_env(const char *context);
 
 //				env detection and syntax
-int				ft_detect_env_var(const char *str);
-char			*ft_extract_env_var(const char **input);
 int				ft_handle_env_var(t_token **head, const char **input);
-void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current);
+char			*ft_extract_env_var(const char **input);
+void 			ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current);
 
 //				Token handler
-// char			*ft_handle_quote(const char **input, char quote);
 void			ft_handle_operator(t_token **head, const char **input);
 int				ft_is_redirection(t_token *token);
 void			ft_handle_word(t_token **head, const char **input);
@@ -178,7 +174,7 @@ void			ft_err_split(t_command *cmd_lst, t_token *head);
 void			ft_err_split_ope(t_command *cmd_lst, t_token *head);
 void			ft_err_bad_redirec(t_command *cmd_lst, t_token *head);
 
-//			syntax 
+//				syntax 
 int				ft_check_syntax(const char *input);
 
 //				Utils
@@ -187,8 +183,13 @@ int				ft_strcmp(char *s1, char *s2);
 
 //				Signal
 
-//				handle quote
-char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current);
+//				double quote
+char 			*ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current);
+char *ft_extract_quotent(const char *start, size_t len);
+char *ft_concatent_content(char *content, char *tmp);
+int     ft_update_ptr_input(const char **input, size_t *i, const char **start);
+
+
 
 
 #endif

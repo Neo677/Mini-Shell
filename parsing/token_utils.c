@@ -110,7 +110,7 @@ char	*ft_get_next_token(const char **input)
 
 	start = *input;
 	while (**input && **input != ' ' && **input != '\t' && **input != '|'
-		&& **input != '<' && **input != '>')
+		&& **input != '<' && **input != '>' && **input != '\"' && **input != '\'')
 		(*input)++;
 	return (ft_strndup(start, *input - start));
 }
