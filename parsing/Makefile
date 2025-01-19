@@ -38,6 +38,8 @@ SRCS =  add_arguments.c \
 		syntax_before.c \
 		start_minishell.c \
 		valid_token.c \
+		double_quote.c \
+
 
 OBJS = $(SRCS:.c=.o)
 

@@ -9,11 +9,9 @@ Juste ici on peut trouver un exemple du prompt qu'il faut afficher avant chaque 
 
 Vous pouvez aussi trouver un pdf qui details le projet, c'etait notre 1er semaine de documentation avant de commencer le projet : 
 
-⬇️⬇️⬇️
-
-![WELCOME](minishell.pdf)
-
 # schéma parsing part create on (draw.io):
+
+![terminal-shell](parsing.png)
 
 ![WELCOME](adding_struct_cmd.drawio.png)
 
@@ -200,10 +198,7 @@ Double-quotes are slightly different, in that some characters within them retain
 So compare:
 
      echo ""hello""    # just prints hello
-     echo "\"hello\""  # prints "hello", because the escaped
-                    # quotes are part of the string
      echo "$PATH"      # prints the value of the PATH variable
-     echo "\$PATH"     # prints $PATH
      echo ""'$PATH'""  # prints $PATH, because it's in
                     # single-quotes (with zero-lenght)
                     # double-quoted sections on each side
@@ -218,13 +213,16 @@ So compare:
      echo "'$PATH'"    # prints the PATH variable with
                     # single-quotes around it (because
                     # $variable expands in double-quotes)
-
+          FIXXXXXX (Well done soldier 🪖)
+               
      NOT fix for now
 
 New handle to do :
-     bash> $$ == PID
-     bash> $$$ == 'PID'=getpid '$'==carac
-     bash> $$$$ == PIDPID
+
+bash> $$ == PID
+bash> $$$ == 'PID'=getpid '$'==carac
+bash> $$$$ == PIDPID
+
 
 
      16/01/2025:
@@ -239,20 +237,50 @@ While this doesn’t directly show the lexical analysis, declare -p can be usefu
 Need to be fix :
 
 probleme :
--handle error in ft_handle_quote and ft_check_syntax
--les sequence espaced  (\\, \") only do for the double quote 
+-handle error in ft_handle_quote and ft_check_syntax+
+                    
+
 make sure to not broke the parsing 
 -quote simple et double badly implement
 
 To fix:
--check que closing quote in ft_check_syntax
--add a better handling of the espaced in ft_handle_double_quote
--make sure for ft_handle_single_quote
+-check que closing quote in ft_check_syntax FIXXXXXX (Well done soldier 🪖)
+
+-make sure for ft_handle_single_quote  FIXXXXXX (Well done soldier 🪖)(i guess need to do more test)
 
 
-- some case like = ">" or "ls | | wc" need to be fix 
--in ft_check syntax make sur for every operator is follow by a valid token
--handle space around operator
--Space problem 
--redirec wihout file can crash
-- check for the env var
+- some case like = ">" or "ls | | wc" need to be fix FIXXXXXX (Well done soldier 🪖)
+-in ft_check syntax make sur for every operator is follow by a valid token FIXXXXXX (Well done soldier 🪖)
+-handle space around operator FIXXXXXX (Well done soldier 🪖)
+-Space problem FIXXXXXX (Well done soldier 🪖)
+-redirec wihout file can crash FIXXXXXX (Well done soldier 🪖)
+- check for the env var FIXXXXXX (Well done soldier 🪖)
+
+17/01/2025:
+
+- alright i fix the problem with the double quote FIXXXXXX (Well done soldier 🪖)
+- handle the env var in double quote FIXXXXXX (Well done soldier 🪖)
+- i fix the lexer for the env ver like $$ or $? FIXXXXXX (Well done soldier 🪖)
+- if i try 'minishell> echo L$$' it suppose to do 'LPID'
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'L$$'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [L$$]
+----------------------------------
+minishell> ls  | 
+ [🚨 ERROR 🚨] pipe = 'syntax error: pipe at the end'
+[ERROR] Token invalid ! = ls
+Segmentation fault (core dumped)
+thobenel@c4r2p2:~/Mini-Shell/parsing$ 
+
+
+# need to be fix (GLHF) 🪖🪖
+
+
+⬇️⬇️⬇️
+
+[WELCOME](Minishell.png)
