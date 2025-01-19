@@ -9,11 +9,9 @@ Juste ici on peut trouver un exemple du prompt qu'il faut afficher avant chaque 
 
 Vous pouvez aussi trouver un pdf qui details le projet, c'etait notre 1er semaine de documentation avant de commencer le projet : 
 
-⬇️⬇️⬇️
-
-![WELCOME](minishell.pdf)
-
 # schéma parsing part create on (draw.io):
+
+![terminal-shell](parsing.png)
 
 ![WELCOME](adding_struct_cmd.drawio.png)
 
@@ -220,9 +218,11 @@ So compare:
      NOT fix for now
 
 New handle to do :
-     bash> $$ == PID
-     bash> $$$ == 'PID'=getpid '$'==carac
-     bash> $$$$ == PIDPID
+
+bash> $$ == PID
+bash> $$$ == 'PID'=getpid '$'==carac
+bash> $$$$ == PIDPID
+
 
 
      16/01/2025:
@@ -279,3 +279,8 @@ thobenel@c4r2p2:~/Mini-Shell/parsing$
 
 
 # need to be fix (GLHF) 🪖🪖
+
+
+⬇️⬇️⬇️
+
+[WELCOME](Minishell.png)

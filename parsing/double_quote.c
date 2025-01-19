@@ -12,48 +12,47 @@
 
 #include "minishell.h"
 
-char *ft_extract_quotent(const char *start, size_t len)
+char	*ft_extract_quotent(const char *start, size_t len)
 {
-    char *tmp;
+	char	*tmp;
 
-    tmp = ft_strndup(start, len);
-    if (!tmp)
-    {
-        ft_printf("[DEBUG] Memory alloc failed in extract content\n");
-        return (NULL);
-    }
-    return (tmp);
+	tmp = ft_strndup(start, len);
+	if (!tmp)
+	{
+		ft_printf("[DEBUG] Memory alloc failed in extract content\n");
+		return (NULL);
+	}
+	return (tmp);
 }
 
-char *ft_concatent_content(char *content, char *tmp)
+char	*ft_concatent_content(char *content, char *tmp)
 {
-    char *new;
+	char	*new;
 
-    if (content)
-    {
-        new = ft_strjoin(content, tmp);
-        free(content);
-        free(tmp);
-        if (!new)
-        {
-            ft_printf("[ERROR] Memory allocation failed during concatenation\n");
-            return (NULL);
-        }
-        return (new);
-    }
-    return (tmp);
+	if (content)
+	{
+		new = ft_strjoin(content, tmp);
+		free(content);
+		free(tmp);
+		if (!new)
+		{
+			ft_printf("[ERROR] Memory allocation failed during concatenation\n");
+			return (NULL);
+		}
+		return (new);
+	}
+	return (tmp);
 }
 
-int     ft_update_ptr_input(const char **input, size_t *i, const char **start)
+int	ft_update_ptr_input(const char **input, size_t *i, const char **start)
 {
-    (*input) += *i + 1;
-    if (**input == '\"')
-    {
-        (*input)++;
-        *start = *input;
-        *i = 0;
-        return (1);
-    }
-    return (0);
+	(*input) += *i + 1;
+	if (**input == '\"')
+	{
+		(*input)++;
+		*start = *input;
+		*i = 0;
+		return (1);
+	}
+	return (0);
 }
-
