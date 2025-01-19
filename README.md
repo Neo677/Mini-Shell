@@ -3,13 +3,15 @@
 
 Bienvenue sur notre Minishell (Parsing part (for now ... ))
 
-Juste ici on peut trouver un exemple du prompt qu'il faut afficher avant chaque nouvelle commande :
+# Juste ici on peut trouver un exemple du prompt qu'il faut afficher avant chaque nouvelle commande :
 
 ![terminal-shell-prompt-commande](https://github.com/user-attachments/assets/0b1883eb-6fed-41c2-91b1-8842fb6fa066)
 
 Vous pouvez aussi trouver un pdf qui details le projet, c'etait notre 1er semaine de documentation avant de commencer le projet : 
+⬇️⬇️⬇️
+[HERE](Minishell.png)
 
-# schéma parsing part create on (draw.io):
+# schéma parsing part create on (draw.io and excalidraw):
 
 ![terminal-shell](parsing.png)
 
@@ -280,7 +282,3 @@ thobenel@c4r2p2:~/Mini-Shell/parsing$
 
 # need to be fix (GLHF) 🪖🪖
 
-
-⬇️⬇️⬇️
-
-[WELCOME](Minishell.pdf)
