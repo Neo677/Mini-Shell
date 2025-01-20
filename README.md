@@ -13,7 +13,7 @@ Bienvenue sur notre Minishell (Parsing part (for now ... ))
 
 # On vous laisse decouvrir un petit pfd qui a pris 1 semaine de diverse doc sur le projet en amont :
 
-![terminal-shell](parsing.[pdf)
+# ![terminal-shell](Minishell.pdf)
 
 
 
