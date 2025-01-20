@@ -131,7 +131,7 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
     free(token_value);
 }
 
-void ft_split_token(t_token **head, const char *input)
+int ft_split_token(t_token **head, const char *input)
 {
     t_command *cmd_lst; // Liste des commandes
     t_command *current; // Commande courante
@@ -139,7 +139,7 @@ void ft_split_token(t_token **head, const char *input)
     cmd_lst = NULL;
     current = NULL;
     if (!ft_check_syntax(input))
-        return;
+        return (0);
     while (*input)
     {
         if (*input == ' ' || *input == '\t')
@@ -153,8 +153,12 @@ void ft_split_token(t_token **head, const char *input)
         else
             ft_handle_words(&input, head, &cmd_lst, &current);
     }
+
     if (!ft_valid_token(*head))
-        ft_free_split(*head, cmd_lst);
+    {
+        return (0);
+    }
+    return (1);
 }
 
 

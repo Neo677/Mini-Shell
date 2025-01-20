@@ -44,12 +44,8 @@ t_token *ft_parse_token(const char *input)
         //return(ft_printf("[ERROR] Entrée vide\n"), NULL);
         return (NULL);
     }
-    ft_split_token(&token, input);
-	if (!(input) || !(*input) || !token)
-	{
-		// ft_printf("[ERROR] split token error render deteced\n");
-		return (NULL);
-	}
+    if (!ft_split_token(&token, input))
+        return (0);
     ft_print_tokens(token); // optionnal (LEXER part)
     if (!ft_create_command_lst(token, &cmd_lst))
     {

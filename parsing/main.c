@@ -46,16 +46,25 @@ void	ft_intro(void)
 
 int main(int ac, char **av, char **env)
 {
-	char *input;
-	// t_command *cmd_lst;
-	t_token *token;
-
 	(void)ac;
 	(void)av;
-	(void)env; // the exec need it (tmp)
-	// env = NULL;
-	// cmd_lst = NULL;
+	// (void)env;
+
+	int cd;
+	char *input;
+
+	t_token *token;
+
+	t_env *env_cpy;
+
+	char **tab;
+	
+	env_cpy = NULL;
+	copy_env(env, &env_cpy);
+    modify_node_value(&env_cpy, "_", "/usr/bin/env");
+
 	// ft_intro();
+
 	while (1)
 	{
 		input = readline("minishell> ");
@@ -73,6 +82,24 @@ int main(int ac, char **av, char **env)
 			
 		token = ft_parse_token(input);
 		add_history(input);
+	
+	    tab = ft_split_built(input, ' ');
+        if (ft_strcmp_exec(tab[0], "env") == 0)
+            ft_env(&env_cpy);
+        else if (ft_strcmp_exec(tab[0], "pwd") == 0)
+            ft_pwd(&env_cpy, &cd);
+        else if (ft_strcmp_exec(tab[0], "export") == 0)
+            ft_export(&env_cpy, tab[1]);
+        else if (ft_strcmp_exec(tab[0], "unset") == 0)
+            ft_unset(&env_cpy, tab[1]);
+        else if (ft_strcmp_exec(tab[0], "echo") == 0)
+            ft_echo(tab);
+        else if (ft_strcmp_exec(tab[0], "exit") == 0)
+            return(ft_exit(&env_cpy, tab));
+        else if (ft_strcmp_exec(tab[0], "./minishell") == 0)
+            main(ac, av, tab);
+        else if (ft_strcmp_exec(tab[0], "cd") == 0)
+            cd = ft_cd(&env_cpy, tab[1]);
 	}
 	clear_history(); // (MACOS)
 	ft_free_token(token);

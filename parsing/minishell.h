@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/02 12:59:14 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/02 12:59:15 by thobenel         ###   ########.fr       */
+/*   Created: 2025/01/20 10:54:31 by thobenel          #+#    #+#             */
+/*   Updated: 2025/01/20 10:54:34 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 
 # include <readline/history.h>
 # include <readline/readline.h>
+
+#include "../Exec/built-in/built_in.h"
+#include "../Exec/include/pipex.h"
 
 # include <time.h>
 # include <signal.h>
@@ -105,6 +108,7 @@ typedef struct s_command
 	struct s_command	*next;
 }			t_command;
 
+
 //				main utils
 void			ft_start_minishell(void);
 void			ft_abort(char *input);
@@ -143,7 +147,7 @@ t_token			*ft_parse_token(const char *input);
 t_token_type	ft_identify_token(char *str);
 t_token			*ft_create_token(t_token_type type, char *value);
 void			ft_add_token(t_token **head, t_token *add);
-void			ft_split_token(t_token **head, const char *input);
+int			    ft_split_token(t_token **head, const char *input);
 
 //				placement in struct (case of pipe check Read me)
 t_command		*ft_init_command(t_command **lst);
@@ -186,6 +190,9 @@ char 			*ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst
 char *ft_extract_quotent(const char *start, size_t len);
 char *ft_concatent_content(char *content, char *tmp);
 int     ft_update_ptr_input(const char **input, size_t *i, const char **start);
+
+//				env
+void    ft_replace_token_env_var(t_token **head, t_env *env);
 
 
 

@@ -3,6 +3,10 @@
         "minishell.h": "c",
         "readline.h": "c",
         "string_view": "c",
-        "libft.h": "c"
+        "libft.h": "c",
+        "built_in.h": "c",
+        "wait.h": "c",
+        "random": "c",
+        "pipex.h": "c"
     }
 }

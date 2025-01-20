@@ -22,11 +22,16 @@ void	ft_set_syntax_quote(const char *input, int *quote)
 
 int	ft_set_syntax_pipe(const char *input)
 {
-	if (*input == '|' || *input == '\0')
-	{
-		ft_printf("before minishell: syntax error near unexpected token '|'\n");
-		return (0);
-	}
+    if (*input == '|')
+    {
+        ft_printf("before minishell: syntax error near unexpected token '|'\n");
+        return (0);
+    }
+    // if (*input == '\0')
+    // {
+    //     ft_printf("> ");
+    //     return (1);
+    // }
 	return (1);
 }
 
@@ -43,7 +48,7 @@ int	ft_set_syntax_redir(const char *input)
     return (1);
 }
 
-int ft_check_syntax(const char *input)
+int  ft_check_syntax(const char *input)
 {
     int quote;
 	
