@@ -13,9 +13,11 @@ Vous pouvez aussi trouver un pdf qui details le projet, c'etait notre 1er semain
 
 # schéma parsing part create on (draw.io and excalidraw):
 
-![terminal-shell](parsing.png)
-
 ![WELCOME](adding_struct_cmd.drawio.png)
+
+# On vous laisse decouvrir un petit pfd qui a pris 1 semaine de diverse doc sur le projet en amont :
+
+![terminal-shell](parsing.[pdf)
 
 
 
