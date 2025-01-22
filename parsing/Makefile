@@ -21,6 +21,7 @@ SRCS =  add_arguments.c \
 	create_command.c \
 	env_var_dct.c \
 	free.c \
+	handle_signal.c \
 	handle_error.c \
 	handle_error_2.c \
 	handle_quotes.c \

@@ -23,7 +23,7 @@
 # include <readline/readline.h>
 
 #include "../Exec/built-in/built_in.h"
-#include "../Exec/include/pipex.h"
+// #include "../Exec/include/pipex.h"
 
 # include <time.h>
 # include <signal.h>
@@ -184,6 +184,10 @@ char			*ft_strndup(const char *src, size_t size);
 int				ft_strcmp(char *s1, char *s2);
 
 //				Signal
+void ft_handle_sig_int(int sig);
+void ft_handle_sig_quit(int sig);
+void ft_set_signal_handler(void);
+
 
 //				double quote
 char 			*ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current);
@@ -192,7 +196,7 @@ char *ft_concatent_content(char *content, char *tmp);
 int     ft_update_ptr_input(const char **input, size_t *i, const char **start);
 
 //				env
-void    ft_replace_token_env_var(t_token **head, t_env *env);
+// void    ft_replace_token_env_var(t_token **head, t_env *env);
 
 
 

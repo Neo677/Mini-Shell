@@ -53,7 +53,7 @@ void				ft_env(t_env **env_cpy);
 /*  EXIT  */
 int					ft_numeric(char *arg);
 long long			ft_atol(char *str, int *error);
-int					ft_exit(SYS_WAIT_env **env_cpy, char **tab);
+int					ft_exit(t_env **env_cpy, char **tab);
 
 /*  EXPORT  */
 int					ft_swap(t_env *a, t_env *b);

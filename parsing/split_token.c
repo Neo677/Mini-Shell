@@ -93,11 +93,19 @@ void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst
 void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
 {
     char *var_name;
+    t_env *env;
     
     var_name = ft_extract_env_var(input);
     if (!var_name)
     {
         ft_printf("[ERROR] Variable d'environnement invalide\n");
+        return (ft_err_split(*cmd_lst, *head));
+    }
+
+    var_name = print_node_by_key(&env, var_name);
+    if (!var_name)
+    {
+        ft_printf("[ERROR] Variable d'environnement NULL\n");
         return (ft_err_split(*cmd_lst, *head));
     }
     ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, var_name));
