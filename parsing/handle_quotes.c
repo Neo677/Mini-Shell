@@ -51,7 +51,7 @@ static char *ft_handle_single_quote(const char **input)
     - Fin de l'analyse des quotes
 */
 
-static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current) 
+static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env *env_cpy) 
 {
     const char *start;
     char *content;
@@ -71,7 +71,7 @@ static char *ft_handle_double_quote(const char **input, t_token **head, t_comman
             if ((*input)[i] == '$') 
             {
                 *input += i;
-                ft_handle_env_vars(input, head, cmd_lst, current);
+                ft_handle_env_vars(input, head, cmd_lst, current, env_cpy);
                 i = 0;
                 start = *input;
             } 
@@ -99,7 +99,8 @@ static char *ft_handle_double_quote(const char **input, t_token **head, t_comman
 
 
 
-char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current) {
+char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env *env_cpy) 
+{
     char *content = NULL;
 
     if (**input == '\'') 
@@ -108,7 +109,7 @@ char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t
     } 
     else if (**input == '\"')
     {
-        content = ft_handle_double_quote(input, head, cmd_lst, current);
+        content = ft_handle_double_quote(input, head, cmd_lst, current, env_cpy);
     }
     if (!content) 
     {

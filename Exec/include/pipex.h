@@ -39,7 +39,7 @@ char		*find_path(t_pipex *pipex, char *cmd, char **envp);
 void		execute_cmd(t_pipex *pipex, char *argv, char **envp);
 
 /*  FREE  */
-void		free_tab(char **tab);
+void		free_tab_pipex(char **tab);
 void		free_all_pipex(t_pipex *pipex);
 void		close_file(t_pipex *pipex);
 void		free_error(t_pipex *pipex, char *error, int key_error);
@@ -56,8 +56,8 @@ void		ft_process(t_pipex *pipex, char **argv, char **envp, int i);
 void		ft_pid(t_pipex *pipex, int argc, char **argv, char **envp);
 
 /*  SPLIT  */
-int			ft_count(char *s, char c);
-int			ft_len(char *str, char c, int i);
+// int			ft_count(char *s, char c);
+// int			ft_len(char *str, char c, int i);
 char		**ft_split_pipex(t_pipex *pipex, char *str, char c);
 
 /*  UTILS_EROOR */

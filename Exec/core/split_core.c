@@ -1,7 +1,7 @@
 
 #include "../include/pipex.h"
 
-int	ft_count(char *s, char c)
+static int	ft_count(char *s, char c)
 {
 	int	i;
 	int	count;
@@ -24,7 +24,7 @@ int	ft_count(char *s, char c)
 	return (count);
 }
 
-int	ft_len(char *str, char c, int i)
+static int	ft_len(char *str, char c, int i)
 {
 	int	j;
 
@@ -37,7 +37,7 @@ int	ft_len(char *str, char c, int i)
 	return (j);
 }
 
-char	**ft_split_init(t_pipex *pipex, char *str, char c, char **tab)
+static char	**ft_split_init(t_pipex *pipex, char *str, char c, char **tab)
 {
 	int	i;
 	int	j;

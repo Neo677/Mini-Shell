@@ -1,7 +1,7 @@
 
 #include "../include/pipex.h"
 
-void	free_tab(char **tab)
+void	free_tab_pipex(char **tab)
 {
 	int	i;
 
@@ -19,9 +19,9 @@ void	free_tab(char **tab)
 void	free_all_pipex(t_pipex *pipex)
 {
 	if (pipex->cmd)
-		free_tab(pipex->cmd);
+		free_tab_pipex(pipex->cmd);
 	if (pipex->paths)
-		free_tab(pipex->paths);
+		free_tab_pipex(pipex->paths);
 	if (pipex->path)
 		free(pipex->path);
 	if (pipex->pid)

@@ -15,7 +15,7 @@
 void	ft_free_split(t_token *head, t_command *cmd_lst)
 {
 	ft_printf("[ERROR] Token invalid ! = %s\n", head->value);
-	// ft_free_token(head);
+	ft_free_token(head);
 	head = NULL;
 	ft_free_commande_lst(cmd_lst);
 }
@@ -25,6 +25,7 @@ void    ft_err_split(t_command *cmd_lst, t_token *head)
     ft_free_token(head);
     head = NULL;
     ft_free_commande_lst(cmd_lst);
+    free(cmd_lst);
 	return;
 }
 

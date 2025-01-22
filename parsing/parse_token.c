@@ -32,7 +32,7 @@
     8) Free
 */
 
-t_token *ft_parse_token(const char *input)
+t_token *ft_parse_token(const char *input, t_env *env_cpy)
 {
     t_token *token;
     t_command *cmd_lst;
@@ -44,7 +44,7 @@ t_token *ft_parse_token(const char *input)
         //return(ft_printf("[ERROR] Entrée vide\n"), NULL);
         return (NULL);
     }
-    if (!ft_split_token(&token, input))
+    if (!ft_split_token(&token, input, env_cpy))
         return (0);
     ft_print_tokens(token); // optionnal (LEXER part)
     if (!ft_create_command_lst(token, &cmd_lst))

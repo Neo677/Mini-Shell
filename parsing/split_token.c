@@ -46,11 +46,11 @@
          2 fonctions d'affichage (DEBUG) et nettoyage (libere la liste de commandes)
 */
 
-void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
+void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env *env_cpy)
 {
     char *token_value;
     
-    token_value = ft_handle_quote(input, head, cmd_lst, current);
+    token_value = ft_handle_quote(input, head, cmd_lst, current, env_cpy);
     if (!token_value)
         return (ft_err_split(*cmd_lst, *head));
     ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
@@ -90,32 +90,35 @@ void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst
 }
 
 
-void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
+void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env *env_cpy)
 {
     char *var_name;
-    t_env *env;
+    char *var_value;
     
     var_name = ft_extract_env_var(input);
     if (!var_name)
     {
         ft_printf("[ERROR] Variable d'environnement invalide\n");
-        return (ft_err_split(*cmd_lst, *head));
+        return ;
     }
 
-    var_name = print_node_by_key(&env, var_name);
-    if (!var_name)
+    var_value = print_node_by_key(&env_cpy, var_name);
+    free(var_name);
+
+
+    if (!var_value)
     {
         ft_printf("[ERROR] Variable d'environnement NULL\n");
-        return (ft_err_split(*cmd_lst, *head));
+        return ;
     }
-    ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, var_name));
+    ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, var_value));
 
     if (!*current)
         *current = ft_init_command(cmd_lst);
-    if (!ft_add_arguments(*current, var_name))
+    if (!ft_add_arguments(*current, var_value))
     {
-        ft_printf("[ERROR] Impossible d'ajouter la variable en argument : %s\n", var_name);
-        return (ft_err_split(*cmd_lst, *head));
+        ft_printf("[ERROR] Impossible d'ajouter la variable en argument : %s\n", var_value);
+        return ;
     }
 }
 
@@ -139,7 +142,7 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
     free(token_value);
 }
 
-int ft_split_token(t_token **head, const char *input)
+int ft_split_token(t_token **head, const char *input, t_env *env_cpy)
 {
     t_command *cmd_lst; // Liste des commandes
     t_command *current; // Commande courante
@@ -153,15 +156,14 @@ int ft_split_token(t_token **head, const char *input)
         if (*input == ' ' || *input == '\t')
             input++;
         else if (*input == '\'' || *input == '\"')
-            ft_handle_quotes(&input, head, &cmd_lst, &current);
+            ft_handle_quotes(&input, head, &cmd_lst, &current, env_cpy);
         else if (*input == '|' || *input == '>' || *input == '<')
             ft_handle_operators(&input, head, &cmd_lst, &current);
         else if (*input == '$')
-            ft_handle_env_vars(&input, head, &cmd_lst, &current);
+            ft_handle_env_vars(&input, head, &cmd_lst, &current, env_cpy);
         else
             ft_handle_words(&input, head, &cmd_lst, &current);
     }
-
     if (!ft_valid_token(*head))
     {
         return (0);

@@ -56,6 +56,7 @@ int    ft_exit(t_env **env_cpy, char **tab)
     long long   num;
     int error;
 
+    num = 0;
     if (tab[1])
     {
         ft_printf("exit\n");

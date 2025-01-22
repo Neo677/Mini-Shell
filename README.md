@@ -11,9 +11,9 @@ Vous pouvez aussi trouver un pdf qui details le projet, c'etait notre 1er semain
 
 # schéma parsing part create on (draw.io):
 
-![terminal-shell](parsing.png)
+![terminal-shell](parsing/docs/parsing.png)
 
-![WELCOME](adding_struct_cmd.drawio.png)
+![WELCOME](parsing/docs/adding_struct_cmd.drawio.png)
 
 
 
@@ -283,4 +283,4 @@ thobenel@c4r2p2:~/Mini-Shell/parsing$
 
 ⬇️⬇️⬇️
 
-[WELCOME](Minishell.png)
+[WELCOME](parsing/docs/Minishell.pdf)

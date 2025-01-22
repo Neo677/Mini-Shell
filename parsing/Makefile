@@ -38,11 +38,10 @@ SRCS =  add_arguments.c \
 	valid_token.c \
 	double_quote.c \
 	replace_env.c \
-	../Exec/core/pipex.c \
 	../Exec/core/cmd.c \
 	../Exec/core/utils.c \
-	../Exec/core/free.c \
-	../Exec/core/split.c \
+	../Exec/core/free_core.c \
+	../Exec/core/split_core.c \
 	../Exec/core/process.c \
 	../Exec/core/init.c \
 	../Exec/core/init_var.c \
@@ -55,9 +54,9 @@ SRCS =  add_arguments.c \
 	../Exec/built-in/env.c \
 	../Exec/built-in/exit.c \
 	../Exec/built-in/export.c \
-	../Exec/built-in/free.c \
+	../Exec/built-in/free_built.c \
 	../Exec/built-in/pwd.c \
-	../Exec/built-in/split.c \
+	../Exec/built-in/split_built.c \
 	../Exec/built-in/unset.c \
 	../Exec/built-in/utils_built_in.c
 
