@@ -76,10 +76,6 @@ static char *ft_handle_double_quote(const char **input, t_token **head, t_comman
                 i = 0;
                 start = *input;
             }
-            if ((*input)[i] == '\'')
-            {
-                ft_handle_single_quote(input);
-            }
             else 
                 i++;
         }

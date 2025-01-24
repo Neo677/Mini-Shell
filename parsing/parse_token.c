@@ -41,18 +41,18 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy)
     token = NULL;
     if (!(input) || !(*input))
     {
-        //return(ft_printf("[ERROR] Entrée vide\n"), NULL);
+        ft_printf_fd(2, "bash: syntax error: unexpected end of input\n");
         return (NULL);
     }
     if (!ft_split_token(&token, input, env_cpy))
     {
-        fprintf(stderr, "Error: Failed to split tokens\n");
+        ft_printf_fd(2, "bash: lexer error: failed to tokenize input\n");
         return (NULL);
     }
     ft_print_tokens(token); // optionnal (LEXER part)
     if (!ft_create_command_lst(token, &cmd_lst))
     {
-        fprintf(stderr, "Error: Failed to create command list\n");
+        ft_printf_fd(2, "bash: parser error: failed to create command list\n");
         ft_free_commande_lst(cmd_lst);
         return (NULL);
     }
