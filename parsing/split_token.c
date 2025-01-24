@@ -163,6 +163,7 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
             ft_handle_env_vars(&input, head, &cmd_lst, &current, env_cpy);
         else
             ft_handle_words(&input, head, &cmd_lst, &current);
+        input++;
     }
     if (!ft_valid_token(*head))
     {

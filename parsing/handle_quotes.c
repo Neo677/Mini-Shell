@@ -29,6 +29,7 @@ static char *ft_handle_single_quote(const char **input)
     content = ft_strndup(start, i);
     if (!content)
         return (ft_printf("[ERROR] Memory allocation failed in ft_handle_single_quote\n"), NULL);
+    printf("content  %s\n", content);
     (*input) += i + 1;
     return (content);
 }
@@ -74,7 +75,11 @@ static char *ft_handle_double_quote(const char **input, t_token **head, t_comman
                 ft_handle_env_vars(input, head, cmd_lst, current, env_cpy);
                 i = 0;
                 start = *input;
-            } 
+            }
+            if ((*input)[i] == '\'')
+            {
+                ft_handle_single_quote(input);
+            }
             else 
                 i++;
         }

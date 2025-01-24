@@ -49,13 +49,13 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy)
         fprintf(stderr, "Error: Failed to split tokens\n");
         return (NULL);
     }
-    // ft_print_tokens(token); // optionnal (LEXER part)
+    ft_print_tokens(token); // optionnal (LEXER part)
     if (!ft_create_command_lst(token, &cmd_lst))
     {
         fprintf(stderr, "Error: Failed to create command list\n");
         ft_free_commande_lst(cmd_lst);
         return (NULL);
     }
-    // ft_print_command_lst(cmd_lst);
+    ft_print_command_lst(cmd_lst);
     return (token); // Retourne les tokens si tout est valide
 }

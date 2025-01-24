@@ -4,7 +4,6 @@
 
 # include "../libft/printf/ft_printf.h"
 # include "../libft/get_next_line/get_next_line.h"
-// # include "../../libft_2.0/libft.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>

@@ -89,14 +89,12 @@ int main(int ac, char **av, char **env)
 	t_buit_in exec;
 	t_token *token;
 	
-	ft_printf("2\n");
 	token = NULL;
 	init_var(&exec);
 	ft_set_signal_handler();
 	copy_env(env, &exec.env_cpy);
 	modify_node_value(&exec.env_cpy, "_", "/usr/bin/env");
 	// ft_intro();
-	printf("1\n");
 	while (1)
 	{
 		exec.input = readline("minishell> ");
