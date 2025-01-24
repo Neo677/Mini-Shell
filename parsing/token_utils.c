@@ -72,7 +72,7 @@ t_token	*ft_create_token(t_token_type type, char *value)
 	if (!token)
 		return (free(token), NULL);
 	token->type = type;
-	token->value = ft_strdup(value);
+	token->value = ft_strdup_v2(value);
 	if (!token->value)
 		return(free(token->value), NULL);
 	token->next = NULL;

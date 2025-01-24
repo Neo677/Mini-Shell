@@ -31,7 +31,7 @@ char	*ft_concatent_content(char *content, char *tmp)
 
 	if (content)
 	{
-		new = ft_strjoin(content, tmp);
+		new = ft_strjoin_v2(content, tmp);
 		free(content);
 		free(tmp);
 		if (!new)

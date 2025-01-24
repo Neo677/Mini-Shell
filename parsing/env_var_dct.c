@@ -62,7 +62,7 @@ char *ft_extract_env_var(const char **input)
     if (**input == '$')
         (*input)++;
     if (**input == '\0' || **input == ' ' || **input == '\t' || **input == '$')
-        return (ft_strdup("$"));
+        return (ft_strdup_v2("$"));
     if (**input == '?' || **input == '$')
         return (ft_detec_var(input));
     is_digit_param = ft_detec_digit(is_digit_param, input);
@@ -78,7 +78,7 @@ char *ft_extract_env_var(const char **input)
             (*input)++;
     }
     if (start == *input)
-        return (ft_strdup("$"));
+        return (ft_strdup_v2("$"));
     var_name = ft_strndup(start, (*input - start));
     if (!var_name)
         return (NULL);

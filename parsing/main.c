@@ -65,7 +65,7 @@ char **ft_token_to_tab(t_token *token)
 	i = 0;
 	while (tmp)
 	{
-		tab[i] = ft_strdup(tmp->value);
+		tab[i] = ft_strdup_v2(tmp->value);
 		if (!tab[i])
 		{
 			while (i > 0)
@@ -89,13 +89,14 @@ int main(int ac, char **av, char **env)
 	t_buit_in exec;
 	t_token *token;
 	
-	
+	ft_printf("2\n");
 	token = NULL;
 	init_var(&exec);
 	ft_set_signal_handler();
 	copy_env(env, &exec.env_cpy);
 	modify_node_value(&exec.env_cpy, "_", "/usr/bin/env");
 	// ft_intro();
+	printf("1\n");
 	while (1)
 	{
 		exec.input = readline("minishell> ");
@@ -135,6 +136,6 @@ int main(int ac, char **av, char **env)
 	free(exec.tab);
 	free_tab(exec.tab);
 	ft_free_token(token);
-	// clear_history(); // (MACOS)
-	rl_clear_history(); // (LINUX)
+	clear_history(); // (MACOS)
+	//rl_clear_history(); // (LINUX)
 }

@@ -14,7 +14,9 @@ NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I include #-fsanitize=leak
 LIBFT_DIR = ../libft_2.0
+LIBFT_DIR_MATE = ../Exec/libft/printf
 LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_MATE = $(LIBFT_DIR_MATE)/libftprintf.a
 READLINE = -lreadline
 SRCS =  add_arguments.c \
 	add_redirections.c \
@@ -60,6 +62,8 @@ SRCS =  add_arguments.c \
 	../Exec/built-in/unset.c \
 	../Exec/built-in/utils_built_in.c
 
+	
+
 
 
 OBJS = $(SRCS:.c=.o)
@@ -68,11 +72,11 @@ all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
 	@echo "Lien des objets pour créer $(NAME)..."
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(READLINE)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LIBFT_MATE) $(READLINE)
 
 $(LIBFT):
 	@echo "Compilation de la libft..."
-	make -C $(LIBFT_DIR)
+	make -C $(LIBFT_DIR) $(LIBFT_DIR_MATE)
 
 %.o: %.c
 	@echo "Compilation de $<..."
@@ -81,12 +85,12 @@ $(LIBFT):
 clean:
 	@echo "Suppression des fichiers objets..."
 	rm -f $(OBJS)
-	make -C $(LIBFT_DIR) clean
+	make -C $(LIBFT_DIR) $(LIBFT_DIR_MATE) clean
 
 fclean: clean
 	@echo "Suppression de $(NAME) et de la libft..."
 	rm -f $(NAME)
-	make -C $(LIBFT_DIR) fclean
+	make -C $(LIBFT_DIR) $(LIBFT_DIR_MATE) fclean
 
 re: fclean all
 

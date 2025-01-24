@@ -12,6 +12,9 @@
         "cstdlib": "c",
         "ft_printf.h": "c",
         "unistd.h": "c",
-        "history.h": "c"
+        "history.h": "c",
+        "stdbool.h": "c",
+        "string.h": "c",
+        "signal.h": "c"
     }
 }
