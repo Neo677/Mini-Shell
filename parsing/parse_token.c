@@ -45,14 +45,14 @@ t_token *ft_parse_token(const char *input, t_env *env_cpy)
         return (NULL);
     }
     if (!ft_split_token(&token, input, env_cpy))
-        return (0);
-    ft_print_tokens(token); // optionnal (LEXER part)
+        exit (2);
+    // ft_print_tokens(token); // optionnal (LEXER part)
     if (!ft_create_command_lst(token, &cmd_lst))
     {
         ft_free_commande_lst(cmd_lst);
         return (0);
     }
-    ft_print_command_lst(cmd_lst);
+    // ft_print_command_lst(cmd_lst);
     return (token); // Retourne les tokens si tout est valide
 }
 

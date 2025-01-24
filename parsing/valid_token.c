@@ -130,16 +130,16 @@ int ft_validate_pipes(t_token *token)
     
     prev = NULL;
     if (!token || token->type == TOKEN_PIPE)
-        return(ft_printf("after: syntax error near unexpected token '|' \n"), 0);
+        return(ft_printf(" syntax error near unexpected token `|' \n"), 0);
 
     while (token) 
     {
         if (token->type == TOKEN_PIPE) 
         {
             if (!prev || prev->type == TOKEN_PIPE) 
-                return(ft_printf("after: syntax error near unexpected token '|' \n"), 0);
-            // if (!token->next)
-            //     return(ft_printf("after: syntax error: pipe at the end \n"), 0);
+                return(ft_printf(" syntax error near unexpected token `|' \n"), 0);
+            if (!token->next)
+                return(ft_printf("after: syntax error: pipe at the end \n"), 0);
         }
         prev = token;
         token = token->next;

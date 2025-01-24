@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = minishell_parser
+NAME = minishell
 CC = gcc -g
 CFLAGS = -Wall -Wextra -Werror -I include #-fsanitize=leak
 LIBFT_DIR = ../libft_2.0

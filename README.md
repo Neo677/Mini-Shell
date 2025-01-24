@@ -272,7 +272,7 @@ Type: TOKEN_WORD, Value: 'L$$'
 [DEBUG] arg = [L$$]
 ----------------------------------
 minishell> ls  | 
- [🚨 ERROR 🚨] pipe = 'syntax error: pipe at the end'
+ [🚨 ERROR 🚨] pipe = 'syntax error: pipe at the end' FIXXXXXX (Well done soldier 🪖)
 [ERROR] Token invalid ! = ls
 Segmentation fault (core dumped)
 thobenel@c4r2p2:~/Mini-Shell/parsing$ 
@@ -284,3 +284,24 @@ thobenel@c4r2p2:~/Mini-Shell/parsing$
 ⬇️⬇️⬇️
 
 [WELCOME](parsing/docs/Minishell.pdf)
+
+24/01/25:
+ need to be fix (GLHF) 🪖🪖:
+ minishell> $PATH
+Type: TOKEN_ENV_VAR, Value: '/home/thobenel/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [/home/thobenel/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin]
+----------------------------------
+minishell> 
+
+thobenel@c1r6p2:~/Mini-Shell/parsing$ $PATH
+bash: /home/thobenel/bin:/home/thobenel/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin: No such file or directory
+thobenel@c1r6p2:~/Mini-Shell/parsing$ 
+
+-- Need to add some error message if the path is not good
+
+
+
