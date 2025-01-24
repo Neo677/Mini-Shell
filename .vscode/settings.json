@@ -8,6 +8,10 @@
         "wait.h": "c",
         "random": "c",
         "pipex.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "cstdlib": "c",
+        "ft_printf.h": "c",
+        "unistd.h": "c",
+        "history.h": "c"
     }
 }

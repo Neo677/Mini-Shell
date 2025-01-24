@@ -40,15 +40,15 @@ t_token_type	ft_identify_token(char *str)
 {
 	t_token_type	type;
 
-	if (ft_strcmp(str, "|") == 0)
+	if (ft_strcmp_parsing(str, "|") == 0)
 		type = TOKEN_PIPE;
-	else if (ft_strcmp(str, "<") == 0)
+	else if (ft_strcmp_parsing(str, "<") == 0)
 		type = TOKEN_IN;
-	else if (ft_strcmp(str, ">") == 0)
+	else if (ft_strcmp_parsing(str, ">") == 0)
 		type = TOKEN_OUT;
-	else if (ft_strcmp(str, ">>") == 0)
+	else if (ft_strcmp_parsing(str, ">>") == 0)
 		type = TOKEN_APPEND;
-	else if (ft_strcmp(str, "<<") == 0)
+	else if (ft_strcmp_parsing(str, "<<") == 0)
 		type = TOKEN_HEREDOC;
 	else if (str[0] == '$')
 		type = TOKEN_ENV_VAR;

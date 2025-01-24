@@ -51,7 +51,7 @@ static char *ft_handle_single_quote(const char **input)
     - Fin de l'analyse des quotes
 */
 
-static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env *env_cpy) 
+static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
 {
     const char *start;
     char *content;
@@ -99,7 +99,7 @@ static char *ft_handle_double_quote(const char **input, t_token **head, t_comman
 
 
 
-char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env *env_cpy) 
+char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
 {
     char *content = NULL;
 
@@ -126,7 +126,8 @@ char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t
 //     char single_quote_char;
 //     char double_quote_char;
 
-//     t_token token_instance;
+//     t_token token_instance;char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_buit_in *env_cpy);
+
 //     t_token *token = &token_instance;
 //     // token->single_quote = false;
 //     // token->double_quote = false;

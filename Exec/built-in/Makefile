@@ -9,7 +9,9 @@ env.c \
 exit.c \
 export.c \
 free.c \
+init.c \
 pwd.c \
+signal.c \
 split.c \
 unset.c \
 utils_built_in.c \

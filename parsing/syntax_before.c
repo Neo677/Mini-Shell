@@ -24,7 +24,7 @@ int	ft_set_syntax_pipe(const char *input)
 {
     if (*input == '|')
     {
-        ft_printf("minishell: syntax error near unexpected token '|'\n");
+        ft_printf_fd(2, " bash: syntax error near unexpected token '|'\n");
         return (0);
     }
     // if (*input == '\0')
@@ -42,7 +42,7 @@ int	ft_set_syntax_redir(const char *input)
         input++;
     if (*input == '\0' || *input == '|')
     {
-        ft_printf("minishell: parse error near `\\n'\n");
+        ft_printf_fd(2, " bash: parse error near `\\n'\n");
         return (0);
     }
     return (1);
@@ -72,7 +72,7 @@ int  ft_check_syntax(const char *input)
         input++;
     }
     if (quote != 0)
-        return (ft_printf("minishell: syntax error: unclosed quote\n"), 0);
+        return (ft_printf_fd(2, "bash : syntax error: unclosed quote\n"), 0);
     return (1);
 }
 

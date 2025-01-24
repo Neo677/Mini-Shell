@@ -1,7 +1,8 @@
 
+
 #include "../include/pipex.h"
 
-char	*ft_join(char *join, char *s1, char *s2)
+char	*ft_join_pipex(char *join, char *s1, char *s2)
 {
 	int	i;
 	int	j;
@@ -33,7 +34,7 @@ char	*ft_strjoin_pipex(char *s1, char *s2)
 	join = malloc(sizeof(char) * (ft_strlen_pipex(s1) + ft_strlen_pipex(s2) + 1));
 	if (!join)
 		return (NULL);
-	return (ft_join(join, s1, s2));
+	return (ft_join_pipex(join, s1, s2));
 }
 
 void	write_error(char *cmd)

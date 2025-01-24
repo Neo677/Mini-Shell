@@ -1,18 +1,17 @@
 #ifndef BUILT_IN_H
 # define BUILT_IN_H
 
-// # include "../libft/get_next_line/get_next_line.h"
-
-# include "../../libft_2.0/libft.h"
+# include "../libft/printf/ft_printf.h"
+# include <errno.h>
 # include <fcntl.h>
-# include <readline/readline.h>
 # include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <errno.h>
-
 
 typedef struct s_env
 {
@@ -21,6 +20,17 @@ typedef struct s_env
 	int				val;
 	struct s_env	*next;
 }					t_env;
+
+typedef struct s_built_in
+{
+	int				ac;
+	char			**av;
+	t_env			*env_cpy;
+	t_env			*export_cpy;
+	char			**tab;
+	char			*input;
+	int				cd;
+}					t_buit_in;
 
 /*  MAIN  */
 int					main(int ac, char **av, char **env);
@@ -34,8 +44,8 @@ t_env				*create_node(char *key, char *value);
 int					modify_node_value(t_env **env_cpy, char *key,
 						char *new_value);
 int					delete_node_by_key(t_env **env_cpy, char *key);
-int 				search_node_and_value(t_env **env, char *key, char *value);
-char			    *print_node_by_key(t_env **env, char *key);
+int					search_node_and_value(t_env **env, char *key, char *value);
+char				*print_node_by_key(t_env **env, char *key);
 
 /*  CPY_ENV  */
 int					ft_strlen_c(char *str, int i, char c);
@@ -55,7 +65,7 @@ void				ft_env(t_env **env_cpy);
 /*  EXIT  */
 int					ft_numeric(char *arg);
 long long			ft_atol(char *str, int *error);
-int					ft_exit(t_env **env_cpy, char **tab);
+int					ft_exit(t_buit_in *exec, char **tab);
 
 /*  EXPORT  */
 int					ft_swap(t_env *a, t_env *b);
@@ -66,10 +76,16 @@ void				ft_export(t_env **env_cpy1, char *key_value);
 /*  FREE  */
 void				free_tab(char **tab);
 void				free_list(t_env **lst);
-void				free_all(char **tab, t_env **env_cpy);
+void				free_all(t_buit_in *exec);
+
+/*  INIT  */
+void    			init_var(t_buit_in *exec);
 
 /*  PWD  */
-void				ft_pwd(t_env **env, int *cd);
+void				ft_pwd(t_env **env, int cd);
+
+/*  SIGNAL  */
+void				signal_handler(int sig);
 
 /*  SPLIT  */
 int					ft_count(char *s, char c);
@@ -81,11 +97,11 @@ char				**ft_split_built(char *str, char c);
 void				ft_unset(t_env **env_cpy, char *key);
 
 /*  UTILS_BUILT_IN  */
-int					ft_strlen_exec(char *s);
-char				*ft_strdup_exec(char *src);
-int					ft_strcmp_exec(char *s1, char *s2);
-char				*ft_join_exec(char *join, char *s1, char *s2);
-char				*ft_strjoin_exec(char *s1, char *s2);
+int					ft_strlen(char *s);
+char				*ft_strdup(char *src);
+int					ft_strcmp(char *s1, char *s2);
+char				*ft_join(char *join, char *s1, char *s2);
+char				*ft_strjoin(char *s1, char *s2);
 // char				*ft_strchr(const char *s, int c);
 
 #endif

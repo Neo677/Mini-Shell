@@ -1,20 +1,5 @@
 #include "built_in.h"
 
-// t_env    *create_node(char *key, char *value)
-// {
-//     t_env *node;
-
-//     node = malloc(sizeof(t_env));
-//     if (!node)
-//         return (NULL);
-//     node->key = ft_strdup_exec(key);
-//     node->value = ft_strdup_exec(value);
-//     if (value[0] == '\0')
-//         node->val = 1;
-//     node->next = NULL;
-//     return (node);
-// }
-
 t_env    *create_node(char *key, char *value)
 {
     t_env *node;
@@ -22,9 +7,9 @@ t_env    *create_node(char *key, char *value)
     node = malloc(sizeof(t_env));
     if (!node)
         return (NULL);
-    node->key = ft_strdup_exec(key);
+    node->key = ft_strdup(key);
     if (value)
-        node->value = ft_strdup_exec(value);
+        node->value = ft_strdup(value);
     else
     {
         node->value = NULL;
@@ -41,10 +26,10 @@ int    modify_node_value(t_env **env_cpy, char *key, char *new_value)
     current = env_cpy[0]; // copie du poiteur vers le debut de notre liste chainee pour pouvoir s'y deplacer
     while (current)
     {
-        if (ft_strcmp_exec(current->key, key) == 0) // recherche de la KEY a laquelle on veut modifier la valeur
+        if (ft_strcmp(current->key, key) == 0) // recherche de la KEY a laquelle on veut modifier la valeur
         {
             free(current->value); // libere l'ancienne valeur
-            current->value = ft_strdup_exec(new_value); // alloue de la memoire et copie la nouvelle valeur
+            current->value = ft_strdup(new_value); // alloue de la memoire et copie la nouvelle valeur
             if (!current->value)
                 return (0);
             return (1);
@@ -63,7 +48,7 @@ int    delete_node_by_key(t_env **env_cpy, char *key)
     previous = NULL;
     while (current)
     {
-        if (ft_strcmp_exec(current->key, key) == 0) // compare si la KEY du noeud actuel est la meme que celle que l'on veut supprimer
+        if (ft_strcmp(current->key, key) == 0) // compare si la KEY du noeud actuel est la meme que celle que l'on veut supprimer
         {
             if (previous == NULL) // previous est le noeud précédent, si il est egal a NULL cela signifie que l'on traite le premier noeud
                 *env_cpy = current->next; // donc ici on fait pointer le debut de notre liste chainee vers le deuxieme noeud
@@ -87,7 +72,7 @@ int search_node_and_value(t_env **env, char *key, char *value)
     current = env[0];
     while (current)
     {
-        if (ft_strcmp_exec(current->key, key) == 0 && ft_strcmp_exec(current->value, value) == 0)
+        if (ft_strcmp(current->key, key) == 0 && ft_strcmp(current->value, value) == 0)
             return (0);
         current = current->next;
     }
@@ -101,7 +86,7 @@ char    *print_node_by_key(t_env **env, char *key)
     current = *env;
     while (current)
     {
-        if (ft_strcmp_exec(current->key, key) == 0)
+        if (ft_strcmp(current->key, key) == 0)
             return (current->value);
         current = current->next;
     }

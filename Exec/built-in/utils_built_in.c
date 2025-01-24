@@ -1,6 +1,6 @@
 #include "built_in.h"
 
-int ft_strlen_exec(char *s)
+int ft_strlen(char *s)
 {
     int i;
 
@@ -10,14 +10,14 @@ int ft_strlen_exec(char *s)
     return (i);
 }
 
-char    *ft_strdup_exec(char *src)
+char    *ft_strdup(char *src)
 {
     char *dst;
     int j;
     int i;
 	int	len;
 
-    len = ft_strlen_exec(src);
+    len = ft_strlen(src);
     dst = malloc(sizeof(char) * len + 1);
     if(!dst)
     {
@@ -35,7 +35,7 @@ char    *ft_strdup_exec(char *src)
     return (dst);
 }
 
-int ft_strcmp_exec(char *s1, char *s2)
+int ft_strcmp(char *s1, char *s2)
 {
     int i;
 
@@ -51,7 +51,7 @@ int ft_strcmp_exec(char *s1, char *s2)
     return (0);
 }
 
-char	*ft_join_exec(char *join, char *s1, char *s2)
+char	*ft_join(char *join, char *s1, char *s2)
 {
 	int	i;
 	int	j;
@@ -72,7 +72,7 @@ char	*ft_join_exec(char *join, char *s1, char *s2)
 	return (join);
 }
 
-char	*ft_strjoin_exec(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*join;
 
@@ -80,10 +80,10 @@ char	*ft_strjoin_exec(char *s1, char *s2)
 		s1 = "";
 	if (!s2)
 		s2 = "";
-	join = malloc(sizeof(char) * (ft_strlen_exec(s1) + ft_strlen_exec(s2) + 1));
+	join = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!join)
 		return (NULL);
-	return (ft_join_exec(join, s1, s2));
+	return (ft_join(join, s1, s2));
 }
 
 // char	*ft_strchr(const char *s, int c)

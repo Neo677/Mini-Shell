@@ -27,41 +27,6 @@ int check_value(char *str)
     return (1);
 }
 
-// char    **split_in_two(char *str, char c)
-// {
-//     int i;
-//     int j;
-//     char    **tab;
-
-//     tab = malloc(sizeof(char *) * 2 + 1);
-//     if (!tab)
-//         return (NULL);
-//     i = 0;
-//     tab[0] = malloc(sizeof(char) * ft_strlen_c(str, i, c) + 1);
-//     if (!tab[0])
-//         return (NULL);
-//     j = 0;
-//     while (str[i] && str[i] != c)
-//         tab[0][j++] = str[i++];
-//     tab[0][j] = '\0';
-//     i++;
-//     tab[1] = malloc(sizeof(char) * ft_strlen_c(str, i, '\0') + 1);
-//     if (!tab[1])
-//         return (NULL);
-//     j = 0;
-//     if (!str[i])
-//     {
-//         tab[1][j] = '\0';
-//         tab[2] = NULL;
-//         return (tab);
-//     }
-//     while (str[i])
-//         tab[1][j++] = str[i++];
-//     tab[1][j] = '\0';
-//     // tab[2] = NULL;
-//     return (tab);
-// }
-
 char    **split_in_two(char *str, char c)
 {
     int i;
@@ -91,21 +56,6 @@ char    **split_in_two(char *str, char c)
     tab[1][j] = '\0';
     return (tab);
 }
-
-// t_env    *create_key_value(char *env)
-// {
-//     t_env   *node;
-//     char **tab;
-
-//     tab = split_in_two(env, '=');
-//     if (!tab)
-//         return (NULL);
-//     node = create_node(tab[0], tab[1]);
-//     free (tab[0]);
-//     free (tab[1]);
-//     free (tab);
-//     return (node);
-// }
 
 t_env    *create_key_value(char *env)
 {

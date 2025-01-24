@@ -42,7 +42,7 @@ int	ft_add_redirections_struct(t_command *cmd, int type, const char *file)
 	if (!new_redir)
 		return (free(new_redir), 0);
 	new_redir->type = type;
-	new_redir->file = ft_strdup(file);
+	new_redir->file = ft_strdup_v2(file);
 	if (!new_redir->file)
 		return (free(new_redir), 0);
 	new_redir->next = NULL;

@@ -46,7 +46,7 @@
          2 fonctions d'affichage (DEBUG) et nettoyage (libere la liste de commandes)
 */
 
-void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env *env_cpy)
+void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
 {
     char *token_value;
     
@@ -90,11 +90,11 @@ void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst
 }
 
 
-void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env *env_cpy)
+void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
 {
     char *var_name;
     char *var_value;
-    
+
     var_name = ft_extract_env_var(input);
     if (!var_name)
     {
@@ -102,7 +102,7 @@ void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst,
         return ;
     }
 
-    var_value = print_node_by_key(&env_cpy, var_name);
+    var_value = print_node_by_key(env_cpy, var_name);
     free(var_name);
 
 
@@ -134,7 +134,7 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
             *current = ft_init_command(cmd_lst);
         if (!ft_add_arguments(*current, token_value))
         {
-            ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);
+            // ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);
             free(token_value);
             return (ft_err_split(*cmd_lst, *head));
         }
@@ -142,7 +142,7 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
     free(token_value);
 }
 
-int ft_split_token(t_token **head, const char *input, t_env *env_cpy)
+int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 {
     t_command *cmd_lst; // Liste des commandes
     t_command *current; // Commande courante

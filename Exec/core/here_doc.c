@@ -1,5 +1,4 @@
-
-// #include "pipex.h"
+// #include "../include/pipex.h"
 
 // int ft_strcmp(char *s1)
 // {
@@ -42,11 +41,10 @@
 //     {
 //         while (1)
 //         {
-//             ft_printf(1, ">");
+//             ft_printf_fd(1, ">");
 //             line = get_next_line(0);
 //             if (ft_limiter(line, argv[2]) != 0);
 //                 break ;
-            
 //         }
 //     }
 // }

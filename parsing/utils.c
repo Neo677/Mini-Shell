@@ -49,7 +49,7 @@ char *ft_strndup(const char *src, size_t size)
     return (dst);
 }
 
-int ft_strcmp(char *s1, char *s2)
+int ft_strcmp_parsing(char *s1, char *s2)
 {
 	int i = 0;
 

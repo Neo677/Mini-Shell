@@ -1,10 +1,11 @@
 
+
 #include "../include/pipex.h"
 
 void	init_var(t_pipex *pipex)
 {
-	pipex->infile = 0;
-	pipex->outfile = 0;
+	pipex->infile = dup(STDIN_FILENO);
+	pipex->outfile = dup(STDOUT_FILENO);
 	pipex->pipefd[0] = 0;
 	pipex->pipefd[1] = 0;
 	pipex->len = 0;
@@ -20,4 +21,6 @@ void	init_var(t_pipex *pipex)
 	pipex->path = NULL;
 	pipex->paths_cmd = NULL;
 	pipex->path_cmd = NULL;
+	pipex->in = NULL;
+	pipex->out = NULL;
 }

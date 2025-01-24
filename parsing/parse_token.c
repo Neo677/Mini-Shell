@@ -32,27 +32,30 @@
     8) Free
 */
 
-t_token *ft_parse_token(const char *input, t_env *env_cpy)
+t_token *ft_parse_token(const char *input, t_env **env_cpy)
 {
     t_token *token;
     t_command *cmd_lst;
-	
+    
     cmd_lst = NULL;
-	token = NULL;
+    token = NULL;
     if (!(input) || !(*input))
     {
         //return(ft_printf("[ERROR] Entrée vide\n"), NULL);
         return (NULL);
     }
     if (!ft_split_token(&token, input, env_cpy))
-        exit (2);
+    {
+        fprintf(stderr, "Error: Failed to split tokens\n");
+        return (NULL);
+    }
     // ft_print_tokens(token); // optionnal (LEXER part)
     if (!ft_create_command_lst(token, &cmd_lst))
     {
+        fprintf(stderr, "Error: Failed to create command list\n");
         ft_free_commande_lst(cmd_lst);
-        return (0);
+        return (NULL);
     }
     // ft_print_command_lst(cmd_lst);
     return (token); // Retourne les tokens si tout est valide
 }
-

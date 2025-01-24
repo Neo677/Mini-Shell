@@ -1,6 +1,6 @@
 #include "built_in.h"
 
-void    ft_pwd(t_env **env, int *cd)
+void    ft_pwd(t_env **env, int cd)
 {
     char    *pwd;
     // int validity_acces;
@@ -16,25 +16,25 @@ void    ft_pwd(t_env **env, int *cd)
     // validity_acces = access(getcwd(NULL, 0), F_OK);
     // printf("%d\n", validity_acces);
 
-    if (*cd == 1)
+    if (cd == 1)
     {
         pwd = getcwd(NULL, 0);
         if (!pwd)
-            ft_printf("pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory");
+            ft_printf_fd(2, "pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory");
         else
         {
             printf("%s\n", pwd);
             if (access(print_node_by_key(env, "OLDPWD"), F_OK) != 0)
-                ft_printf("bash: %s: %s\n", print_node_by_key(env, "OLDPWD"), strerror(errno));
+                ft_printf_fd(2, "bash: %s: %s\n", print_node_by_key(env, "OLDPWD"), strerror(errno));
             free(pwd);
         }
-        *cd = 0;
+        cd = 0;
     }
     else
     {
         printf("%s\n", print_node_by_key(env, "PWD"));
         if (access(print_node_by_key(env, "OLDPWD"), F_OK) != 0)
-            ft_printf("bash: %s: %s\n", print_node_by_key(env, "OLDPWD"), strerror(errno));
+            ft_printf_fd(2, "bash: %s: %s\n", print_node_by_key(env, "OLDPWD"), strerror(errno));
     }
 }
 // mettre a jour la variable d'environnement OLDPWD

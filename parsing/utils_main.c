@@ -22,7 +22,7 @@ void    ft_clean_up(t_token **token, char **input)
 
 int    ft_handle_exit(char *input)
 {
-    if (ft_strcmp(input, "exit") == 0)
+    if (ft_strcmp_parsing(input, "exit") == 0)
     {
         printf("Bye Bye !! 👋\n");
         free(input);

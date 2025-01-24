@@ -7,7 +7,7 @@ int    ft_swap(t_env *a, t_env *b)
     
     if (!a || !b)
         return (0);
-    if (ft_strcmp_exec(a->key, b->key) > 0)
+    if (ft_strcmp(a->key, b->key) > 0)
     {
         temp_key = a->key;
         temp_value = a->value;
@@ -69,49 +69,6 @@ t_env   **export_cpy(t_env **env_cpy, t_env **cpy_env_cpy)
     return (cpy_env_cpy);
 }
 
-// void    ft_export(t_env **env_cpy1, char *key_value)
-// {
-//     t_env   *current;
-//     t_env   *new_node;
-//     t_env   **env_cpy;
-//     t_env   *cpy_env_cpy;
-
-//     cpy_env_cpy = NULL;
-//     env_cpy = export_cpy(env_cpy1, &cpy_env_cpy);
-//     if (!key_value)
-//     {
-//         sort_list(env_cpy);
-//         current = *env_cpy;
-//         while (current)
-//         {
-//             printf("declare -x %s=\"%s\"\n", current->key, current->value);
-//             current = current->next;
-//         }
-//     }
-//     else
-//     {
-//         if ((key_value[0] >= 'a' && key_value[0] <= 'z') || (key_value[0] >= 'A' && key_value[0] <= 'Z'))
-//         {
-//             new_node = create_key_value(key_value);
-//             current = *env_cpy;
-//             if (*env_cpy == NULL)
-//                 *env_cpy = new_node;
-//             else
-//             {
-//                 while (current->next)
-//                     current = current->next;
-//                 current->next = new_node;
-//             }  
-//         }
-//         else
-//         {
-//             ft_printf(2, "bash: export: `%s': not a valid identifier\n", key_value);
-//             return ;
-//         }     
-//     }
-// }
-
-
 void    ft_export(t_env **env_cpy1, char *key_value)
 {
     t_env   *current;
@@ -154,7 +111,7 @@ void    ft_export(t_env **env_cpy1, char *key_value)
         }
         else
         {
-            ft_printf("bash: export: `%s': not a valid identifier\n", key_value);
+            ft_printf_fd(2, "bash: export: `%s': not a valid identifier\n", key_value);
             return ;
         }     
     }

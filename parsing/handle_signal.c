@@ -29,9 +29,7 @@ void ft_handle_sig_int(int sig)
     (void)sig;
     printf("\n");
     rl_on_new_line();
-    // rl_replace_line("", 0); // LINUX
-    printf("\r\033[K");  // Clear the current line
-    fflush(stdout);
+    rl_replace_line("", 0); // LINUX
     rl_redisplay();
 }
 
