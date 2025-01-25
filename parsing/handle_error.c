@@ -14,30 +14,30 @@
 
 int	ft_error_pipe(const char *context)
 {
-	printf(" [🚨 ERROR 🚨] pipe = '%s'\n", context);
-	return (0);
+	ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `%s`", context);
+	return (258);
 }
 
 int	ft_error_redirections(const char *context)
 {
-	printf(" [🚨ERROR🚨]redirection syntax = '%s'\n", context);
-	return (0);
+	ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `%s`", context);
+	return (258);
 }
 
 int	ft_error_quote(void)
 {
-	printf(" [🚨ERROR🚨] quote syntax = unclosed quote\n");
-	return (0);
+	ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed quote\n");
+	return (258);
 }
 
 int	ft_error_general(const char *context)
 {
-	printf(" [🚨ERROR🚨] general = %s\n", context);
-	return (0);
+	ft_printf_fd(STDERR_FILENO, "minishell: %s\n", context);
+	return (1);
 }
 
 int	ft_error_env(const char *context)
 {
-	printf(" [🚨ERROR🚨] env_var minishell = %s\n", context);
-	return (0);
+	ft_printf_fd(STDERR_FILENO, "minishell: '%s': invalid environment variable\n", context);
+	return (1);
 }

@@ -301,7 +301,10 @@ thobenel@c1r6p2:~/Mini-Shell/parsing$ $PATH
 bash: /home/thobenel/bin:/home/thobenel/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin: No such file or directory
 thobenel@c1r6p2:~/Mini-Shell/parsing$ 
 
--- Need to add some error message if the path is not good
-
-
+-- Need to add some error message and some code error :
+	•	Par convention :
+	•	0 : Standard Input (stdin)
+	•	1 : Standard Output (stdout)
+	•	2 : Standard Error (stderr)
+          (l'un ou l'autre peu importe) (use ft_printf_fd qui a etait par mon super mate DPascal)
 

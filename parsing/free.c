@@ -14,7 +14,7 @@
 
 void	error_exit(const char *error)
 {
-	ft_printf("[🚨ERROR🚨] minishell = %s\n", error);
+	ft_printf_fd(STDERR_FILENO, "minishell: error exit detected %s\n", error);
 	exit(EXIT_FAILURE);
 }
 

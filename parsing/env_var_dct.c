@@ -81,6 +81,9 @@ char *ft_extract_env_var(const char **input)
         return (ft_strdup_v2("$"));
     var_name = ft_strndup(start, (*input - start));
     if (!var_name)
-        return (NULL);
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: failed to extact the envrionnement varibles\n");
+		return (258);
+    }
     return (var_name);
 }

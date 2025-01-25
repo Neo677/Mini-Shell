@@ -25,10 +25,16 @@ static char *ft_handle_single_quote(const char **input)
     while ((*input)[i] && (*input)[i] != '\'')
         i++;
     if ((*input)[i] != '\'')
-        return(ft_printf("[ERROR] Unclosed single quote\n"), NULL);
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed single quote\n");
+        return (NULL); // return 258 pour la fonctions appelante
+    }
     content = ft_strndup(start, i);
     if (!content)
-        return (ft_printf("[ERROR] Memory allocation failed in ft_handle_single_quote\n"), NULL);
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: error: memory allocation failed in ft_handle_single_quote\n");
+        return (NULL); // probleme interne
+    }
     printf("content  %s\n", content);
     (*input) += i + 1;
     return (content);
@@ -83,22 +89,28 @@ static char *ft_handle_double_quote(const char **input, t_token **head, t_comman
         {
             tmp = ft_extract_quotent(start, i);
             if (!tmp)
-                return(ft_printf("[ERROR] Memory allocation failed in ft_handle_double_quote\n"), NULL);
+            {
+                ft_printf_fd(STDERR_FILENO, "minishell: error: memory allocation failed in ft_handle_double_quote\n");
+                return (NULL); // erreur interne
+            }
             content = ft_concatent_content(content, tmp);
             if (!content)
+            {
+                ft_printf_fd(STDERR_FILENO, "minishell error: memory allocation failed in ft_handle_double_quote\n");
                 return (NULL);
+            }
             if (ft_update_ptr_input(input, &i, &start))
                 continue;
             break;
         }
         else
-            return (ft_printf("[ERROR] Unclosed double quote\n"), NULL);
+        {
+            ft_printf_fd(STDERR_FILENO, "minishell syntax error: unclosed double quote\n");
+            return (NULL);
+        }
     }
     return (content);
 }
-
-
-
 
 char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
 {
@@ -114,8 +126,8 @@ char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t
     }
     if (!content) 
     {
-        ft_printf("[DEBUG] Error while handling quote content\n");
-        return (NULL);
+        ft_printf_fd(STDERR_FILENO, "minishell: error while processing quotes\n");
+        return (258);
     }
     return (content);
 }

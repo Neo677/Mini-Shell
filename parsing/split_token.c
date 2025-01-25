@@ -148,7 +148,7 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
             *current = ft_init_command(cmd_lst);
         if (!ft_add_arguments(*current, token_value))
         {
-            // ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);
+            ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add argument `%s`\n", token_value);
             free(token_value);
             return (ft_err_split(*cmd_lst, *head));
         }
