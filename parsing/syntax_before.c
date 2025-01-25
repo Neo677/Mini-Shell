@@ -12,12 +12,13 @@
 
 #include "minishell.h"
 
-void	ft_set_syntax_quote(const char *input, int *quote)
+static bool	ft_set_syntax_quote(const char *input, int *quote)
 {
 	if (*quote == 0)
 		*quote = *input;
 	else if (*quote == *input)
 		*quote = 0;
+    return (*quote != 0);
 }
 
 int	ft_set_syntax_pipe(const char *input)
@@ -42,8 +43,8 @@ int	ft_set_syntax_redir(const char *input)
         input++;
     if (*input == '\0' || *input == '|')
     {
-        ft_printf_fd(2, " bash: parse error near `\\n'\n");
-        return (0);
+         return (ft_printf_fd(STDERR_FILENO, " bash: parse error near `\\n'\n"), 0);
+       
     }
     return (1);
 }
@@ -72,7 +73,7 @@ int  ft_check_syntax(const char *input)
         input++;
     }
     if (quote != 0)
-        return (ft_printf_fd(2, "bash : syntax error: unclosed quote\n"), 0);
+        return (ft_printf_fd(STDERR_FILENO, "bash : syntax error: unclosed quote\n"), 258);
     return (1);
 }
 

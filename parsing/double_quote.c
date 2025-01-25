@@ -20,7 +20,7 @@ char	*ft_extract_quotent(const char *start, size_t len)
 	if (!tmp)
 	{
 		ft_printf_fd(STDERR_FILENO, "minishell: error memory allocation failed\n");
-		return (258);
+		return (NULL);
 	}
 	return (tmp);
 }
@@ -37,7 +37,7 @@ char	*ft_concatent_content(char *content, char *tmp)
 		if (!new)
 		{
 			ft_printf_fd(STDERR_FILENO, "minishell: error allocation failed during concatenation\n");
-			return (258);
+			return (NULL);
 		}
 		return (new);
 	}
@@ -53,11 +53,6 @@ int	ft_update_ptr_input(const char **input, size_t *i, const char **start)
 		*start = *input;
 		*i = 0;
 		return (1);
-	}
-	else
-	{
-		ft_printf_fd(STDERR_FILENO, "minishell: error unclosed double quote\n");
-		return (258);
 	}
 	return (0);
 }

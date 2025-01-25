@@ -131,7 +131,7 @@ void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst,
         *current = ft_init_command(cmd_lst);
     if (!ft_add_arguments(*current, var_value))
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: `%s`: unbound variable\n", var_name);
+        ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n");
         return;
     }
 }

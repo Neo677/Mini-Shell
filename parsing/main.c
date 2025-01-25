@@ -91,43 +91,61 @@ int main(int ac, char **av, char **env)
 	
 	token = NULL;
 	init_var(&exec);
+
 	ft_set_signal_handler();
+
 	copy_env(env, &exec.env_cpy);
+
 	modify_node_value(&exec.env_cpy, "_", "/usr/bin/env");
+
 	// ft_intro();
+
 	while (1)
 	{
+
 		exec.input = readline("minishell> ");
 
 		if (!exec.input)
 		{
-			ft_printf("exit\n");
-
+			ft_printf("CTRL-D\n");
+			free(exec.input);
 			// need to content a free fonction
 			// also return te right code
 			break ; // ✅
 		}
 
 		token = ft_parse_token(exec.input, &exec.env_cpy);
+
 		exec.tab = ft_token_to_tab(token);
 		// exec.tab = ft_split_built(exec.input, ' ');
 
 		if (ft_strcmp(exec.tab[0], "env") == 0)
 			ft_env(&exec.env_cpy);
+
 		else if (ft_strcmp(exec.tab[0], "pwd") == 0)
 			ft_pwd(&exec.env_cpy, exec.cd);
+
 		else if (ft_strcmp(exec.tab[0], "export") == 0)
 			ft_export(&exec.env_cpy, exec.tab[1]);
+		
 		else if (ft_strcmp(exec.tab[0], "unset") == 0)
 			ft_unset(&exec.env_cpy, exec.tab[1]);
+
 		else if (ft_strcmp(exec.tab[0], "echo") == 0)
 			ft_echo(exec.tab);
+
 		else if (ft_strcmp(exec.tab[0], "exit") == 0)
 			return(ft_exit(&exec, exec.tab));
-		else if (ft_strcmp(exec.tab[0], "./minishell") == 0)
-			main(ac, av, exec.tab);
+					/*
+						[DEBUG] arg = [exit]
+					----------------------------------
+					*** stack smashing detected ***: terminated
+					Aborted (core dumped)
+					*/
 		else if (ft_strcmp(exec.tab[0], "cd") == 0)
 			exec.cd = ft_cd(&exec.env_cpy, exec.tab[1]);
+		// else if (ft_strcmp(exec.tab[0], "./minishell") == 0)
+		// 	main(ac, av, exec.tab);
 		add_history(exec.input);
 	}
 	free(exec.input);

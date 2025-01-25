@@ -15,22 +15,22 @@ void	take_redirections(t_pipex *pipex, t_redirections *redirections)
 		current = current->next;
 	}
 }
-int	count_cmd(t_command *cmd)
-{
-	t_command *current;
-	int	i;
+// int	count_cmd(t_command *cmd)
+// {
+// 	t_command *current;
+// 	int	i;
 
-	current = cmd;
-	i = 0;
-	while (current)
-	{
-		i++;
-		current = current->next;
-	}
-	return (i);
-	// nbr de cmd = pipe + 1 ??
-	// Si il y a 1 | cela signifie qu il y a 2 cmd ??
-}
+// 	current = cmd;
+// 	i = 0;
+// 	while (current)
+// 	{
+// 		i++;
+// 		current = current->next;
+// 	}
+// 	return (i);
+// 	// nbr de cmd = pipe + 1 ??
+// 	// Si il y a 1 | cela signifie qu il y a 2 cmd ??
+// }
 
 void	exec(t_command *cmd, t_token *token, t_redirections *dir, char **env)
 {

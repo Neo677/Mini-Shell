@@ -127,7 +127,7 @@ char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t
     if (!content) 
     {
         ft_printf_fd(STDERR_FILENO, "minishell: error while processing quotes\n");
-        return (258);
+        return (NULL);
     }
     return (content);
 }
