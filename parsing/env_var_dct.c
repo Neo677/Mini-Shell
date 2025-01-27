@@ -59,26 +59,13 @@ char *ft_extract_env_var(const char **input)
     int          is_digit_param;
 
     is_digit_param = 0;
-    if (*input)
+    if (**input == '$')
         (*input)++;
-
-
+    if (**input == '\0' || **input == ' ' || **input == '\t' || **input == '$')
+        return (ft_strdup_v2("$"));
     if (**input == '?' || **input == '$')
-    {
-        var_name = ft_detec_var(input);
-        // var_name = ft_strndup(*input, 1);
-        // (*input)++;
-        // return (var_name);
-    }
-
-
+        return (ft_detec_var(input));
     is_digit_param = ft_detec_digit(is_digit_param, input);
-    // if (ft_isdigit(**input))
-    //     is_digit_param = 1;
-    // else
-    //     is_digit_param = 0;
-
-    
     start = *input;
     if (is_digit_param)
     {
@@ -91,9 +78,12 @@ char *ft_extract_env_var(const char **input)
             (*input)++;
     }
     if (start == *input)
-        return (ft_strdup("$"));
+        return (ft_strdup_v2("$"));
     var_name = ft_strndup(start, (*input - start));
     if (!var_name)
-        return(free(var_name), NULL);
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: failed to extact the envrionnement varibles\n");
+		return (NULL);
+    }
     return (var_name);
 }

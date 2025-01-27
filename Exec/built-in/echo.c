@@ -8,7 +8,7 @@ int check_outfile(char *outfile, int fd_stdout, char *redirection)
         fd_stdout = open(outfile, O_WRONLY | O_APPEND | O_CREAT, 0644);
     if (fd_stdout < 0)
     {
-        ft_printf(2, "bash: ");
+        ft_printf_fd(2, "bash: ");
         perror(outfile);
         return (-1);
     }
@@ -63,3 +63,34 @@ void    ft_echo(char **tab)
     if (line_break == 0)
         write(fd_stdout, "\n", 1); 
 }
+
+
+// Voir pour les $
+/*
+echo $ = $
+echo $1234 = 234
+si apres le $ il y a un caractere alphanumerique
+echo $f
+
+Variables :
+
+$VAR fait référence à la valeur de la variable VAR.
+Si la variable n'existe pas, Bash affiche une chaîne vide.
+Paramètres positionnels :
+
+$1, $2, ... représentent les arguments passés au script ou à la commande.
+$* et $@ représentent tous les arguments.
+Littéral $:
+
+Si $ n'est pas suivi d'une variable ou d'un paramètre valide, il est affiché tel quel.
+Variables d'environnement :
+
+Certaines variables (comme $USER, $HOME, $PATH) sont définies par le système.
+Syntaxe incorrecte :
+
+Les noms de variables doivent commencer par une lettre ou un _, et non par un chiffre ou un symbole comme +.
+
+
+1 - check si premier caractere a-z, A-Z, _
+
+*/

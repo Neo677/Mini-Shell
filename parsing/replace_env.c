@@ -1,32 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_main.c                                       :+:      :+:    :+:   */
+/*   replace_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/12 17:25:41 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/12 17:25:42 by thobenel         ###   ########.fr       */
+/*   Created: 2025/01/20 12:41:17 by thobenel          #+#    #+#             */
+/*   Updated: 2025/01/20 12:41:18 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    ft_clean_up(t_token **token, char **input)
-{
-    if (token && *token)
-        ft_free_token(*token);
-    if (input && *input)
-        free(*input);
-}
-
-int    ft_handle_exit(char *input)
-{
-    if (ft_strcmp_parsing(input, "exit") == 0)
-    {
-        printf("Bye Bye !! 👋\n");
-        free(input);
-        return(0);
-    }
-    return (1);
-}

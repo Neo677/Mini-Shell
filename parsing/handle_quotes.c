@@ -25,10 +25,17 @@ static char *ft_handle_single_quote(const char **input)
     while ((*input)[i] && (*input)[i] != '\'')
         i++;
     if ((*input)[i] != '\'')
-        return(ft_printf("[ERROR] Unclosed single quote\n"), NULL);
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed single quote\n");
+        return (NULL); // return 258 pour la fonctions appelante
+    }
     content = ft_strndup(start, i);
     if (!content)
-        return (ft_printf("[ERROR] Memory allocation failed in ft_handle_single_quote\n"), NULL);
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: error: memory allocation failed in ft_handle_single_quote\n");
+        return (NULL); // probleme interne
+    }
+    printf("content  %s\n", content);
     (*input) += i + 1;
     return (content);
 }
@@ -51,7 +58,7 @@ static char *ft_handle_single_quote(const char **input)
     - Fin de l'analyse des quotes
 */
 
-static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current) 
+static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
 {
     const char *start;
     char *content;
@@ -71,10 +78,10 @@ static char *ft_handle_double_quote(const char **input, t_token **head, t_comman
             if ((*input)[i] == '$') 
             {
                 *input += i;
-                ft_handle_env_vars(input, head, cmd_lst, current);
+                ft_handle_env_vars(input, head, cmd_lst, current, env_cpy);
                 i = 0;
                 start = *input;
-            } 
+            }
             else 
                 i++;
         }
@@ -82,24 +89,31 @@ static char *ft_handle_double_quote(const char **input, t_token **head, t_comman
         {
             tmp = ft_extract_quotent(start, i);
             if (!tmp)
-                return(ft_printf("[ERROR] Memory allocation failed in ft_handle_double_quote\n"), NULL);
+            {
+                ft_printf_fd(STDERR_FILENO, "minishell: error: memory allocation failed in ft_handle_double_quote\n");
+                return (NULL); // erreur interne
+            }
             content = ft_concatent_content(content, tmp);
             if (!content)
+            {
+                ft_printf_fd(STDERR_FILENO, "minishell error: memory allocation failed in ft_handle_double_quote\n");
                 return (NULL);
+            }
             if (ft_update_ptr_input(input, &i, &start))
                 continue;
             break;
         }
         else
-            return (ft_printf("[ERROR] Unclosed double quote\n"), NULL);
+        {
+            ft_printf_fd(STDERR_FILENO, "minishell syntax error: unclosed double quote\n");
+            return (NULL);
+        }
     }
     return (content);
 }
 
-
-
-
-char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current) {
+char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
+{
     char *content = NULL;
 
     if (**input == '\'') 
@@ -108,11 +122,11 @@ char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t
     } 
     else if (**input == '\"')
     {
-        content = ft_handle_double_quote(input, head, cmd_lst, current);
+        content = ft_handle_double_quote(input, head, cmd_lst, current, env_cpy);
     }
     if (!content) 
     {
-        ft_printf("[DEBUG] Error while handling quote content\n");
+        ft_printf_fd(STDERR_FILENO, "minishell: error while processing quotes\n");
         return (NULL);
     }
     return (content);
@@ -125,7 +139,8 @@ char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t
 //     char single_quote_char;
 //     char double_quote_char;
 
-//     t_token token_instance;
+//     t_token token_instance;char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_buit_in *env_cpy);
+
 //     t_token *token = &token_instance;
 //     // token->single_quote = false;
 //     // token->double_quote = false;

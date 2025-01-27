@@ -130,15 +130,16 @@ int ft_validate_pipes(t_token *token)
     
     prev = NULL;
     if (!token || token->type == TOKEN_PIPE)
-        return(ft_error_pipe("syntax error near unexpected token '|' \n"), 0);
+        return(ft_printf(" syntax error near unexpected token `|' \n"), 0);
+
     while (token) 
     {
         if (token->type == TOKEN_PIPE) 
         {
             if (!prev || prev->type == TOKEN_PIPE) 
-                return(ft_error_pipe("syntax error near unexpected token '|'"), 0);
+                return(ft_printf(" syntax error near unexpected token `|' \n"), 0);
             if (!token->next)
-                return(ft_error_pipe("syntax error: pipe at the end"), 0);
+                return(ft_printf("after: syntax error: pipe at the end \n"), 0);
         }
         prev = token;
         token = token->next;
@@ -152,7 +153,7 @@ int ft_valid_env_var(t_token *token)
     while (token)
     {
         if (token->type == TOKEN_ENV_VAR)
-            if (!ft_strlen(token->value))
+            if (!ft_strlen_v2(token->value))
                 return(ft_error_env("invalid env var syntax :("), 0);
         token = token->next;
     }

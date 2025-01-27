@@ -49,7 +49,7 @@ int ft_add_arguments(t_command *cmd, const char *arg)
             j++;
         }
     }
-    new_arg[i] = ft_strdup(arg);
+    new_arg[i] = ft_strdup_v2(arg);
     if (!new_arg)
         return(free(new_arg), 0);
     new_arg[i + 1] = NULL;

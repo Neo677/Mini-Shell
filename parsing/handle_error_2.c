@@ -14,10 +14,11 @@
 
 void	ft_free_split(t_token *head, t_command *cmd_lst)
 {
-	ft_printf("[ERROR] Token invalid ! = %s\n", head->value);
+    ft_printf_fd(STDERR_FILENO, "minishell: invalid token '%s'\n", head->value);
 	ft_free_token(head);
 	head = NULL;
 	ft_free_commande_lst(cmd_lst);
+    cmd_lst = NULL;
 }
 
 void    ft_err_split(t_command *cmd_lst, t_token *head)
@@ -25,21 +26,23 @@ void    ft_err_split(t_command *cmd_lst, t_token *head)
     ft_free_token(head);
     head = NULL;
     ft_free_commande_lst(cmd_lst);
+    free(cmd_lst);
 	return;
 }
 
 void    ft_err_split_ope(t_command *cmd_lst, t_token *head)
 {
-	ft_printf("[ERROR] Échec de l'ajout de commande\n");
+    ft_printf_fd(STDERR_FILENO, "minishell: failed to add the command\n");
     ft_free_token(head);
     head = NULL;
     ft_free_commande_lst(cmd_lst);
+    cmd_lst = NULL;
 	return;
 }
 
 void    ft_err_bad_redirec(t_command *cmd_lst, t_token *head)
 {
-	ft_printf("[ERROR] Redirection sans fichier valide\n");
+    ft_printf_fd(STDERR_FILENO, "syntax error near unexpected token `newline`\n");
     ft_free_token(head);
     head = NULL;
     ft_free_commande_lst(cmd_lst);

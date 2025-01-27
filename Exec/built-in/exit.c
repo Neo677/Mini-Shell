@@ -51,30 +51,31 @@ long long ft_atol(char *str, int *error)
     return (res * sign);
 }
 
-int    ft_exit(t_env **env_cpy, char **tab)
+int    ft_exit(t_buit_in *exec, char **tab)
 {
     long long   num;
     int error;
 
+    num = 0;
     if (tab[1])
     {
-        ft_printf(1, "exit\n");
+        ft_printf_fd(1, "exit\n");
         if (tab[2])
         {
             printf("%s\n", tab[2]);
-            ft_printf(2, "bash: exit: too many arguments\n");
+            ft_printf_fd(2, "bash: exit: too many arguments\n");
             return (0);
         }
         if (ft_numeric(tab[1]) == 0)
         {
-            ft_printf(2, "bash: exit: %s: numeric argument required\n", tab[1]);
+            ft_printf_fd(2, "bash: exit: %s: numeric argument required\n", tab[1]);
             return (0);
         }
         error = 0;
         num = ft_atol(tab[1], &error);
         if (error == 1)
         {
-            ft_printf(2, "bash: exit: %s: numeric argument required\n", tab[1]);
+            ft_printf_fd(2, "bash: exit: %s: numeric argument required\n", tab[1]);
             return (0);
         }
         if (num > 255 || num < 0)
@@ -85,7 +86,7 @@ int    ft_exit(t_env **env_cpy, char **tab)
         }
         printf("%lld\n", num);
     }
-    free_all(tab, env_cpy);
+    free_all(exec);
     return(num);
 }
 

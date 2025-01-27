@@ -3,17 +3,17 @@
 
 Bienvenue sur notre Minishell (Parsing part (for now ... ))
 
-# Juste ici on peut trouver un exemple du prompt qu'il faut afficher avant chaque nouvelle commande :
+Juste ici on peut trouver un exemple du prompt qu'il faut afficher avant chaque nouvelle commande :
 
 ![terminal-shell-prompt-commande](https://github.com/user-attachments/assets/0b1883eb-6fed-41c2-91b1-8842fb6fa066)
 
-# schéma parsing part create on (draw.io and excalidraw):
+Vous pouvez aussi trouver un pdf qui details le projet, c'etait notre 1er semaine de documentation avant de commencer le projet : 
 
-![WELCOME](adding_struct_cmd.drawio.png)
+# schéma parsing part create on (draw.io):
 
-# On vous laisse decouvrir un petit pfd qui a pris 1 semaine de diverse doc sur le projet en amont :
+![terminal-shell](parsing/docs/parsing.png)
 
-# ![terminal-shell](Minishell.pdf)
+![WELCOME](parsing/docs/adding_struct_cmd.drawio.png)
 
 
 
@@ -272,11 +272,39 @@ Type: TOKEN_WORD, Value: 'L$$'
 [DEBUG] arg = [L$$]
 ----------------------------------
 minishell> ls  | 
- [🚨 ERROR 🚨] pipe = 'syntax error: pipe at the end'
+ [🚨 ERROR 🚨] pipe = 'syntax error: pipe at the end' FIXXXXXX (Well done soldier 🪖)
 [ERROR] Token invalid ! = ls
 Segmentation fault (core dumped)
 thobenel@c4r2p2:~/Mini-Shell/parsing$ 
 
 
 # need to be fix (GLHF) 🪖🪖
+
+
+⬇️⬇️⬇️
+
+[WELCOME](parsing/docs/Minishell.pdf)
+
+24/01/25:
+ need to be fix (GLHF) 🪖🪖:
+ minishell> $PATH
+Type: TOKEN_ENV_VAR, Value: '/home/thobenel/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [/home/thobenel/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin]
+----------------------------------
+minishell> 
+
+thobenel@c1r6p2:~/Mini-Shell/parsing$ $PATH
+bash: /home/thobenel/bin:/home/thobenel/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin: No such file or directory
+thobenel@c1r6p2:~/Mini-Shell/parsing$ 
+
+-- Need to add some error message and some code error :
+	•	Par convention :
+	•	0 : Standard Input (stdin)
+	•	1 : Standard Output (stdout)
+	•	2 : Standard Error (stderr)
+          (l'un ou l'autre peu importe) (use ft_printf_fd qui a etait par mon super mate DPascal)
 

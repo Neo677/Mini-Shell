@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/02 12:59:14 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/02 12:59:15 by thobenel         ###   ########.fr       */
+/*   Created: 2025/01/20 10:54:31 by thobenel          #+#    #+#             */
+/*   Updated: 2025/01/20 10:54:34 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 # include <readline/history.h>
 # include <readline/readline.h>
+
+# include "../Exec/built-in/built_in.h"
 
 # include <time.h>
 # include <signal.h>
@@ -105,8 +107,9 @@ typedef struct s_command
 	struct s_command	*next;
 }			t_command;
 
+
 //				main utils
-void			ft_start_minishell(void);
+// void			ft_start_minishell(void);
 void			ft_abort(char *input);
 void			ft_abort_parse(char *input);
 void			ft_abort_cmd(char *input, t_token *token);
@@ -130,20 +133,20 @@ int				ft_error_env(const char *context);
 
 //				env detection and syntax
 int				ft_handle_env_var(t_token **head, const char **input);
-char			*ft_extract_env_var(const char **input);
-void 			ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current);
+char *ft_extract_env_var(const char **input);
+void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy);
 
 //				Token handler
 void			ft_handle_operator(t_token **head, const char **input);
 int				ft_is_redirection(t_token *token);
 void			ft_handle_word(t_token **head, const char **input);
-t_token			*ft_parse_token(const char *input);
+t_token *ft_parse_token(const char *input, t_env **env_cpy);
 
 //				Token creations
 t_token_type	ft_identify_token(char *str);
 t_token			*ft_create_token(t_token_type type, char *value);
 void			ft_add_token(t_token **head, t_token *add);
-void			ft_split_token(t_token **head, const char *input);
+int ft_split_token(t_token **head, const char *input, t_env **env_cpy);
 
 //				placement in struct (case of pipe check Read me)
 t_command		*ft_init_command(t_command **lst);
@@ -177,15 +180,22 @@ int				ft_check_syntax(const char *input);
 
 //				Utils
 char			*ft_strndup(const char *src, size_t size);
-int				ft_strcmp(char *s1, char *s2);
+int				ft_strcmp_parsing(char *s1, char *s2);
 
 //				Signal
+void ft_handle_sig_int(int sig);
+void ft_handle_sig_quit(int sig);
+void ft_set_signal_handler(void);
+
 
 //				double quote
-char 			*ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current);
+char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy);
 char *ft_extract_quotent(const char *start, size_t len);
 char *ft_concatent_content(char *content, char *tmp);
 int     ft_update_ptr_input(const char **input, size_t *i, const char **start);
+
+//				env
+// void    ft_replace_token_env_var(t_token **head, t_env *env);
 
 
 

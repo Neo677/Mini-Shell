@@ -11,6 +11,7 @@ core/init.c \
 core/init_var.c \
 core/utils_error.c \
 core/here_doc.c \
+core/check_file.c \
 libft/get_next_line/get_next_line.c \
 libft/get_next_line/get_next_line_utils.c \
 

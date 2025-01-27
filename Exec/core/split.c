@@ -1,7 +1,8 @@
 
-#include "pipex.h"
 
-int	ft_count(char *s, char c)
+#include "../include/pipex.h"
+
+int	ft_count_pipex(char *s, char c)
 {
 	int	i;
 	int	count;
@@ -24,7 +25,7 @@ int	ft_count(char *s, char c)
 	return (count);
 }
 
-int	ft_len(char *str, char c, int i)
+int	ft_len_pipex(char *str, char c, int i)
 {
 	int	j;
 
@@ -37,7 +38,7 @@ int	ft_len(char *str, char c, int i)
 	return (j);
 }
 
-char	**ft_split_init(t_pipex *pipex, char *str, char c, char **tab)
+char	**ft_split_init_pipex(t_pipex *pipex, char *str, char c, char **tab)
 {
 	int	i;
 	int	j;
@@ -45,11 +46,11 @@ char	**ft_split_init(t_pipex *pipex, char *str, char c, char **tab)
 
 	i = 0;
 	start = 0;
-	while (str[i] && start < ft_count(str, c))
+	while (str[i] && start < ft_count_pipex(str, c))
 	{
 		while (str[i] == c)
 			i++;
-		tab[start] = malloc(sizeof(char) * ft_len(str, c, i) + 1);
+		tab[start] = malloc(sizeof(char) * ft_len_pipex(str, c, i) + 1);
 		if (!tab[start])
 			free_error(pipex, "Erreur allocation ft_split(tab[start])", 0);
 		j = 0;
@@ -67,10 +68,10 @@ char	**ft_split(t_pipex *pipex, char *str, char c)
 	char	**tab;
 	int		words;
 
-	words = ft_count(str, c);
+	words = ft_count_pipex(str, c);
 	tab = malloc(sizeof(char *) * (words + 1));
 	if (!tab)
 		free_error(pipex, "Erreur allocation ft_split(tab)", 0);
-	tab = ft_split_init(pipex, str, c, tab);
+	tab = ft_split_init_pipex(pipex, str, c, tab);
 	return (tab);
 }

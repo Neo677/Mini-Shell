@@ -1,5 +1,6 @@
 
-#include "pipex.h"
+
+#include "../include/pipex.h"
 
 void	free_tab(char **tab)
 {
@@ -16,7 +17,7 @@ void	free_tab(char **tab)
 	free(tab);
 }
 
-void	free_all(t_pipex *pipex)
+void	free_all_core(t_pipex *pipex)
 {
 	if (pipex->cmd)
 		free_tab(pipex->cmd);
@@ -42,8 +43,8 @@ void	close_file(t_pipex *pipex)
 
 void	free_error(t_pipex *pipex, char *error, int key_error)
 {
-	free_all(pipex);
+	free_all_core(pipex);
 	close_file(pipex);
-	ft_printf(2, "%s", error);
+	ft_printf_fd(2, "%s", error);
 	exit(key_error);
 }

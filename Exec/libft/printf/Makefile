@@ -6,7 +6,7 @@
 #    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 03:00:01 by dpascal           #+#    #+#              #
-#    Updated: 2024/12/05 08:10:33 by dpascal          ###   ########.fr        #
+#    Updated: 2025/01/15 12:09:11 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC = gcc -fPIC
 CFLAGS = -Wall -Wextra -Werror
 SRC = ft_putchar.c ft_putstr.c \
 ft_putnbr.c ft_p_adress.c \
-ft_uputnbr.c ft_printf.c \
+ft_uputnbr.c ft_printf_fd.c \
 ft_strlen.c ft_putnbr_adr.c
 
 

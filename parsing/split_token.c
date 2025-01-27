@@ -46,19 +46,22 @@
          2 fonctions d'affichage (DEBUG) et nettoyage (libere la liste de commandes)
 */
 
-void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
+void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
 {
     char *token_value;
     
-    token_value = ft_handle_quote(input, head, cmd_lst, current);
+    token_value = ft_handle_quote(input, head, cmd_lst, current, env_cpy);
     if (!token_value)
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
         return (ft_err_split(*cmd_lst, *head));
+    }
     ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
     if (!*current)
         *current = ft_init_command(cmd_lst);
     if (!ft_add_arguments(*current, token_value))
     {
-        ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);
+        ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
         return (ft_err_split(*cmd_lst, *head));
     }
     free(token_value);
@@ -70,44 +73,66 @@ void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst
 
     ft_handle_operator(head, input);
     if (*head == NULL)
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: error: invalid operator\n");
         return;
+    }
     if (*(input[-1]) == '|')
     {
         *current = ft_init_command(cmd_lst);
         if (!*current)
+        {
+            ft_printf_fd(STDERR_FILENO, "minishell: error: failed to initialize command\n");
             return (ft_err_split_ope(*cmd_lst, *head));
+        }
     }
     else if (*(input[-1]) == '>' || *(input[-1]) == '<') // redrirec
     {
         file = ft_get_next_token(input);
         if (!file)
+        {
+            ft_printf_fd(STDERR_FILENO, "minishell: error: missing file for redirection\n");
             return (ft_err_bad_redirec(*cmd_lst, *head));
+        }
         if (!*current)
             *current = ft_init_command(cmd_lst);
         if (!ft_add_redirections_struct(*current, ft_identify_token((char *)(*input - 1)), file))
+        {
+            ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add redirection for file `%s`\n", file);
             return (ft_err_split_ope(*cmd_lst, *head));
+        }
     }
 }
 
 
-void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
+void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
 {
     char *var_name;
-    
+    char *var_value;
+
     var_name = ft_extract_env_var(input);
     if (!var_name)
     {
-        ft_printf("[ERROR] Variable d'environnement invalide\n");
-        return (ft_err_split(*cmd_lst, *head));
+        ft_printf_fd(STDERR_FILENO, "minishell: error: invalid environment variable name\n");
+        return;
     }
-    ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, var_name));
+
+    var_value = print_node_by_key(env_cpy, var_name);
+    free(var_name);
+
+    if (!var_value)
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable\n");
+        return;
+    }
+    ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, var_value));
 
     if (!*current)
         *current = ft_init_command(cmd_lst);
-    if (!ft_add_arguments(*current, var_name))
+    if (!ft_add_arguments(*current, var_value))
     {
-        ft_printf("[ERROR] Impossible d'ajouter la variable en argument : %s\n", var_name);
-        return (ft_err_split(*cmd_lst, *head));
+        ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n");
+        return;
     }
 }
 
@@ -123,7 +148,7 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
             *current = ft_init_command(cmd_lst);
         if (!ft_add_arguments(*current, token_value))
         {
-            ft_printf("[ERROR] Impossible d'ajouter l'argument : %s\n", token_value);
+            ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add argument `%s`\n", token_value);
             free(token_value);
             return (ft_err_split(*cmd_lst, *head));
         }
@@ -131,7 +156,7 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
     free(token_value);
 }
 
-void ft_split_token(t_token **head, const char *input)
+int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 {
     t_command *cmd_lst; // Liste des commandes
     t_command *current; // Commande courante
@@ -139,22 +164,29 @@ void ft_split_token(t_token **head, const char *input)
     cmd_lst = NULL;
     current = NULL;
     if (!ft_check_syntax(input))
-        return;
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n");
+        return (258);
+    }
     while (*input)
     {
         if (*input == ' ' || *input == '\t')
             input++;
         else if (*input == '\'' || *input == '\"')
-            ft_handle_quotes(&input, head, &cmd_lst, &current);
+            ft_handle_quotes(&input, head, &cmd_lst, &current, env_cpy);
         else if (*input == '|' || *input == '>' || *input == '<')
             ft_handle_operators(&input, head, &cmd_lst, &current);
         else if (*input == '$')
-            ft_handle_env_vars(&input, head, &cmd_lst, &current);
+            ft_handle_env_vars(&input, head, &cmd_lst, &current, env_cpy);
         else
             ft_handle_words(&input, head, &cmd_lst, &current);
     }
     if (!ft_valid_token(*head))
-        ft_free_split(*head, cmd_lst);
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: syntax error in token list\n");
+        return (ft_free_token(*head), 258);
+    }
+    return (1);
 }
 
 

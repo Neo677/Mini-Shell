@@ -19,7 +19,7 @@ char	*ft_extract_quotent(const char *start, size_t len)
 	tmp = ft_strndup(start, len);
 	if (!tmp)
 	{
-		ft_printf("[DEBUG] Memory alloc failed in extract content\n");
+		ft_printf_fd(STDERR_FILENO, "minishell: error memory allocation failed\n");
 		return (NULL);
 	}
 	return (tmp);
@@ -31,12 +31,12 @@ char	*ft_concatent_content(char *content, char *tmp)
 
 	if (content)
 	{
-		new = ft_strjoin(content, tmp);
+		new = ft_strjoin_v2(content, tmp);
 		free(content);
 		free(tmp);
 		if (!new)
 		{
-			ft_printf("[ERROR] Memory allocation failed during concatenation\n");
+			ft_printf_fd(STDERR_FILENO, "minishell: error allocation failed during concatenation\n");
 			return (NULL);
 		}
 		return (new);
