@@ -6,20 +6,20 @@ void    free_char(char *str)
         free(str);
 }
 
-void	free_tab(char **tab)
-{
-	int	i;
+// void	free_tab(char **tab)
+// {
+// 	int	i;
 
-	if (!tab)
-		return ;
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}
+// 	if (!tab)
+// 		return ;
+// 	i = 0;
+// 	while (tab[i])
+// 	{
+// 		free(tab[i]);
+// 		i++;
+// 	}
+// 	free(tab);
+// }
 
 void	free_list(t_env **lst)
 {
@@ -42,12 +42,12 @@ void	free_list(t_env **lst)
     *lst = NULL;
 }
 
-void	free_all(t_buit_in *exec)
+void	free_all_builtin(t_built_in *exec)
 {
     if (!exec)
         return ;
     free_char(exec->input);
-	free_tab(exec->tab);
+	// free_tab(exec->tab);
 	free_list(&exec->env_cpy);
     free_list(&exec->export_cpy);
 }

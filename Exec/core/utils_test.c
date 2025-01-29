@@ -15,43 +15,6 @@ void	take_redirections(t_pipex *pipex, t_redirections *redirections)
 		current = current->next;
 	}
 }
-int	count_cmd(t_command *cmd)
-{
-	t_command *current;
-	int	i;
-
-	current = cmd;
-	i = 0;
-	while (current)
-	{
-		i++;
-		current = current->next;
-	}
-	return (i);
-	// nbr de cmd = pipe + 1 ??
-	// Si il y a 1 | cela signifie qu il y a 2 cmd ??
-}
-
-void	exec(t_command *cmd, t_token *token, t_redirections *dir, char **env)
-{
-	t_pipex	pipex;
-	
-	// Ouverture du ou des Heredoc
-	if (check_redirections(&dir) == -1)
-		return (0);
-	// ?? Check les files dans le fils directement ??
-	// boucle pour chaque ligne de commandez
-	pipex.len = count_cmd(&cmd);
-	// init_pipex(&pipex, &cmd);
-	take_redirections(&pipex, &dir);
-	// check built-in
-	// pipex
-	ft_pid(&pipex, &cmd, env);
-	ft_check_status(&pipex);
-	free_error(&pipex, "", pipex.exit_code);
-	return (0);
-}
-
 
 int	token_checker(t_command *cmd, t_token *token, t_pipex *pipex)
 {
@@ -99,22 +62,19 @@ int	token_checker(t_command *cmd, t_token *token, t_pipex *pipex)
 	return (0);
 }
 
-int	count_cmd(t_command *cmd)
-{
-	t_command *current;
-	int	i;
 
-	current = cmd;
-	i = 0;
-	while (current)
-	{
-		i++;
-		current = current->next;
-	}
-	return (i);
-	// nbr de cmd = pipe + 1 ??
-	// Si il y a 1 | cela signifie qu il y a 2 cmd ??
+void    function_process(t_command *cmd, t_pipex *pipex, t_token *token)
+{
+    int i;
+
+    i = 0;
+    pipex->pid = malloc(sizeof(int) * pipex->len);
+    if (!pipex->pid)
+        return (0);
+    token_checker(cmd, token, pipex);
+    
 }
+
 
 int    check_dir(t_command *cmd)
 {
@@ -124,14 +84,17 @@ int    check_dir(t_command *cmd)
     int outfile;
 
     current = cmd;
+    printf("/////////////////////////test1.1/////////////////////////\n");
     while (current)
     {
         current_dir = current->redirections;
+        printf("/////////////////////////test1.2/////////////////////////\n");
         while (current_dir)
         {
-            if (current_dir->type == 0)
+            printf("/////////////////////////test1.3/////////////////////////\n");
+            if (current_dir->type == TOKEN_IN)
             {
-                infile = open(current_dir->file[0], O_RDONLY, 0644);
+                infile = open(current_dir->file, O_RDONLY, 0644);
                 if (infile < 0)
                 {
                     ft_printf_fd(2, "bash: ");
@@ -141,9 +104,9 @@ int    check_dir(t_command *cmd)
                     // pipex->error = 1;
                 }
             }
-            if (current_dir->type == 1)
+            if (current_dir->type == TOKEN_OUT)
             {
-                outfile = open(current_dir->file[1], O_TRUNC | O_CREAT | O_WRONLY, 0644);
+                outfile = open(current_dir->file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
                 if (outfile < 0)
                 {
                     ft_printf_fd(2, "bash: ");
@@ -158,16 +121,4 @@ int    check_dir(t_command *cmd)
         current = current->next;
     }
     return (0);
-}
-
-void    function_process(t_command *cmd, t_pipex *pipex, t_token *token)
-{
-    int i;
-
-    i = 0;
-    pipex->pid = malloc(sizeof(int) * pipex->len);
-    if (!pipex->pid)
-        return (0);
-    token_checker(cmd, token, pipex);
-    
 }

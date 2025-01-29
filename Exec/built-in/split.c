@@ -1,43 +1,43 @@
 
 #include "pipex.h"
 
-int	ft_count(char *s, char c)
-{
-	int	i;
-	int	count;
-	int	onoff;
+// int	ft_count(char *s, char c)
+// {
+// 	int	i;
+// 	int	count;
+// 	int	onoff;
 
-	i = 0;
-	count = 0;
-	onoff = 0;
-	while (s[i])
-	{
-		if (s[i] != c && onoff == 0)
-		{
-			count++;
-			onoff = 1;
-		}
-		else
-			onoff = 0;
-		i++;
-	}
-	return (count);
-}
+// 	i = 0;
+// 	count = 0;
+// 	onoff = 0;
+// 	while (s[i])
+// 	{
+// 		if (s[i] != c && onoff == 0)
+// 		{
+// 			count++;
+// 			onoff = 1;
+// 		}
+// 		else
+// 			onoff = 0;
+// 		i++;
+// 	}
+// 	return (count);
+// }
 
-int	ft_len(char *str, char c, int i)
-{
-	int	j;
+// int	ft_len(char *str, char c, int i)
+// {
+// 	int	j;
 
-	j = 0;
-	while (str[i] && str[i] != c)
-	{
-		i++;
-		j++;
-	}
-	return (j);
-}
+// 	j = 0;
+// 	while (str[i] && str[i] != c)
+// 	{
+// 		i++;
+// 		j++;
+// 	}
+// 	return (j);
+// }
 
-char	**ft_split_init(char *str, char c, char **tab)
+char	**ft_split_init_built(char *str, char c, char **tab)
 {
 	int	i;
 	int	j;
@@ -71,6 +71,6 @@ char	**ft_split_built(char *str, char c)
 	tab = malloc(sizeof(char *) * (words + 1));
 	if (!tab)
 		return (NULL);
-	tab = ft_split_init(str, c, tab);
+	tab = ft_split_init_built(str, c, tab);
 	return (tab);
 }

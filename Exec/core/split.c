@@ -63,7 +63,7 @@ char	**ft_split_init(t_pipex *pipex, char *str, char c, char **tab)
 	return (tab);
 }
 
-char	**ft_split(t_pipex *pipex, char *str, char c)
+char	**ft_split_dp(t_pipex *pipex, char *str, char c)
 {
 	char	**tab;
 	int		words;

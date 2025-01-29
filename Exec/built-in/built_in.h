@@ -27,13 +27,17 @@ typedef struct s_built_in
 	char			**av;
 	t_env			*env_cpy;
 	t_env			*export_cpy;
-	char			**tab;
+	// char			**tab;
 	char			*input;
 	int				cd;
-}					t_buit_in;
+	int				exit;
+}					t_built_in;
+
+# include "../include/pipex.h"
 
 /*  MAIN  */
-int					main(int ac, char **av, char **env);
+void 				builtin(t_built_in *exec, t_command *cmd);
+int    				check_builtin(t_command *cmd);
 
 /*  CD  */
 int					ft_cd(t_env **env, char *arg);
@@ -65,7 +69,7 @@ void				ft_env(t_env **env_cpy);
 /*  EXIT  */
 int					ft_numeric(char *arg);
 long long			ft_atol(char *str, int *error);
-int					ft_exit(t_buit_in *exec, char **tab);
+int					ft_exit(t_built_in *exec, char **tab);
 
 /*  EXPORT  */
 int					ft_swap(t_env *a, t_env *b);
@@ -76,10 +80,10 @@ void				ft_export(t_env **env_cpy1, char *key_value);
 /*  FREE  */
 void				free_tab(char **tab);
 void				free_list(t_env **lst);
-void				free_all(t_buit_in *exec);
+void				free_all_builtin(t_built_in *exec);
 
 /*  INIT  */
-void    			init_var(t_buit_in *exec);
+void    			init_var_builtin(t_built_in *exec);
 
 /*  PWD  */
 void				ft_pwd(t_env **env, int cd);
@@ -90,18 +94,18 @@ void				signal_handler(int sig);
 /*  SPLIT  */
 int					ft_count(char *s, char c);
 int					ft_len(char *str, char c, int i);
-char				**ft_split_init(char *str, char c, char **tab);
+char				**ft_split_init_built(char *str, char c, char **tab);
 char				**ft_split_built(char *str, char c);
 
 /*  UNSET  */
 void				ft_unset(t_env **env_cpy, char *key);
 
 /*  UTILS_BUILT_IN  */
-int					ft_strlen(char *s);
-char				*ft_strdup(char *src);
+// int				ft_strlen(char *s);
+// char				*ft_strdup(char *src);
 int					ft_strcmp(char *s1, char *s2);
-char				*ft_join(char *join, char *s1, char *s2);
-char				*ft_strjoin(char *s1, char *s2);
+// char				*ft_join(char *join, char *s1, char *s2);
+// char				*ft_strjoin(char *s1, char *s2);
 // char				*ft_strchr(const char *s, int c);
 
 #endif

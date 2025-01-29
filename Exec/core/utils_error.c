@@ -23,7 +23,7 @@ char	*ft_join(char *join, char *s1, char *s2)
 	return (join);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin_dp(char *s1, char *s2)
 {
 	char	*join;
 
