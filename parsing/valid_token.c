@@ -153,8 +153,10 @@ int ft_valid_env_var(t_token *token)
     while (token)
     {
         if (token->type == TOKEN_ENV_VAR)
-            if (!ft_strlen_v2(token->value))
-                return(ft_error_env("invalid env var syntax :("), 0);
+        {
+            if (!token->value || !ft_strlen_v2(token->value))
+                return(ft_error_env("invalid env var syntax :( \n"), 0);
+        }
         token = token->next;
     }
     return (1);

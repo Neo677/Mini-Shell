@@ -108,7 +108,6 @@ int main(int ac, char **av, char **env)
 		if (!exec.input)
 		{
 			ft_printf("CTRL-D\n");
-			free(exec.input);
 			// need to content a free fonction
 			// also return te right code
 			break ; // ✅
