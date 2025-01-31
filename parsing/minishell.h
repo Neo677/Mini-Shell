@@ -110,6 +110,13 @@ typedef struct s_command
 	struct s_command	*next;
 }			t_command;
 
+typedef struct s_quote
+{
+	int 		in_single;
+	int 		in_double;
+	size_t 		start;
+}				t_quote;
+
 typedef struct s_pipex t_pipex;
 typedef struct s_built_in t_buit_in;
 typedef struct s_env t_env;
@@ -149,6 +156,10 @@ int				ft_is_redirection(t_token *token);
 void			ft_handle_word(t_token **head, const char **input);
 t_token *ft_parse_token(const char *input, t_env **env_cpy);
 
+//				quote handler
+char *ft_handle_quote(const char **input, t_quote *state);
+
+
 //				Token creations
 t_token_type	ft_identify_token(char *str);
 t_token			*ft_create_token(t_token_type type, char *value);
@@ -177,7 +188,7 @@ void			ft_free_commande_lst(t_command *command);
 void			ft_main_free(t_command *cmd, t_redirections *redir, t_token *head);
 
 //				split error message and free
-void	ft_free_split(t_token **head, t_command **cmd_lst, const char *error_msg, const char *token);
+void			ft_free_split(t_token **head, t_command **cmd_lst, const char *error_msg, const char *token);
 void			ft_err_split(t_command *cmd_lst, t_token *head);
 void			ft_err_split_ope(t_command *cmd_lst, t_token *head);
 void			ft_err_bad_redirec(t_command *cmd_lst, t_token *head);
@@ -193,13 +204,6 @@ int				ft_strcmp_parsing(char *s1, char *s2);
 void ft_handle_sig_int(int sig);
 void ft_handle_sig_quit(int sig);
 void ft_set_signal_handler(void);
-
-
-//				double quote
-char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy);
-char *ft_extract_quotent(const char *start, size_t len);
-char *ft_concatent_content(char *content, char *tmp);
-int     ft_update_ptr_input(const char **input, size_t *i, const char **start);
 
 //				env
 // void    ft_replace_token_env_var(t_token **head, t_env *env);

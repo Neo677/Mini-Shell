@@ -46,11 +46,11 @@
          2 fonctions d'affichage (DEBUG) et nettoyage (libere la liste de commandes)
 */
 
-void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
+void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
 {
     char *token_value;
     
-    token_value = ft_handle_quote(input, head, cmd_lst, current, env_cpy);
+    token_value = ft_handle_quote(input, );
     if (!token_value)
     {
         ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
@@ -182,7 +182,7 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
         if (*input == ' ' || *input == '\t')
             input++;
         else if (*input == '\'' || *input == '\"')
-            ft_handle_quotes(&input, head, &cmd_lst, &current, env_cpy);
+            ft_handle_quotes(&input, head, &cmd_lst, &current);
         else if (*input == '|' || *input == '>' || *input == '<')
             ft_handle_operators(&input, head, &cmd_lst, &current);
         else if (*input == '$')

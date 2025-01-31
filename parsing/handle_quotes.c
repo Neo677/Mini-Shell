@@ -12,123 +12,88 @@
 
 #include "minishell.h"
 
-static char *ft_handle_single_quote(const char **input) 
-{
-    const char *start;
-    char *content;
-    size_t i;
+// static char *ft_handle_single_quote(const char **input) 
+// {
+//     const char *start;
+//     char *content;
+//     size_t i;
 
-    i = 0;
-    if (**input != '\'')
-        return (NULL);
-    start = ++(*input);
-    while ((*input)[i] && (*input)[i] != '\'')
-        i++;
-    if ((*input)[i] != '\'')
-    {
-        ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed single quote\n");
-        return (NULL); // return 258 pour la fonctions appelante
-    }
-    content = ft_strndup(start, i);
-    if (!content)
-    {
-        ft_printf_fd(STDERR_FILENO, "minishell: error: memory allocation failed in ft_handle_single_quote\n");
-        return (NULL); // probleme interne
-    }
-    printf("content  %s\n", content);
-    (*input) += i + 1;
-    return (content);
+//     i = 0;
+//     if (**input != '\'')
+//         return (NULL);
+//     start = ++(*input);
+//     while ((*input)[i] && (*input)[i] != '\'')
+//         i++;
+//     if ((*input)[i] != '\'')
+//     {
+//         ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed single quote\n");
+//         return (NULL); // return 258 pour la fonctions appelante
+//     }
+//     content = ft_strndup(start, i);
+//     if (!content)
+//     {
+//         ft_printf_fd(STDERR_FILENO, "minishell: error: memory allocation failed in ft_handle_single_quote\n");
+//         return (NULL); // probleme interne
+//     }
+//     printf("content  %s\n", content);
+//     (*input) += i + 1;
+//     return (content);
+// }
+
+// /*
+//     - Double quote non trouvée
+//     - Sauter la quote ouvrante
+//     - Parcourir jusqu'à la prochaine quote fermante ou caractère spécial
+//     - Sauter les caractères échappés
+//     - Gestion des variables d'environnement
+//     -  Avancer jusqu'au `$`
+//         - Réinitialiser après le traitement
+//         - Réinitialiser le début
+//     - Vérifier si une quote fermante est trouvée
+//     - Concaténer les contenus si nécessaire
+//     - Sauter la quote fermante
+//     - Vérifier si une autre quote suit immédiatement
+//     - Sauter l'ouverture de la prochaine quote
+//     - Reprendre l'analyse
+//     - Fin de l'analyse des quotes
+// */
+
+t_quote init_quote(void)
+{
+    return ((t_quote){0, 0, 0});
 }
 
-/*
-    - Double quote non trouvée
-    - Sauter la quote ouvrante
-    - Parcourir jusqu'à la prochaine quote fermante ou caractère spécial
-    - Sauter les caractères échappés
-    - Gestion des variables d'environnement
-    -  Avancer jusqu'au `$`
-        - Réinitialiser après le traitement
-        - Réinitialiser le début
-    - Vérifier si une quote fermante est trouvée
-    - Concaténer les contenus si nécessaire
-    - Sauter la quote fermante
-    - Vérifier si une autre quote suit immédiatement
-    - Sauter l'ouverture de la prochaine quote
-    - Reprendre l'analyse
-    - Fin de l'analyse des quotes
-*/
-
-static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
+static int ft_handle_single_quote(const char **input, t_quote *state)
 {
-    const char *start;
-    char *content;
-    char *tmp;
-    size_t i;
-
-    if (**input != '\"') 
-        return (NULL);
-    i  = 0;
-    content = NULL;
+    state->in_single = !state->in_single;
     (*input)++;
-    start = *input;
-    while (**input) 
-    {
-        while ((*input)[i] && (*input)[i] != '\"') 
-        {
-            if ((*input)[i] == '$') 
-            {
-                *input += i;
-                ft_handle_env_vars(input, head, cmd_lst, current, env_cpy);
-                i = 0;
-                start = *input;
-            }
-            else 
-                i++;
-        }
-        if ((*input)[i] == '\"')
-        {
-            tmp = ft_extract_quotent(start, i);
-            if (!tmp)
-            {
-                ft_printf_fd(STDERR_FILENO, "minishell: error: memory allocation failed in ft_handle_double_quote\n");
-                return (NULL); // erreur interne
-            }
-            content = ft_concatent_content(content, tmp);
-            if (!content)
-            {
-                ft_printf_fd(STDERR_FILENO, "minishell error: memory allocation failed in ft_handle_double_quote\n");
-                return (NULL);
-            }
-            if (ft_update_ptr_input(input, &i, &start))
-                continue;
-            break;
-        }
-        else
-        {
-            ft_printf_fd(STDERR_FILENO, "minishell syntax error: unclosed double quote\n");
-            return (NULL);
-        }
-    }
-    return (content);
+    return (1);
 }
 
-char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
+static int ft_handle_double_quote(const char **input, t_quote *state)
 {
-    char *content = NULL;
+    state->in_double = !state->in_double;
+    (*input)++;
+    return (1);
+}
 
-    if (**input == '\'') 
+char *ft_handle_quote(const char **input, t_quote *state)
+{
+    char *content;
+
+    content = NULL;
+    if (**input == '\'' && !state->in_double)
     {
-        content = ft_handle_single_quote(input);
-    } 
-    else if (**input == '\"')
-    {
-        content = ft_handle_double_quote(input, head, cmd_lst, current, env_cpy);
+        if (!ft_handle_single_quote(input, state))
+            return (NULL);
     }
-    if (!content) 
+    if (**input == '"' && !state->in_single)
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: error while processing quotes\n");
-        return (NULL);
+        if (!ft_handle_double_quote(input, state))
+            return (NULL);
     }
+    else
+        content = ft_extract_quotent(input, state);
     return (content);
 }
 

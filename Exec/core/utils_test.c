@@ -160,15 +160,14 @@ int	token_checker(t_command *cmd, t_token *token, t_pipex *pipex)
 //     return (0);
 // }
 
-void    function_process(t_command *cmd, t_pipex *pipex, t_token *token)
+int    function_process(t_command *cmd, t_pipex *pipex, t_token *token)
 {
-    int i;
 
-    i = 0;
     pipex->pid = malloc(sizeof(int) * pipex->len);
     if (!pipex->pid)
         return (0);
     token_checker(cmd, token, pipex);
+    return (1);
 }
 
 int     check_dir(t_command *cmd)

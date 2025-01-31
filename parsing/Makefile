@@ -41,6 +41,8 @@ SRCS =	add_arguments.c \
 		valid_token.c \
 		double_quote.c \
 		replace_env.c \
+		../Exec/core/check_file.c \
+		../Exec/core/exec.c \
 		../Exec/core/cmd.c \
 		../Exec/core/utils.c \
 		../Exec/core/free.c \
@@ -49,7 +51,9 @@ SRCS =	add_arguments.c \
 		../Exec/core/init.c \
 		../Exec/core/init_var.c \
 		../Exec/core/utils_error.c \
+		../Exec/core/utils_test.c \
 		../Exec/core/here_doc.c \
+		../Exec/built-in/built-in.c \
 		../Exec/built-in/cd.c \
 		../Exec/built-in/cmd_node.c \
 		../Exec/built-in/cpy_env.c \
