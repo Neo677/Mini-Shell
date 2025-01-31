@@ -58,7 +58,10 @@ void	ft_print_command_lst(t_command *head)
 
 	current = head;
 	if (current == NULL)
-		ft_printf("\n[DEBUG] no command\n");
+	{	
+		ft_printf("[DEBUG] no command\n");
+		return;
+	}
 	ft_printf("\n-------------[DEBUG]---------------\n");
 	while (current)
 	{

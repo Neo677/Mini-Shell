@@ -1,6 +1,6 @@
 
 
-#include "../include/pipex.h"
+#include "../built-in/built_in.h"
 
 int	ft_count_pipex(char *s, char c)
 {
@@ -63,7 +63,7 @@ char	**ft_split_init_pipex(t_pipex *pipex, char *str, char c, char **tab)
 	return (tab);
 }
 
-char	**ft_split(t_pipex *pipex, char *str, char c)
+char	**ft_split_dp(t_pipex *pipex, char *str, char c)
 {
 	char	**tab;
 	int		words;

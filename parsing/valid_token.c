@@ -147,6 +147,21 @@ int ft_validate_pipes(t_token *token)
     return (1);
 }
 
+int ft_isspace(char c)
+{
+    return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
+}
+
+static bool ft_is_empty_string(const char *str)
+{
+    while (*str)
+    {
+        if (!ft_isspace(*str))
+            return (false);
+        str++;
+    }
+    return (true);
+}
 
 int ft_valid_env_var(t_token *token)
 {
@@ -154,8 +169,9 @@ int ft_valid_env_var(t_token *token)
     {
         if (token->type == TOKEN_ENV_VAR)
         {
-            if (!token->value || !ft_strlen_v2(token->value))
-                return(ft_error_env("invalid env var syntax :( \n"), 0);
+            if (ft_is_empty_string(token->value))
+                ft_error_env("invalid env var syntax :( \n");
+            return (0);
         }
         token = token->next;
     }

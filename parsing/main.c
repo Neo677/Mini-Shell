@@ -88,11 +88,16 @@ int main(int ac, char **av, char **env)
 	(void)av;
 	t_buit_in exec;
 	t_token *token;
+	t_pipex pipex;
 	
 	token = NULL;
-	init_var(&exec);
+	init_var_builtin(&exec);
+	init_var(&pipex);
 
-	ft_set_signal_handler();
+	// ft_set_signal_handler();
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
+
 
 	copy_env(env, &exec.env_cpy);
 
@@ -114,26 +119,29 @@ int main(int ac, char **av, char **env)
 		}
 
 		token = ft_parse_token(exec.input, &exec.env_cpy);
+		if (!token)
+		{
+			ft_printf_fd(STDERR_FILENO, "syntax error near unexpected token `newline'\n");
+			continue;
+		}
+		// recupe $cmd_lst
 
 		exec.tab = ft_token_to_tab(token);
 		// exec.tab = ft_split_built(exec.input, ' ');
 
-		if (ft_strcmp(exec.tab[0], "env") == 0)
+		if (ft_strcmp2(exec.tab[0], "env") == 0)
 			ft_env(&exec.env_cpy);
-
-		else if (ft_strcmp(exec.tab[0], "pwd") == 0)
+		else if (ft_strcmp2(exec.tab[0], "pwd") == 0)
+		{
 			ft_pwd(&exec.env_cpy, exec.cd);
-
-		else if (ft_strcmp(exec.tab[0], "export") == 0)
+		}
+		else if (ft_strcmp2(exec.tab[0], "export") == 0)
 			ft_export(&exec.env_cpy, exec.tab[1]);
-		
-		else if (ft_strcmp(exec.tab[0], "unset") == 0)
+		else if (ft_strcmp2(exec.tab[0], "unset") == 0)
 			ft_unset(&exec.env_cpy, exec.tab[1]);
-
-		else if (ft_strcmp(exec.tab[0], "echo") == 0)
+		else if (ft_strcmp2(exec.tab[0], "echo") == 0)
 			ft_echo(exec.tab);
-
-		else if (ft_strcmp(exec.tab[0], "exit") == 0)
+		else if (ft_strcmp2(exec.tab[0], "exit") == 0)
 			return(ft_exit(&exec, exec.tab));
 					/*
 						[DEBUG] arg = [exit]
@@ -141,16 +149,18 @@ int main(int ac, char **av, char **env)
 					*** stack smashing detected ***: terminated
 					Aborted (core dumped)
 					*/
-		else if (ft_strcmp(exec.tab[0], "cd") == 0)
+		else if (ft_strcmp2(exec.tab[0], "cd") == 0)
 			exec.cd = ft_cd(&exec.env_cpy, exec.tab[1]);
-		// else if (ft_strcmp(exec.tab[0], "./minishell") == 0)
-		// 	main(ac, av, exec.tab);
-		add_history(exec.input);
+		else if (ft_strcmp2(exec.tab[0], "./minishell") == 0)
+			main(ac, av, exec.tab);
+		if (exec.input)
+			add_history(exec.input);
+		free(exec.input);
 	}
-	free(exec.input);
-	free(exec.tab);
+	
+	// free(exec.tab);
 	free_tab(exec.tab);
 	ft_free_token(token);
-	clear_history(); // (MACOS)
-	//rl_clear_history(); // (LINUX)
+	// clear_history(); // (MACOS)
+	rl_clear_history(); // (LINUX)
 }

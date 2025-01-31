@@ -42,12 +42,12 @@ void	free_list(t_env **lst)
     *lst = NULL;
 }
 
-void	free_all(t_buit_in *exec)
+void	free_al_builtin(t_buit_in *exec)
 {
     if (!exec)
         return ;
     free_char(exec->input);
-	free_tab(exec->tab);
+	// free_tab(exec->tab);
 	free_list(&exec->env_cpy);
     free_list(&exec->export_cpy);
 }

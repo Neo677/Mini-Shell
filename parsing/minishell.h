@@ -13,6 +13,9 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "../Exec/built-in/built_in.h"
+
+
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -22,12 +25,12 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-# include "../Exec/built-in/built_in.h"
-
 # include <time.h>
 # include <signal.h>
 
 # include "../libft_2.0/libft.h"
+
+// # include "../Exec/include/pipex.h"
 
 /*
 
@@ -107,6 +110,10 @@ typedef struct s_command
 	struct s_command	*next;
 }			t_command;
 
+typedef struct s_pipex t_pipex;
+typedef struct s_built_in t_buit_in;
+typedef struct s_env t_env;
+
 
 //				main utils
 // void			ft_start_minishell(void);
@@ -170,7 +177,7 @@ void			ft_free_commande_lst(t_command *command);
 void			ft_main_free(t_command *cmd, t_redirections *redir, t_token *head);
 
 //				split error message and free
-void			ft_free_split(t_token *head, t_command *cmd_lst);
+void	ft_free_split(t_token **head, t_command **cmd_lst, const char *error_msg, const char *token);
 void			ft_err_split(t_command *cmd_lst, t_token *head);
 void			ft_err_split_ope(t_command *cmd_lst, t_token *head);
 void			ft_err_bad_redirec(t_command *cmd_lst, t_token *head);

@@ -53,6 +53,7 @@ SRCS =	add_arguments.c \
 		../Exec/built-in/cd.c \
 		../Exec/built-in/cmd_node.c \
 		../Exec/built-in/cpy_env.c \
+		../Exec/built-in/init.c \
 		../Exec/built-in/echo.c \
 		../Exec/built-in/env.c \
 		../Exec/built-in/exit.c \
@@ -61,7 +62,8 @@ SRCS =	add_arguments.c \
 		../Exec/built-in/pwd.c \
 		../Exec/built-in/split.c \
 		../Exec/built-in/unset.c \
-		../Exec/built-in/utils_built_in.c
+		../Exec/built-in/utils_built_in.c \
+		../Exec/built-in/signal.c
 
 OBJS = $(SRCS:.c=.o)
 

@@ -1,6 +1,80 @@
+//			header
 
+#include "../built-in/built_in.h"
 
-#include "../include/pipex.h"
+int ft_strlen_nb(int nb)
+{
+	int i;
+
+	i = -1;
+	if (nb < 0)
+	{
+		nb *= -1;
+		i++;
+	}
+	while (nb > 9)
+	{
+		nb /= 10;
+		i++;
+	}
+	return (i);
+}
+
+char *ft_itoa_exec(int nbr)
+{
+	char *str;
+	int len;
+	int i;
+
+	len = ft_strlen_nb(nbr);
+	str = malloc(sizeof(char) * len + 1);
+	if (!str)
+		return (0);
+	i = 0;
+	if (nbr < 0)
+	{
+		nbr *= -1;
+		str[i] = '-';
+		i++;
+	}
+	str[len] = '\0';
+	while (i < len)
+	{
+		len--;
+		str[len] = (nbr % 10) + '0';
+		nbr /= 10;
+	}
+	return (str);
+}
+
+int count_cmd(t_command *cmd)
+{
+	t_command *current;
+	int i;
+
+	i = 0;
+	current = cmd;
+	while (current)
+	{
+		i++;
+		current = current->next;
+	}
+	return (i);
+}
+
+int ft_strcmp2(char *s1, char *s2)
+{
+	int i;
+
+	i = 0;
+	while (s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (-1);
+		i++;
+	}
+	return (0);
+}
 
 int	str_search(char *big, char *little, int len)
 {

@@ -62,6 +62,7 @@ int ft_is_redirection(t_token *token)
 void ft_handle_operator(t_token **head, const char **input)
 {
     char operateur[3];
+    t_token *new_token;
 
     if (**input == '|') 			 // Gestion des pipes
     {
@@ -74,26 +75,42 @@ void ft_handle_operator(t_token **head, const char **input)
             return;					 // Arrête immédiatement
         }
         (*input)++;
-        ft_add_token(head, ft_create_token(TOKEN_PIPE, "|"));
+        new_token = ft_create_token(TOKEN_PIPE, "|");
+        if (!new_token)
+        {
+            ft_free_token(new_token);
+            *head = NULL;
+            return;
+        }
     }
     else if (**input == '>' || **input == '<')  // Gestion des redirections (<, >, <<, >>)
     {
         operateur[0] = **input;
         operateur[1] = 0;
+        operateur[2] = 0;
         (*input)++;
-        if (**input == operateur[0]) 			// Double redirection (<< ou >>)
+        if (**input == operateur[0])
         {
             operateur[1] = **input;
             (*input)++;
+            operateur[2] = '\0';
         }
         if (!**input || **input == '|' || **input == '<' || **input == '>')
         {
             ft_error_redirections(operateur);
-            ft_free_token(*head); 				// Libère les tokens créés
-            *head = NULL; 						// Réinitialise la liste
-            return; 							// Arrête immédiatement
+            ft_free_token(*head);
+            *head = NULL;
+            (*input)++;
+            return;
         }
-        ft_add_token(head, ft_create_token(ft_identify_token(operateur), operateur));
+        new_token = ft_create_token(ft_identify_token(operateur), operateur);
+        if (!new_token)
+        {
+            ft_free_token(new_token);
+            *head = NULL;
+            return;
+        }
+        ft_add_token(head, new_token);
     }
 }
 

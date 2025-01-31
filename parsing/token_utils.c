@@ -83,19 +83,19 @@ t_token	*ft_create_token(t_token_type type, char *value)
 	// here we add to the token list chain and fill it with the 2 fields type, value
 void	ft_add_token(t_token **head, t_token *new_token)
 {
-	t_token	*tmp;
+	t_token	*current;
 
-	if (!new_token || !new_token->value)
-		return ;
+	if (!head || !new_token)
+		return;
 	if (*head == NULL)
-		*head = new_token;
-	else
 	{
-		tmp = *head;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new_token;
+		*head = new_token;
+		return;
 	}
+	current = *head;
+	while (current->next)
+		current = current->next;
+	current->next = new_token;
 }
 
 //      find the limits of a token base on spaces or delim

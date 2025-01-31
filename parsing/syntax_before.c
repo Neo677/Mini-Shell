@@ -25,7 +25,7 @@ int	ft_set_syntax_pipe(const char *input)
 {
     if (*input == '|')
     {
-        ft_printf_fd(2, " bash: syntax error near unexpected token '|'\n");
+        ft_printf_fd(2, "bash: syntax error near unexpected token '|'\n");
         return (0);
     }
     // if (*input == '\0')
@@ -43,8 +43,8 @@ int	ft_set_syntax_redir(const char *input)
         input++;
     if (*input == '\0' || *input == '|')
     {
-         return (ft_printf_fd(STDERR_FILENO, " bash: parse error near `\\n'\n"), 0);
-       
+        //  return (ft_printf_fd(STDERR_FILENO, "bash: parse error near `\\n'"), 0);
+        return (0);
     }
     return (1);
 }

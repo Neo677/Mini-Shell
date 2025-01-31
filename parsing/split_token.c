@@ -54,15 +54,25 @@ void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t
     if (!token_value)
     {
         ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
-        return (ft_err_split(*cmd_lst, *head));
+        ft_free_split(head, cmd_lst, "invalid quoted string", NULL);
+        return;
     }
     ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
     if (!*current)
         *current = ft_init_command(cmd_lst);
+    if (!*current)
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: error: failed to initialize command\n");
+        free(token_value);
+        ft_free_split(head, cmd_lst, "", NULL);
+        return;
+    }
     if (!ft_add_arguments(*current, token_value))
     {
         ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
-        return (ft_err_split(*cmd_lst, *head));
+        free(token_value);
+        
+        return;
     }
     free(token_value);
 }
@@ -119,7 +129,6 @@ void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst,
 
     var_value = print_node_by_key(env_cpy, var_name);
     free(var_name);
-
     if (!var_value)
     {
         ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable\n");
@@ -165,7 +174,7 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
     current = NULL;
     if (!ft_check_syntax(input))
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n");
+        // ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n");
         return (258);
     }
     while (*input)

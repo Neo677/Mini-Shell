@@ -86,7 +86,7 @@ int    ft_exit(t_buit_in *exec, char **tab)
         }
         printf("%lld\n", num);
     }
-    free_all(exec);
+    free_al_builtin(exec);
     return(num);
 }
 

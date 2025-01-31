@@ -1,6 +1,6 @@
 
 
-#include "../include/pipex.h"
+#include "../built-in/built_in.h"
 
 void	init_var(t_pipex *pipex)
 {
@@ -23,4 +23,5 @@ void	init_var(t_pipex *pipex)
 	pipex->path_cmd = NULL;
 	pipex->in = NULL;
 	pipex->out = NULL;
+	pipex->filename_hd = NULL;
 }
