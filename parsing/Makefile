@@ -39,7 +39,6 @@ SRCS =	add_arguments.c \
 		syntax_before.c \
 		start_minishell.c \
 		valid_token.c \
-		double_quote.c \
 		replace_env.c \
 		../Exec/core/check_file.c \
 		../Exec/core/exec.c \

@@ -46,38 +46,31 @@
          2 fonctions d'affichage (DEBUG) et nettoyage (libere la liste de commandes)
 */
 
-void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
+static int ft_handle_quotes(const char **input, t_token **head, t_quote *state, t_command **current_cmd)
 {
-    char *token_value;
-    
-    token_value = ft_handle_quote(input, );
-    if (!token_value)
+    char *content;
+
+    content = ft_handle_quote(input, state);
+    if (!content)
+        return (0);
+    ft_add_token(head, ft_create_token(TOKEN_WORD, content));
+    if (!content)
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
-        ft_free_split(head, cmd_lst, "invalid quoted string", NULL);
-        return;
+        free(content);
+        return (0);
     }
-    ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
-    if (!*current)
-        *current = ft_init_command(cmd_lst);
-    if (!*current)
+    if (*current_cmd && !ft_add_arguments(*current_cmd, content))
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: error: failed to initialize command\n");
-        free(token_value);
-        ft_free_split(head, cmd_lst, "", NULL);
-        return;
+        ft_printf_fd(STDERR_FILENO, "minishell: error: adding quote argument\n");
+        free(content);
+        return (0);
     }
-    if (!ft_add_arguments(*current, token_value))
-    {
-        ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
-        free(token_value);
-        
-        return;
-    }
-    free(token_value);
+    free(content);
+    return (1);
 }
 
-void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
+
+static int ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
 {
     char *file;
 
@@ -85,7 +78,7 @@ void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst
     if (*head == NULL)
     {
         ft_printf_fd(STDERR_FILENO, "minishell: error: invalid operator\n");
-        return;
+        return (0);
     }
     if (*(input[-1]) == '|')
     {
@@ -93,7 +86,7 @@ void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst
         if (!*current)
         {
             ft_printf_fd(STDERR_FILENO, "minishell: error: failed to initialize command\n");
-            return (ft_err_split_ope(*cmd_lst, *head));
+            return (ft_err_split_ope(*cmd_lst, *head), 0);
         }
     }
     else if (*(input[-1]) == '>' || *(input[-1]) == '<') // redrirec
@@ -102,20 +95,21 @@ void ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst
         if (!file)
         {
             ft_printf_fd(STDERR_FILENO, "minishell: error: missing file for redirection\n");
-            return (ft_err_bad_redirec(*cmd_lst, *head));
+            return (ft_err_bad_redirec(*cmd_lst, *head), 0);
         }
         if (!*current)
             *current = ft_init_command(cmd_lst);
         if (!ft_add_redirections_struct(*current, ft_identify_token((char *)(*input - 1)), file))
         {
             ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add redirection for file `%s`\n", file);
-            return (ft_err_split_ope(*cmd_lst, *head));
+            return (ft_err_split_ope(*cmd_lst, *head), 0);
         }
     }
+    return (1);
 }
 
 
-void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
+int ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
 {
     char *var_name;
     char *var_value;
@@ -124,7 +118,7 @@ void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst,
     if (!var_name)
     {
         ft_printf_fd(STDERR_FILENO, "minishell: error: invalid environment variable name\n");
-        return;
+        return (0);
     }
 
     var_value = print_node_by_key(env_cpy, var_name);
@@ -132,7 +126,7 @@ void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst,
     if (!var_value)
     {
         ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable\n");
-        return;
+        return (0);
     }
     ft_add_token(head, ft_create_token(TOKEN_ENV_VAR, var_value));
 
@@ -141,11 +135,12 @@ void ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst,
     if (!ft_add_arguments(*current, var_value))
     {
         ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n");
-        return;
+        return (0);
     }
+    return (1);
 }
 
-void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
+int ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
 {
     char *token_value;
     
@@ -159,16 +154,18 @@ void ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_
         {
             ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add argument `%s`\n", token_value);
             free(token_value);
-            return (ft_err_split(*cmd_lst, *head));
+            return (0);
         }
     }
     free(token_value);
+    return (1);
 }
 
 int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 {
     t_command *cmd_lst; // Liste des commandes
     t_command *current; // Commande courante
+    t_quote     state;
 
     cmd_lst = NULL;
     current = NULL;
@@ -179,13 +176,22 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
     }
     while (*input)
     {
-        if (*input == ' ' || *input == '\t')
+        state = init_quote();
+        if ((*input == ' ' || *input == '\t') && !state.in_double && !state.in_single)
             input++;
-        else if (*input == '\'' || *input == '\"')
-            ft_handle_quotes(&input, head, &cmd_lst, &current);
-        else if (*input == '|' || *input == '>' || *input == '<')
-            ft_handle_operators(&input, head, &cmd_lst, &current);
-        else if (*input == '$')
+        if (!*input)
+            break;
+        if (*input == '\'' || *input == '"')
+        {
+            if (!ft_handle_quotes(&input, head, &state, &current))
+                return (0);
+        }
+        if (*input == '|' || *input == '>' || *input == '<')
+        {
+            if (!ft_handle_operators(&input, head, &cmd_lst, &current))
+                return (0);
+        }
+        if (*input == '$')
             ft_handle_env_vars(&input, head, &cmd_lst, &current, env_cpy);
         else
             ft_handle_words(&input, head, &cmd_lst, &current);
@@ -193,7 +199,7 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
     if (!ft_valid_token(*head))
     {
         ft_printf_fd(STDERR_FILENO, "minishell: syntax error in token list\n");
-        return (ft_free_token(*head), 258);
+        return (0);
     }
     return (1);
 }
@@ -231,7 +237,7 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 // 				ft_free_commande_lst(cmd_lst);
 // 				return ;
 // 			}
-// 			// Ajout du token de type WORD (même si c’est issu de quotes)
+// 			// Ajout du token de type WORD (même si c'est issu de quotes)
 // 			ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
 // 			// Création de commande si nécessaire, puis ajout en arguments
 // 			if (!current)
@@ -300,7 +306,7 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 // 			// 1) Extraire le nom de la variable
 // 			var_name = ft_extract_env_var(&input);
 // 			// └─ Avance le *input,
-// 			// lit la variable (ou un seul digit si c’est `$1`)
+// 			// lit la variable (ou un seul digit si c'est `$1`)
 // 			if (!var_name)
 // 			{
 // 				ft_printf("[ERROR] Variable d'environnement invalide\n");
@@ -324,7 +330,7 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 // 				return ;
 // 			}
 // 			// Pas de lookup réel, pas d'expansion
-// 			// => On se contente de parser et de stocker "VAR" ou "1" si c’est `$1`.
+// 			// => On se contente de parser et de stocker "VAR" ou "1" si c'est `$1`.
 // 		}
 // 		// e) Gestion des mots (commandes/arguments génériques)
 // 		else

@@ -63,6 +63,31 @@ t_quote init_quote(void)
     return ((t_quote){0, 0, 0});
 }
 
+char *ft_extract_quotent(const char *input, t_quote *state)
+{
+    const char *start;
+    size_t lenght;
+    char *content;
+
+    start = input + state->start;
+    lenght = 0;
+    while (start[lenght] && !((state->in_single && start[lenght] == '\'') || (state->in_double && start[lenght] == '"')))
+        lenght++;
+    if (!start[lenght])
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: unclosed quote detected\n");
+        return (NULL);
+    }
+    content = ft_strndup(start + 1, lenght - 1);
+    if (!content)
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: memory allocation failed for quoted content\n");
+        return (NULL);
+    }
+    state->start += lenght + 1;
+    return (content);
+}
+
 static int ft_handle_single_quote(const char **input, t_quote *state)
 {
     state->in_single = !state->in_single;
@@ -93,7 +118,7 @@ char *ft_handle_quote(const char **input, t_quote *state)
             return (NULL);
     }
     else
-        content = ft_extract_quotent(input, state);
+        content = ft_extract_quotent(*input, state);
     return (content);
 }
 
