@@ -174,7 +174,7 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
     }
     while (*input)
     {
-        state = init_quote();
+        state = init_quote(get_last_exit_status());
 
         if ((*input == ' ' || *input == '\t') && !state.in_double && !state.in_single)
             input++;

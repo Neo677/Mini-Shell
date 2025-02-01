@@ -28,7 +28,7 @@
 # include <time.h>
 # include <signal.h>
 
-# include "../libft_v.2.0/libft.h"
+# include "../libft_2.0/libft.h"
 
 // # include "../Exec/include/pipex.h"
 
@@ -114,6 +114,7 @@ typedef struct s_quote
 {
 	int 		in_single;
 	int 		in_double;
+	int			exit_status;
 	size_t 		start;
 }				t_quote;
 
@@ -156,10 +157,23 @@ int				ft_is_redirection(t_token *token);
 void			ft_handle_word(t_token **head, const char **input);
 t_token *ft_parse_token(const char *input, t_env **env_cpy);
 
+
+
+
+
+
+
 //				quote handler
-t_quote init_quote(void);
-char *ft_handle_quote(const char **input, t_quote *state, t_env **env_cpy);
-// char *ft_extract_quotent(const char **input, t_quote *state);
+t_quote init_quote(int exit_status);
+
+
+//				exit_status
+int get_last_exit_status(void);
+
+
+
+
+
 
 //				Token creations
 t_token_type	ft_identify_token(char *str);
