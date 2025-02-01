@@ -46,24 +46,22 @@
          2 fonctions d'affichage (DEBUG) et nettoyage (libere la liste de commandes)
 */
 
-static int ft_handle_quotes(const char **input, t_token **head, t_quote *state, t_command **current_cmd)
+static int ft_handle_quotes(const char **input, t_token **head, t_quote *state, t_command **current_cmd, t_env **env_cpy)
 {
     char *content;
 
-    content = ft_handle_quote(input, state);
+    content = ft_handle_quote(input, state, env_cpy);
     if (!content)
         return (0);
-    ft_add_token(head, ft_create_token(TOKEN_WORD, content));
-    if (!content)
+
+    if (content[0] != '\0')
     {
-        free(content);
-        return (0);
-    }
-    if (*current_cmd && !ft_add_arguments(*current_cmd, content))
-    {
-        ft_printf_fd(STDERR_FILENO, "minishell: error: adding quote argument\n");
-        free(content);
-        return (0);
+        ft_add_token(head, ft_create_token(TOKEN_WORD, content));
+        if (*current_cmd && !ft_add_arguments(*current_cmd, content))
+        {
+            free(content);
+            return (0);
+        }
     }
     free(content);
     return (1);
@@ -172,31 +170,32 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
     if (!ft_check_syntax(input))
     {
         // ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n");
-        return (258);
+        return (0);
     }
     while (*input)
     {
         state = init_quote();
+
         if ((*input == ' ' || *input == '\t') && !state.in_double && !state.in_single)
             input++;
-        if (!*input)
-            break;
-        if (*input == '\'' || *input == '"')
+        else if (*input == '\'' || *input == '"')
         {
-            if (!ft_handle_quotes(&input, head, &state, &current))
+            if (!ft_handle_quotes(&input, head, &state, &current, env_cpy))
                 return (0);
         }
-        if (*input == '|' || *input == '>' || *input == '<')
+        else if (*input == '|' || *input == '>' || *input == '<')
         {
             if (!ft_handle_operators(&input, head, &cmd_lst, &current))
                 return (0);
         }
-        if (*input == '$')
+        else if (*input == '$')
             ft_handle_env_vars(&input, head, &cmd_lst, &current, env_cpy);
         else
+        {
             ft_handle_words(&input, head, &cmd_lst, &current);
+        }
     }
-    if (!ft_valid_token(*head))
+    if (ft_valid_token(*head) == 0)
     {
         ft_printf_fd(STDERR_FILENO, "minishell: syntax error in token list\n");
         return (0);

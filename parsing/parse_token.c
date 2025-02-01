@@ -46,7 +46,7 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy)
         ft_printf_fd(2, "minishell: syntax error: unexpected end of input\n");
         return (NULL);
     }
-    if (!ft_split_token(&token, input, env_cpy))
+    if (ft_split_token(&token, input, env_cpy) == 0)
     {
         ft_printf_fd(2, "minishell: lexer error: failed to tokenize input\n");
         return (NULL);
@@ -57,15 +57,15 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy)
         ft_free_token(token);
         return (NULL);
     }
-    // ft_print_tokens(token); // optionnal (LEXER part)
+    ft_print_tokens(token); // optionnal (LEXER part)
     if (!ft_create_command_lst(token, &cmd_lst))
     {
         ft_printf_fd(2, "minishell: parser error: failed to create command list\n");
         ft_free_commande_lst(cmd_lst);
         return (NULL);
     }
-    // ft_print_command_lst(cmd_lst);
-    // if (!cmd_lst)
-    //     return (NULL);
+    ft_print_command_lst(cmd_lst);
+    if (!cmd_lst)
+        return (NULL);
     return (token); // Retourne les tokens si tout est valide
 }

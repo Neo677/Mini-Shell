@@ -12,34 +12,6 @@
 
 #include "minishell.h"
 
-// static char *ft_handle_single_quote(const char **input) 
-// {
-//     const char *start;
-//     char *content;
-//     size_t i;
-
-//     i = 0;
-//     if (**input != '\'')
-//         return (NULL);
-//     start = ++(*input);
-//     while ((*input)[i] && (*input)[i] != '\'')
-//         i++;
-//     if ((*input)[i] != '\'')
-//     {
-//         ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed single quote\n");
-//         return (NULL); // return 258 pour la fonctions appelante
-//     }
-//     content = ft_strndup(start, i);
-//     if (!content)
-//     {
-//         ft_printf_fd(STDERR_FILENO, "minishell: error: memory allocation failed in ft_handle_single_quote\n");
-//         return (NULL); // probleme interne
-//     }
-//     printf("content  %s\n", content);
-//     (*input) += i + 1;
-//     return (content);
-// }
-
 // /*
 //     - Double quote non trouvée
 //     - Sauter la quote ouvrante
@@ -63,137 +35,87 @@ t_quote init_quote(void)
     return ((t_quote){0, 0, 0});
 }
 
-char *ft_extract_quotent(const char *input, t_quote *state)
+char *ft_extract_quotent(const char **input, t_quote *state)
 {
     const char *start;
     size_t lenght;
     char *content;
 
-    start = input + state->start;
+    start = *input + state->start;
     lenght = 0;
-    while (start[lenght] && !((state->in_single && start[lenght] == '\'') || (state->in_double && start[lenght] == '"')))
+    while (**input && !((state->in_single && start[lenght] == '\'') ||
+                            (state->in_double && start[lenght] == '"')))
+    {
         lenght++;
+    }
     if (!start[lenght])
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: unclosed quote detected\n");
+        ft_printf_fd(STDERR_FILENO, "minishell: unclosed quotes detected\n");
         return (NULL);
     }
     content = ft_strndup(start + 1, lenght - 1);
     if (!content)
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: memory allocation failed for quoted content\n");
+        ft_printf_fd(STDERR_FILENO, "minishell: memeory allocation failed\n");
         return (NULL);
     }
     state->start += lenght + 1;
     return (content);
 }
 
-static int ft_handle_single_quote(const char **input, t_quote *state)
+
+
+static char *ft_handle_single_quote(const char **input)
 {
-    state->in_single = !state->in_single;
-    (*input)++;
-    return (1);
+    const char *start;
+    size_t lenght;
+    char *content;
+
+    content = NULL;
+    start = *(input)++;
+    lenght = 0;
+    while (start[lenght] && start[lenght] != '\'')
+        lenght++;
+    if (!start[lenght])
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: unclosed single quote\n");
+        return (NULL);
+    }
+    content = ft_strndup(start, lenght);
+    *input = start + lenght + 1;
+    return (content);
 }
 
-static int ft_handle_double_quote(const char **input, t_quote *state)
+static char *ft_handle_double_quote(const char **input, t_env **env_cpy)
 {
-    state->in_double = !state->in_double;
-    (*input)++;
-    return (1);
+    char *content;
+    char *expendad;
+    char *tmp;
+    int i;
+
+    i = 0;
+    content = ft_extract_content(input, )
+
 }
 
-char *ft_handle_quote(const char **input, t_quote *state)
+
+
+char *ft_handle_quote(const char **input, t_quote *state, t_env **env_cpy)
 {
     char *content;
 
     content = NULL;
     if (**input == '\'' && !state->in_double)
     {
-        if (!ft_handle_single_quote(input, state))
-            return (NULL);
+        state->in_single = !state->in_single;
+        content = ft_handle_single_quote(input);
     }
     if (**input == '"' && !state->in_single)
     {
-        if (!ft_handle_double_quote(input, state))
-            return (NULL);
+        state->in_double = !state->in_double;
+        content = ft_handle_double_quote(input, env_cpy);
     }
-    else
-        content = ft_extract_quotent(*input, state);
+    if (!content)
+        return (NULL);
     return (content);
 }
-
-// char *ft_handle_quote(const char **input, char quote_type)
-// {
-//     const char *start;
-//     char *content;
-//     char single_quote_char;
-//     char double_quote_char;
-
-//     t_token token_instance;char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_buit_in *env_cpy);
-
-//     t_token *token = &token_instance;
-//     // token->single_quote = false;
-//     // token->double_quote = false;
-//     size_t i;
-//     char start_quote;
-
-//     ft_printf("1.0\n");
-
-//     i = 0;
-//     ft_printf("1.1\n");
-//     single_quote_char = '\'';
-//     double_quote_char = '\"';
-//     ft_printf("1.2\n");
-//     start_quote = **(input);
-//     ft_printf("1.3\n");
-//     start = ++(*input);
-//     ft_printf("1debut = %s\n", double_quote_char);
-//     // ft_printf("2debut = %s\n", double_quote_char);
-//     ft_printf("3debut = %s\n", start_quote);
-//     ft_printf("4debut = %s\n", start);
-
-//     if (start_quote == single_quote_char)
-//         token->single_quote = true;
-//     else if (start_quote == double_quote_char)
-//         token->double_quote = true;
-//     ft_printf("1\n");
-    
-//     while ((*input)[i] && (*input)[i] != quote_type)
-//     {
-//         ft_printf("2\n");
-//         if (quote_type == '\'' && token->single_quote == true)
-//         {
-//             ft_printf("3\n");
-//             content = ft_handle_single_quote(input);
-//         }
-            
-//         else if (quote_type == double_quote_char && token->double_quote == true)
-//         {
-//             ft_printf("4\n");
-//             content = ft_handle_double_quote(input);
-//         }
-//         ft_printf("5\n");
-        
-//         i++;
-//     }
-//     ft_printf("6\n");
-//     if ((*input)[i] != quote_type)
-//     {
-//         ft_printf("7\n");
-//         return (NULL);
-//     }
-//     ft_printf("8\n");
-//     if ((*input)[i] != quote_type)
-//     {
-//         return (printf("[DEBUG] quote non closed\n"), NULL);
-//     }
-//     ft_printf("9\n");
-
-//     // content = ft_strndup(start, i);
-//     // if (!content)
-//     //     return (free(content), NULL);
-//     // (*input) += i + 1; // Increment input pointer to skip the closing quote
-//     return (content);
-// }
-
-

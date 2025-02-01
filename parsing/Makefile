@@ -13,7 +13,7 @@
 NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I include #-fsanitize=leak
-LIBFT_DIR = ../libft_2.0
+LIBFT_DIR = ../libft_v.2.0
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_DIR_MATE = ../Exec/libft/printf
 LIBFT_MATE = $(LIBFT_DIR_MATE)/libftprintf.a
@@ -52,7 +52,6 @@ SRCS =	add_arguments.c \
 		../Exec/core/utils_error.c \
 		../Exec/core/utils_test.c \
 		../Exec/core/here_doc.c \
-		../Exec/built-in/built-in.c \
 		../Exec/built-in/cd.c \
 		../Exec/built-in/cmd_node.c \
 		../Exec/built-in/cpy_env.c \

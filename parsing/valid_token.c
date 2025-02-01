@@ -169,7 +169,7 @@ int ft_valid_env_var(t_token *token)
     {
         if (token->type == TOKEN_ENV_VAR)
         {
-            if (ft_is_empty_string(token->value))
+            if (!ft_is_empty_string(token->value))
                 ft_error_env("invalid env var syntax :( \n");
             return (0);
         }

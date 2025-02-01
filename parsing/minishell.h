@@ -28,7 +28,7 @@
 # include <time.h>
 # include <signal.h>
 
-# include "../libft_2.0/libft.h"
+# include "../libft_v.2.0/libft.h"
 
 // # include "../Exec/include/pipex.h"
 
@@ -158,8 +158,8 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy);
 
 //				quote handler
 t_quote init_quote(void);
-char *ft_handle_quote(const char **input, t_quote *state);
-char *ft_extract_quotent(const char *input, t_quote *state);
+char *ft_handle_quote(const char **input, t_quote *state, t_env **env_cpy);
+// char *ft_extract_quotent(const char **input, t_quote *state);
 
 //				Token creations
 t_token_type	ft_identify_token(char *str);
