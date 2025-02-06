@@ -51,7 +51,7 @@ long long ft_atol(char *str, int *error)
     return (res * sign);
 }
 
-int    ft_exit(t_built_in *exec, char **tab)
+int    ft_exit(t_buit_in *exec, char **tab)
 {
     long long   num;
     int error;
@@ -86,7 +86,7 @@ int    ft_exit(t_built_in *exec, char **tab)
         }
         printf("%lld\n", num);
     }
-    free_all_builtin(exec);
+    free_all(exec);
     return(num);
 }
 

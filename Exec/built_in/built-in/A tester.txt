@@ -96,3 +96,20 @@ cd no_path = bash: cd: [no_path]: No such file or directory
 cd "no_permissions" = bash: cd: [no_permissions]: Permission denied
 
 
+
+
+
+export a=1 a=2 test1 _test2 \test3
+
+
+Probleme a resoudre 
+- leak quand export plus valeur sans egal
+export test
+- Pb quand change variable deja existante sans egal
+export test ; export test
+- Pb pas de "" quand variable avec juste =
+export test= doit donner test=""
+donc il faut check si il y a un egal ou non 
+
+Voir split_in_two et tab_export 
+si cela est pas faisable, refaire fonction export avec une structure propre
