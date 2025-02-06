@@ -49,17 +49,8 @@ int ft_is_redirection(t_token *token)
     return (0);
 }
 
-/*
-    Here we gonna need to split this fonction in 3 way :
-		1) handle the pipe error and use fonction in ft_validay_pipes
-		2) handle redirection in or out (still use the tab op[3])
-		3) also add the handle word in the main 
 
-	At this moment we break into fragment the input of the user 
-	and put it in the enum token (ex. TOKEN_PIPE, TOKEN_WORD, etc...)
-*/
-
-void ft_handle_operator(t_token **head, const char **input)
+int ft_handle_operator(t_token **head, const char **input)
 {
     char operateur[3];
     t_token *new_token;
@@ -72,7 +63,7 @@ void ft_handle_operator(t_token **head, const char **input)
             (*input) += 2;
             ft_free_token(*head);	 // Libère les tokens déjà créés
             *head = NULL;			 // Réinitialise la liste
-            return;					 // Arrête immédiatement
+            return (0);					 // Arrête immédiatement
         }
         (*input)++;
         new_token = ft_create_token(TOKEN_PIPE, "|");
@@ -80,7 +71,7 @@ void ft_handle_operator(t_token **head, const char **input)
         {
             ft_free_token(new_token);
             *head = NULL;
-            return;
+            return (0);
         }
     }
     else if (**input == '>' || **input == '<')  // Gestion des redirections (<, >, <<, >>)
@@ -101,17 +92,18 @@ void ft_handle_operator(t_token **head, const char **input)
             ft_free_token(*head);
             *head = NULL;
             (*input)++;
-            return;
+            return (0);
         }
         new_token = ft_create_token(ft_identify_token(operateur), operateur);
         if (!new_token)
         {
             ft_free_token(new_token);
             *head = NULL;
-            return;
+            return (0);
         }
         ft_add_token(head, new_token);
     }
+    return (1);
 }
 
 

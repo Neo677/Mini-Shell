@@ -39,9 +39,59 @@
 char *ft_detec_var(const char **input)
 {
     char *var_name;
+    char buf[16];
+    char *args[5];
+    char *envp[1];
+    int fd_pipe[2];
+    pid_t pid;
+    ssize_t n;
 
-    var_name = ft_strndup(*input, 1);
-    (*input)++;
+    if (**input == '$' && (*input)[1] == '$') 
+    {
+        if (pipe(fd_pipe) == -1)
+        {
+            return (ft_strdup("0"));
+        }
+        pid = fork();
+        if (pid == 0)
+        {
+            close(fd_pipe[0]);
+            dup2(fd_pipe[1], STDOUT_FILENO);
+            close(fd_pipe[1]);
+
+            args[0] = "sh";
+            args[1] = "sh";
+            args[2] = "-c";
+            args[3] = "echo $PPID";
+            args[4] = NULL;
+            envp[0] = NULL;
+            execve("/bin/sh", args, envp);
+            // execlp("sh", "sh", "-c", "echo $PPID", (char *)NULL);
+
+
+            exit (1);
+        }
+        close(fd_pipe[1]);
+        waitpid(pid, NULL, 0);
+        n = read(fd_pipe[0], buf, sizeof(buf)-1);
+        close(fd_pipe[0]);
+        if (n > 0)
+        {
+            buf[n] = '\0';
+            var_name = ft_strtrim(buf, "\n");
+        }
+        else
+        {
+            var_name = ft_strdup("0");
+        }
+        (*input) += 2;
+        return (var_name);
+    }
+    else
+    {
+        var_name = ft_strndup(*input, 1);
+        (*input)++;
+    }
     return (var_name);
 }
 

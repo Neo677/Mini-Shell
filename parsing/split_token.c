@@ -46,38 +46,35 @@
          2 fonctions d'affichage (DEBUG) et nettoyage (libere la liste de commandes)
 */
 
-static int ft_handle_quotes(const char **input, t_token **head, t_quote *state, t_command **current_cmd, t_env **env_cpy)
+void ft_handle_quotes(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
 {
-    char *content;
-
-    content = ft_handle_quote(input, state, env_cpy);
-    if (!content)
-        return (0);
-
-    if (content[0] != '\0')
+    char *token_value;
+    
+    token_value = ft_handle_quote(input, head, cmd_lst, current, env_cpy);
+    if (!token_value)
     {
-        ft_add_token(head, ft_create_token(TOKEN_WORD, content));
-        if (*current_cmd && !ft_add_arguments(*current_cmd, content))
-        {
-            free(content);
-            return (0);
-        }
+        ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
+        return (ft_err_split(*cmd_lst, *head));
     }
-    free(content);
-    return (1);
+    ft_add_token(head, ft_create_token(TOKEN_WORD, token_value));
+    if (!*current)
+        *current = ft_init_command(cmd_lst);
+    if (!ft_add_arguments(*current, token_value))
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
+        free(token_value);
+        return (ft_err_split(*cmd_lst, *head));
+    }
+    free(token_value);
 }
-
 
 static int ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
 {
     char *file;
 
-    ft_handle_operator(head, input);
-    if (*head == NULL)
-    {
-        ft_printf_fd(STDERR_FILENO, "minishell: error: invalid operator\n");
+    if (!ft_handle_operator(head, input))
         return (0);
-    }
+
     if (*(input[-1]) == '|')
     {
         *current = ft_init_command(cmd_lst);
@@ -87,7 +84,7 @@ static int ft_handle_operators(const char **input, t_token **head, t_command **c
             return (ft_err_split_ope(*cmd_lst, *head), 0);
         }
     }
-    else if (*(input[-1]) == '>' || *(input[-1]) == '<') // redrirec
+    else if (*(input[-1]) == '>' || *(input[-1]) == '<')
     {
         file = ft_get_next_token(input);
         if (!file)
@@ -100,12 +97,13 @@ static int ft_handle_operators(const char **input, t_token **head, t_command **c
         if (!ft_add_redirections_struct(*current, ft_identify_token((char *)(*input - 1)), file))
         {
             ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add redirection for file `%s`\n", file);
+            free(file);
             return (ft_err_split_ope(*cmd_lst, *head), 0);
         }
+        free(file);
     }
     return (1);
 }
-
 
 int ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
 {
@@ -133,8 +131,10 @@ int ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, 
     if (!ft_add_arguments(*current, var_value))
     {
         ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n");
+        free(var_value);
         return (0);
     }
+    free(var_value);
     return (1);
 }
 
@@ -161,26 +161,22 @@ int ft_handle_words(const char **input, t_token **head, t_command **cmd_lst, t_c
 
 int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 {
-    t_command *cmd_lst; // Liste des commandes
-    t_command *current; // Commande courante
-    t_quote     state;
+    t_command *cmd_lst;
+    t_command *current;
 
     cmd_lst = NULL;
     current = NULL;
     if (!ft_check_syntax(input))
-    {
-        // ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n");
         return (0);
-    }
+        
     while (*input)
     {
-        state = init_quote(get_last_exit_status());
-
-        if ((*input == ' ' || *input == '\t') && !state.in_double && !state.in_single)
+        if (*input == ' ' || *input == '\t')
             input++;
         else if (*input == '\'' || *input == '"')
         {
-            if (!ft_handle_quotes(&input, head, &state, &current, env_cpy))
+            ft_handle_quotes(&input, head, &cmd_lst, &current, env_cpy);
+            if (!current)
                 return (0);
         }
         else if (*input == '|' || *input == '>' || *input == '<')
@@ -189,10 +185,14 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy)
                 return (0);
         }
         else if (*input == '$')
-            ft_handle_env_vars(&input, head, &cmd_lst, &current, env_cpy);
+        {
+            if (!ft_handle_env_vars(&input, head, &cmd_lst, &current, env_cpy))
+                return (0);
+        }
         else
         {
-            ft_handle_words(&input, head, &cmd_lst, &current);
+            if (!ft_handle_words(&input, head, &cmd_lst, &current))
+                return (0);
         }
     }
     if (ft_valid_token(*head) == 0)

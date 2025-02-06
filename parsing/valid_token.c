@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 int ft_valid_redirections(const t_token *token)
 {
     while (token)
@@ -19,11 +18,10 @@ int ft_valid_redirections(const t_token *token)
         if (token->type == TOKEN_IN || token->type == TOKEN_OUT ||
             token->type == TOKEN_APPEND || token->type == TOKEN_HEREDOC)
         {
-            // Vérifiez que la redirection est suivie d'un fichier/argument valide
             if (!token->next || token->next->type != TOKEN_WORD)
             {
-                ft_printf("minishell: parse error near `\n' \n");
-                return (0); // Erreur détectée
+                ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token\n");
+                return (0);
             }
         }
         token = token->next;
@@ -31,81 +29,47 @@ int ft_valid_redirections(const t_token *token)
     return (1);
 }
 
-/*
-    step for check if the quotes is valid :
-    1) saute l'ouverture de la quote
-    2) erreur si quote non fermer 
-    3) sauter la fermeture de la quote
-
-*/
-
-char *ft_valid_quotes(char **current, char quote_type) {
+char *ft_valid_quotes(char **current, char quote_type) 
+{
     char *start;
     char *value;
     size_t len = 0;
 
-    if (!current || !*current || !**current) {
+    if (!current || !*current || !**current) 
+    {
         ft_error_quote();
         return (NULL);
     }
 
-    (*current)++; // Sauter la quote ouvrante
+    (*current)++;
     start = *current;
 
-    while (**current && **current != quote_type) {
+    while (**current && **current != quote_type) 
+    {
         if (**current == '\\' && (quote_type == '\"') &&
-            (*(*current + 1) == quote_type || *(*current + 1) == '\\')) {
-            (*current)++; // Ignorer le caractère échappé
+            (*(*current + 1) == quote_type || *(*current + 1) == '\\')) 
+        {
+            (*current)++;
         }
         (*current)++;
         len++;
     }
-
-    if (**current == '\0') { // Erreur si quote fermante absente
+    if (**current == '\0') 
+    { 
         ft_error_quote();
         return (NULL);
     }
 
-    // Copie du contenu entre les quotes
     value = ft_strndup(start, len);
-    if (!value) {
-        ft_printf("[ERROR] Memory allocation failed in ft_valid_quotes.\n");
+    if (!value) 
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: memory allocation failed\n");
         return (NULL);
     }
 
-    (*current)++; // Sauter la quote fermante
+    (*current)++;
     return (value);
 }
-
-/*
-                    🚨    🚨    🚨
-    Check the validity of :
-    1) initialisation of the token before 
-            (that why we got prev)
-    2) check the pipe
-        a. check if the pipe is valid
-        b. the handle error mean if we got a pipe at the begining of the input
-            or at the end, and if there is a double. 
-            (ex : input = '| cat ...' or 'cat .. |' or 'cat ... || cat ...')
-    3) check error on redirection 
-        a. every redirection muste be follow by a file/arg valid (<, >, >>, <<)
-        b. else return a faild (0)
-    4) the quote must be set on a valide content
-        a.check the quotes
-        b. else return a faild (0)
-    5) Updates the previous and the next token.
-    6) return (1) if the token are good
-
-    🧑‍💻  for a certain visiblity and of course norm i need to do
-    🧑‍💻  split this fonction but the purpose is the same
-
-    utils for the parsing :
-    chekc if the quote is correctly closed for 
-    avoid a syntax error in the token
-    1)  Si une quote est non fermée
-    2) Signale une erreur
-    3) Quote valide
-*/
 
 int ft_validay_quotes(t_token *token)
 {
@@ -116,7 +80,7 @@ int ft_validay_quotes(t_token *token)
         parsed_value = ft_valid_quotes(&token->value, token->type);
         if (!parsed_value)
         {
-            printf("quote syntax = unclosed quote\n");
+            ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed quote\n");
             return (0);
         }
         free(parsed_value);
@@ -130,16 +94,16 @@ int ft_validate_pipes(t_token *token)
     
     prev = NULL;
     if (!token || token->type == TOKEN_PIPE)
-        return(ft_printf(" syntax error near unexpected token `|' \n"), 0);
+        return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
 
     while (token) 
     {
         if (token->type == TOKEN_PIPE) 
         {
             if (!prev || prev->type == TOKEN_PIPE) 
-                return(ft_printf(" syntax error near unexpected token `|' \n"), 0);
+                return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
             if (!token->next)
-                return(ft_printf("after: syntax error: pipe at the end \n"), 0);
+                return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error: pipe at the end\n"), 0);
         }
         prev = token;
         token = token->next;
@@ -154,6 +118,8 @@ int ft_isspace(char c)
 
 static bool ft_is_empty_string(const char *str)
 {
+    if (!str)
+        return (true);
     while (*str)
     {
         if (!ft_isspace(*str))
@@ -165,32 +131,34 @@ static bool ft_is_empty_string(const char *str)
 
 int ft_valid_env_var(t_token *token)
 {
+    if (!token)
+        return (1);
+        
     while (token)
     {
         if (token->type == TOKEN_ENV_VAR)
         {
-            if (!ft_is_empty_string(token->value))
-                ft_error_env("invalid env var syntax :( \n");
-            return (0);
+            if (!token->value || ft_is_empty_string(token->value))
+            {
+                ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable syntax\n");
+                return (0);
+            }
+            if (ft_strchr(token->value, '$') && ft_strlen(token->value) == 1)
+            {
+                ft_printf_fd(STDERR_FILENO, "minishell: $: ambiguous redirect\n");
+                return (0);
+            }
         }
         token = token->next;
     }
     return (1);
 }
-/*
-    1) Vérifie les pipes
-    2) Vérifie les redirections
-    3) Vérifie les variables d'environnement
-    4) Vérifie les quotes
-    5) Vérifie chaque token pour les quotes
-    6) Tous les tokens sont valides
-*/
 
 int ft_valid_token(t_token *token)
 {
-	t_token *current;
+    t_token *current;
 
-	current = token;
+    current = token;
     if (!ft_validate_pipes(token))
         return (0);
     if (!ft_valid_redirections(token))

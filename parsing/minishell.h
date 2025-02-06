@@ -27,6 +27,8 @@
 
 # include <time.h>
 # include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 # include "../libft_2.0/libft.h"
 
@@ -110,13 +112,6 @@ typedef struct s_command
 	struct s_command	*next;
 }			t_command;
 
-typedef struct s_quote
-{
-	int 		in_single;
-	int 		in_double;
-	int			exit_status;
-	size_t 		start;
-}				t_quote;
 
 typedef struct s_pipex t_pipex;
 typedef struct s_built_in t_buit_in;
@@ -152,27 +147,14 @@ char *ft_extract_env_var(const char **input);
 int ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy);
 
 //				Token handler
-void			ft_handle_operator(t_token **head, const char **input);
+int ft_handle_operator(t_token **head, const char **input);
 int				ft_is_redirection(t_token *token);
 void			ft_handle_word(t_token **head, const char **input);
 t_token *ft_parse_token(const char *input, t_env **env_cpy);
 
 
 
-
-
-
-
-//				quote handler
-t_quote init_quote(int exit_status);
-
-
-//				exit_status
-int get_last_exit_status(void);
-
-
-
-
+char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) ;
 
 
 //				Token creations

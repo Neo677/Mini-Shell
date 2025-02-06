@@ -108,12 +108,9 @@ int main(int ac, char **av, char **env)
 		}
 		add_history(exec.input);
 		token = ft_parse_token(exec.input, &exec.env_cpy);
-		
+		// recupe $cmd_lst
 		if (!token)
-		{
-			ft_printf_fd(STDERR_FILENO, "syntax error near unexpected token `newline'\n");
 			continue;
-		}// recupe $cmd_lst
 		else
 		{
 			exec.tab = ft_token_to_tab(token);
@@ -138,6 +135,6 @@ int main(int ac, char **av, char **env)
 	}
 	free_tab(exec.tab);
 	ft_free_token(token);
-	rl_clear_history(); // (LINUX)
-	//  clear_history(); // (MACOS)
+	// rl_clear_history(); // (LINUX)
+	clear_history(); // (MACOS)
 }

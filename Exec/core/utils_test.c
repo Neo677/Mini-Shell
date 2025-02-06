@@ -57,6 +57,7 @@ int	token_checker(t_command *cmd, t_token *token, t_pipex *pipex)
 {
 	t_token	*cur_token;
 
+    (void)cmd;
 	cur_token = token;
     if (cur_token->type == TOKEN_WORD)
         return (1);

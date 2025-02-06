@@ -30,188 +30,152 @@
 //     - Fin de l'analyse des quotes
 // */
 
-char *ft_strjoin_free(char *s1, char *s2)
+char	*ft_extract_quotent(const char *start, size_t len)
 {
-    char *new_str;
+	char	*tmp;
 
-    if (!s1 || !s2)
-    {
-        free(s1);
-        free(s2);
+	tmp = ft_strndup(start, len);
+	if (!tmp)
+	{
+		ft_printf_fd(STDERR_FILENO, "minishell: error memory allocation failed\n");
+		return (NULL);
+	}
+	return (tmp);
+}
+
+char	*ft_concatent_content(char *content, char *tmp)
+{
+	char	*new;
+
+	if (content)
+	{
+		new = ft_strjoin_v2(content, tmp);
+		free(content);
+		free(tmp);
+		if (!new)
+		{
+			ft_printf_fd(STDERR_FILENO, "minishell: error allocation failed during concatenation\n");
+			return (NULL);
+		}
+		return (new);
+	}
+	return (tmp);
+}
+
+int	ft_update_ptr_input(const char **input, size_t *i, const char **start)
+{
+	(*input) += *i + 1;
+	if (**input == '\"')
+	{
+		(*input)++;
+		*start = *input;
+		*i = 0;
+		return (1);
+	}
+	return (0);
+}
+
+char    *ft_strjoin_free(char *s1, char *s2)
+{
+    char    *result;
+    
+    if (!s1 && !s2)
         return (NULL);
-    }
-    new_str = ft_strjoin(s1, s2);
+    if (!s1)
+        return (ft_strdup(s2));
+    if (!s2)
+        return (ft_strdup(s1));
+        
+    result = ft_strjoin(s1, s2);
     free(s1);
     free(s2);
-    return (new_str);
-}
-
-char *ft_strjoin_char(char *str, char c)
-{
-    char    *new;
-    int     len;
-
-    if (!str)
-    {
-        new = malloc(2);
-        if (!new)
-            return (NULL);
-        new[0] = c;
-        new[1] = '\0';
-        return (new);
-    }
-    len = ft_strlen(str);
-    new = malloc(len + 2);
-    if (!new)
-        return (NULL);
-    ft_memcpy(new, str, len);
-    new[len] = c;
-    new[len + 1] = '\0';
-    free(str);
-    return (new);
-}
-
-int ft_get_var_len(const char *str)
-{
-    int len;
-
-    len = 1;
-    if (str[1] == '?')
-        return (2);
-    if (!ft_isalpha(str[1]) && str[1] != '_')
-        return (1);
-    while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
-        len++;
-    return (len);
-}
-
-char *ft_get_env(char *name, t_env **env_cpy)
-{
-    t_env *tmp;
-
-    tmp = *env_cpy;
-    while (tmp)
-    {
-        if (ft_strcmp2(tmp->key, name) == 0)
-            return (tmp->value);
-        tmp = tmp->next;
-    }
-    return (NULL);
-}
-
-char *ft_get_var_value(const char *var_str, t_env **env_cpy, int exit_status)
-{
-    char *var_name;
-    char *value;
-    int len;
-
-    len = ft_get_var_len(var_str);
-    if (var_str[1] == '?')
-        return (ft_itoa(exit_status));
-    var_name = ft_strndup(var_str + 1, len - 1);
-    if (!var_name)
-        return (NULL);
-    value = ft_get_env(var_name, env_cpy);
-    if (!value)
-        return (ft_strdup(""));
-    return (ft_strdup(value));
-}
-
-char *ft_expand_env_var(char *content, t_env **env_cpy, int exit_satus)
-{
-    char *result;
-    char *tmp;
-    int i;
-    int var_len;
-
-    result = ft_strdup("");
-    i = 0;
-    while (content[i])
-    {
-        if (content[i] == '$' && (i == 0 || content[i - 1] != '\\'))
-        {
-            var_len = ft_get_var_len(content + i);
-            tmp = ft_get_var_value(content + i, env_cpy, exit_satus);
-            result = ft_strjoin_free(result, tmp);
-            i += var_len;
-            free(tmp);
-        }
-        else
-        {
-            result = ft_strjoin_char(result, content[i]);
-            i++;
-        }
-    }
-    free(content);
     return (result);
 }
-
-t_quote init_quote(int exit_status)
-{
-    return ((t_quote){0, 0, exit_status, 0});
-}
-
-char *ft_handle_single_quote(const char **input, t_quote *state)
+ 
+static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
 {
     const char *start;
     char *content;
-    size_t size;
+    char *tmp;
+    size_t i;
 
-    state->in_single = 1;
+    content = NULL;
+    i = 0;
+    if (**input != '\"')
+        return (NULL);
     start = ++(*input);
-    size = 0;
-    while (start[size] && start[size] != '\'')
-        size++;
-    if (!start[size])
+    while ((*input)[i] && (*input)[i] != '\"')
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: unclosed single quote\n");
-        state->in_single = 0;
+        if ((*input)[i] == '$')
+        {
+            tmp = ft_extract_quotent(start, i);
+            content = ft_concatent_content(content, tmp);
+            if (!content)
+                return (NULL);
+            if (!ft_handle_env_vars(input, head, cmd_lst, current, env_cpy))
+                return (NULL);
+            start = *input;
+            i = 0;
+        }
+        else
+            i++;
+    }
+    if ((*input)[i] != '\"')
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed double quote\n");
         return (NULL);
     }
-    content = ft_strndup(start, size);
-    *input = start + size + 1;
-    state->in_single = 0;
+    tmp = ft_extract_quotent(start, i);
+    content = ft_concatent_content(content, tmp);
+    if (!content)
+        return (NULL);
+    (*input) += i + 1;
     return (content);
 }
 
-char *ft_handle_double_quote(const char **input, t_quote *state, t_env **env_cpy)
+static char *ft_handle_single_quote(const char **input) 
 {
     const char *start;
     char *content;
-    size_t size;
-    char *expanded;
+    size_t i;
 
-    state->in_double = 1;
+    i = 0;
+    if (**input != '\'')
+        return (NULL);
     start = ++(*input);
-    size = 0;
-    while (start[size] && start[size] != '"')
+    while ((*input)[i] && (*input)[i] != '\'')
+        i++;
+    if ((*input)[i] != '\'')
     {
-        if (start[size] == '\\' && 
-            (start[size + 1] == '"' || start[size + 1] == '\\' || start[size + 1] == '$'))
-        {
-            size++;
-        }
-        size++;
-    }
-    if (!start[size])
-    {
-        ft_printf_fd(STDERR_FILENO, "minishell: unclosed double quote\n");
-        state->in_double = 0;
+        ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed single quote\n");
         return (NULL);
     }
-    content = ft_strndup(start, size);
-    expanded = ft_expand_env_var(content, env_cpy, state->exit_status);
-    free(content);
-    *input = start + size + 1;
-    state->in_double = 0;
-    return (expanded);
+    content = ft_strndup(start, i);
+    if (!content)
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: error: memory allocation failed in ft_handle_single_quote\n");
+        return (NULL);
+    }
+    (*input) += i + 1;
+    return (content);
 }
 
-char *ft_handle_quote(const char **input, t_quote *state, t_env **env_cpy)
+char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
 {
-    if (**input == '\'' && !state->in_double)
-        return (ft_handle_single_quote(input, state));
-    else if (**input == '"' && !state->in_single)
-        return (ft_handle_double_quote(input, state, env_cpy));
-    return (NULL);
+    char *content = NULL;
+
+    if (**input == '\'') 
+    {
+        content = ft_handle_single_quote(input);
+    } 
+    else if (**input == '\"')
+    {
+        content = ft_handle_double_quote(input, head, cmd_lst, current, env_cpy);
+    }
+    if (!content) 
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: error while processing quotes\n");
+        return (NULL);
+    }
+    return (content);
 }
