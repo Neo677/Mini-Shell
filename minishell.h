@@ -1,1 +1,0 @@
-extern int g_shell_pid; 
