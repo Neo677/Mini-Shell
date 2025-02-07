@@ -60,7 +60,7 @@ int check_value(char *str);
 int					check_outfile(char *outfile, int fd_stdout,
 						char *redirection);
 int					check_option(char *option);
-void				ft_echo(char **tab);
+void				ft_echo(char *input);
 
 /*  ENV  */
 void				ft_env(t_env **env_cpy);
@@ -110,7 +110,8 @@ char				*ft_strjoin(char *s1, char *s2);
 // char				*ft_strchr(const char *s, int c);
 
 /*  UTILS  */
-int skip_built(char *str);
+int skip_space(char *str, int i);
+int skip_built(char *str, int i);
 int	count_export_var(char *str);
 char  **tab_export(char *str);
 

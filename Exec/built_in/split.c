@@ -88,7 +88,7 @@ char    *split_export(char *str)
     int j;
 
 
-    new_str = malloc(sizeof(char) * ft_strlen(str) - skip_built(str) + 1);
+    new_str = malloc(sizeof(char) * ft_strlen(str) - skip_built(str, 0) + 1);
     if (!new_str)
         return (NULL);
     i = 0;

@@ -34,7 +34,7 @@ int main(int ac, char **av, char **env)
         else if (ft_strcmp(exec.tab[0], "unset") == 0)
             ft_unset(&exec.env_cpy, exec.tab[1]);
         else if (ft_strcmp(exec.tab[0], "echo") == 0)
-            ft_echo(exec.tab);
+            ft_echo(exec.input);
         else if (ft_strcmp(exec.tab[0], "exit") == 0)
             return(ft_exit(&exec, exec.tab));
         else if (ft_strcmp(exec.tab[0], "cd") == 0)

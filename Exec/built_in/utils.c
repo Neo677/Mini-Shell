@@ -1,10 +1,14 @@
 #include "built_in.h"
 
-int skip_built(char *str)
+int skip_space(char *str, int i)
 {
-  int i;
+  while (str[i] && str[i] == ' ')
+    i++;
+  return (i);
+}
 
-  i = 0;
+int skip_built(char *str, int i)
+{
   while (str[i] && str[i] == ' ')
     i++;
   while (str[i] && str[i] != ' ')
@@ -30,7 +34,7 @@ int	count_export_var(char *str)
 	char	quote;
 
 	count = 0;
-	i = skip_built(str);
+	i = skip_built(str, 0);
   quote = 0;
   if (check_space(str, i) == 0)
     return (0);
@@ -67,7 +71,7 @@ char  **tab_export(char *str)
   tab = malloc(sizeof(char *) * (count_export_var(str) + 1));
   if (!tab)
     return (NULL);
-  i = skip_built(str);
+  i = skip_built(str, 0);
   j = 0;
   quote = 0;
   while (j < count_export_var(str))
@@ -85,7 +89,6 @@ char  **tab_export(char *str)
 				quote = 0;
 			else if (!quote && str[i] == ' ')
 				break;
-      printf("str[i] = .%c.\n", str[i]);
 			i++;
 		}
     tab[j] = malloc(sizeof(char) * (i - start + 1));
