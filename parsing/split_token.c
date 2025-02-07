@@ -116,9 +116,17 @@ int ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, 
         ft_printf_fd(STDERR_FILENO, "minishell: error: invalid environment variable name\n");
         return (0);
     }
-
-    var_value = print_node_by_key(env_cpy, var_name);
-    free(var_name);
+    // Special handling for "$$"
+    if (ft_strcmp(var_name, "$$") == 0)
+    {
+        free(var_name);
+        var_value = ft_get_pid_str();
+    }
+    else
+    {
+        var_value = print_node_by_key(env_cpy, var_name);
+        free(var_name);
+    }
     if (!var_value)
     {
         ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable\n");

@@ -152,6 +152,7 @@ int				ft_is_redirection(t_token *token);
 void			ft_handle_word(t_token **head, const char **input);
 t_token *ft_parse_token(const char *input, t_env **env_cpy);
 
+char *ft_get_pid_str(void);
 
 
 char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) ;

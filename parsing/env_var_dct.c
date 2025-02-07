@@ -36,62 +36,50 @@
     - Duplicates and returns the variable name.
 */
 
+char *ft_get_pid_str(void)
+{
+    char    *argv[4];
+    char    *envp[1];
+    int      fd_pipe[2];
+    pid_t    pid;
+    char     buffer[32];
+    int      nread;
+
+    argv[0] = "/bin/sh";
+    argv[1] = "-c";
+    argv[2] = "echo $PPID";
+    argv[3] = NULL;
+    envp[0] = NULL;
+
+    if (pipe(fd_pipe) == -1)
+        return (ft_strdup("0"));
+
+    pid = fork();
+    if (pid == 0)
+    {
+        close(fd_pipe[0]);
+        dup2(fd_pipe[1], STDOUT_FILENO);
+        close(fd_pipe[1]);
+        execve("/bin/sh", argv, envp);
+        exit(EXIT_FAILURE);
+    }
+    close(fd_pipe[1]);
+    waitpid(pid, NULL, 0);
+    nread = read(fd_pipe[0], buffer, sizeof(buffer) - 1);
+    close(fd_pipe[0]);
+    if (nread <= 0)
+        return (ft_strdup("0"));
+    buffer[nread] = '\0';
+    if (buffer[nread - 1] == '\n')
+        buffer[nread - 1] = '\0';
+    return (ft_strdup(buffer));
+}
+
 char *ft_detec_var(const char **input)
 {
-    char *var_name;
-    char buf[16];
-    char *args[5];
-    char *envp[1];
-    int fd_pipe[2];
-    pid_t pid;
-    ssize_t n;
-
-    if (**input == '$' && (*input)[1] == '$') 
-    {
-        if (pipe(fd_pipe) == -1)
-        {
-            return (ft_strdup("0"));
-        }
-        pid = fork();
-        if (pid == 0)
-        {
-            close(fd_pipe[0]);
-            dup2(fd_pipe[1], STDOUT_FILENO);
-            close(fd_pipe[1]);
-
-            args[0] = "sh";
-            args[1] = "sh";
-            args[2] = "-c";
-            args[3] = "echo $PPID";
-            args[4] = NULL;
-            envp[0] = NULL;
-            execve("/bin/sh", args, envp);
-            // execlp("sh", "sh", "-c", "echo $PPID", (char *)NULL);
-
-
-            exit (1);
-        }
-        close(fd_pipe[1]);
-        waitpid(pid, NULL, 0);
-        n = read(fd_pipe[0], buf, sizeof(buf)-1);
-        close(fd_pipe[0]);
-        if (n > 0)
-        {
-            buf[n] = '\0';
-            var_name = ft_strtrim(buf, "\n");
-        }
-        else
-        {
-            var_name = ft_strdup("0");
-        }
-        (*input) += 2;
-        return (var_name);
-    }
-    else
-    {
-        var_name = ft_strndup(*input, 1);
-        (*input)++;
-    }
+    char    *var_name;
+    var_name = ft_strndup(*input, 1);
+    (*input)++;
     return (var_name);
 }
 
@@ -104,36 +92,29 @@ int     ft_detec_digit(int is_digit_param, const char **input)
 
 char *ft_extract_env_var(const char **input)
 {
-    const char  *start;
-    char        *var_name;
-    int          is_digit_param;
+    const char *start;
+    char *var_name;
 
-    is_digit_param = 0;
-    if (**input == '$')
-        (*input)++;
-    if (**input == '\0' || **input == ' ' || **input == '\t' || **input == '$')
-        return (ft_strdup_v2("$"));
-    if (**input == '?' || **input == '$')
-        return (ft_detec_var(input));
-    is_digit_param = ft_detec_digit(is_digit_param, input);
+    if (**input != '$')
+        return (NULL);
+    if ((*input)[0] == '$' && (*input)[1] == '$')
+    {
+        *input += 2;
+        return (ft_strdup("$$"));
+    }
+    if ((*input)[0] == '$' && (*input)[1] == '?')
+    {
+        *input += 2;
+        return (ft_strdup("?"));
+    }
+    (*input)++;
+    if (!ft_isalpha(**input) && **input != '_')
+        return (ft_strdup("$"));
+
     start = *input;
-    if (is_digit_param)
-    {
-        if (ft_isdigit(**input))
-            (*input)++;
-    }
-    else
-    {
-        while (**input && (ft_isalnum(**input) || **input == '_'))
-            (*input)++;
-    }
-    if (start == *input)
-        return (ft_strdup_v2("$"));
-    var_name = ft_strndup(start, (*input - start));
-    if (!var_name)
-    {
-        ft_printf_fd(STDERR_FILENO, "minishell: failed to extact the envrionnement varibles\n");
-		return (NULL);
-    }
+    while (**input && (ft_isalnum(**input) || **input == '_'))
+        (*input)++;
+
+    var_name = ft_strndup(start, *input - start);
     return (var_name);
 }
