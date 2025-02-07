@@ -103,7 +103,7 @@ int main(int ac, char **av, char **env)
 		exec.input = readline("minishell> ");
 		if (!exec.input)
 		{
-			ft_printf("CTRL-D\n");
+			ft_printf("exit\n");
 			break ; // ✅
 		}
 		add_history(exec.input);
