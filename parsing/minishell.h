@@ -112,6 +112,16 @@ typedef struct s_command
 	struct s_command	*next;
 }			t_command;
 
+typedef struct s_parse_context
+{
+	const char **input;
+	t_token **head;
+	t_command **cmd_lst;
+	t_command **current;
+	t_env **env_cpy;
+}		t_parse_context;
+
+
 
 typedef struct s_pipex t_pipex;
 typedef struct s_built_in t_buit_in;
@@ -119,7 +129,9 @@ typedef struct s_env t_env;
 
 
 //				main utils
-// void			ft_start_minishell(void);
+void	ft_intro(void);
+char **ft_token_to_tab(t_token *token);
+
 void			ft_abort(char *input);
 void			ft_abort_parse(char *input);
 void			ft_abort_cmd(char *input, t_token *token);

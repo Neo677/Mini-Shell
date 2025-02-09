@@ -92,7 +92,8 @@ char    *ft_strjoin_free(char *s1, char *s2)
     return (result);
 }
  
-static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
+// static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
+static char *ft_handle_double_quote(t_parse_context *ctx) 
 {
     const char *start;
     char *content;
@@ -101,26 +102,26 @@ static char *ft_handle_double_quote(const char **input, t_token **head, t_comman
 
     content = NULL;
     i = 0;
-    if (**input != '\"')
+    if (ctx->input != '\"')
         return (NULL);
-    start = ++(*input);
-    while ((*input)[i] && (*input)[i] != '\"')
+    start = ++(ctx->input);
+    while ((ctx->input)[i] && (ctx->input)[i] != '\"')
     {
-        if ((*input)[i] == '$')
+        if ((ctx->input)[i] == '$')
         {
             tmp = ft_extract_quotent(start, i);
             content = ft_concatent_content(content, tmp);
             if (!content)
                 return (NULL);
-            if (!ft_handle_env_vars(input, head, cmd_lst, current, env_cpy))
+            if (!ft_handle_env_vars(ctx))
                 return (NULL);
-            start = *input;
+            start = ctx->input;
             i = 0;
         }
         else
             i++;
     }
-    if ((*input)[i] != '\"')
+    if ((ctx->input)[i] != '\"')
     {
         ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed double quote\n");
         return (NULL);
@@ -129,7 +130,7 @@ static char *ft_handle_double_quote(const char **input, t_token **head, t_comman
     content = ft_concatent_content(content, tmp);
     if (!content)
         return (NULL);
-    (*input) += i + 1;
+    (ctx->input) += i + 1;
     return (content);
 }
 
@@ -160,17 +161,17 @@ static char *ft_handle_single_quote(const char **input)
     return (content);
 }
 
-char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) 
+char *ft_handle_quote(t_parse_context *ctx) 
 {
     char *content = NULL;
 
-    if (**input == '\'') 
+    if (ctx->input == '\'') 
     {
-        content = ft_handle_single_quote(input);
+        content = ft_handle_single_quote(ctx->input);
     } 
-    else if (**input == '\"')
+    else if (ctx->input == '\"')
     {
-        content = ft_handle_double_quote(input, head, cmd_lst, current, env_cpy);
+        content = ft_handle_double_quote(ctx);
     }
     if (!content) 
     {
