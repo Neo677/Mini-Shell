@@ -36,6 +36,7 @@ int main(int ac, char **av, char **env)
 			ft_printf("exit\n");
 			break ; // ✅
 		}
+		
 		add_history(exec.input);
 		token = ft_parse_token(exec.input, &exec.env_cpy);
 		if (!token)
@@ -43,27 +44,30 @@ int main(int ac, char **av, char **env)
 		else
 		{
 			exec.tab = ft_token_to_tab(token);
-			if (ft_strcmp2(exec.tab[0], "env") == 0)
+			if ((ft_strcmp2(exec.tab[0], "env") == 0) && ft_strlen(exec.tab[0]) == 3)
 				ft_env(&exec.env_cpy);
-			else if (ft_strcmp2(exec.tab[0], "pwd") == 0)
+			else if ((ft_strcmp2(exec.tab[0], "pwd") == 0) && ft_strlen(exec.tab[0]) == 3)
 				ft_pwd(&exec.env_cpy, exec.cd);
-			else if (ft_strcmp2(exec.tab[0], "export") == 0)
+			else if ((ft_strcmp2(exec.tab[0], "export") == 0) && ft_strlen(exec.tab[0]) == 6)
 				ft_export(&exec.env_cpy, exec.tab[1]);
-			else if (ft_strcmp2(exec.tab[0], "unset") == 0)
+			else if ((ft_strcmp2(exec.tab[0], "unset") == 0) && ft_strlen(exec.tab[0]) == 5)
 				ft_unset(&exec.env_cpy, exec.tab[1]);
-			else if (ft_strcmp2(exec.tab[0], "echo") == 0)
+			else if ((ft_strcmp2(exec.tab[0], "echo") == 0) && ft_strlen(exec.tab[0]) == 4)
 				ft_echo(exec.tab);
-			else if (ft_strcmp2(exec.tab[0], "exit") == 0)
+			else if ((ft_strcmp2(exec.tab[0], "exit") == 0) && ft_strlen(exec.tab[0]) == 4)
 				return(ft_exit(&exec, exec.tab));
-			else if (ft_strcmp2(exec.tab[0], "cd") == 0)
+			else if ((ft_strcmp2(exec.tab[0], "cd") == 0) && ft_strlen(exec.tab[0]) == 2)
 				exec.cd = ft_cd(&exec.env_cpy, exec.tab[1]);
-			else if (ft_strcmp2(exec.tab[0], "./minishell") == 0)
+			else if ((ft_strcmp2(exec.tab[0], "./minishell") == 0) && ft_strlen(exec.tab[0]) == 11)
 				main(ac, av, exec.tab);
+			else
+				ft_printf_fd(127,"minishell: Command not found\n");
+				
 		}
 		free(exec.input);
 	}
 	free_tab(exec.tab);
 	ft_free_token(token);
-	// rl_clear_history(); // (LINUX)
-	clear_history(); // (MACOS)
+	rl_clear_history(); // (LINUX)
+	// clear_history(); // (MACOS)
 }

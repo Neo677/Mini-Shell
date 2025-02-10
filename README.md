@@ -304,6 +304,8 @@ thobenel@c1r6p2:~/Mini-Shell/parsing$ $PATH
 bash: /home/thobenel/bin:/home/thobenel/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin: No such file or directory
 thobenel@c1r6p2:~/Mini-Shell/parsing$ 
 
+![List_Error_Code](parsing/docs/error-code_list.png)
+
 -- Need to add some error message and some code error :
 	•	Par convention :
 	•	0 : Standard Input (stdin)

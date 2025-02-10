@@ -67,7 +67,7 @@ int ft_strcmp2(char *s1, char *s2)
 	int i;
 
 	i = 0;
-	while (s2[i])
+	while (s2[i] != '\0')
 	{
 		if (s1[i] != s2[i])
 			return (-1);
