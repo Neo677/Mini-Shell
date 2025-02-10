@@ -91,9 +91,8 @@ char    *ft_strjoin_free(char *s1, char *s2)
     free(s2);
     return (result);
 }
- 
-// static char *ft_handle_double_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
-static char *ft_handle_double_quote(t_parse_context *ctx) 
+
+static char *ft_handle_double_quote(const char **input, t_parse_context *ctx) 
 {
     const char *start;
     char *content;
@@ -102,12 +101,12 @@ static char *ft_handle_double_quote(t_parse_context *ctx)
 
     content = NULL;
     i = 0;
-    if (ctx->input != '\"')
+    if (**input != '\"')
         return (NULL);
-    start = ++(ctx->input);
-    while ((ctx->input)[i] && (ctx->input)[i] != '\"')
+    start = ++(*input);
+    while ((*input)[i] && (*input)[i] != '\"')
     {
-        if ((ctx->input)[i] == '$')
+        if ((*input)[i] == '$')
         {
             tmp = ft_extract_quotent(start, i);
             content = ft_concatent_content(content, tmp);
@@ -115,13 +114,13 @@ static char *ft_handle_double_quote(t_parse_context *ctx)
                 return (NULL);
             if (!ft_handle_env_vars(ctx))
                 return (NULL);
-            start = ctx->input;
+            start = *input;
             i = 0;
         }
         else
             i++;
     }
-    if ((ctx->input)[i] != '\"')
+    if ((*input)[i] != '\"')
     {
         ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed double quote\n");
         return (NULL);
@@ -130,7 +129,7 @@ static char *ft_handle_double_quote(t_parse_context *ctx)
     content = ft_concatent_content(content, tmp);
     if (!content)
         return (NULL);
-    (ctx->input) += i + 1;
+    (*input) += i + 1;
     return (content);
 }
 
@@ -165,13 +164,13 @@ char *ft_handle_quote(t_parse_context *ctx)
 {
     char *content = NULL;
 
-    if (ctx->input == '\'') 
+    if (**ctx->input == '\'') 
     {
         content = ft_handle_single_quote(ctx->input);
     } 
-    else if (ctx->input == '\"')
+    else if (**ctx->input == '\"')
     {
-        content = ft_handle_double_quote(ctx);
+        content = ft_handle_double_quote(ctx->input, ctx);
     }
     if (!content) 
     {

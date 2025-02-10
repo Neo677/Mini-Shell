@@ -56,6 +56,7 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy)
         ft_free_token(token);
         return (NULL);
     }
+    // ft_print_tokens(token);
     if (!ft_create_command_lst(token, &cmd_lst))
     {
         ft_printf_fd(STDERR_FILENO, "minishell: parser error: failed to create command list\n");

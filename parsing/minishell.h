@@ -112,6 +112,10 @@ typedef struct s_command
 	struct s_command	*next;
 }			t_command;
 
+typedef struct s_pipex t_pipex;
+typedef struct s_built_in t_buit_in;
+typedef struct s_env t_env;
+
 typedef struct s_parse_context
 {
 	const char **input;
@@ -120,12 +124,6 @@ typedef struct s_parse_context
 	t_command **current;
 	t_env **env_cpy;
 }		t_parse_context;
-
-
-
-typedef struct s_pipex t_pipex;
-typedef struct s_built_in t_buit_in;
-typedef struct s_env t_env;
 
 
 //				main utils
@@ -156,7 +154,10 @@ int				ft_error_env(const char *context);
 //				env detection and syntax
 int				ft_handle_env_var(t_token **head, const char **input);
 char *ft_extract_env_var(const char **input);
-int ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy);
+// int ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy);
+int	ft_handle_env_vars(t_parse_context *ctx);
+
+
 
 //				Token handler
 int ft_handle_operator(t_token **head, const char **input);
@@ -167,7 +168,8 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy);
 char *ft_get_pid_str(void);
 
 
-char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) ;
+// char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) ;
+char *ft_handle_quote(t_parse_context *ctx);
 
 
 //				Token creations

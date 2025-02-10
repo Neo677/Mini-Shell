@@ -308,3 +308,21 @@ thobenel@c1r6p2:~/Mini-Shell/parsing$
 	•	2 : Standard Error (stderr)
           (l'un ou l'autre peu importe) (use ft_printf_fd qui a etait par mon super mate DPascal)
 
+10/02/2025 :
+Wouah Hou
+     nouvelle erreur :
+          syntax sur les builts-in = 
+          minishell> pwd
+               /Users/benelgorch/Documents/GitHub/Mini-Shell/parsing
+               minishell> pwddddddd
+               /Users/benelgorch/Documents/GitHub/Mini-Shell/parsing
+               minishell> pwde
+               /Users/benelgorch/Documents/GitHub/Mini-Shell/parsing
+               minishell> pwdenculee
+               /Users/benelgorch/Documents/GitHub/Mini-Shell/parsing
+          minishell> echoooooo hello
+               hello
+     donc au niveau de la syntax apres le lexer je doit implementer une fonctions qui va 
+     regarder si le nom des commande concorde avec la liste des built-in 
+# need to be fix (GLHF) 🪖🪖:
+          
