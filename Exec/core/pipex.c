@@ -1,6 +1,6 @@
 
 
-#include "../built-in/built_in.h"
+#include "../include/pipex.h"
 
 // int	main(int argc, char *argv[], char *envp[])
 // {
@@ -23,11 +23,11 @@
 // 	t_redirections	redirections;
 
 // 	// Ouverture du ou des Heredoc
-// 	if (check_redirection(&redirections) == -1)
+// 	if (check_redirections(&redirections) == -1)
 // 		return (0);
 // 	// ?? Check les files dans le fils directement ??
 // 	pipex.len = count_cmd(&cmd);
-// 	init_pipex(&pipex, &cmd);
+// 	// init_pipex(&pipex, &cmd);
 // 	take_redirections(&pipex, &redirections);
 // 	// check built-in
 // 	// pipex
@@ -39,10 +39,15 @@
 
 void	test_1_2(void)
 {
-	printf("ceci est un test\n\n\n");
+	printf("ceci est un test\n\n\n\n");
 }
 
 /* 
+word = 0
+pipe = 1
+in = 2
+out = 3
+
 au dessus :
 - argv se transeformera en t_command arg
 - argc deviendra un compteur du nombre de commande

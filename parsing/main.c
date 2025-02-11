@@ -16,13 +16,14 @@ int main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
+	// t_parse_context ctx;
 	t_token *token;
 	t_buit_in exec;
 	t_pipex pipex;
 	
 	token = NULL;
 	init_var_builtin(&exec);
-	init_var(&pipex);
+	init_var_pipex(&pipex);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
 	copy_env(env, &exec.env_cpy);
@@ -30,44 +31,57 @@ int main(int ac, char **av, char **env)
 	// ft_intro();
 	while (1)
 	{
+		// ctx.exit_status = 0;
 		exec.input = readline("minishell> ");
 		if (!exec.input)
 		{
 			ft_printf("exit\n");
+			// ctx.exit_status = 258;
 			break ; // ✅
 		}
-		
 		add_history(exec.input);
 		token = ft_parse_token(exec.input, &exec.env_cpy);
+		// we can do if (!token = ft_parse_token(exec.input, &exec.env_cpy))
 		if (!token)
+		{
+			free(exec.input);
 			continue;
+		}
 		else
 		{
 			exec.tab = ft_token_to_tab(token);
-			if ((ft_strcmp2(exec.tab[0], "env") == 0) && ft_strlen(exec.tab[0]) == 3)
+			if ((ft_strcmp(exec.tab[0], "env") == 0) && ft_strlen(exec.tab[0]) == 3)
 				ft_env(&exec.env_cpy);
-			else if ((ft_strcmp2(exec.tab[0], "pwd") == 0) && ft_strlen(exec.tab[0]) == 3)
+			else if ((ft_strcmp(exec.tab[0], "pwd") == 0) && ft_strlen(exec.tab[0]) == 3)
 				ft_pwd(&exec.env_cpy, exec.cd);
-			else if ((ft_strcmp2(exec.tab[0], "export") == 0) && ft_strlen(exec.tab[0]) == 6)
-				ft_export(&exec.env_cpy, exec.tab[1]);
-			else if ((ft_strcmp2(exec.tab[0], "unset") == 0) && ft_strlen(exec.tab[0]) == 5)
+			else if ((ft_strcmp(exec.tab[0], "export") == 0) && ft_strlen(exec.tab[0]) == 6)
+				ft_export(&exec.env_cpy, tab_export(exec.input));
+			else if ((ft_strcmp(exec.tab[0], "unset") == 0) && ft_strlen(exec.tab[0]) == 5)
 				ft_unset(&exec.env_cpy, exec.tab[1]);
-			else if ((ft_strcmp2(exec.tab[0], "echo") == 0) && ft_strlen(exec.tab[0]) == 4)
-				ft_echo(exec.tab);
-			else if ((ft_strcmp2(exec.tab[0], "exit") == 0) && ft_strlen(exec.tab[0]) == 4)
+			else if ((ft_strcmp(exec.tab[0], "echo") == 0) && ft_strlen(exec.tab[0]) == 4)
+				ft_echo(exec.input);
+			else if ((ft_strcmp(exec.tab[0], "exit") == 0) && ft_strlen(exec.tab[0]) == 4)
 				return(ft_exit(&exec, exec.tab));
-			else if ((ft_strcmp2(exec.tab[0], "cd") == 0) && ft_strlen(exec.tab[0]) == 2)
+			else if ((ft_strcmp(exec.tab[0], "cd") == 0) && ft_strlen(exec.tab[0]) == 2)
 				exec.cd = ft_cd(&exec.env_cpy, exec.tab[1]);
-			else if ((ft_strcmp2(exec.tab[0], "./minishell") == 0) && ft_strlen(exec.tab[0]) == 11)
-				main(ac, av, exec.tab);
-			else
-				ft_printf_fd(127,"minishell: Command not found\n");
-				
+			free(exec.input);
+			if (exec.tab != NULL)
+			{
+				free_tab(exec.tab);
+				exec.tab = NULL;
+			}
 		}
-		free(exec.input);
+		ft_free_token(token);
+		// rl_clear_history(); // (LINUX)
+		clear_history(); // (MACOS)
 	}
-	free_tab(exec.tab);
-	ft_free_token(token);
-	rl_clear_history(); // (LINUX)
-	// clear_history(); // (MACOS)
+	// if (exec.tab != NULL)
+	// {
+	// 	free_tab(exec.tab);
+	// 	exec.tab = NULL;
+	// }
+	return (0);
 }
+
+// just apres avoir verifier que le fork a marche (recupe le dernie code exit)
+// ctx->exit_status = WEXITSTATUS(status); // cruciale pour $?

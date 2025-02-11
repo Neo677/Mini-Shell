@@ -86,15 +86,15 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (ft_join(join, s1, s2));
 }
 
-char	*ft_strchr(const char *s, int c)
-{
-	if (s == NULL)
-		return (NULL);
-	while (*s)
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
-	}
-	return (NULL);
-}
+// char	*ft_strchr(const char *s, int c)
+// {
+// 	if (s == NULL)
+// 		return (NULL);
+// 	while (*s)
+// 	{
+// 		if (*s == (char)c)
+// 			return ((char *)s);
+// 		s++;
+// 	}
+// 	return (NULL);
+// }

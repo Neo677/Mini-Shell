@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 00:34:50 by dpascal           #+#    #+#             */
-/*   Updated: 2024/11/12 18:32:52 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/01/19 13:24:36 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_putnbr(int n, char *base, int len, int fd)
 		n = n * -1;
 		len++;
 	}
-	baselen = ft_strlen(base);
+	baselen = ft_strlen_pf(base);
 	if (n >= baselen)
 		len = ft_putnbr(n / baselen, base, len, fd);
 	len += ft_putchar(base[n % baselen], fd);

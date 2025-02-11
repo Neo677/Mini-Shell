@@ -15,6 +15,7 @@ signal.c \
 split.c \
 unset.c \
 utils_built_in.c \
+utils.c \
 
 
 OBJS = $(SRCS:.c=.o)

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpascal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:57:53 by dpascal           #+#    #+#             */
-/*   Updated: 2024/05/09 23:57:57 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/01/19 13:24:01 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_strlen(char *s)
+int	ft_strlen_pf(char *s)
 {
 	int	i;
 

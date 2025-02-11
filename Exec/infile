@@ -1,0 +1,2 @@
+infile1
+< infile ls | cat > outfile | < infile2 cat > outfile2

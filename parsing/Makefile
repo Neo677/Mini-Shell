@@ -40,6 +40,8 @@ SRCS =	add_arguments.c \
 		start_minishell.c \
 		valid_token.c \
 		replace_env.c \
+		init_var_builtin.c \
+		exit_status.c \
 		../Exec/core/check_file.c \
 		../Exec/core/exec.c \
 		../Exec/core/cmd.c \
@@ -52,20 +54,21 @@ SRCS =	add_arguments.c \
 		../Exec/core/utils_error.c \
 		../Exec/core/utils_test.c \
 		../Exec/core/here_doc.c \
-		../Exec/built-in/cd.c \
-		../Exec/built-in/cmd_node.c \
-		../Exec/built-in/cpy_env.c \
-		../Exec/built-in/init.c \
-		../Exec/built-in/echo.c \
-		../Exec/built-in/env.c \
-		../Exec/built-in/exit.c \
-		../Exec/built-in/export.c \
-		../Exec/built-in/free.c \
-		../Exec/built-in/pwd.c \
-		../Exec/built-in/split.c \
-		../Exec/built-in/unset.c \
-		../Exec/built-in/utils_built_in.c \
-		../Exec/built-in/signal.c
+		../Exec/built_in/cd.c \
+		../Exec/built_in/cmd_node.c \
+		../Exec/built_in/cpy_env.c \
+		../Exec/built_in/init.c \
+		../Exec/built_in/echo.c \
+		../Exec/built_in/env.c \
+		../Exec/built_in/exit.c \
+		../Exec/built_in/export.c \
+		../Exec/built_in/free.c \
+		../Exec/built_in/pwd.c \
+		../Exec/built_in/split.c \
+		../Exec/built_in/unset.c \
+		../Exec/built_in/utils_built_in.c \
+		../Exec/built_in/signal.c \
+		../Exec/built_in/utils.c
 
 OBJS = $(SRCS:.c=.o)
 
