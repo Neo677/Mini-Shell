@@ -47,34 +47,33 @@ int main(int ac, char **av, char **env)
 			free(exec.input);
 			continue;
 		}
-		else
+		
+		exec.tab = ft_token_to_tab(token);
+		if ((ft_strcmp(exec.tab[0], "env") == 0) && ft_strlen(exec.tab[0]) == 3)
+			ft_env(&exec.env_cpy);
+		else if ((ft_strcmp(exec.tab[0], "pwd") == 0) && ft_strlen(exec.tab[0]) == 3)
+			ft_pwd(&exec.env_cpy, exec.cd);
+		else if ((ft_strcmp(exec.tab[0], "export") == 0) && ft_strlen(exec.tab[0]) == 6)
+			ft_export(&exec.env_cpy, tab_export(exec.input));
+		else if ((ft_strcmp(exec.tab[0], "unset") == 0) && ft_strlen(exec.tab[0]) == 5)
+			ft_unset(&exec.env_cpy, exec.tab[1]);
+		else if ((ft_strcmp(exec.tab[0], "echo") == 0) && ft_strlen(exec.tab[0]) == 4)
+			ft_echo(exec.tab[1]);
+		else if ((ft_strcmp(exec.tab[0], "exit") == 0) && ft_strlen(exec.tab[0]) == 4)
+			return (ft_exit(&exec, exec.tab));
+		else if ((ft_strcmp(exec.tab[0], "cd") == 0) && ft_strlen(exec.tab[0]) == 2)
+			exec.cd = ft_cd(&exec.env_cpy, exec.tab[1]);
+	
+		free(exec.input);
+		if (exec.tab != NULL)
 		{
-			exec.tab = ft_token_to_tab(token);
-			if ((ft_strcmp(exec.tab[0], "env") == 0) && ft_strlen(exec.tab[0]) == 3)
-				ft_env(&exec.env_cpy);
-			else if ((ft_strcmp(exec.tab[0], "pwd") == 0) && ft_strlen(exec.tab[0]) == 3)
-				ft_pwd(&exec.env_cpy, exec.cd);
-			else if ((ft_strcmp(exec.tab[0], "export") == 0) && ft_strlen(exec.tab[0]) == 6)
-				ft_export(&exec.env_cpy, tab_export(exec.input));
-			else if ((ft_strcmp(exec.tab[0], "unset") == 0) && ft_strlen(exec.tab[0]) == 5)
-				ft_unset(&exec.env_cpy, exec.tab[1]);
-			else if ((ft_strcmp(exec.tab[0], "echo") == 0) && ft_strlen(exec.tab[0]) == 4)
-				ft_echo(exec.input);
-			else if ((ft_strcmp(exec.tab[0], "exit") == 0) && ft_strlen(exec.tab[0]) == 4)
-				return(ft_exit(&exec, exec.tab));
-			else if ((ft_strcmp(exec.tab[0], "cd") == 0) && ft_strlen(exec.tab[0]) == 2)
-				exec.cd = ft_cd(&exec.env_cpy, exec.tab[1]);
-			free(exec.input);
-			if (exec.tab != NULL)
-			{
-				free_tab(exec.tab);
-				exec.tab = NULL;
-			}
+			free_tab(exec.tab);
+			exec.tab = NULL;
 		}
 		ft_free_token(token);
-		// rl_clear_history(); // (LINUX)
-		clear_history(); // (MACOS)
+		// clear_history(); // (MACOS)
 	}
+	rl_clear_history(); // (LINUX)
 	// if (exec.tab != NULL)
 	// {
 	// 	free_tab(exec.tab);
@@ -82,6 +81,9 @@ int main(int ac, char **av, char **env)
 	// }
 	return (0);
 }
+
+			// else if ((ft_strcmp(exec.tab[0], "echo") == 0) && ft_strlen(exec.tab[0]) == 4)
+			// 	ft_echo(exec.tab);
 
 // just apres avoir verifier que le fork a marche (recupe le dernie code exit)
 // ctx->exit_status = WEXITSTATUS(status); // cruciale pour $?

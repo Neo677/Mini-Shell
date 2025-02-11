@@ -35,10 +35,7 @@ t_command *ft_init_command(t_command **lst)
 
     new_cmd = malloc(sizeof(t_command));
     if (!new_cmd)
-    {
-        ft_printf_fd(STDERR_FILENO, "minishell: memory failed for t_command\n");
-        return (NULL);
-    }
+        return (ft_printf_fd(STDERR_FILENO, "minishell: memory failed for t_command\n"), NULL);
     new_cmd->arg = NULL;
     new_cmd->redirections = NULL;
     new_cmd->p_pipe = 0;

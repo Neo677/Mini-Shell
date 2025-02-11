@@ -73,6 +73,7 @@ int ft_handle_operator(t_token **head, const char **input)
             *head = NULL;
             return (0);
         }
+        ft_add_token(head, new_token);
     }
     else if (**input == '>' || **input == '<')  // Gestion des redirections (<, >, <<, >>)
     {
