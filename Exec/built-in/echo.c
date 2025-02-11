@@ -86,8 +86,9 @@ void    ft_echo(char *input)
     char    *outfile;
     char    *str;
 
-    i = skip_built(input, 0);
-    i = skip_space(input, i);
+    i = 0;
+    // i = skip_built(input, 0);
+    // i = skip_space(input, i);
     if (!input[i])
     {
         write(1, "\n", 1);

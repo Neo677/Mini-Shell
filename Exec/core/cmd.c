@@ -1,6 +1,6 @@
 
 
-#include "../include/pipex.h"
+#include "../built-in/built_in.h"
 
 char	*find_cmd(t_pipex *pipex, char *cmd, char **paths)
 {
@@ -11,8 +11,8 @@ char	*find_cmd(t_pipex *pipex, char *cmd, char **paths)
 		return (cmd);
 	while (paths[i])
 	{
-		pipex->paths_cmd = malloc(sizeof(char) * ft_strlen(cmd)
-				+ ft_strlen(pipex->paths[i]) + 2);
+		pipex->paths_cmd = malloc(sizeof(char) * ft_strlen_pipex(cmd)
+				+ ft_strlen_pipex(pipex->paths[i]) + 2);
 		if (!pipex->paths_cmd)
 			free_error(pipex, "Erreur allocation paths_cmd", 0);
 		ft_strcpy(pipex->paths_cmd, paths[i]);
@@ -36,19 +36,19 @@ char	*find_path(t_pipex *pipex, char *cmd, char **envp)
 	i = 0;
 	while (str_search(envp[i], "PATH", 4) == 0)
 		i++;
-	pipex->paths = ft_split_dp(pipex, envp[i] + 5, ':');
+	pipex->paths = ft_split_pipex(pipex, envp[i] + 5, ':');
 	pipex->path_cmd = find_cmd(pipex, cmd, pipex->paths);
 	return (pipex->path_cmd);
 }
 
-void	execute_cmd(t_pipex *pipex, char *arg, char **envp)
+void	execute_cmd(t_pipex *pipex, char **arg, char **envp)
 {
-	pipex->cmd = ft_split_dp(pipex, arg, ' ');
-	pipex->path = find_path(pipex, pipex->cmd[0], envp);
+	// pipex->cmd = ft_split_pipex(pipex, arg, ' ');
+	pipex->path = find_path(pipex, arg[0], envp);
 	if (access("temp_null", F_OK) == 0)
 		unlink("temp_null");
 	if (access("temp_null2", F_OK) == 0)
 		unlink("temp_null2");
-	if (execve(pipex->path, pipex->cmd, envp) == -1)
+	if (execve(pipex->path, arg, envp) == -1)
 		free_error(pipex, "", 0);
 }

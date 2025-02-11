@@ -1,6 +1,6 @@
 
 
-#include "../include/pipex.h"
+#include "../built-in/built_in.h"
 
 // void	ft_wait(t_pipex *pipex, int pid[], int len)
 // {
@@ -61,8 +61,6 @@
 // }
 
 
-
-
 // void	ft_wait(t_pipex *pipex, int pid[], int len)
 // {
 // 	int	i;
@@ -101,6 +99,7 @@
 // 	pipex->pid = malloc(sizeof(int) * pipex->len);
 // 	if (!pipex->pid)
 // 		free_error(pipex, "Error : allocation pid", 0);
+// 	pipex->stdin_fd = pipex->infile;
 // 	while (i < pipex->len)
 // 	{
 // 		if (i < (pipex->len - 1))
@@ -120,6 +119,7 @@
 // 	}
 // 	ft_wait(pipex, pipex->pid, pipex->len);
 // }
+
 
 void	redir_input(t_command *cmd, t_pipex *pipex)
 {
@@ -159,9 +159,9 @@ void	child_process(t_pipex *pipex, t_command *cmd, char **envp)
 	pid_t	pid;
 
 	i = 0;
-	while (i < count_cmd(cmd) - 1)
+	while (i < count_cmd(cmd)) // - 1
 	{
-		if (i < count_cmd(cmd) - 1)
+		if (i < count_cmd(cmd)) // - 1
 			pipe(pipe_fd);
 	
 		pid = fork();
@@ -183,13 +183,14 @@ void	child_process(t_pipex *pipex, t_command *cmd, char **envp)
 				dup2(pipex->outfile, STDOUT_FILENO);
 				close (pipex->outfile);
 			}
-			else if (i < count_cmd(cmd) - 1)
+			else if (i < count_cmd(cmd)) // - 1
 				dup2(pipe_fd[1], STDOUT_FILENO);
 			if (i > 0)
 				dup2(pipe_fd[0], STDIN_FILENO);
 			close (pipe_fd[0]);
 			close (pipe_fd[1]);
-			execute_cmd(pipex, cmd->arg[i], envp);
+			execute_cmd(pipex, cmd->arg, envp);
+			// regrouper cmd->arg en une chaine pour envoyer au 2 eme arg de execute_cmd
 		}
 		close (pipe_fd[1]);
 		if (i > 0)
