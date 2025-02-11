@@ -122,7 +122,7 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 		free(var_name);
 	}
 	if (!var_value)
-		return(ft_printf_fd(STDERR_FILENO, "1minishell: invalid environment variable\n"), 0);
+		return(ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable\n"), 0);
 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
 	if (!*ctx->current)
 		*ctx->current = ft_init_command(ctx->cmd_lst);

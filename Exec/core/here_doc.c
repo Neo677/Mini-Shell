@@ -1,4 +1,16 @@
-#include "../include/pipex.h"
+
+
+#include "../built-in/built_in.h"
+
+int	ft_strlen_dp(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
 
 char    *heredoc_name(int i)
 {
@@ -8,7 +20,7 @@ char    *heredoc_name(int i)
 
     name = "heredoc_"; // /tmp/heredoc_
     num = ft_itoa_exec(i);
-    filename = malloc(sizeof(char) * ft_strlen_dp(name) + ft_strlen_dp(num) + 1);
+    filename = malloc(sizeof(char) * (ft_strlen_dp(name) + ft_strlen_dp(num) + 1));
     if (!filename)
     {
         free(num);

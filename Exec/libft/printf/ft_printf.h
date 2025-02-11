@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 02:08:31 by dpascal           #+#    #+#             */
-/*   Updated: 2025/01/19 13:24:23 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/01/15 11:49:49 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,6 @@ int		ft_uputnbr(unsigned int n, char *base, int len, int fd);
 int		ft_putnbr_adr(unsigned long n, char *base, int len, int fd);
 int		ft_written(const char *format, va_list args, int len, t_data *data);
 int		ft_printf_fd(int fd, const char *format, ...);
-int		ft_strlen_pf(char *s);
+int		ft_strlen(char *s);
 
 #endif

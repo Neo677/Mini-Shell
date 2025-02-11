@@ -75,21 +75,6 @@ char *ft_get_pid_str(void)
     return (ft_strdup(buffer));
 }
 
-char *ft_expand_exit_status(t_parse_context *ctx)
-{
-    return (ft_itoa(ctx->exit_status));
-}
-
-void    ft_handle_dollar_quest(t_parse_context *ctx)
-{
-    char *status_str;
-
-    status_str = ft_itoa(ctx->exit_status);
-    ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, status_str));
-    free(status_str);
-    (*ctx->input) += 2;
-}
-
 char *ft_detec_var(const char **input)
 {
     char    *var_name;
@@ -108,6 +93,7 @@ int     ft_detec_digit(int is_digit_param, const char **input)
 char *ft_extract_env_var(const char **input)
 {
     const char *start;
+    t_parse_context *ctx;
     char *var_name;
 
     if (**input != '$')
@@ -120,7 +106,8 @@ char *ft_extract_env_var(const char **input)
     if ((*input)[0] == '$' && (*input)[1] == '?')
     {
         *input += 2;
-        return (ft_strdup("?"));
+        //return (ft_strdup("?"));
+        // return (ft_itoa(ctx->))
     }
     (*input)++;
     if (!ft_isalpha(**input) && **input != '_')

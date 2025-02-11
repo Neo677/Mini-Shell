@@ -1,6 +1,4 @@
 #include "built_in.h"
-#include <unistd.h>
-#include "../include/pipex.h"
 
 int check_outfile(char *outfile, int fd_stdout, char *redirection)
 {
@@ -80,18 +78,6 @@ char    *take_filename(char *input, int i)
     return (str);
 }
 
-// void skip_space(const char **str)
-// {
-//     while (**str == ' ' || **str == '\t')
-//         (*str)++;
-// }
-
-// void skip_built(const char **str)
-// {
-//     while (**str && **str != ' ' && **str != '\t')
-//         (*str)++;
-// }
-
 void    ft_echo(char *input)
 {
     int i;
@@ -100,9 +86,9 @@ void    ft_echo(char *input)
     char    *outfile;
     char    *str;
 
+    i = 0;
     // i = skip_built(input, 0);
     // i = skip_space(input, i);
-    i = 0;
     if (!input[i])
     {
         write(1, "\n", 1);

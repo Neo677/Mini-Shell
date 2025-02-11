@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:08 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/12 17:25:09 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/11 21:33:49 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,11 @@
     8) Free
 */
 
-t_token *ft_parse_token(const char *input, t_env **env_cpy)
+t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst)
 {
     t_token *token;
-    t_command *cmd_lst;
     
-    cmd_lst = NULL;
+    *cmd_lst = NULL;
     token = NULL;
     if (!input || !*input)
     {
@@ -56,14 +55,14 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy)
         ft_free_token(token);
         return (NULL);
     }
-    ft_print_tokens(token);
-    if (!ft_create_command_lst(token, &cmd_lst))
+    //ft_print_tokens(token);
+    if (!ft_create_command_lst(token, cmd_lst))
     {
         ft_printf_fd(STDERR_FILENO, "minishell: parser error: failed to create command list\n");
         ft_free_token(token);
-        ft_free_commande_lst(cmd_lst);
+        ft_free_commande_lst(*cmd_lst);
         return (NULL);
     }
-    ft_print_command_lst(cmd_lst);
+    ft_print_command_lst(*cmd_lst);
     return (token);
 }

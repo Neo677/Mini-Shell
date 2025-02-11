@@ -180,7 +180,7 @@ void    ft_export(t_env **env_cpy1, char **key_value)
         }  
         i++;   
     }
-    // free_tab(key_value);
+    free_tab(key_value);
     free_env_list(cpy_env_cpy);
 }
 

@@ -6,22 +6,22 @@ void    free_char(char *str)
         free(str);
 }
 
-void	free_tab(char **tab)
-{
-	int	i;
+// void	free_tab(char **tab)
+// {
+// 	int	i;
 
-	if (!tab)
-		return ;
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-        tab[i] = NULL;
-		i++;
-	}
-	free(tab);
-    tab = NULL;
-}
+// 	if (!tab)
+// 		return ;
+// 	i = 0;
+// 	while (tab[i])
+// 	{
+// 		free(tab[i]);
+//         tab[i] = NULL;
+// 		i++;
+// 	}
+// 	free(tab);
+//     tab = NULL;
+// }
 
 void	free_list(t_env **lst)
 {

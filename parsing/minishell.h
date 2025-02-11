@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 10:54:31 by thobenel          #+#    #+#             */
-/*   Updated: 2025/01/20 10:54:34 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:49:06 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../Exec/built_in/built_in.h"
+# include "../Exec/built-in/built_in.h"
+
 
 # include <unistd.h>
 # include <stdio.h>
@@ -31,7 +32,7 @@
 
 # include "../libft_2.0/libft.h"
 
-# include "../Exec/include/pipex.h"
+// # include "../Exec/include/pipex.h"
 
 /*
 
@@ -122,7 +123,7 @@ typedef struct s_parse_context
 	t_command **cmd_lst;
 	t_command **current;
 	t_env **env_cpy;
-	int exit_status;
+	int		exit_status;
 }		t_parse_context;
 
 
@@ -163,14 +164,15 @@ int	ft_handle_env_vars(t_parse_context *ctx);
 int ft_handle_operator(t_token **head, const char **input);
 int				ft_is_redirection(t_token *token);
 void			ft_handle_word(t_token **head, const char **input);
-t_token *ft_parse_token(const char *input, t_env **env_cpy);
 
+
+// t_token *ft_parse_token(const char *input, t_env **env_cpy, t_pipex *pipex, char **env);
+t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst);
 char *ft_get_pid_str(void);
 
-char *ft_handle_quote(t_parse_context *ctx);
 
-// 				Code error $?
-void    ft_handle_dollar_quest(t_parse_context *ctx);
+// char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) ;
+char *ft_handle_quote(t_parse_context *ctx);
 
 
 //				Token creations
@@ -221,7 +223,6 @@ void ft_set_signal_handler(void);
 //				env
 // void    ft_replace_token_env_var(t_token **head, t_env *env);
 
-void init_var_builtin(t_buit_in *exec);
 
 
 

@@ -1,8 +1,8 @@
 
 
-#include "../include/pipex.h"
+#include "../built-in/built_in.h"
 
-void	init_var_pipex(t_pipex *pipex)
+void	init_var(t_pipex *pipex)
 {
 	pipex->infile = dup(STDIN_FILENO);
 	pipex->outfile = dup(STDOUT_FILENO);

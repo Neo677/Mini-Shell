@@ -1,23 +1,28 @@
-#include "../include/pipex.h"
 
-void	free_tab_pipex(char **tab)
+
+#include "../built-in/built_in.h"
+
+void	free_tab(char **tab)
 {
 	int	i;
 
-	i = 0;
 	if (!tab)
 		return;
+	i = 0;
 	while (tab[i])
-		free(tab[i++]);
+	{
+		free(tab[i]);
+		i++;
+	}
 	free(tab);
 }
 
-void	free_all_pipex(t_pipex *pipex)
+void	free_all_core(t_pipex *pipex)
 {
 	if (pipex->cmd)
-		free_tab_pipex(pipex->cmd);
+		free_tab(pipex->cmd);
 	if (pipex->paths)
-		free_tab_pipex(pipex->paths);
+		free_tab(pipex->paths);
 	if (pipex->path)
 		free(pipex->path);
 	if (pipex->pid)
@@ -38,7 +43,7 @@ void	close_file(t_pipex *pipex)
 
 void	free_error(t_pipex *pipex, char *error, int key_error)
 {
-	free_all_pipex(pipex);
+	free_all_core(pipex);
 	close_file(pipex);
 	ft_printf_fd(2, "%s", error);
 	exit(key_error);
