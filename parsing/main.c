@@ -76,3 +76,5 @@ int main(int ac, char **av, char **env)
 	// rl_clear_history(); // (LINUX)
 	clear_history(); // (MACOS)
 }
+
+// ctx->last_exit_code = WEXITSTATUS(status);

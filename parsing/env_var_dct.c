@@ -93,7 +93,6 @@ int     ft_detec_digit(int is_digit_param, const char **input)
 char *ft_extract_env_var(const char **input)
 {
     const char *start;
-    t_parse_context *ctx;
     char *var_name;
 
     if (**input != '$')
@@ -106,8 +105,7 @@ char *ft_extract_env_var(const char **input)
     if ((*input)[0] == '$' && (*input)[1] == '?')
     {
         *input += 2;
-        //return (ft_strdup("?"));
-        // return (ft_itoa(ctx->))
+        return (ft_strdup("?"));
     }
     (*input)++;
     if (!ft_isalpha(**input) && **input != '_')
