@@ -96,7 +96,7 @@ static int ft_create_lst_redir(t_token **token, t_command **current, t_command *
     if (!*current || !(*token)->next || (*token)->next->type != TOKEN_WORD)
         return (ft_printf_fd(2, "minishell: memory allocation failed for command\n"), 0);
     file = (*token)->next->value;
-    if (ft_add_redirections_struct(*current, (*token)->type, file))
+    if (!ft_add_redirections_struct(*current, (*token)->type, file))
         return (ft_printf_fd(2, "minishell: 4syntax error near unexpected token \n"), 0);
     *token = (*token)->next->next;
     return (1);

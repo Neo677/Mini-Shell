@@ -84,7 +84,14 @@ int check_heredoc(t_token *token, t_pipex *pipex)
                 heredoc_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
                 while (1)
                 {
+                    pipex->line_hd++;
                     line = readline(">");
+                    if (line == NULL)
+                    {
+                        ft_printf_fd(2, "bash: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n", pipex->line_hd, current->next->value);
+                        free (line);
+                        break ;
+                    }
                     if (ft_strcmp2(line, current->next->value) == 0)
                     {
                         free (line);

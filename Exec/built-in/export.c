@@ -72,6 +72,51 @@ t_env   **export_cpy(t_env **env_cpy, t_env **cpy_env_cpy)
     return (cpy_env_cpy);
 }
 
+char    *replace_backslash_n(char *value)
+{
+    
+    char    *new_value;
+    int i;
+    int j;
+
+    new_value = malloc(sizeof(char)* ft_strlen(value) + ft_count(value, '\n') + 1);
+    if (!new_value)
+        return (NULL);
+    i = 0;
+    j = 0;
+    while (value[i])
+    {
+        if (value[i] == '\n')
+        {
+            new_value[j] = '\\';
+            j++;
+            new_value[j] = 'n';
+            i++;
+            j++;
+        }
+        new_value[j] = value[i];
+        j++;
+        i++;
+    }
+    return (new_value);
+}
+
+int check_variable_backslash_n(char *value)
+{
+    int i;
+
+    i = 0;
+    while (value[i])
+    {
+        if (value[i] == '\n')
+        {
+            return (1);
+        }
+        i++;
+    }
+    return (0);
+}
+
 void    ft_export(t_env **env_cpy1, char **key_value)
 {
     t_env   *current;
@@ -93,7 +138,9 @@ void    ft_export(t_env **env_cpy1, char **key_value)
         {
             if ((current->key[0] >= 'a' && current->key[0] <= 'z') || (current->key[0] >= 'A' && current->key[0] <= 'Z') || current->key[0] == '_')
             {
-                if (current->value)
+                if (check_variable_backslash_n(current->value) == 1)
+                    printf("declare -x %s=$\'%s\'\n", current->key, replace_backslash_n(current->value));
+                else if (current->value)
                     printf("declare -x %s=\"%s\"\n", current->key, current->value);
                 else
                     printf("declare -x %s\n", current->key);

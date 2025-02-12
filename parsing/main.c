@@ -12,6 +12,29 @@
 
 #include "minishell.h"
 
+char	*test_input(t_token *token)
+{
+	char	*str;
+	t_token	*current;
+	int	onoff;
+	
+	onoff = 1;
+	str = NULL;
+	current = token;
+	while (current)
+	{
+		str = ft_strjoin(str, current->value);
+		if (onoff == 1 && current->next)
+		{
+			str = ft_strjoin(str, " ");
+			onoff = 0;
+		}
+		current = current->next;
+	}
+	return (str);
+	
+}
+
 int main(int ac, char **av, char **env)
 {
 	(void)ac;
@@ -35,7 +58,7 @@ int main(int ac, char **av, char **env)
 		if (!exec.input)
 		{
 			ft_printf("exit\n");
-			break;// ✅
+			break ; // ✅
 		}
 		
 		add_history(exec.input);
@@ -46,14 +69,13 @@ int main(int ac, char **av, char **env)
 		{
 			check_heredoc(token, &pipex);
 			check_file(token);
-
 			exec.tab = ft_token_to_tab(token);
 			if ((ft_strcmp2(exec.tab[0], "env") == 0) && ft_strlen(exec.tab[0]) == 3)
 				ft_env(&exec.env_cpy);
 			else if ((ft_strcmp2(exec.tab[0], "pwd") == 0) && ft_strlen(exec.tab[0]) == 3)
 				ft_pwd(&exec.env_cpy, exec.cd);
 			else if ((ft_strcmp2(exec.tab[0], "export") == 0) && ft_strlen(exec.tab[0]) == 6)
-				ft_export(&exec.env_cpy, tab_export(exec.input));
+				ft_export(&exec.env_cpy, tab_export(test_input(token)));
 			else if ((ft_strcmp2(exec.tab[0], "unset") == 0) && ft_strlen(exec.tab[0]) == 5)
 				ft_unset(&exec.env_cpy, exec.tab[1]);
 			else if ((ft_strcmp2(exec.tab[0], "echo") == 0) && ft_strlen(exec.tab[0]) == 4)
@@ -66,6 +88,7 @@ int main(int ac, char **av, char **env)
 				main(ac, av, exec.tab);
 			else
 				child_process(&pipex, cmd_lst, env);
+			// ft_printf_fd(127,"minishell: Command not found\n");
 		}
 		clear_file(pipex.filename_hd);
 		free(exec.input);

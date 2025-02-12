@@ -160,14 +160,15 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 	t_command *cmd_lst = NULL;
 	t_command *current = NULL;
 
-	// ctx.cmd_lst = &cmd_lst;
-	// ctx.current = &current;
-	// ctx.head = head;
-	// ctx.input = &input;
-	// ctx.env_cpy = env_cpy;
-	// ctx.exit_status = 0;
-	ft_init_cmd(cmd_lst, current, ctx);
-	ft_init_ctx(head, input, env_cpy, ctx);
+	ctx.cmd_lst = &cmd_lst;
+	ctx.current = &current;
+	ctx.head = head;
+	ctx.input = &input;
+	ctx.input_exec = input;
+	ctx.env_cpy = env_cpy;
+	ctx.exit_status = 0;
+	// ft_init_cmd(cmd_lst, current, ctx);
+	// ft_init_ctx(head, input, env_cpy, ctx);
 	if (!ft_check_syntax(input, &ctx))
 	{
 		exit(ctx.exit_status);

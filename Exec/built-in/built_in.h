@@ -59,10 +59,12 @@ typedef struct s_pipex
     char					*in;
     char					*out;
     char					**filename_hd;
+    int                     line_hd;
 }							t_pipex;
 
 typedef struct s_token t_token;
 typedef struct s_command t_command;
+
 
 /*  MAIN  */
 int					main(int ac, char **av, char **env);

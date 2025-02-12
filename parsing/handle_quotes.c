@@ -29,7 +29,6 @@
 //     - Reprendre l'analyse
 //     - Fin de l'analyse des quotes
 // */
-
 char	*ft_extract_quotent(const char *start, size_t len)
 {
 	char	*tmp;
@@ -92,6 +91,44 @@ char    *ft_strjoin_free(char *s1, char *s2)
     return (result);
 }
 
+char    *ft_eof_quote(const char *input, t_parse_context *ctx)
+{
+    char    *line;
+    char    *new_str;
+    char    *new_str2;
+    char    *history;
+    char    **test;
+
+    (void)input;
+    new_str = NULL;
+    new_str2 = ft_strdup_v2(ctx->input_exec);
+    while (1)
+    {
+        line = readline("> ");
+        if (line == NULL)
+        {
+            ft_printf_fd(2, "bash: unexpected EOF while looking for matching `\"'");
+            free(line);
+            free(new_str);
+            return (NULL);
+        }
+        if (ft_strcmp2(line, "\"") == 0)
+        {
+            free(line);
+            break ;
+        }
+        new_str = ft_strjoin(new_str, "\n");
+        new_str = ft_strjoin(new_str, line);
+    }
+    new_str = ft_strjoin(new_str, "\n");
+    history = ft_strjoin(new_str2, new_str);
+    test = ft_split_built(history, '"');
+    add_history(history);
+    // printf ("new_str = %s\n", test[1]);
+    // free(history);
+    return (test[1]);
+}
+
 static char *ft_handle_double_quote(const char **input, t_parse_context *ctx) 
 {
     const char *start;
@@ -122,17 +159,26 @@ static char *ft_handle_double_quote(const char **input, t_parse_context *ctx)
     }
     if ((*input)[i] != '\"')
     {
-        // ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed double quote\n");
-        // return (NULL);
-        char *line;
-        char *new_str = NULL;
-        char *new_str2 = ft_strdup_v2(ctx->input)
-        char *history;
-        char **test;
-        while (1)
-        {
+        char    *test;
+        test = ft_eof_quote(*input, ctx);
+        // printf("input = %s\n", *input);
+        if (!test)
+            return (NULL);
+        // tmp = ft_extract_quotent(start, i);
+        content = ft_concatent_content(content, test);
+        if (!content)
+            return (NULL);
+        (*input) += i + 1;
+        return (content);
+        // return (test);
+        // ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed doule quote\n");
+        // while (1)
+        // {
             
-        }
+            // *input = readline("> ");
+            
+        // }
+        // return (NULL);
     }
     tmp = ft_extract_quotent(start, i);
     content = ft_concatent_content(content, tmp);

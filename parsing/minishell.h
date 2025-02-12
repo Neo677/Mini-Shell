@@ -119,7 +119,7 @@ typedef struct s_env t_env;
 typedef struct s_parse_context
 {
 	const char **input;
-	const char **input
+	const char *input_exec;
 	t_token **head;
 	t_command **cmd_lst;
 	t_command **current;

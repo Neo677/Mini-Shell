@@ -36,6 +36,7 @@ typedef struct s_pipex
 	char					*in;
 	char					*out;
 	char					**filename_hd;
+	int						line_hd;
 }							t_pipex;
 
 
