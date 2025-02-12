@@ -15,6 +15,8 @@ Vous pouvez aussi trouver un pdf qui details le projet, c'etait notre 1er semain
 
 ![WELCOME](parsing/docs/adding_struct_cmd.drawio.png)
 
+https://docs.google.com/spreadsheets/d/1BPW7k81LJPhGv2fbi35NIIoOC_mGZXQQJDnV0SjulFs/edit?pli=1&gid=0#gid=0
+
 https://github.com/Dsite42/minishell/blob/master/minishell_evalsheet.pdf?utm_source=chatgpt.com
 
 https://github.com/mharriso/school21-checklists?utm_source=chatgpt.com
