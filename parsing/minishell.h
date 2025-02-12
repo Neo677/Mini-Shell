@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 10:54:31 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/11 12:49:06 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/12 03:53:05 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct s_env t_env;
 typedef struct s_parse_context
 {
 	const char **input;
+	const char *input_exec;
 	t_token **head;
 	t_command **cmd_lst;
 	t_command **current;

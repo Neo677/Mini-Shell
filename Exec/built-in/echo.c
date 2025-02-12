@@ -49,6 +49,7 @@ char    *take_str(char *input, int i)
     }
     str[j] = '\0';
     parse_str = parse_value(str);
+    // printf ("%s\n", parse_str);
     free(str);
     return (parse_str);
 }

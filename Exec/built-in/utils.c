@@ -34,10 +34,12 @@ int	count_export_var(char *str)
 	char	quote;
 
 	count = 0;
-	i = skip_built(str, 0);
+  i = 0;
+	// i = skip_built(str, 0);
   quote = 0;
-  if (check_space(str, i) == 0)
-    return (0);
+  // if (check_space(str, i) == 0)
+  //   return (0);
+  // printf("str = %s\n", str);
 	while (str[i])
 	{
 		while (str[i])

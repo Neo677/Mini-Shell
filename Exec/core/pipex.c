@@ -32,7 +32,7 @@
 // 	// check built-in
 // 	// pipex
 // 	ft_pid(&pipex, &cmd, env);
-// 	ft_check_status(&pipex);
+//  ft_check_status(&pipex);
 // 	free_error(&pipex, "", pipex.exit_code);
 // 	return (0);
 // }

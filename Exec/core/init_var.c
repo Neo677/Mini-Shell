@@ -24,4 +24,5 @@ void	init_var(t_pipex *pipex)
 	pipex->in = NULL;
 	pipex->out = NULL;
 	pipex->filename_hd = NULL;
+	pipex->line_hd = 0;
 }

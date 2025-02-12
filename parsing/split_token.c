@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:18 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/12 17:25:19 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/12 05:26:53 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 	ctx.current = &current;
 	ctx.head = head;
 	ctx.input = &input;
+	ctx.input_exec = input;
 	ctx.env_cpy = env_cpy;
 	if (!ft_check_syntax(input))
 		return (0);
@@ -364,3 +365,4 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 // 	ft_print_command_lst(cmd_lst);
 // 	ft_free_commande_lst(cmd_lst);
 // }
+

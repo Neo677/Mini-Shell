@@ -6,11 +6,58 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:24:46 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/11 20:55:25 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/12 07:39:47 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+// char	*join_input(char **tab)
+// {
+// 	char	*str;
+// 	char	*tmp;
+// 	int		i;
+
+// 	i = 0;
+// 	str = ft_strdup("");
+// 	if (!str)
+// 		return (NULL);
+// 	while (tab[i])
+// 	{
+// 		printf("tab[%d] = %s\n", i, tab[i]);
+// 		tmp = str;
+// 		str = ft_strjoin(str, tab[i]);
+// 		free(tmp);
+// 		if (!str)
+// 			return (NULL);
+// 		i++;
+// 	}
+// 	return (str);
+// }
+
+char	*test_input(t_token *token)
+{
+	char	*str;
+	t_token	*current;
+	int	onoff;
+	
+	onoff = 1;
+	str = NULL;
+	current = token;
+	while (current)
+	{
+		str = ft_strjoin(str, current->value);
+		if (onoff == 1 && current->next)
+		{
+			str = ft_strjoin(str, " ");
+			onoff = 0;
+		}
+		current = current->next;
+	}
+	return (str);
+	
+}
 
 int main(int ac, char **av, char **env)
 {
@@ -46,15 +93,21 @@ int main(int ac, char **av, char **env)
 		{
 			check_heredoc(token, &pipex);
 			check_file(token);
-
+			// printf("token = %s\n", test_input(token));
+			// printf("token == %s\n", token->value);
 			exec.tab = ft_token_to_tab(token);
-			printf ("exec.tab[1] = %s\n", exec.tab[1]);
+			// printf("TEST  === %s\n", join_input(exec.tab));
+			// printf ("tab[0] = %s\n", exec.tab[0]);
+			// printf ("tab[1] = %s\n", exec.tab[1]);
+			// printf ("tab[2] = %s\n", exec.tab[2]);
+			// printf ("tab[3] = %s\n", exec.tab[3]);
+			// printf ("tab[4] = %s\n", exec.tab[4]);
 			if ((ft_strcmp2(exec.tab[0], "env") == 0) && ft_strlen(exec.tab[0]) == 3)
 				ft_env(&exec.env_cpy);
 			else if ((ft_strcmp2(exec.tab[0], "pwd") == 0) && ft_strlen(exec.tab[0]) == 3)
 				ft_pwd(&exec.env_cpy, exec.cd);
 			else if ((ft_strcmp2(exec.tab[0], "export") == 0) && ft_strlen(exec.tab[0]) == 6)
-				ft_export(&exec.env_cpy, tab_export(exec.input));
+				ft_export(&exec.env_cpy, tab_export(test_input(token)));
 			else if ((ft_strcmp2(exec.tab[0], "unset") == 0) && ft_strlen(exec.tab[0]) == 5)
 				ft_unset(&exec.env_cpy, exec.tab[1]);
 			else if ((ft_strcmp2(exec.tab[0], "echo") == 0) && ft_strlen(exec.tab[0]) == 4)

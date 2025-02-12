@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_before.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:20:12 by thobenel          #+#    #+#             */
-/*   Updated: 2025/01/17 12:34:36 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/12 01:14:22 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	ft_set_syntax_quote(const char *input, int *quote)
-{
-	if (*quote == 0)
-		*quote = *input;
-	else if (*quote == *input)
-		*quote = 0;
-    return (*quote != 0);
-}
+// static bool	ft_set_syntax_quote(const char *input, int *quote)
+// {
+// 	if (*quote == 0)
+// 		*quote = *input;
+// 	else if (*quote == *input)
+// 		*quote = 0;
+//     return (*quote != 0);
+// }
 
 int	ft_set_syntax_pipe(const char *input)
 {
@@ -56,8 +56,8 @@ int  ft_check_syntax(const char *input)
 	quote = 0;
     while (*input)
     {
-        if (*input == '\'' || *input == '\"')
-            ft_set_syntax_quote(input, &quote);
+        // if (*input == '\'' || *input == '\"')
+        //     ft_set_syntax_quote(input, &quote);
         if (quote == 0)
         {
             if (*input == '|')
@@ -72,8 +72,8 @@ int  ft_check_syntax(const char *input)
         }
         input++;
     }
-    if (quote != 0)
-        return (ft_printf_fd(STDERR_FILENO, "bash : syntax error: unclosed quote\n"), 258);
+    // if (quote != 0)
+    //     return (ft_printf_fd(STDERR_FILENO, "bash : syntax error: unclosed quote\n"), 258);
     return (1);
 }
 
