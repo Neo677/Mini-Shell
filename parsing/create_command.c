@@ -35,10 +35,7 @@ t_command *ft_init_command(t_command **lst)
 
     new_cmd = malloc(sizeof(t_command));
     if (!new_cmd)
-    {
-        ft_printf_fd(STDERR_FILENO, "minishell: memory failed for t_command\n");
-        return (NULL);
-    }
+        return (ft_printf_fd(STDERR_FILENO, "minishell: memory failed for t_command\n"), NULL);
     new_cmd->arg = NULL;
     new_cmd->redirections = NULL;
     new_cmd->p_pipe = 0;
@@ -87,6 +84,7 @@ static int ft_create_lst_word(t_token **token, t_command **current, t_command **
     if (!*current || !ft_add_arguments(*current, (*token)->value))
         return (ft_printf_fd(2, "minishell: failed to add argument\n"), 0);
     *token = (*token)->next;
+    return (1);
 }
 
 static int ft_create_lst_redir(t_token **token, t_command **current, t_command **lst)
@@ -111,6 +109,7 @@ static int ft_create_lst_env_var(t_token **token, t_command **current, t_command
     if (!*current || !ft_add_arguments(*current, (*token)->value))
         return (ft_printf_fd(2, "minishell: failed to add envrionnement varibles as arugments\n"), 0);
     *token = (*token)->next;
+    return (1);
 }
 
 int ft_create_command_lst(t_token *token, t_command **lst)
@@ -122,157 +121,76 @@ int ft_create_command_lst(t_token *token, t_command **lst)
     {
         if (token->type == TOKEN_PIPE)
         {
-            
+            if (!ft_create_lst_pipe(&token, &current))
+                return (0);
         }
         else if (token->type == TOKEN_WORD)
         {
-
+            if (!ft_create_lst_word(&token, &current, lst))
+                return (0);
         }
         else if (ft_is_redirection(token))
         {
-
+            if (!ft_create_lst_redir(&token, &current, lst))
+                return (0);
         }
         else if (token->type == TOKEN_ENV_VAR)
         {
-
+            if (!ft_create_lst_env_var(&token, &current, lst))
+                return (0);
         }
         else
-        {
-
-        }
-    }
-}
-
-
-int ft_create_command_lst(t_token *token, t_command **lst)
-{
-    t_command *current;
-    const char *file;
-
-    current = NULL;
-    file = NULL;
-    while (token)
-    {
-        // if (token->type == TOKEN_PIPE)
-        // {
-        //     if (current)
-        //         current->p_pipe = 1;
-        //     current = NULL;
-        //     token = token->next;
-        // }
-        // else if (token->type == TOKEN_WORD)
-        // {
-        //     if (!current)
-        //         current = ft_init_command(lst);
-        //     if (!current || !ft_add_arguments(current, token->value))
-        //         return (ft_printf_fd(2, "minishell: failed to add argument\n"), 0);
-        //     token = token->next;
-        // }
-        // else if (ft_is_redirection(token))
-        // {
-        //     if (!current)
-        //         current = ft_init_command(lst);
-        //     if (!current || !token->next || token->next->type != TOKEN_WORD)
-            //     return (ft_printf_fd(2, "minishell: memory allocation failed for command\n"), 0);
-            // file = token->next->value;
-            // if (!ft_add_redirections_struct(current, token->type, file))
-            //     return (ft_printf_fd(2, "minishell: 4syntax error near unexpected token \n"), 0);
-            // token = token->next->next;
-        }
-        else if (token->type == TOKEN_ENV_VAR)
-        {
-            if (!current)
-                current = ft_init_command(lst);
-            if (!current || !ft_add_arguments(current, token->value))
-                return (ft_printf_fd(2, "minishell: failed to add envrionnement varibles as arugments\n"), 0);
-            token = token->next;
-        }
-        else
-            return (ft_printf_fd(2, "minishell: 5syntax error near unexpected token '%s'\n", token->value), 0);
+            return (ft_printf_fd(2, "minishell: syntax error near unexpected token '%s'\n", token->value), 0);
     }
     return (1);
 }
 
 
+// int ft_create_command_lst(t_token *token, t_command **lst)
+// {
+//     t_command *current;
+//     const char *file;
 
-/* Gère un token PIPE : marque la fin de la commande courante. */
-static int	handle_pipe(t_token **token, t_command **current)
-{
-	if (*current)
-		(*current)->p_pipe = 1;
-	*current = NULL;
-	*token = (*token)->next;
-	return (1);
-}
-
-/* Gère un token WORD : ajoute l'argument à la commande. */
-static int	handle_word(t_token **token, t_command **current, t_command **lst)
-{
-	if (!*current)
-		*current = ft_init_command(lst);
-	if (!*current || !ft_add_arguments(*current, (*token)->value))
-		return (ft_printf_fd(2, "minishell: failed to add argument\n"), 0);
-	*token = (*token)->next;
-	return (1);
-}
-
-/* Gère une redirection : vérifie que le token suivant est un WORD, ajoute la redirection. */
-static int	handle_redirection(t_token **token, t_command **current, t_command **lst)
-{
-	const char	*file;
-
-	if (!*current)
-		*current = ft_init_command(lst);
-	if (!*current || !(*token)->next || (*token)->next->type != TOKEN_WORD)
-		return (ft_printf_fd(2, "minishell: memory allocation failed for command\n"), 0);
-	file = (*token)->next->value;
-	if (!ft_add_redirections_struct(*current, (*token)->type, file))
-		return (ft_printf_fd(2, "minishell: syntax error near unexpected token\n"), 0);
-	*token = (*token)->next->next;
-	return (1);
-}
-
-/* Gère un token ENV_VAR : ajoute l'argument à la commande. */
-static int	handle_env_var(t_token **token, t_command **current, t_command **lst)
-{
-	if (!*current)
-		*current = ft_init_command(lst);
-	if (!*current || !ft_add_arguments(*current, (*token)->value))
-		return (ft_printf_fd(2, "minishell: failed to add environment variable as argument\n"), 0);
-	*token = (*token)->next;
-	return (1);
-}
-
-/* Fonction principale qui parcourt la liste des tokens et crée la liste de commandes.
-   Cette fonction fait environ 15–20 lignes. */
-int ft_create_command_lst(t_token *token, t_command **lst)
-{
-	t_command	*current = NULL;
-
-	while (token)
-	{
-		if (token->type == TOKEN_PIPE)
-		{
-			if (!handle_pipe(&token, &current))
-				return (0);
-		}
-		else if (token->type == TOKEN_WORD)
-		{
-			if (!handle_word(&token, &current, lst))
-				return (0);
-		}
-		else if (ft_is_redirection(token))
-		{
-			if (!handle_redirection(&token, &current, lst))
-				return (0);
-		}
-		else if (token->type == TOKEN_ENV_VAR)
-		{
-			if (!handle_env_var(&token, &current, lst))
-				return (0);
-		}
-		else
-			return (ft_printf_fd(2, "minishell: syntax error near unexpected token '%s'\n", token->value), 0);
-	}
-	return (1);
-}
+//     current = NULL;
+//     file = NULL;
+//     while (token)
+//     {
+//         // if (token->type == TOKEN_PIPE)
+//         // {
+//         //     if (current)
+//         //         current->p_pipe = 1;
+//         //     current = NULL;
+//         //     token = token->next;
+//         // }
+//         // else if (token->type == TOKEN_WORD)
+//         // {
+//         //     if (!current)
+//         //         current = ft_init_command(lst);
+//         //     if (!current || !ft_add_arguments(current, token->value))
+//         //         return (ft_printf_fd(2, "minishell: failed to add argument\n"), 0);
+//         //     token = token->next;
+//         // }
+//         // else if (ft_is_redirection(token))
+//         // {
+//         //     if (!current)
+//         //         current = ft_init_command(lst);
+//         //     if (!current || !token->next || token->next->type != TOKEN_WORD)
+//             //     return (ft_printf_fd(2, "minishell: memory allocation failed for command\n"), 0);
+//             // file = token->next->value;
+//             // if (!ft_add_redirections_struct(current, token->type, file))
+//             //     return (ft_printf_fd(2, "minishell: 4syntax error near unexpected token \n"), 0);
+//             // token = token->next->next;
+//         }
+//         else if (token->type == TOKEN_ENV_VAR)
+//         {
+//             if (!current)
+//                 current = ft_init_command(lst);
+//             if (!current || !ft_add_arguments(current, token->value))
+//                 return (ft_printf_fd(2, "minishell: failed to add envrionnement varibles as arugments\n"), 0);
+//             token = token->next;
+//         }
+//         else
+//             return (ft_printf_fd(2, "minishell: 5syntax error near unexpected token '%s'\n", token->value), 0);
+//     }
+//     return (1);
+// }

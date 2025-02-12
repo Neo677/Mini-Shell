@@ -160,49 +160,34 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 	t_command *cmd_lst = NULL;
 	t_command *current = NULL;
 
-	ctx.cmd_lst = &cmd_lst;
-	ctx.current = &current;
-	ctx.head = head;
-	ctx.input = &input;
-	ctx.env_cpy = env_cpy;
-	ctx.exit_status = 0;
+	// ctx.cmd_lst = &cmd_lst;
+	// ctx.current = &current;
+	// ctx.head = head;
+	// ctx.input = &input;
+	// ctx.env_cpy = env_cpy;
+	// ctx.exit_status = 0;
+	ft_init_cmd(cmd_lst, current, ctx);
+	ft_init_ctx(head, input, env_cpy, ctx);
 	if (!ft_check_syntax(input, &ctx))
 	{
 		exit(ctx.exit_status);
 		// return (ctx.exit_status);
 	}
-		
 	while (**ctx.input)
 	{
 		if (**ctx.input == ' ' || **ctx.input == '\t')
 			(*ctx.input)++;
 		else if (**ctx.input == '\'' || **ctx.input == '"')
-		{
 			ft_handle_quotes(&ctx);
-			if (!ctx.current)
-				return (0);
-		}
 		else if (**ctx.input == '|' || **ctx.input == '>' || **ctx.input == '<')
-		{
-			if (!ft_handle_operators(&ctx))
-				return (0);
-		}
+			ft_handle_operators(&ctx);
 		else if (**ctx.input == '$')
-		{
-			if (!ft_handle_env_vars(&ctx))
-				return (0);
-		}
+			ft_handle_env_vars(&ctx);
 		else
-		{
-			if (!ft_handle_words(&ctx))
-				return (0);
-		}
+			ft_handle_words(&ctx);
 	}
-	if (ft_valid_token(*ctx.head) == 0)
-	{
-		// ft_printf_fd(STDERR_FILENO, "minishell: syntax error in token list\n");
+	if (!ft_valid_token(*ctx.head))
 		return (0);
-	}
 	*head = *ctx.head;
 	return (1);
 }

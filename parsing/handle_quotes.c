@@ -122,13 +122,17 @@ static char *ft_handle_double_quote(const char **input, t_parse_context *ctx)
     }
     if ((*input)[i] != '\"')
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed double quote\n");
-        return (NULL);
-        // while (1)
-        // {
-        //     *input = readline("> ");;
-
-        // }
+        // ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed double quote\n");
+        // return (NULL);
+        char *line;
+        char *new_str = NULL;
+        char *new_str2 = ft_strdup_v2(ctx->input)
+        char *history;
+        char **test;
+        while (1)
+        {
+            
+        }
     }
     tmp = ft_extract_quotent(start, i);
     content = ft_concatent_content(content, tmp);

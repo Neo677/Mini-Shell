@@ -47,7 +47,7 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst)
     {
         // ft_printf_fd(STDERR_FILENO, "minishell: lexer error: failed to tokenize input\n");
         ft_free_token(token);
-        return (NULL);
+        return (ft_free_token(token), NULL);
     }
     if (!ft_valid_token(token))
     {

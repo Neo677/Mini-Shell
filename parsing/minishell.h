@@ -119,6 +119,7 @@ typedef struct s_env t_env;
 typedef struct s_parse_context
 {
 	const char **input;
+	const char **input
 	t_token **head;
 	t_command **cmd_lst;
 	t_command **current;
@@ -179,6 +180,8 @@ char *ft_handle_quote(t_parse_context *ctx);
 t_token_type	ft_identify_token(char *str);
 t_token			*ft_create_token(t_token_type type, char *value);
 void			ft_add_token(t_token **head, t_token *add);
+void    ft_init_cmd(t_command *cmd_lst, t_command *current, t_parse_context ctx);
+void    ft_init_ctx(t_token **head, const char *input, t_env **env_cpy, t_parse_context ctx);
 int				ft_split_token(t_token **head, const char *input, t_env **env_cpy);
 
 //				placement in struct (case of pipe check Read me)
@@ -226,4 +229,4 @@ void ft_set_signal_handler(void);
 
 
 
-#endif
+#endif	

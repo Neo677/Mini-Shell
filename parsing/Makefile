@@ -39,7 +39,7 @@ SRCS =	add_arguments.c \
 		syntax_before.c \
 		start_minishell.c \
 		valid_token.c \
-		replace_env.c \
+		init_parse.c \
 		../Exec/core/check_file.c \
 		../Exec/core/exec.c \
 		../Exec/core/cmd.c \
