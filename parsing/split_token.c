@@ -122,7 +122,7 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 		free(var_name);
 	}
 	if (!var_value)
-		return(ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable\n"), 0);
+		return(ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
 	if (!*ctx->current)
 		*ctx->current = ft_init_command(ctx->cmd_lst);
@@ -153,6 +153,7 @@ int	ft_handle_words(t_parse_context *ctx)
 	return (1);
 }
 
+
 int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 {
 	t_parse_context ctx;
@@ -164,8 +165,13 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 	ctx.head = head;
 	ctx.input = &input;
 	ctx.env_cpy = env_cpy;
-	if (!ft_check_syntax(input))
-		return (0);
+	ctx.exit_status = 0;
+	if (!ft_check_syntax(input, &ctx))
+	{
+		exit(ctx.exit_status);
+		// return (ctx.exit_status);
+	}
+		
 	while (**ctx.input)
 	{
 		if (**ctx.input == ' ' || **ctx.input == '\t')
@@ -194,12 +200,14 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 	}
 	if (ft_valid_token(*ctx.head) == 0)
 	{
-		ft_printf_fd(STDERR_FILENO, "minishell: syntax error in token list\n");
+		// ft_printf_fd(STDERR_FILENO, "minishell: syntax error in token list\n");
 		return (0);
 	}
 	*head = *ctx.head;
 	return (1);
 }
+
+
 
 // void	ft_split_token(t_token **head, const char *input)
 // {
@@ -363,4 +371,102 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 // 	ft_print_tokens(*head);
 // 	ft_print_command_lst(cmd_lst);
 // 	ft_free_commande_lst(cmd_lst);
+// }
+
+// #include "minishell.h"
+
+// /*
+//  * ft_check_syntax
+//  * Vérifie la syntaxe de la chaîne d'entrée.
+//  * Retourne 1 si la syntaxe est valide, 0 sinon.
+//  *
+//  * Vérifications réalisées :
+//  *  - Les quotes simples et doubles doivent être correctement fermées.
+//  *  - Un pipe ('|') ne doit pas être en début de ligne, ni suivi uniquement d'espaces ou d'un autre opérateur.
+//  *  - Une redirection ('>' ou '<') doit être suivie d'un token non vide (après espaces) qui n'est pas un autre opérateur.
+//  *  - Pour les redirections, on autorise ">" ou ">>", et "<" ou "<<" uniquement.
+//  */
+// int ft_check_syntax(const char *input)
+// {
+//     int quote = 0;
+//     int i = 0;
+
+//     while (input[i])
+//     {
+//         // Gestion des quotes
+//         if (input[i] == '\'' || input[i] == '"')
+//         {
+//             if (quote == 0)
+//                 quote = input[i];           // Ouvre une quote
+//             else if (quote == input[i])
+//                 quote = 0;                  // Ferme la quote
+//             i++;
+//             continue;
+//         }
+//         // Vérifications hors quotes
+//         if (quote == 0)
+//         {
+//             // Vérifier le pipe
+//             if (input[i] == '|')
+//             {
+//                 // Erreur si pipe en début de ligne
+//                 if (i == 0)
+//                 {
+//                     ft_printf_fd(2, "minishell: syntax error near unexpected token `|'\n");
+//                     return (0);
+//                 }
+//                 // Vérifier le caractère suivant le pipe
+//                 int j = i + 1;
+//                 while (input[j] && (input[j] == ' ' || input[j] == '\t'))
+//                     j++;
+//                 if (!input[j])
+//                 {
+//                     ft_printf_fd(2, "minishell: syntax error near unexpected token `newline'\n");
+//                     return (0);
+//                 }
+//                 if (input[j] == '|' || input[j] == '>' || input[j] == '<')
+//                 {
+//                     ft_printf_fd(2, "minishell: syntax error near unexpected token `%c'\n", input[j]);
+//                     return (0);
+//                 }
+//             }
+//             // Vérifier les redirections
+//             if (input[i] == '>' || input[i] == '<')
+//             {
+//                 char op = input[i];
+//                 int count = 0;
+//                 // Compter le nombre d'opérateurs consécutifs
+//                 while (input[i] == op)
+//                 {
+//                     count++;
+//                     i++;
+//                 }
+//                 // Pour '>' et '<', on autorise 1 ou 2 caractères (pour >> et <<)
+//                 if ((op == '>' && (count < 1 || count > 2)) ||
+//                     (op == '<' && (count < 1 || count > 2)))
+//                 {
+//                     ft_printf_fd(2, "minishell: syntax error near unexpected token `%.*s'\n", count, &input[i - count]);
+//                     return (0);
+//                 }
+//                 // Sauter les espaces suivant la redirection
+//                 while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+//                     i++;
+//                 if (!input[i] || input[i] == '|' || input[i] == '>' || input[i] == '<')
+//                 {
+//                     ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n",
+//                         (!input[i] ? "newline" : (input[i] == '|' ? "|" : (op == '>' ? ">" : "<"))));
+//                     return (0);
+//                 }
+//                 continue; // On continue sans i++ car i a déjà été avancé
+//             }
+//         }
+//         i++;
+//     }
+//     // Si une quote reste ouverte à la fin
+//     if (quote != 0)
+//     {
+//         ft_printf_fd(2, "minishell: syntax error: unclosed quote\n");
+//         return (0);
+//     }
+//     return (1);
 // }

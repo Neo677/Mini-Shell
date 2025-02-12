@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+ 
 int ft_valid_redirections(const t_token *token)
 {
     while (token)
@@ -94,16 +95,16 @@ int ft_validate_pipes(t_token *token)
     
     prev = NULL;
     if (!token || token->type == TOKEN_PIPE)
-        return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
+        return (ft_error_pipe(token->value), 0);
 
     while (token) 
     {
         if (token->type == TOKEN_PIPE) 
         {
             if (!prev || prev->type == TOKEN_PIPE) 
-                return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
+                return (ft_error_pipe(token->value), 0);
             if (!token->next)
-                return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error: pipe at the end\n"), 0);
+                return (ft_error_pipe(token->value), 0);
         }
         prev = token;
         token = token->next;

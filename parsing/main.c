@@ -35,7 +35,7 @@ int main(int ac, char **av, char **env)
 		if (!exec.input)
 		{
 			ft_printf("exit\n");
-			break ; // ✅
+			break;// ✅
 		}
 		
 		add_history(exec.input);
@@ -48,7 +48,6 @@ int main(int ac, char **av, char **env)
 			check_file(token);
 
 			exec.tab = ft_token_to_tab(token);
-			printf ("exec.tab[1] = %s\n", exec.tab[1]);
 			if ((ft_strcmp2(exec.tab[0], "env") == 0) && ft_strlen(exec.tab[0]) == 3)
 				ft_env(&exec.env_cpy);
 			else if ((ft_strcmp2(exec.tab[0], "pwd") == 0) && ft_strlen(exec.tab[0]) == 3)
@@ -73,8 +72,8 @@ int main(int ac, char **av, char **env)
 	}
 	free_tab(exec.tab);
 	ft_free_token(token);
-	// rl_clear_history(); // (LINUX)
-	clear_history(); // (MACOS)
+	rl_clear_history(); // (LINUX)
+	// clear_history(); // (MACOS)
 }
 
 // ctx->last_exit_code = WEXITSTATUS(status);

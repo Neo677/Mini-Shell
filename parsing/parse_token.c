@@ -63,6 +63,6 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst)
         ft_free_commande_lst(*cmd_lst);
         return (NULL);
     }
-    ft_print_command_lst(*cmd_lst);
+    // ft_print_command_lst(*cmd_lst);
     return (token);
 }

@@ -146,8 +146,8 @@ void			ft_print_redirections(t_redirections *head);
 void			ft_print_command_lst(t_command *head);
 
 //				error handler for different message
-int				ft_error_pipe(const char *context);
-int				ft_error_redirections(const char *context);
+void				ft_error_pipe(const char *context);
+void				ft_error_redirections(const char *context);
 int				ft_error_quote(void);
 int				ft_error_general(const char *context);
 int				ft_error_env(const char *context);
@@ -209,7 +209,7 @@ void			ft_err_split_ope(t_command *cmd_lst, t_token *head);
 void			ft_err_bad_redirec(t_command *cmd_lst, t_token *head);
 
 //				syntax 
-int				ft_check_syntax(const char *input);
+int  ft_check_syntax(const char *input, t_parse_context *ctx);
 
 //				Utils
 char			*ft_strndup(const char *src, size_t size);

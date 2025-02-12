@@ -25,6 +25,18 @@
     3) after we got the size we can add it as a node
 */
 
+static void    ft_utils_adding(int i, t_command *cmd)
+{
+    i = 0;
+    if (cmd->arg)
+    {
+        while(cmd->arg[i])
+        {
+            i++;
+        }
+    }
+}
+
 int ft_add_arguments(t_command *cmd, const char *arg)
 {
     int i;
@@ -34,20 +46,15 @@ int ft_add_arguments(t_command *cmd, const char *arg)
     if (!cmd || !arg)
         return (0);
     i = 0;
-    if (cmd->arg)
-        while(cmd->arg[i])
-            i++;
+    ft_utils_adding(i, cmd);
     new_arg = malloc(sizeof(char *) * (i + 2));
     if (!new_arg)
         return (0);
     if (cmd->arg)
     {
-        j = 0;
-        while (cmd->arg[j])
-        {
+        j = -1;
+        while (cmd->arg[j++])
             new_arg[j] = cmd->arg[j];
-            j++;
-        }
     }
     new_arg[i] = ft_strdup_v2(arg);
     if (!new_arg)
