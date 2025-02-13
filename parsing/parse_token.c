@@ -45,7 +45,7 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst)
     }
     if (!ft_split_token(&token, input, env_cpy))
     {
-        // ft_printf_fd(STDERR_FILENO, "minishell: lexer error: failed to tokenize input\n");
+        
         ft_free_token(token);
         return (ft_free_token(token), NULL);
     }
@@ -55,7 +55,7 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst)
         ft_free_token(token);
         return (NULL);
     }
-    //ft_print_tokens(token);
+    // ft_print_tokens(token);
     if (!ft_create_command_lst(token, cmd_lst))
     {
         ft_printf_fd(STDERR_FILENO, "minishell: parser error: failed to create command list\n");

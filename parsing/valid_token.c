@@ -134,18 +134,19 @@ int ft_valid_env_var(t_token *token)
 {
     if (!token)
         return (1);
-        
     while (token)
     {
         if (token->type == TOKEN_ENV_VAR)
         {
             if (!token->value || ft_is_empty_string(token->value))
             {
+                printf("here2\n");
                 ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable syntax\n");
                 return (0);
             }
             if (ft_strchr(token->value, '$') && ft_strlen(token->value) == 1)
             {
+                printf("here3\n");
                 ft_printf_fd(STDERR_FILENO, "minishell: $: ambiguous redirect\n");
                 return (0);
             }

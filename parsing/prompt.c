@@ -65,7 +65,7 @@ void	ft_print_command_lst(t_command *head)
 	ft_printf("\n-------------[DEBUG]---------------\n");
 	while (current)
 	{
-		//ft_printf("head = %s\n", head->arg);
+		// ft_printf("head = %s\n", *(current->arg));
 		ft_printf("\n[DEBUG] t_command = pipe: %d\n", current->p_pipe); // Si on l’utilises
 		ft_print_tab(current->arg);          // Affiche arg[]
 		ft_print_redirections(current->redirections);

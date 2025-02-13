@@ -29,6 +29,7 @@
 //     - Reprendre l'analyse
 //     - Fin de l'analyse des quotes
 // */
+
 char	*ft_extract_quotent(const char *start, size_t len)
 {
 	char	*tmp;
@@ -129,6 +130,33 @@ char    *ft_eof_quote(const char *input, t_parse_context *ctx)
     return (test[1]);
 }
 
+static int	ft_handle_env_vars_quote(t_parse_context *ctx)
+{
+    char	*var_name;
+    char	*var_value;
+	// char	*tmp;
+
+	var_name = ft_extract_env_var(ctx->input);
+	if (!var_name)
+		return(ft_printf_fd(STDERR_FILENO, "minishell: error: invalid environment variable name\n"), 0);
+	if (ft_strcmp(var_name, "$$") == 0)
+	{
+		free(var_name);
+		var_value = ft_get_pid_str();
+	}
+	else
+		var_value = print_node_by_key(ctx->env_cpy, var_name);
+	if (!var_value)
+		return(ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
+	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
+	if (!*ctx->current)
+		*ctx->current = ft_init_command(ctx->cmd_lst);
+	if (!ft_add_arguments(*ctx->current, var_value))
+		return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
+	// free(var_value);
+	return (1);
+}
+
 static char *ft_handle_double_quote(const char **input, t_parse_context *ctx) 
 {
     const char *start;
@@ -147,9 +175,10 @@ static char *ft_handle_double_quote(const char **input, t_parse_context *ctx)
         {
             tmp = ft_extract_quotent(start, i);
             content = ft_concatent_content(content, tmp);
-            if (!content)
+            if (!content || !tmp)
                 return (NULL);
-            if (!ft_handle_env_vars(ctx))
+            
+            if (!ft_handle_env_vars_quote(ctx))
                 return (NULL);
             start = *input;
             i = 0;
@@ -170,15 +199,6 @@ static char *ft_handle_double_quote(const char **input, t_parse_context *ctx)
             return (NULL);
         (*input) += i + 1;
         return (content);
-        // return (test);
-        // ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed doule quote\n");
-        // while (1)
-        // {
-            
-            // *input = readline("> ");
-            
-        // }
-        // return (NULL);
     }
     tmp = ft_extract_quotent(start, i);
     content = ft_concatent_content(content, tmp);
@@ -226,8 +246,9 @@ char *ft_handle_quote(t_parse_context *ctx)
     else if (**ctx->input == '\"')
     {
         content = ft_handle_double_quote(ctx->input, ctx);
+
     }
-    if (!content) 
+    if (!content)
     {
         ft_printf_fd(STDERR_FILENO, "minishell: error while processing quotes\n");
         return (NULL);

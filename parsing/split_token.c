@@ -70,7 +70,7 @@ void	ft_handle_quotes(t_parse_context *ctx)
 		free(token_value);
 		return (ft_err_split(*ctx->cmd_lst, *ctx->head));
 	}
-	free(token_value);
+	// free(token_value);
 }
 
 static int	ft_handle_operators(t_parse_context *ctx)
@@ -116,19 +116,23 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 		free(var_name);
 		var_value = ft_get_pid_str();
 	}
-	else
+	var_value = print_node_by_key(ctx->env_cpy, var_name);
+	if (!var_value)
+		return (0);
+	// free(var_name);
+	printf("1.1\n");
+	if (check_variable_backslash_n_parse(var_value) == 1)
 	{
-		var_value = print_node_by_key(ctx->env_cpy, var_name);
-		free(var_name);
+		printf("1\n");
+		var_value = replace_with_space(var_value);
 	}
 	if (!var_value)
-		return(ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
-	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
+		return(0);
+	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));	
 	if (!*ctx->current)
 		*ctx->current = ft_init_command(ctx->cmd_lst);
 	if (!ft_add_arguments(*ctx->current, var_value))
 		return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
-	free(var_value);
 	return (1);
 }
 
@@ -181,11 +185,20 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 		else if (**ctx.input == '\'' || **ctx.input == '"')
 			ft_handle_quotes(&ctx);
 		else if (**ctx.input == '|' || **ctx.input == '>' || **ctx.input == '<')
-			ft_handle_operators(&ctx);
+		{
+			if (!ft_handle_operators(&ctx))
+				return (0);
+		}
 		else if (**ctx.input == '$')
-			ft_handle_env_vars(&ctx);
+		{
+			if (!ft_handle_env_vars(&ctx))
+				return (ft_printf("\n"), 0);
+		}
 		else
-			ft_handle_words(&ctx);
+		{
+			if (!ft_handle_words(&ctx))
+				return (0);
+		}
 	}
 	if (!ft_valid_token(*ctx.head))
 		return (0);

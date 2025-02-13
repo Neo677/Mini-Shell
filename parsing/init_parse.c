@@ -1,6 +1,16 @@
-// //          header
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_parse.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 05:00:44 by thobenel          #+#    #+#             */
+/*   Updated: 2025/02/13 05:00:46 by thobenel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// #include "minishell.h"
+#include "minishell.h"
 
 // void    ft_init_cmd(t_command *cmd_lst, t_command *current, t_parse_context ctx)
 // {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 10:54:31 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/11 12:49:06 by dpascal          ###   ########.fr       */
+/*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
+/*   Updated: 2025/02/13 05:01:31 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,8 @@ void ft_handle_sig_int(int sig);
 void ft_handle_sig_quit(int sig);
 void ft_set_signal_handler(void);
 
+char    *replace_with_space(char *str);
+int check_variable_backslash_n_parse(char *value);
 //				env
 // void    ft_replace_token_env_var(t_token **head, t_env *env);
 
