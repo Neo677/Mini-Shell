@@ -47,7 +47,7 @@ void redir_input(t_command *cmd, t_pipex *pipex)
             if (pipex->infile < 0)
 			{
                 perror(redirection->file);
-                exit(1);
+                return ;
             }
             dup2(pipex->infile, STDIN_FILENO);
             close(pipex->infile);
@@ -58,7 +58,7 @@ void redir_input(t_command *cmd, t_pipex *pipex)
             if (pipex->outfile < 0)
 			{
                 perror(redirection->file);
-                exit(1);
+                return ;
             }
             dup2(pipex->outfile, STDOUT_FILENO);
             close(pipex->outfile);
@@ -69,7 +69,7 @@ void redir_input(t_command *cmd, t_pipex *pipex)
             if (pipex->outfile < 0)
 			{
                 perror(redirection->file);
-                exit(1);
+                return ;
             }
             dup2(pipex->outfile, STDOUT_FILENO);
             close(pipex->outfile);
@@ -82,7 +82,7 @@ void redir_input(t_command *cmd, t_pipex *pipex)
                 if (pipex->infile < 0)
 				{
                     perror(pipex->filename_hd[i]);
-                    exit(1);
+                    return ;
                 }
                 dup2(pipex->infile, STDIN_FILENO);
                 close(pipex->infile);
@@ -157,7 +157,36 @@ void redir_input(t_command *cmd, t_pipex *pipex)
 // 	}
 // }
 
-void child_process(t_pipex *pipex, t_command *cmd, char **env)
+int check_built_in(char *str)
+{
+    if ((ft_strcmp2(str, "env") == 0) || (ft_strcmp2(str, "pwd") == 0) || (ft_strcmp2(str, "export") == 0)
+    || (ft_strcmp2(str, "unset") == 0) || (ft_strcmp2(str, "echo") == 0) || (ft_strcmp2(str, "exit") == 0)
+    || (ft_strcmp2(str, "cd") == 0))
+    {
+        return (1);
+    }
+    return (0);
+}
+
+// int execute_built_in(char **tab, t_buit_in *exec, t_command *cmd)
+// {
+//     if (ft_strcmp2(tab[0], "env") == 0)
+//         ft_env(exec->env_cpy);
+//     else if (ft_strcmp2(tab[0], "pwd") == 0)
+//         ft_pwd(exec->env_cpy, exec->cd);
+//     else if (ft_strcmp2(tab[0], "export") == 0)
+//         ft_export(exec->env_cpy, ));
+//     else if (ft_strcmp2(tab[0], "unset") == 0)
+//         ft_unset(exec->env_cpy, exec->tab[1]);
+//     else if (ft_strcmp2(tab[0], "echo") == 0)
+//         ft_echo(test_input(token));
+//     else if (ft_strcmp2(tab[0], "exit") == 0)
+//         return(ft_exit(exec, exec->tab));
+//     else if (ft_strcmp2(tab[0], "cd") == 0)
+//         exec->cd = ft_cd(exec->env_cpy, exec->tab[1]);
+// }
+
+void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 {
 	int	i;
 	int	pipe_fd[2];
@@ -180,6 +209,8 @@ void child_process(t_pipex *pipex, t_command *cmd, char **env)
 				return ;
 			}
 		}
+		if (check_built_in(current->arg[0]) == 1)
+			// execute_built_in(char **tab, exec, cmd);
 		pid = fork();
 		if (pid < 0)
 		{

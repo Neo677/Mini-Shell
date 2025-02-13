@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 10:54:31 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/12 03:53:05 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/13 02:25:15 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ void ft_set_signal_handler(void);
 //				env
 // void    ft_replace_token_env_var(t_token **head, t_env *env);
 
-
+char    *replace_with_space(char *str);
 
 
 #endif

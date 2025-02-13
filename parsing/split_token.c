@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:18 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/12 05:26:53 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/13 02:25:36 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 		var_value = print_node_by_key(ctx->env_cpy, var_name);
 		free(var_name);
 	}
+	if (check_variable_backslash_n(var_value))
+		var_value = replace_with_space(var_value);
 	if (!var_value)
 		return(ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable\n"), 0);
 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
@@ -128,7 +130,6 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 		*ctx->current = ft_init_command(ctx->cmd_lst);
 	if (!ft_add_arguments(*ctx->current, var_value))
 		return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
-	free(var_value);
 	return (1);
 }
 

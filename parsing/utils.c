@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:12:14 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/04 17:12:16 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/12 21:48:26 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char *ft_strndup(const char *src, size_t size)
 
     dst = (char *)malloc(len + 1);
     if (!dst)
-        return (free(dst), NULL);
+        return (NULL);
     ft_strncpy(dst, src, len);
     dst[len] = '\0';
     return (dst);

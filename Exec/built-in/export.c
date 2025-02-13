@@ -140,10 +140,13 @@ void    ft_export(t_env **env_cpy1, char **key_value)
             {
                 if (check_variable_backslash_n(current->value) == 1)
                     printf("declare -x %s=$\'%s\'\n", current->key, replace_backslash_n(current->value));
-                else if (current->value)
-                    printf("declare -x %s=\"%s\"\n", current->key, current->value);
                 else
-                    printf("declare -x %s\n", current->key);
+                {
+                    if (current->value)
+                        printf("declare -x %s=\"%s\"\n", current->key, current->value);
+                    else
+                        printf("declare -x %s\n", current->key);
+                }
             }
             current = current->next;
         }
