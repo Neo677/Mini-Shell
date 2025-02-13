@@ -119,7 +119,6 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 	var_value = print_node_by_key(ctx->env_cpy, var_name);
 	if (!var_value)
 		return (0);
-	// free(var_name);
 	printf("1.1\n");
 	if (check_variable_backslash_n_parse(var_value) == 1)
 	{
@@ -129,6 +128,7 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 	if (!var_value)
 		return(0);
 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));	
+	free(var_name);
 	if (!*ctx->current)
 		*ctx->current = ft_init_command(ctx->cmd_lst);
 	if (!ft_add_arguments(*ctx->current, var_value))

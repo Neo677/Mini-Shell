@@ -62,6 +62,5 @@ int ft_add_arguments(t_command *cmd, const char *arg)
     new_arg[i + 1] = NULL;
     free(cmd->arg);
     cmd->arg = new_arg;
-    free(new_arg);
     return (1);
 }

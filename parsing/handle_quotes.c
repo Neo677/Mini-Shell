@@ -118,8 +118,23 @@ char    *ft_eof_quote(const char *input, t_parse_context *ctx)
             free(line);
             break ;
         }
-        new_str = ft_strjoin(new_str, "\n");
-        new_str = ft_strjoin(new_str, line);
+        new_str = ft_strjoin(new_str, "\n"); // leak here 
+        new_str = ft_strjoin(new_str, line); // leak here 
+    
+/*        line = readline("> ");
+        // ... error checking ...
+        
+        // Fix for newline addition
+        char *tmp = new_str;
+        new_str = ft_strjoin(tmp, "\n");
+        free(tmp);
+        
+        // Fix for line addition
+        tmp = new_str;
+        new_str = ft_strjoin(tmp, line);
+        free(tmp);
+        free(line);
+*/
     }
     new_str = ft_strjoin(new_str, "\n");
     history = ft_strjoin(new_str2, new_str);
