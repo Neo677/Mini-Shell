@@ -2,52 +2,126 @@
 
 #include "../built-in/built_in.h"
 
-// void	redir_input(t_command *cmd, t_pipex *pipex)
+// int redir_input(t_command *cmd, t_pipex *pipex) 
 // {
-// 	t_command *current;
-// 	int	i;
+//     t_redirections *redirection;
+//     int i;
 
-// 	current = cmd;
 // 	i = 0;
-// 	while (current->redirections)
+//     redirection = cmd->redirections;
+// 	if (!redirection)
+// 		return (1);
+//     while (redirection) 
 // 	{
-// 		if (current->redirections->type == 2)
+//         if (redirection->type == 2) 
 // 		{
-// 			pipex->infile = open(current->redirections->file, O_RDONLY, 0644);
-// 		}
-// 		if (current->redirections->type == 3)
+//             pipex->infile = open(redirection->file, O_RDONLY, 0644);
+//             if (pipex->infile < 0)
+// 			{
+//                 perror(redirection->file);
+//                 return (1);
+//             }
+//             dup2(pipex->infile, STDIN_FILENO);
+//             close(pipex->infile);
+//         }
+//         if (redirection->type == 3)
 // 		{
-// 			pipex->outfile = open(current->redirections->file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-// 		}
-// 		if (current->redirections->type == 4)
+//             pipex->outfile = open(redirection->file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+//             if (pipex->outfile < 0)
+// 			{
+//                 perror(redirection->file);
+//                 return (1);
+//             }
+//             dup2(pipex->outfile, STDOUT_FILENO);
+//             close(pipex->outfile);
+//         }
+//         if (redirection->type == 4)
 // 		{
-// 			pipex->outfile = open(current->redirections->file, O_CREAT | O_APPEND | O_WRONLY, 0644);
-// 		}
-// 		if (current->redirections->type == 5)
+//             pipex->outfile = open(redirection->file, O_CREAT | O_APPEND | O_WRONLY, 0644);
+//             if (pipex->outfile < 0)
+// 			{
+//                 perror(redirection->file);
+//                 return (1);
+//             }
+//             dup2(pipex->outfile, STDOUT_FILENO);
+//             close(pipex->outfile);
+//         }
+//         if (redirection->type == 5)
 // 		{
-// 			if (pipex->filename_hd && pipex->filename_hd[i])
-// 				pipex->infile = open(pipex->filename_hd[i], O_CREAT | O_TRUNC | O_RDONLY, 0644);
-// 			i++;
-// 		}
-// 		current->redirections = current->redirections->next;
-// 	}
-// 	current = cmd;
+//             if (pipex->filename_hd && pipex->filename_hd[i])
+// 			{
+//                 pipex->infile = open(pipex->filename_hd[i], O_CREAT | O_RDONLY, 0644);
+//                 if (pipex->infile < 0)
+// 				{
+//                     perror(pipex->filename_hd[i]);
+//                     return (1);
+//                 }
+//                 dup2(pipex->infile, STDIN_FILENO);
+//                 close(pipex->infile);
+//                 i++;
+//             }
+//         }
+//         redirection = redirection->next;
+//     }
+// 	return (0);
 // }
 
-void redir_input(t_command *cmd, t_pipex *pipex) 
+// int check_built_in(char *str)
+// {
+//     if ((ft_strcmp2(str, "env") == 0) || (ft_strcmp2(str, "pwd") == 0) || (ft_strcmp2(str, "export") == 0)
+//     || (ft_strcmp2(str, "unset") == 0) || (ft_strcmp2(str, "echo") == 0) || (ft_strcmp2(str, "exit") == 0)
+//     || (ft_strcmp2(str, "cd") == 0))
+//     {
+//         return (1);
+//     }
+//     return (0);
+// }
+
+// int execute_built_in(t_buit_in *exec, t_command *cmd, int fd)
+// {
+//     if (ft_strcmp2(cmd->arg[0], "env") == 0)
+// 		ft_env(&exec->env_cpy);
+//     else if (ft_strcmp2(cmd->arg[0], "pwd") == 0)
+// 		ft_pwd(&exec->env_cpy, exec->cd);
+//     else if (ft_strcmp2(cmd->arg[0], "export") == 0)
+// 		ft_export(&exec->env_cpy, cmd->arg);
+//     else if (ft_strcmp2(cmd->arg[0], "unset") == 0)
+// 		ft_unset(&exec->env_cpy, cmd->arg[1]);
+//     else if (ft_strcmp2(cmd->arg[0], "echo") == 0)
+// 	{
+// 		if (cmd->redirections->type == 2)
+//         	printf("TEST\n");
+// 		ft_echo(cmd, fd);
+// 	}
+//     else if (ft_strcmp2(cmd->arg[0], "exit") == 0)
+// 		return(ft_exit(exec, cmd->arg));
+//     else if (ft_strcmp2(cmd->arg[0], "cd") == 0)
+// 		exec->cd = ft_cd(&exec->env_cpy, cmd->arg[1]);
+// 	else
+// 		printf("error : execute_built_in\n");
+// 	return (0);
+// }
+
+
+
+int redir_input(t_command *cmd, t_pipex *pipex) 
 {
     t_redirections *redirection;
-    int i = 0;
+    int i;
 
+	i = 0;
     redirection = cmd->redirections;
-    while (redirection) {
+	if (!redirection)
+		return (1);
+    while (redirection) 
+	{
         if (redirection->type == 2) 
 		{
             pipex->infile = open(redirection->file, O_RDONLY, 0644);
             if (pipex->infile < 0)
 			{
                 perror(redirection->file);
-                return ;
+                return (1);
             }
             dup2(pipex->infile, STDIN_FILENO);
             close(pipex->infile);
@@ -58,7 +132,7 @@ void redir_input(t_command *cmd, t_pipex *pipex)
             if (pipex->outfile < 0)
 			{
                 perror(redirection->file);
-                return ;
+                return (1);
             }
             dup2(pipex->outfile, STDOUT_FILENO);
             close(pipex->outfile);
@@ -69,7 +143,7 @@ void redir_input(t_command *cmd, t_pipex *pipex)
             if (pipex->outfile < 0)
 			{
                 perror(redirection->file);
-                return ;
+                return (1);
             }
             dup2(pipex->outfile, STDOUT_FILENO);
             close(pipex->outfile);
@@ -82,7 +156,7 @@ void redir_input(t_command *cmd, t_pipex *pipex)
                 if (pipex->infile < 0)
 				{
                     perror(pipex->filename_hd[i]);
-                    return ;
+                    return (1);
                 }
                 dup2(pipex->infile, STDIN_FILENO);
                 close(pipex->infile);
@@ -91,71 +165,8 @@ void redir_input(t_command *cmd, t_pipex *pipex)
         }
         redirection = redirection->next;
     }
+	return (0);
 }
-
-
-// void	child_process(t_pipex *pipex, t_command *cmd, char **env)
-// {
-// 	int	i;
-// 	int	pipe_fd[2];
-// 	pid_t	pid;
-// 	t_command	*current;
-
-// 	i = 0;
-// 	current = cmd;
-// 	while (i < count_cmd(cmd))
-// 	{
-// 		if (i < count_cmd(cmd))
-// 			pipe(pipe_fd);
-	
-// 		pid = fork();
-// 		if (pid < 0)
-// 		{
-// 			perror("fork");
-// 			return ;
-// 		}
-// 		if (pid == 0)
-// 		{
-// 			redir_input(current, pipex);
-// 			if (pipex->infile >= 0)
-// 			{
-// 				printf("TEST1\n");
-// 				dup2(pipex->infile, STDIN_FILENO);
-// 				close (pipex->infile);
-// 			}
-// 			if (pipex->outfile >= 0)
-// 			{
-// 				printf("TEST2\n");
-// 				dup2(pipex->outfile, STDOUT_FILENO);
-// 				close (pipex->outfile);
-// 			}
-// 			else if (i < count_cmd(cmd))
-// 			{
-// 				printf("TEST3\n");
-// 				dup2(pipe_fd[1], STDOUT_FILENO);
-// 			}
-// 			if (i > 0)
-// 			{
-// 				printf("TEST4\n");
-// 				dup2(pipe_fd[0], STDIN_FILENO);
-// 			}
-// 			close (pipe_fd[0]);
-// 			close (pipe_fd[1]);
-// 			execute_cmd(pipex, current->arg, env);
-// 		}
-// 		close (pipe_fd[1]);
-// 		if (i > 0)
-// 			close (pipe_fd[0]);
-// 		i++;
-// 		current = current->next;
-// 	}
-// 	i = 0;
-// 	while (i < count_cmd(cmd))
-// 	{
-// 		wait(NULL);
-// 		i++;
-// 	}
-// }
 
 int check_built_in(char *str)
 {
@@ -168,23 +179,26 @@ int check_built_in(char *str)
     return (0);
 }
 
-// int execute_built_in(char **tab, t_buit_in *exec, t_command *cmd)
-// {
-//     if (ft_strcmp2(tab[0], "env") == 0)
-//         ft_env(exec->env_cpy);
-//     else if (ft_strcmp2(tab[0], "pwd") == 0)
-//         ft_pwd(exec->env_cpy, exec->cd);
-//     else if (ft_strcmp2(tab[0], "export") == 0)
-//         ft_export(exec->env_cpy, ));
-//     else if (ft_strcmp2(tab[0], "unset") == 0)
-//         ft_unset(exec->env_cpy, exec->tab[1]);
-//     else if (ft_strcmp2(tab[0], "echo") == 0)
-//         ft_echo(test_input(token));
-//     else if (ft_strcmp2(tab[0], "exit") == 0)
-//         return(ft_exit(exec, exec->tab));
-//     else if (ft_strcmp2(tab[0], "cd") == 0)
-//         exec->cd = ft_cd(exec->env_cpy, exec->tab[1]);
-// }
+int execute_built_in(t_buit_in *exec, t_command *cmd, int fd)
+{
+    if (ft_strcmp2(cmd->arg[0], "env") == 0)
+		ft_env(&exec->env_cpy);
+    else if (ft_strcmp2(cmd->arg[0], "pwd") == 0)
+		ft_pwd(&exec->env_cpy, exec->cd);
+    else if (ft_strcmp2(cmd->arg[0], "export") == 0)
+		ft_export(&exec->env_cpy, cmd->arg);
+    else if (ft_strcmp2(cmd->arg[0], "unset") == 0)
+		ft_unset(&exec->env_cpy, cmd->arg[1]);
+    else if (ft_strcmp2(cmd->arg[0], "echo") == 0)
+		ft_echo(cmd, fd);
+    else if (ft_strcmp2(cmd->arg[0], "exit") == 0)
+		return(ft_exit(exec, cmd->arg));
+    else if (ft_strcmp2(cmd->arg[0], "cd") == 0)
+		exec->cd = ft_cd(&exec->env_cpy, cmd->arg[1]);
+	else
+		printf("error : execute_built_in\n");
+	return (0);
+}
 
 void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 {
@@ -192,60 +206,352 @@ void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 	int	pipe_fd[2];
 	int	prev_pipe;
 	int	cmd_count;
+	int	save_stdin;
+	int	save_stdout;
 	pid_t	pid;
 	t_command	*current;
-	(void)exec;
 
 	i = 0;
 	prev_pipe = -1;
 	cmd_count = count_cmd(cmd);
 	current = cmd;
-	while (i < cmd_count)
+	save_stdin = dup(STDIN_FILENO);
+	if (cmd_count == 1)
 	{
-		if (i < cmd_count - 1)
-		{
-			if (pipe(pipe_fd) == -1)
-			{
-				perror("pipe");
-				return ;
-			}
-		}
 		if (check_built_in(current->arg[0]) == 1)
-			// execute_built_in(char **tab, exec, cmd);
-		pid = fork();
-		if (pid < 0)
-		{
-			perror("fork");
-			return ;
-		}
-		if (pid == 0)
 		{
 			redir_input(current, pipex);
-			if (prev_pipe != -1)
+			execute_built_in(exec, current, save_stdin);
+		}
+		else
+		{
+			pid = fork();
+			if (pid < 0)
 			{
-				dup2(prev_pipe, STDIN_FILENO);
-				close(prev_pipe);
+				perror("fork");
+				return ;
 			}
+
+			if (pid == 0)
+			{
+				redir_input(current, pipex);
+				execute_cmd(pipex, current->arg, env);
+			}
+		}
+		wait(NULL);
+	}
+	else
+	{
+		while (i < cmd_count)
+		{
 			if (i < cmd_count - 1)
 			{
-				dup2(pipe_fd[1], STDOUT_FILENO);
-				close(pipe_fd[1]);
+				if (pipe(pipe_fd) == -1)
+				{
+					perror("pipe");
+					return ;
+				}
 			}
-			close(pipe_fd[0]);
-			execute_cmd(pipex, current->arg, env);
-			exit(0);
+
+			if (check_built_in(current->arg[0]) == 1)
+			{
+				save_stdin = dup(STDIN_FILENO);
+				save_stdout = dup(STDOUT_FILENO);
+				if (redir_input(current, pipex) == 0)
+					prev_pipe = -1;
+				else
+				{
+					if (prev_pipe != -1)
+					{
+						dup2(prev_pipe, STDIN_FILENO);
+						close(prev_pipe);
+					}
+					if (i < cmd_count - 1)
+					{
+						dup2(pipe_fd[1], STDOUT_FILENO);
+						close(pipe_fd[1]);
+					}
+				}
+				// printf ("dir = %s\n", cmd->redirections->file);
+				execute_built_in(exec, current, save_stdin);
+				close(pipe_fd[0]);
+				dup2(save_stdin, STDIN_FILENO);
+				dup2(save_stdout, STDOUT_FILENO);
+				close(save_stdin);
+				close(save_stdout);
+			}
+			else
+			{
+				pid = fork();
+				if (pid < 0)
+				{
+					perror("fork");
+					return ;
+				}
+				if (pid == 0)
+				{
+					if (redir_input(current, pipex) == 0)
+						prev_pipe = -1;
+					else
+					{
+						if (prev_pipe != -1)
+						{
+							dup2(prev_pipe, STDIN_FILENO);
+							close(prev_pipe);
+						}
+						if (i < cmd_count - 1)
+						{
+							dup2(pipe_fd[1], STDOUT_FILENO);
+							close(pipe_fd[1]);
+						}
+					}
+					close(pipe_fd[0]);
+					execute_cmd(pipex, current->arg, env);
+					exit(0);
+				}
+			}
+			
+			if (prev_pipe != -1)
+				close(prev_pipe);
+			close(pipe_fd[1]);
+			prev_pipe = pipe_fd[0];
+			current = current->next;
+			i++;
 		}
-		if (prev_pipe != -1)
-			close(prev_pipe);
-		close(pipe_fd[1]);
-		prev_pipe = pipe_fd[0];
-		current = current->next;
-		i++;
-	}
-	i = 0;
-	while (i < cmd_count)
-	{
-		wait(NULL);
-		i++;
+		i = 0;
+		while (i < cmd_count)
+		{
+			wait(NULL);
+			i++;
+		}
 	}
 }
+
+
+// int redir_input(t_command *cmd, t_pipex *pipex) 
+// {
+//     t_redirections *redirection;
+//     int i;
+
+// 	i = 0;
+//     redirection = cmd->redirections;
+// 	if (!redirection)
+// 		return (1);
+//     while (redirection) 
+// 	{
+//         if (redirection->type == 2) 
+// 		{
+//             pipex->infile = open(redirection->file, O_RDONLY, 0644);
+//             if (pipex->infile < 0)
+// 			{
+//                 perror(redirection->file);
+//                 return (1);
+//             }
+//             dup2(pipex->infile, STDIN_FILENO);
+//             close(pipex->infile);
+//         }
+//         if (redirection->type == 3)
+// 		{
+//             pipex->outfile = open(redirection->file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+//             if (pipex->outfile < 0)
+// 			{
+//                 perror(redirection->file);
+//                 return (1);
+//             }
+//             dup2(pipex->outfile, STDOUT_FILENO);
+//             close(pipex->outfile);
+//         }
+//         if (redirection->type == 4)
+// 		{
+//             pipex->outfile = open(redirection->file, O_CREAT | O_APPEND | O_WRONLY, 0644);
+//             if (pipex->outfile < 0)
+// 			{
+//                 perror(redirection->file);
+//                 return (1);
+//             }
+//             dup2(pipex->outfile, STDOUT_FILENO);
+//             close(pipex->outfile);
+//         }
+//         if (redirection->type == 5)
+// 		{
+//             if (pipex->filename_hd && pipex->filename_hd[i])
+// 			{
+//                 pipex->infile = open(pipex->filename_hd[i], O_CREAT | O_RDONLY, 0644);
+//                 if (pipex->infile < 0)
+// 				{
+//                     perror(pipex->filename_hd[i]);
+//                     return (1);
+//                 }
+//                 dup2(pipex->infile, STDIN_FILENO);
+//                 close(pipex->infile);
+//                 i++;
+//             }
+//         }
+//         redirection = redirection->next;
+//     }
+// 	return (0);
+// }
+
+// int check_built_in(char *str)
+// {
+//     if ((ft_strcmp2(str, "env") == 0) || (ft_strcmp2(str, "pwd") == 0) || (ft_strcmp2(str, "export") == 0)
+//     || (ft_strcmp2(str, "unset") == 0) || (ft_strcmp2(str, "echo") == 0) || (ft_strcmp2(str, "exit") == 0)
+//     || (ft_strcmp2(str, "cd") == 0))
+//     {
+//         return (1);
+//     }
+//     return (0);
+// }
+
+// int execute_built_in(t_buit_in *exec, t_command *cmd, int fd)
+// {
+//     if (ft_strcmp2(cmd->arg[0], "env") == 0)
+// 		ft_env(&exec->env_cpy);
+//     else if (ft_strcmp2(cmd->arg[0], "pwd") == 0)
+// 		ft_pwd(&exec->env_cpy, exec->cd);
+//     else if (ft_strcmp2(cmd->arg[0], "export") == 0)
+// 		ft_export(&exec->env_cpy, cmd->arg);
+//     else if (ft_strcmp2(cmd->arg[0], "unset") == 0)
+// 		ft_unset(&exec->env_cpy, cmd->arg[1]);
+//     else if (ft_strcmp2(cmd->arg[0], "echo") == 0)
+// 		ft_echo(cmd, fd);
+//     else if (ft_strcmp2(cmd->arg[0], "exit") == 0)
+// 		return(ft_exit(exec, cmd->arg));
+//     else if (ft_strcmp2(cmd->arg[0], "cd") == 0)
+// 		exec->cd = ft_cd(&exec->env_cpy, cmd->arg[1]);
+// 	else
+// 		printf("error : execute_built_in\n");
+// 	return (0);
+// }
+
+// void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
+// {
+// 	int	i;
+// 	int	pipe_fd[2];
+// 	int	prev_pipe;
+// 	int	cmd_count;
+// 	int	save_stdin;
+// 	int	save_stdout;
+// 	pid_t	pid;
+// 	t_command	*current;
+
+// 	i = 0;
+// 	prev_pipe = -1;
+// 	cmd_count = count_cmd(cmd);
+// 	current = cmd;
+// 	save_stdin = dup(STDIN_FILENO);
+// 	if (cmd_count == 1)
+// 	{
+// 		if (check_built_in(current->arg[0]) == 1)
+// 		{
+// 			redir_input(current, pipex);
+// 			execute_built_in(exec, current, save_stdin);
+// 		}
+// 		else
+// 		{
+// 			pid = fork();
+// 			if (pid < 0)
+// 			{
+// 				perror("fork");
+// 				return ;
+// 			}
+
+// 			if (pid == 0)
+// 			{
+// 				redir_input(current, pipex);
+// 				execute_cmd(pipex, current->arg, env);
+// 			}
+// 		}
+// 		wait(NULL);
+// 	}
+// 	else
+// 	{
+// 		while (i < cmd_count)
+// 		{
+// 			if (i < cmd_count - 1)
+// 			{
+// 				if (pipe(pipe_fd) == -1)
+// 				{
+// 					perror("pipe");
+// 					return ;
+// 				}
+// 			}
+// 			if (check_built_in(current->arg[0]) == 1)
+// 			{
+// 				save_stdin = dup(STDIN_FILENO);
+// 				save_stdout = dup(STDOUT_FILENO);
+// 				if (redir_input(current, pipex) == 0)
+// 				{
+// 					prev_pipe = -1;
+// 				}
+// 				else
+// 				{
+// 					if (prev_pipe != -1)
+// 					{
+// 						dup2(prev_pipe, STDIN_FILENO);
+// 						close(prev_pipe);
+// 					}
+// 					if (i < cmd_count - 1)
+// 					{
+// 						dup2(pipe_fd[1], STDOUT_FILENO);
+// 						close(pipe_fd[1]);
+// 					}
+// 				}
+// 				save_stdin = dup(STDIN_FILENO);
+// 				// if (current->redirections)
+// 				// if (!current->redirections)
+// 				execute_built_in(exec, current, save_stdin);
+// 				close(pipe_fd[0]);
+// 				dup2(save_stdin, STDIN_FILENO);
+// 				dup2(save_stdout, STDOUT_FILENO);
+// 				close(save_stdin);
+// 				close(save_stdout);
+// 			}
+// 			else
+// 			{
+// 				pid = fork();
+// 				if (pid < 0)
+// 				{
+// 					perror("fork");
+// 					return ;
+// 				}
+// 				if (pid == 0)
+// 				{
+// 					if (redir_input(current, pipex) == 0)
+// 					{
+// 						prev_pipe = -1;
+// 					}
+// 					else
+// 					{
+// 						if (prev_pipe != -1)
+// 						{
+// 							dup2(prev_pipe, STDIN_FILENO);
+// 							close(prev_pipe);
+// 						}
+// 						if (i < cmd_count - 1)
+// 						{
+// 							dup2(pipe_fd[1], STDOUT_FILENO);
+// 							close(pipe_fd[1]);
+// 						}
+// 					}
+// 					close(pipe_fd[0]);
+// 					execute_cmd(pipex, current->arg, env);
+// 					exit(0);
+// 				}
+// 			}
+// 			if (prev_pipe != -1)
+// 				close(prev_pipe);
+// 			close(pipe_fd[1]);
+// 			prev_pipe = pipe_fd[0];
+// 			current = current->next;
+// 			i++;
+// 		}
+// 		i = 0;
+// 		while (i < cmd_count)
+// 		{
+// 			wait(NULL);
+// 			i++;
+// 		}
+// 	}	
+// }
+

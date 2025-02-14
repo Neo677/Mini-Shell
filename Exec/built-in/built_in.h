@@ -95,7 +95,7 @@ int check_value(char *str);
 int					check_outfile(char *outfile, int fd_stdout,
 						char *redirection);
 int					check_option(char *option);
-void				ft_echo(char *input);
+void				ft_echo(t_command *cmd, int fd);
 
 /*  ENV  */
 void				ft_env(t_env **env_cpy);
@@ -160,7 +160,7 @@ void    clear_file(char **filename);
 int check_heredoc(t_token *token, t_pipex *pipex);
 void	test_1_2(void);
 
-void	redir_input(t_command *cmd, t_pipex *pipex);
+int	redir_input(t_command *cmd, t_pipex *pipex);
 void	child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **envp);
 
 int     check_dir(t_command *cmd);

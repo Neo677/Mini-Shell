@@ -73,56 +73,104 @@
 
 void ft_handle_quotes(t_parse_context *ctx)
 {
-    char *quoted_content;
-	size_t len;
+	char *quote_content;
+	const char *input_ptr;
+	char prev_char;
+	char *new;
 
-	(void)len;
-    quoted_content = ft_handle_quote(ctx);
-    if (!quoted_content)
-    {
-        // ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
-        ft_err_split(*ctx->cmd_lst, *ctx->head);
-        return;
-    }
-    if (ctx->last_token && ctx->last_token->value)
-    {
-        len = ft_strlen(ctx->last_token->value);
-        if (len > 0 && ctx->last_token->value[len - 1] == '=')
-        {
-			printf(".%s.\n", ctx->last_token->value);
-            char *new_value = ft_strjoin_free(ctx->last_token->value, quoted_content);
-            if (!new_value)
-            {
-                // ft_printf_fd(STDERR_FILENO, "minishell: error: allocation failed during concatenation\n");
-                free(quoted_content);
-                ft_err_split(*ctx->cmd_lst, *ctx->head);
-                return;
-            }
-            ctx->last_token->value = new_value;
-            if (!ft_add_arguments(*ctx->current, quoted_content))
-            {
-                ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add quoted argument\n");
-                free(quoted_content);
-                ft_err_split(*ctx->cmd_lst, *ctx->head);
-                return;
-            }
-            free(quoted_content);
-            return;
-        }
-    }
-    ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, quoted_content));
-    if (!*ctx->current)
-        *ctx->current = ft_init_command(ctx->cmd_lst);
-    if (!ft_add_arguments(*ctx->current, quoted_content))
-    {
-        ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add argument `%s`\n", quoted_content);
-        free(quoted_content);
-        ft_err_split(*ctx->cmd_lst, *ctx->head);
-        return;
-    }
-    ctx->last_token = ft_last_token(*ctx->head);
-    free(quoted_content);
+	input_ptr = *ctx->input;
+	quote_content = ft_handle_quote(ctx);
+	if (!quote_content)
+		return (ft_err_split(*ctx->cmd_lst, *ctx->head));
+	if (input_ptr > ctx->input_exec)
+		prev_char = *(input_ptr - 1); // (*input)
+	else
+		prev_char = ' ';
+	if (!ft_isspace(prev_char) && ctx->last_token && ctx->last_token->value)
+	{
+		new = ft_strjoin_free(ctx->last_token->value, quote_content);
+		if (!new)
+		{
+			free(quote_content);
+			ft_err_split(*ctx->cmd_lst, *ctx->head);
+			return;
+		}
+		ctx->last_token->value = new;
+		if (!ft_add_arguments(*ctx->current, quote_content))
+		{
+			// ft_printf_fd(2, "minishell: adding arguments error\n");
+			free(quote_content);
+			ft_err_split(*ctx->cmd_lst, *ctx->head);
+			return;
+		}
+		free(quote_content);
+		return;
+	}
+	ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, quote_content));
+	if (!*ctx->current)
+		*ctx->current = ft_init_command(ctx->cmd_lst);
+	if (!ft_add_arguments(*ctx->cmd_lst, quote_content))
+	{
+		// ft_printf_fd
+		ft_err_split(*ctx->cmd_lst, *ctx->head);
+		free(quote_content);
+		return;
+	}
+	ctx->last_token = ft_last_token(*ctx->head);
+	free(quote_content);
 }
+
+// void ft_handle_quotes(t_parse_context *ctx)
+// {
+//     char *quoted_content;
+// 	size_t len;
+
+// 	(void)len;
+//     quoted_content = ft_handle_quote(ctx);
+//     if (!quoted_content)
+//     {
+//         // ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
+//         ft_err_split(*ctx->cmd_lst, *ctx->head);
+//         return;
+//     }
+//     if (ctx->last_token && ctx->last_token->value)
+//     {
+//         len = ft_strlen(ctx->last_token->value);
+//         if (len > 0 && !ft_isspace(ctx->last_token->value[len - 1]))
+//         {
+//             char *new_value = ft_strjoin_free(ctx->last_token->value, quoted_content);
+//             if (!new_value)
+//             {
+//                 // ft_printf_fd(STDERR_FILENO, "minishell: error: allocation failed during concatenation\n");
+//                 free(quoted_content);
+//                 ft_err_split(*ctx->cmd_lst, *ctx->head);
+//                 return;
+//             }
+//             ctx->last_token->value = new_value;
+//             if (!ft_add_arguments(*ctx->current, quoted_content))
+//             {
+//                 ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add quoted argument\n");
+//                 free(quoted_content);
+//                 ft_err_split(*ctx->cmd_lst, *ctx->head);
+//                 return;
+//             }
+//             free(quoted_content);
+//             return;
+//         }
+//     }
+//     ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, quoted_content));
+//     if (!*ctx->current)
+//         *ctx->current = ft_init_command(ctx->cmd_lst);
+//     if (!ft_add_arguments(*ctx->current, quoted_content))
+//     {
+//         ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add argument `%s`\n", quoted_content);
+//         free(quoted_content);
+//         ft_err_split(*ctx->cmd_lst, *ctx->head);
+//         return;
+//     }
+//     ctx->last_token = ft_last_token(*ctx->head);
+//     free(quoted_content);
+// }
 
 int	ft_handle_operators(t_parse_context *ctx)
 {

@@ -218,7 +218,7 @@ char *ft_strndup(const char *src, size_t size);
 int ft_strcmp_parsing(char *s1, char *s2);
 char    *replace_with_space(char *str);
 int check_variable_backslash_n_parse(char *value);
-int 	ft_isspace(int c);
+int ft_isspace(char c);
 
 int ft_valid_redirections(const t_token *token);
 char *ft_valid_quotes(char **current, char quote_type); 
