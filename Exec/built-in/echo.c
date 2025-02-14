@@ -79,57 +79,41 @@ char    *take_filename(char *input, int i)
     return (str);
 }
 
-void    ft_echo(char *input)
+void    ft_echo(t_command *cmd, int fd)
 {
     int i;
     int line_break;
-    int fd_stdout;
-    char    *outfile;
-    char    *str;
 
-    i = 0;
-    i = skip_built(input, 0);
-    i = skip_space(input, i);
-    if (!input[i])
+    i = 1;
+    (void)fd;
+    printf("test1\n");
+    if (cmd->redirections->type)
+    {
+        printf("test2\n");
+        if (cmd->redirections->type == 2)
+        {
+            dup2(fd, STDIN_FILENO);
+            // dup2(fd, STDOUT_FILENO);
+        }
+    }
+    if (!cmd->arg[1])
     {
         write(1, "\n", 1);
         return ;
     }
     line_break = 0;
-    if (input[i] == '-' && input[i + 1] == 'n')
+    if (cmd->arg[i][0] == '-' && cmd->arg[i][1] == 'n')
     {
         line_break = 1;
-        i += 2;
+        i++;
     }
-    i = skip_space(input, i);
-    fd_stdout = 0;
-    outfile = NULL;
-    if (input[i] == '>' && input[i + 1] == '>')
+    while (cmd->arg[i])
     {
-        outfile = take_filename(input, i + 2);
-        fd_stdout = check_outfile(outfile, fd_stdout, ">>");
-        if (fd_stdout < 0)
-            return ;
-        i += 2;
-        i = skip_built(input, i) + 1;
+        printf("%s ", cmd->arg[i]);
+        i++;
     }
-    else if (input[i] == '>')
-    {
-        outfile = take_filename(input, i + 1);
-        fd_stdout = check_outfile(outfile, fd_stdout, ">");
-        if (fd_stdout < 0)
-            return ;
-        i += 1;
-        i = skip_built(input, i);
-    }
-    str = NULL;
-    str = take_str(input, i);
-    write(fd_stdout, str, ft_strlen(str));
     if (line_break == 0)
-        write(fd_stdout, "\n", 1);
-    free(str);
-    if (outfile)
-        free(outfile);
+        printf("\n");
 }
 
 // Voir pour les $

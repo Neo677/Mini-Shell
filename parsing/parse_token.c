@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:08 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/13 02:21:02 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/13 20:40:40 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,6 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst)
         ft_free_commande_lst(*cmd_lst);
         return (NULL);
     }
-    // ft_print_command_lst(*cmd_lst);
+    ft_print_command_lst(*cmd_lst);
     return (token);
 }

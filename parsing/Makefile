@@ -6,12 +6,12 @@
 #    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 17:24:52 by thobenel          #+#    #+#              #
-#    Updated: 2025/02/11 14:35:12 by dpascal          ###   ########.fr        #
+#    Updated: 2025/02/13 22:25:06 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-CC = gcc
+CC = gcc -g
 CFLAGS = -Wall -Wextra -Werror -I include #-fsanitize=leak
 LIBFT_DIR = ../libft_2.0
 LIBFT = $(LIBFT_DIR)/libft.a

@@ -331,3 +331,8 @@ Wouah Hou
      regarder si le nom des commande concorde avec la liste des built-in 
 # need to be fix (GLHF) 🪖🪖:
           
+
+     bash-5.2$ echo test"45"
+test45
+bash-5.2$ echo test "45"
+test 45

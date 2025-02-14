@@ -45,13 +45,18 @@ void    init_hd(t_token *token, t_pipex *pipex)
             i++;
         current = current->next;
     }
-    pipex->filename_hd = malloc(sizeof(char *)* i);
+    if (i > 0)
+        pipex->filename_hd = malloc(sizeof(char *)* i);
+    else
+        pipex->filename_hd = NULL;
 }
 
 void    clear_file(char **filename)
 {
     int i;
 
+    if (!filename)
+        return ;
     i = 0;
     while (filename[i])
     {

@@ -129,8 +129,8 @@ void    ft_export(t_env **env_cpy1, char **key_value)
 
     cpy_env_cpy = NULL;
     env_cpy = export_cpy(env_cpy1, &cpy_env_cpy);
-    i = 0;
-    if (!key_value[0])
+    i = 1;
+    if (!key_value[1])
     {
         sort_list(env_cpy);
         current = *env_cpy;
@@ -156,6 +156,7 @@ void    ft_export(t_env **env_cpy1, char **key_value)
     }
     while (key_value[i])
     {
+        printf("key = %s\n", key_value[i]);
         if ((key_value[i][0] >= 'a' && key_value[i][0] <= 'z') || (key_value[i][0] >= 'A' && key_value[i][0] <= 'Z') || key_value[i][0] == '_')
         {
             current = *env_cpy1;
@@ -223,7 +224,7 @@ void    ft_export(t_env **env_cpy1, char **key_value)
         }
         else
         {
-            ft_printf_fd(2, "bash: export: `%s': not a valid identifier\n", key_value[i]);
+            ft_printf_fd(2, "bash: export: `%s': not testa valid identifier\n", key_value[i]);
             free_env_list(cpy_env_cpy);
             free_tab(key_value);
             return;
