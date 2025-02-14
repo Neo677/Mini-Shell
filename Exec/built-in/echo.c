@@ -85,15 +85,15 @@ void    ft_echo(t_command *cmd, int fd)
     int line_break;
 
     i = 1;
-    (void)fd;
-    printf("test1\n");
-    if (cmd->redirections->type)
+    if (cmd->redirections)
     {
-        printf("test2\n");
-        if (cmd->redirections->type == 2)
+        if (cmd->redirections->type)
         {
-            dup2(fd, STDIN_FILENO);
-            // dup2(fd, STDOUT_FILENO);
+            if (cmd->redirections->type == 2)
+            {
+                dup2(fd, STDOUT_FILENO);
+                // close(fd);
+            }
         }
     }
     if (!cmd->arg[1])

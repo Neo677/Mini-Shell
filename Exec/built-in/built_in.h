@@ -36,6 +36,7 @@ typedef struct s_built_in
 	char			*input;
 	int				cd;
     int				exit;
+    int             check_built_in;
 }					t_buit_in;
 
 typedef struct s_pipex
@@ -68,7 +69,7 @@ typedef struct s_command t_command;
 
 /*  MAIN  */
 int					main(int ac, char **av, char **env);
-int check_built_in(char *str);
+int check_built_in(char *str, t_buit_in *exec);
 
 /*  CD  */
 int					ft_cd(t_env **env, char *arg);
@@ -160,7 +161,7 @@ void    clear_file(char **filename);
 int check_heredoc(t_token *token, t_pipex *pipex);
 void	test_1_2(void);
 
-int	redir_input(t_command *cmd, t_pipex *pipex);
+int	redir_input(t_command *cmd, t_pipex *pipex, t_buit_in *exec);
 void	child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **envp);
 
 int     check_dir(t_command *cmd);
