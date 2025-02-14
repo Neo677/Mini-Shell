@@ -109,10 +109,7 @@ char    *print_node_by_key(t_env **env, char *key)
     while (current)
     {
         if (ft_strcmp(current->key, key) == 0)
-        {
             return (current->value);
-        }
-            
         current = current->next;
     }
     return (NULL);

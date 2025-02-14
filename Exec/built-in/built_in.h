@@ -68,6 +68,7 @@ typedef struct s_command t_command;
 
 /*  MAIN  */
 int					main(int ac, char **av, char **env);
+int check_built_in(char *str);
 
 /*  CD  */
 int					ft_cd(t_env **env, char *arg);
@@ -105,6 +106,7 @@ long long			ft_atol(char *str, int *error);
 int					ft_exit(t_buit_in *exec, char **tab);
 
 /*  EXPORT  */
+int check_variable_backslash_n(char *value);
 int					ft_swap(t_env *a, t_env *b);
 t_env				*sort_list(t_env **env_cpy);
 t_env				**export_cpy(t_env **env_cpy, t_env **cpy_env_cpy);
@@ -159,7 +161,7 @@ int check_heredoc(t_token *token, t_pipex *pipex);
 void	test_1_2(void);
 
 void	redir_input(t_command *cmd, t_pipex *pipex);
-void	child_process(t_pipex *pipex, t_command *cmd, char **envp);
+void	child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **envp);
 
 int     check_dir(t_command *cmd);
 

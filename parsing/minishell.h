@@ -87,7 +87,7 @@ typedef struct s_token
 	t_token_type	type;
 	char			*value;
 	struct s_token	*next;
-}		t_token;
+}			t_token;
 
 /*
 		main structure for the command
@@ -102,7 +102,7 @@ typedef struct s_redirections
 	int						type;
 	char					*file;
 	struct s_redirections	*next;
-}		t_redirections;
+}			t_redirections;
 
 typedef struct s_command
 {
@@ -121,114 +121,111 @@ typedef struct s_parse_context
 	const char **input;
 	const char *input_exec;
 	t_token **head;
+	t_token *last_token;
 	t_command **cmd_lst;
 	t_command **current;
 	t_env **env_cpy;
 	int		exit_status;
-}		t_parse_context;
+}			t_parse_context;
 
 
-//				main utils
+int	ft_add_arguments(t_command *cmd, const char *arg);
+
+int	ft_add_redirections_struct(t_command *cmd, int type, const char *file);
+
+int ft_create_command_lst(t_token *token, t_command **lst);
+
+char *ft_get_pid_str(void);
+char *ft_detec_var(const char **input);
+int     ft_detec_digit(int is_digit_param, const char **input);
+char *ft_extract_env_var(const char **input);
+
+int get_last_exit_status(void);
+
+void	error_exit(const char *error);
+void	ft_free_token(t_token *head);
+void	ft_free_redirection(t_redirections *redir);
+void	ft_free_commande_lst(t_command *command);
+void	ft_main_free(t_command *cmd, t_redirections *redir, t_token *head);
+
+void	ft_free_split(t_token **head, t_command **cmd_lst, const char *error_msg, const char *token);;
+void    ft_err_split(t_command *cmd_lst, t_token *head);
+void    ft_err_split_ope(t_command *cmd_lst, t_token *head);
+void    ft_err_bad_redirec(t_command *cmd_lst, t_token *head);
+
+void	ft_error_pipe(const char *context);
+void	ft_error_redirections(const char *context);
+int	ft_error_quote(void);
+int	ft_error_general(const char *context);
+int	ft_error_env(const char *context);
+
+char	*ft_extract_quotent(const char *start, size_t len);
+char	*ft_concatent_content(char *content, char *tmp);
+int	ft_update_ptr_input(const char **input, size_t *i, const char **start);
+char    *ft_strjoin_free(char *s1, char *s2);
+char    *ft_eof_double_quote(const char *input, t_parse_context *ctx);
+char    *ft_eof_single_quote(const char *input, t_parse_context *ctx);
+char *ft_handle_quote(t_parse_context *ctx); 
+
+void ft_handle_sig_int(int sig);
+void ft_handle_sig_quit(int sig);
+
+t_command *ft_init_command(t_command **lst);
+
+// void    ft_init_cmd(t_command *cmd_lst, t_command *current, t_parse_context ctx);
+// void    ft_init_ctx(t_token **head, const char *input, t_env **env_cpy, t_parse_context ctx);
+
+t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst);
+
+void	ft_print_tab(char **tab);
+void	ft_print_redirections(t_redirections *head);
+void	ft_print_command_lst(t_command *head);
+void	ft_print_tokens(t_token *head);
+
+void ft_handle_quotes(t_parse_context *ctx);
+int	ft_handle_operators(t_parse_context *ctx);
+int	ft_handle_env_vars(t_parse_context *ctx);
+int	ft_handle_words(t_parse_context *ctx);
+int	ft_split_token(t_token **head, const char *input, t_env **env_cpy);
+
+void	ft_abort(char *input);
+void	ft_abort_parse(char *input);
+void	ft_abort_cmd(char *input, t_token *token);
+
+void    ft_set_syntax_redir_1(int k, int len, char op);
+void    ft_set_syntax_redir_2(const char *input, int j);
+int  ft_check_syntax(const char *input, t_parse_context *ctx);
+
+int ft_is_redirection(t_token *token);
+int ft_handle_operator(t_token **head, const char **input);
+void ft_handle_word(t_token **head, const char **input);
+int ft_handle_env_var(t_token **head, const char **input);
+
+t_token_type	ft_identify_token(char *str);
+t_token	*ft_create_token(t_token_type type, char *value);
+void	ft_add_token(t_token **head, t_token *new_token);
+char	*ft_get_next_token(const char **input);
+t_token *ft_last_token(t_token *head);
+
+void    ft_clean_up(t_token **token, char **input);
+int    ft_handle_exit(char *input);
 void	ft_intro(void);
 char **ft_token_to_tab(t_token *token);
 
-void			ft_abort(char *input);
-void			ft_abort_parse(char *input);
-void			ft_abort_cmd(char *input, t_token *token);
-
-void			ft_clean_up(t_token **token, char **input);
-int				ft_handle_exit(char *input);
-
-//				prompt
-void			ft_intro(void);
-void			ft_print_tokens(t_token *head);
-void			ft_print_tab(char **tab);
-void			ft_print_redirections(t_redirections *head);
-void			ft_print_command_lst(t_command *head);
-
-//				error handler for different message
-void				ft_error_pipe(const char *context);
-void				ft_error_redirections(const char *context);
-int				ft_error_quote(void);
-int				ft_error_general(const char *context);
-int				ft_error_env(const char *context);
-
-//				env detection and syntax
-int				ft_handle_env_var(t_token **head, const char **input);
-char *ft_extract_env_var(const char **input);
-// int ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy);
-int	ft_handle_env_vars(t_parse_context *ctx);
-
-
-
-//				Token handler
-int ft_handle_operator(t_token **head, const char **input);
-int				ft_is_redirection(t_token *token);
-void			ft_handle_word(t_token **head, const char **input);
-
-
-// t_token *ft_parse_token(const char *input, t_env **env_cpy, t_pipex *pipex, char **env);
-t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst);
-char *ft_get_pid_str(void);
-
-
-// char *ft_handle_quote(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy) ;
-char *ft_handle_quote(t_parse_context *ctx);
-
-
-//				Token creations
-t_token_type	ft_identify_token(char *str);
-t_token			*ft_create_token(t_token_type type, char *value);
-void			ft_add_token(t_token **head, t_token *add);
-void    ft_init_cmd(t_command *cmd_lst, t_command *current, t_parse_context ctx);
-void    ft_init_ctx(t_token **head, const char *input, t_env **env_cpy, t_parse_context ctx);
-int				ft_split_token(t_token **head, const char *input, t_env **env_cpy);
-
-//				placement in struct (case of pipe check Read me)
-t_command		*ft_init_command(t_command **lst);
-int				ft_create_command_lst(t_token *token, t_command **lst);
-int				ft_add_redirections_struct(t_command *cmd, int type, const char *file);
-int				ft_add_arguments(t_command *cmd, const char *args);
-
-//				Utils for token
-int 			ft_valid_redirections(const t_token *token);
-char			*ft_valid_quotes(char **current, char quote_type);
-int				ft_validay_quotes(t_token *token);
-int				ft_validate_pipes(t_token *token);
-int				ft_valid_token(t_token *token);
-char			*ft_get_next_token(const char **input);
-
-//				Handle free and error 
-void			error_exit(const char *error);
-void			ft_free_token(t_token *token);
-void			ft_free_redirection(t_redirections *redir);
-void			ft_free_commande_lst(t_command *command);
-void			ft_main_free(t_command *cmd, t_redirections *redir, t_token *head);
-
-//				split error message and free
-void			ft_free_split(t_token **head, t_command **cmd_lst, const char *error_msg, const char *token);
-void			ft_err_split(t_command *cmd_lst, t_token *head);
-void			ft_err_split_ope(t_command *cmd_lst, t_token *head);
-void			ft_err_bad_redirec(t_command *cmd_lst, t_token *head);
-
-//				syntax 
-int  ft_check_syntax(const char *input, t_parse_context *ctx);
-
-//				Utils
-char			*ft_strndup(const char *src, size_t size);
-int				ft_strcmp_parsing(char *s1, char *s2);
-
-//				Signal
-void ft_handle_sig_int(int sig);
-void ft_handle_sig_quit(int sig);
-void ft_set_signal_handler(void);
-
+size_t ft_strnlen(const char *s, size_t max);
+char *ft_strncpy(char *dst, const char *src, size_t len);
+char *ft_strndup(const char *src, size_t size);
+int ft_strcmp_parsing(char *s1, char *s2);
 char    *replace_with_space(char *str);
 int check_variable_backslash_n_parse(char *value);
-//				env
-// void    ft_replace_token_env_var(t_token **head, t_env *env);
+int 	ft_isspace(int c);
 
-
+int ft_valid_redirections(const t_token *token);
+char *ft_valid_quotes(char **current, char quote_type); 
+int ft_validay_quotes(t_token *token);
+int ft_validate_pipes(t_token *token);
+int ft_valid_env_var(t_token *token);
+int ft_valid_token(t_token *token);
 
 
 #endif	

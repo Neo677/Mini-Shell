@@ -44,7 +44,7 @@ int	ft_add_redirections_struct(t_command *cmd, int type, const char *file)
 	new_redir->type = type;
 	new_redir->file = ft_strdup_v2(file);
 	if (!new_redir->file)
-		return(ft_printf_fd(STDERR_FILENO, "minishell: memory allocation error\n"), 0);
+		return(ft_printf_fd(STDERR_FILENO, "minishell: memory allocation error\n"), free(new_redir), 0);
 	new_redir->next = NULL;
 	if (!cmd->redirections)
 		cmd->redirections = new_redir;

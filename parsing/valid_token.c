@@ -112,10 +112,10 @@ int ft_validate_pipes(t_token *token)
     return (1);
 }
 
-int ft_isspace(char c)
-{
-    return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
-}
+// int ft_isspace(char c)
+// {
+//     return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
+// }
 
 static bool ft_is_empty_string(const char *str)
 {

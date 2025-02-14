@@ -333,3 +333,17 @@ Wouah Hou
      regarder si le nom des commande concorde avec la liste des built-in 
 # need to be fix (GLHF) 🪖🪖:
           
+
+char	*test_input(t_token *token);
+
+minishell> echo hello world
+FEIN1.0 = echo
+FEIN1.1 = echo
+FEIN2 = echo 
+FEIN1.0 = echo
+FEIN1.1 = echo hello
+FEIN1.0 = echo
+FEIN1.1 = echo helloworld
+FEIN3 = echo helloworld
+helloworld
+minishell> 

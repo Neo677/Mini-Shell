@@ -119,7 +119,7 @@ int  ft_check_syntax(const char *input, t_parse_context *ctx)
     int res;
 
     ctx->exit_status = 0;
-    if (!ft_set_syntax_quote(input, ctx))
+    if (ft_set_syntax_quote(input, ctx) == 0)
         return (0);
     i = 0;
     while (input[i])

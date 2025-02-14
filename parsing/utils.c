@@ -95,3 +95,8 @@ int check_variable_backslash_n_parse(char *value)
     }
     return (0);
 }
+
+int 	ft_isspace(int c)
+{
+	return ((c >= 9 && c <= 13) || c == ' ');
+}

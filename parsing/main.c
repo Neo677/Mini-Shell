@@ -32,7 +32,6 @@ char	*test_input(t_token *token)
 		current = current->next;
 	}
 	return (str);
-	
 }
 
 int main(int ac, char **av, char **env)
@@ -77,19 +76,24 @@ int main(int ac, char **av, char **env)
 		else if ((ft_strcmp2(exec.tab[0], "unset") == 0) && ft_strlen(exec.tab[0]) == 5)
 			ft_unset(&exec.env_cpy, exec.tab[1]);
 		else if ((ft_strcmp2(exec.tab[0], "echo") == 0) && ft_strlen(exec.tab[0]) == 4)
-			ft_echo(exec.tab[1]);
+			ft_echo(test_input(token));
 		else if ((ft_strcmp2(exec.tab[0], "exit") == 0) && ft_strlen(exec.tab[0]) == 4)
 			return(ft_exit(&exec, exec.tab));
 		else if ((ft_strcmp2(exec.tab[0], "cd") == 0) && ft_strlen(exec.tab[0]) == 2)
 			exec.cd = ft_cd(&exec.env_cpy, exec.tab[1]);
 		else if ((ft_strcmp2(exec.tab[0], "./minishell") == 0) && ft_strlen(exec.tab[0]) == 11)
 			main(ac, av, exec.tab);
-		else
-			child_process(&pipex, cmd_lst, env);
+		// else
+			// child_process(&pipex, cmd_lst, exec., env);
 		// ft_printf_fd(127,"minishell: Command not found\n");
 		if (pipex.filename_hd)
+		{
+			// printf("1\n");
 			clear_file(pipex.filename_hd);
-		free(exec.input);
+		}
+			
+		if (exec.input)
+			free(exec.input);
 	}
 	free_tab(exec.tab);
 	ft_free_token(token);

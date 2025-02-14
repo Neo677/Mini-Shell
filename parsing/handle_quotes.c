@@ -92,7 +92,7 @@ char    *ft_strjoin_free(char *s1, char *s2)
     return (result);
 }
 
-char    *ft_eof_quote(const char *input, t_parse_context *ctx)
+char    *ft_eof_double_quote(const char *input, t_parse_context *ctx)
 {
     char    *line;
     char    *new_str;
@@ -181,10 +181,10 @@ static char *ft_handle_double_quote(const char **input, t_parse_context *ctx)
 
     content = NULL;
     i = 0;
-    if (**input != '\"')
+    if (**input != '"')
         return (NULL);
     start = ++(*input);
-    while ((*input)[i] && (*input)[i] != '\"')
+    while ((*input)[i] && (*input)[i] != '"')
     {
         if ((*input)[i] == '$')
         {
@@ -201,10 +201,10 @@ static char *ft_handle_double_quote(const char **input, t_parse_context *ctx)
         else
             i++;
     }
-    if ((*input)[i] != '\"')
+    if ((*input)[i] != '"')
     {
         char    *test;
-        test = ft_eof_quote(*input, ctx);
+        test = ft_eof_double_quote(*input, ctx);
         // printf("input = %s\n", *input);
         if (!test)
             return (NULL);
@@ -223,10 +223,63 @@ static char *ft_handle_double_quote(const char **input, t_parse_context *ctx)
     return (content);
 }
 
-static char *ft_handle_single_quote(const char **input) 
+char    *ft_eof_single_quote(const char *input, t_parse_context *ctx)
+{
+    char    *line;
+    char    *new_str;
+    char    *new_str2;
+    char    *history;
+    char    **test;
+
+    (void)input;
+    new_str = NULL;
+    new_str2 = ft_strdup_v2(ctx->input_exec);
+    while (1)
+    {
+        line = readline("> ");
+        if (line == NULL)
+        {
+            ft_printf_fd(2, "bash: unexpected EOF while looking for matching `\''");
+            free(line);
+            free(new_str);
+            return (NULL);
+        }
+        if (ft_strcmp2(line, "\'") == 0)
+        {
+            free(line);
+            break ;
+        }
+        new_str = ft_strjoin(new_str, "\n"); // leak here 
+        new_str = ft_strjoin(new_str, line); // leak here 
+    
+/*        line = readline("> ");
+        // ... error checking ...
+        
+        // Fix for newline addition
+        char *tmp = new_str;
+        new_str = ft_strjoin(tmp, "\n");
+        free(tmp);
+        
+        // Fix for line addition
+        tmp = new_str;
+        new_str = ft_strjoin(tmp, line);
+        free(tmp);
+        free(line);
+*/
+    }
+    new_str = ft_strjoin(new_str, "\n");
+    history = ft_strjoin(new_str2, new_str);
+    test = ft_split_built(history, '\'');
+    add_history(history);
+    // printf ("new_str = %s\n", test[1]);
+    // free(history);
+    return (test[1]);
+}
+
+static char *ft_handle_single_quote(const char **input, t_parse_context *ctx) 
 {
     const char *start;
-    char *content;
+    char *content = NULL;
     size_t i;
 
     i = 0;
@@ -237,8 +290,22 @@ static char *ft_handle_single_quote(const char **input)
         i++;
     if ((*input)[i] != '\'')
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed single quote\n");
-        return (NULL);
+        // ft_printf_fd(STDERR_FILENO, "minishell: syntax error: unclosed single quote\n");
+        // return (NULL);
+        if ((*input)[i] != '\'')
+        {
+            char    *test;
+            test = ft_eof_single_quote(*input, ctx);
+            // printf("input = %s\n", *input);
+            if (!test)
+                return (NULL);
+            // tmp = ft_extract_quotent(start, i);
+            content = ft_concatent_content(content, test);
+            if (!content)
+                return (NULL);
+            (*input) += i + 1;
+            return (content);
+        }
     }
     content = ft_strndup(start, i);
     if (!content)
@@ -252,17 +319,17 @@ static char *ft_handle_single_quote(const char **input)
 
 char *ft_handle_quote(t_parse_context *ctx) 
 {
-    char *content = NULL;
+    char *content;
 
-    if (**ctx->input == '\'') 
+    if (**ctx->input == '\'')
     {
-        content = ft_handle_single_quote(ctx->input);
+        content = ft_handle_single_quote(ctx->input, ctx);
     } 
     else if (**ctx->input == '\"')
     {
         content = ft_handle_double_quote(ctx->input, ctx);
-
     }
+
     if (!content)
     {
         ft_printf_fd(STDERR_FILENO, "minishell: error while processing quotes\n");

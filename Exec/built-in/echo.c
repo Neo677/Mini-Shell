@@ -88,8 +88,8 @@ void    ft_echo(char *input)
     char    *str;
 
     i = 0;
-    // i = skip_built(input, 0);
-    // i = skip_space(input, i);
+    i = skip_built(input, 0);
+    i = skip_space(input, i);
     if (!input[i])
     {
         write(1, "\n", 1);

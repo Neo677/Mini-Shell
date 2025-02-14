@@ -51,29 +51,80 @@
 // static int	ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
 // int	ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
 
-void	ft_handle_quotes(t_parse_context *ctx)
-{
-	char	*token_value;
+    /*
+        verif si le token avant est coller a la detection des quotes 
+        export TEST="54"
+            Type: TOKEN_WORD, Value: 'export'
+            Type: TOKEN_WORD, Value: 'test1='
+            Type: TOKEN_WORD, Value: '52'
+        
+            he differe the 52 because he see a quote juste after the "=" so we need to tell him if there is no space before the quote 
+            at the detector i need to keep it in the same token
 
-	token_value = ft_handle_quote(ctx);
-	if (!token_value)
-	{
-		ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
-		return (ft_err_split(*ctx->cmd_lst, *ctx->head));
-	}
-	ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, token_value));
-	if (!*ctx->current)
-		*ctx->current = ft_init_command(ctx->cmd_lst);
-	if (!ft_add_arguments(*ctx->current, token_value))
-	{
-		ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
-		free(token_value);
-		return (ft_err_split(*ctx->cmd_lst, *ctx->head));
-	}
-	// free(token_value);
+        we suppose to have :
+            Type: TOKEN_WORD, Value: 'export'
+            Type: TOKEN_WORD, Value: 'test1=52'
+
+		Verifier si le caractere juste avant la quote (dans l'input original)
+		n'est pas un espace. on peut comparer avec la fin du token precedent.
+		Par exemple, si ctx->last_token existe et que le dernier caractere de sa valeur
+		n'est pas un espace, on concatene.
+*/
+
+void ft_handle_quotes(t_parse_context *ctx)
+{
+    char *quoted_content;
+	size_t len;
+
+	(void)len;
+    quoted_content = ft_handle_quote(ctx);
+    if (!quoted_content)
+    {
+        // ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
+        ft_err_split(*ctx->cmd_lst, *ctx->head);
+        return;
+    }
+    if (ctx->last_token && ctx->last_token->value)
+    {
+        len = ft_strlen(ctx->last_token->value);
+        if (len > 0 && ctx->last_token->value[len - 1] == '=')
+        {
+			printf(".%s.\n", ctx->last_token->value);
+            char *new_value = ft_strjoin_free(ctx->last_token->value, quoted_content);
+            if (!new_value)
+            {
+                // ft_printf_fd(STDERR_FILENO, "minishell: error: allocation failed during concatenation\n");
+                free(quoted_content);
+                ft_err_split(*ctx->cmd_lst, *ctx->head);
+                return;
+            }
+            ctx->last_token->value = new_value;
+            if (!ft_add_arguments(*ctx->current, quoted_content))
+            {
+                ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add quoted argument\n");
+                free(quoted_content);
+                ft_err_split(*ctx->cmd_lst, *ctx->head);
+                return;
+            }
+            free(quoted_content);
+            return;
+        }
+    }
+    ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, quoted_content));
+    if (!*ctx->current)
+        *ctx->current = ft_init_command(ctx->cmd_lst);
+    if (!ft_add_arguments(*ctx->current, quoted_content))
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add argument `%s`\n", quoted_content);
+        free(quoted_content);
+        ft_err_split(*ctx->cmd_lst, *ctx->head);
+        return;
+    }
+    ctx->last_token = ft_last_token(*ctx->head);
+    free(quoted_content);
 }
 
-static int	ft_handle_operators(t_parse_context *ctx)
+int	ft_handle_operators(t_parse_context *ctx)
 {
     char	*file;
 
@@ -119,7 +170,6 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 	var_value = print_node_by_key(ctx->env_cpy, var_name);
 	if (!var_value)
 		return (0);
-	printf("1.1\n");
 	if (check_variable_backslash_n_parse(var_value) == 1)
 	{
 		printf("1\n");
@@ -133,22 +183,26 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 		*ctx->current = ft_init_command(ctx->cmd_lst);
 	if (!ft_add_arguments(*ctx->current, var_value))
 		return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
+	free(var_value);
 	return (1);
 }
 
 int	ft_handle_words(t_parse_context *ctx)
 {
 	char	*token_value;
+	t_token *new_token;
 
 	token_value = ft_get_next_token(ctx->input);
 	if (token_value && *token_value != '\0')
 	{
-		ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, token_value));
+		new_token = ft_create_token(TOKEN_WORD, token_value);
+		ft_add_token(ctx->head, new_token);
+		ctx->last_token = new_token;
 		if (!*ctx->current)
 			*ctx->current = ft_init_command(ctx->cmd_lst);
 		if (!ft_add_arguments(*ctx->current, token_value))
 		{
-			ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add argument `%s`\n", token_value);
+			// ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add argument `%s`\n", token_value);
 			free(token_value);
 			return (0);
 		}
@@ -156,7 +210,6 @@ int	ft_handle_words(t_parse_context *ctx)
 	free(token_value);
 	return (1);
 }
-
 
 int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 {
@@ -171,6 +224,7 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 	ctx.input_exec = input;
 	ctx.env_cpy = env_cpy;
 	ctx.exit_status = 0;
+	ctx.last_token = NULL;
 	// ft_init_cmd(cmd_lst, current, ctx);
 	// ft_init_ctx(head, input, env_cpy, ctx);
 	if (!ft_check_syntax(input, &ctx))
@@ -205,8 +259,6 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 	*head = *ctx.head;
 	return (1);
 }
-
-
 
 // void	ft_split_token(t_token **head, const char *input)
 // {
