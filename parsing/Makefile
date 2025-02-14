@@ -6,7 +6,7 @@
 #    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 17:24:52 by thobenel          #+#    #+#              #
-#    Updated: 2025/02/11 14:35:12 by dpascal          ###   ########.fr        #
+#    Updated: 2025/02/13 22:25:06 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,8 +39,7 @@ SRCS =	add_arguments.c \
 		syntax_before.c \
 		start_minishell.c \
 		valid_token.c \
-		init_parse.c \
-		init_command.c \
+		replace_env.c \
 		../Exec/core/check_file.c \
 		../Exec/core/exec.c \
 		../Exec/core/cmd.c \

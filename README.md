@@ -15,8 +15,6 @@ Vous pouvez aussi trouver un pdf qui details le projet, c'etait notre 1er semain
 
 ![WELCOME](parsing/docs/adding_struct_cmd.drawio.png)
 
-https://docs.google.com/spreadsheets/d/1BPW7k81LJPhGv2fbi35NIIoOC_mGZXQQJDnV0SjulFs/edit?pli=1&gid=0#gid=0
-
 https://github.com/Dsite42/minishell/blob/master/minishell_evalsheet.pdf?utm_source=chatgpt.com
 
 https://github.com/mharriso/school21-checklists?utm_source=chatgpt.com
@@ -334,16 +332,7 @@ Wouah Hou
 # need to be fix (GLHF) 🪖🪖:
           
 
-char	*test_input(t_token *token);
-
-minishell> echo hello world
-FEIN1.0 = echo
-FEIN1.1 = echo
-FEIN2 = echo 
-FEIN1.0 = echo
-FEIN1.1 = echo hello
-FEIN1.0 = echo
-FEIN1.1 = echo helloworld
-FEIN3 = echo helloworld
-helloworld
-minishell> 
+     bash-5.2$ echo test"45"
+test45
+bash-5.2$ echo test "45"
+test 45

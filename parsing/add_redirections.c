@@ -37,14 +37,23 @@ int	ft_add_redirections_struct(t_command *cmd, int type, const char *file)
 	t_redirections	*current;
 
 	if (!cmd || !file)
-		return(ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token\n"), 0);
+	{
+		ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token\n");
+		return (258);
+	}
 	new_redir = malloc(sizeof(t_redirections));
 	if (!new_redir)
-		return (ft_printf_fd(STDERR_FILENO, "minishell: allocation error\n"), 0);
+	{
+		ft_printf_fd(STDERR_FILENO, "minishell: allocation error\n");
+		return (258);
+	}
 	new_redir->type = type;
 	new_redir->file = ft_strdup_v2(file);
 	if (!new_redir->file)
-		return(ft_printf_fd(STDERR_FILENO, "minishell: memory allocation error\n"), free(new_redir), 0);
+	{
+		ft_printf_fd(STDERR_FILENO, "minishell: memory allocation error\n");
+		return (258);
+	}
 	new_redir->next = NULL;
 	if (!cmd->redirections)
 		cmd->redirections = new_redir;

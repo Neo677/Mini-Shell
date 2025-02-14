@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   add_arguments.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:24:18 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/12 17:24:20 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/12 05:09:38 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,6 @@
     3) after we got the size we can add it as a node
 */
 
-static int    ft_utils_adding(t_command *cmd)
-{
-    int i;
-
-    i = 0;
-    if (cmd->arg)
-    {
-        while(cmd->arg[i])
-        {
-            i++;
-        }
-    }
-    return (i);
-}
-
 int ft_add_arguments(t_command *cmd, const char *arg)
 {
     int i;
@@ -48,13 +33,16 @@ int ft_add_arguments(t_command *cmd, const char *arg)
 
     if (!cmd || !arg)
         return (0);
-    i = ft_utils_adding(cmd);
+    i = 0;
+    if (cmd->arg)
+        while(cmd->arg[i])
+            i++;
     new_arg = malloc(sizeof(char *) * (i + 2));
     if (!new_arg)
         return (0);
-    j = 0;
     if (cmd->arg)
     {
+        j = 0;
         while (cmd->arg[j])
         {
             new_arg[j] = cmd->arg[j];
@@ -65,6 +53,7 @@ int ft_add_arguments(t_command *cmd, const char *arg)
     if (!new_arg)
         return(free(new_arg), 0);
     new_arg[i + 1] = NULL;
+    free(cmd->arg);
     cmd->arg = new_arg;
     return (1);
 }

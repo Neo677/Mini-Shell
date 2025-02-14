@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:18 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/12 17:25:19 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/13 02:25:36 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,167 @@
 // static int	ft_handle_operators(const char **input, t_token **head, t_command **cmd_lst, t_command **current)
 // int	ft_handle_env_vars(const char **input, t_token **head, t_command **cmd_lst, t_command **current, t_env **env_cpy)
 
-    /*
-        verif si le token avant est coller a la detection des quotes 
-        export TEST="54"
-            Type: TOKEN_WORD, Value: 'export'
-            Type: TOKEN_WORD, Value: 'test1='
-            Type: TOKEN_WORD, Value: '52'
-        
-            he differe the 52 because he see a quote juste after the "=" so we need to tell him if there is no space before the quote 
-            at the detector i need to keep it in the same token
+// void	ft_handle_quotes(t_parse_context *ctx)
+// {
+// 	char	*token_value;
 
-        we suppose to have :
-            Type: TOKEN_WORD, Value: 'export'
-            Type: TOKEN_WORD, Value: 'test1=52'
+// 	token_value = ft_handle_quote(ctx);
+// 	if (!token_value)
+// 	{
+// 		ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
+// 		return (ft_err_split(*ctx->cmd_lst, *ctx->head));
+// 	}
+// 	ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, token_value));
+// 	if (!*ctx->current)
+// 		*ctx->current = ft_init_command(ctx->cmd_lst);
+// 	if (!ft_add_arguments(*ctx->current, token_value))
+// 	{
+// 		ft_printf_fd(STDERR_FILENO, "minishell: error: invalid quoted string\n");
+// 		free(token_value);
+// 		return (ft_err_split(*ctx->cmd_lst, *ctx->head));
+// 	}
+// 	free(token_value);
+// }
 
-		Verifier si le caractere juste avant la quote (dans l'input original)
-		n'est pas un espace. on peut comparer avec la fin du token precedent.
-		Par exemple, si ctx->last_token existe et que le dernier caractere de sa valeur
-		n'est pas un espace, on concatene.
-*/
+
+
+// static int	ft_handle_operators(t_parse_context *ctx)
+// {
+//     char	*file;
+
+// 	if (!ft_handle_operator(ctx->head, ctx->input))
+// 		return (0);
+// 	if (**ctx->input == '|')
+// 	{
+// 		*ctx->current = ft_init_command(ctx->cmd_lst);
+// 		if (!*ctx->current)
+// 			return (ft_err_split_ope(*ctx->current, *ctx->head), 0);
+// 	}
+// 	else if (**ctx->input == '>' || **ctx->input == '<')
+// 	{
+// 		file = ft_get_next_token(ctx->input);
+// 		if (!file)
+// 			return (ft_err_bad_redirec(*ctx->cmd_lst, *ctx->head), 0);
+// 		if (!*ctx->current)
+// 			*ctx->current = ft_init_command(ctx->cmd_lst);
+// 		if (!ft_add_redirections_struct(*ctx->current, ft_identify_token((char *)(*ctx->input)), file))
+// 		{
+// 			ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add redirection for file `%s`\n", file);
+// 			free(file);
+// 			return (ft_err_split_ope(*ctx->cmd_lst, *ctx->head), 0);
+// 		}
+// 		free(file);
+// 	}
+// 	return (1);
+// }
+
+// int	ft_handle_env_vars(t_parse_context *ctx)
+// {
+//     char	*var_name;
+//     char	*var_value;
+
+// 	var_name = ft_extract_env_var(ctx->input);
+// 	if (!var_name)
+// 		return(ft_printf_fd(STDERR_FILENO, "minishell: error: invalid environment variable name\n"), 0);
+// 	if (ft_strcmp(var_name, "$$") == 0)
+// 	{
+// 		free(var_name);
+// 		var_value = ft_get_pid_str();
+// 	}
+// 	else
+// 	{
+// 		var_value = print_node_by_key(ctx->env_cpy, var_name);
+// 		free(var_name);
+// 	}
+// 	if (check_variable_backslash_n(var_value))
+// 		var_value = replace_with_space(var_value);
+// 	if (!var_value)
+// 		return(ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable\n"), 0);
+// 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
+// 	if (!*ctx->current)
+// 		*ctx->current = ft_init_command(ctx->cmd_lst);
+// 	if (!ft_add_arguments(*ctx->current, var_value))
+// 		return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
+// 	return (1);
+// }
+
+// int	ft_handle_words(t_parse_context *ctx)
+// {
+// 	char	*token_value;
+
+// 	token_value = ft_get_next_token(ctx->input);
+// 	if (token_value && *token_value != '\0')
+// 	{
+// 		ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, token_value));
+// 		if (!*ctx->current)
+// 			*ctx->current = ft_init_command(ctx->cmd_lst);
+// 		if (!ft_add_arguments(*ctx->current, token_value))
+// 		{
+// 			ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add argument `%s`\n", token_value);
+// 			free(token_value);
+// 			return (0);
+// 		}
+// 	}
+// 	free(token_value);
+// 	return (1);
+// }
+
+// int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
+// {
+// 	t_parse_context ctx;
+// 	t_command *cmd_lst = NULL;
+// 	t_command *current = NULL;
+
+// 	ctx.cmd_lst = &cmd_lst;
+// 	ctx.current = &current;
+// 	ctx.head = head;
+// 	ctx.input = &input;
+// 	ctx.input_exec = input;
+// 	ctx.env_cpy = env_cpy;
+// 	if (!ft_check_syntax(input))
+// 		return (0);
+// 	while (**ctx.input)
+// 	{
+// 		if (**ctx.input == ' ' || **ctx.input == '\t')
+// 			(*ctx.input)++;
+// 		else if (**ctx.input == '\'' || **ctx.input == '"')
+// 		{
+// 			ft_handle_quotes(&ctx);
+// 			if (!ctx.current)
+// 				return (0);
+// 		}
+// 		else if (**ctx.input == '|' || **ctx.input == '>' || **ctx.input == '<')
+// 		{
+// 			if (!ft_handle_operators(&ctx))
+// 				return (0);
+// 		}
+// 		else if (**ctx.input == '$')
+// 		{
+// 			if (!ft_handle_env_vars(&ctx))
+// 				return (0);
+// 		}
+// 		else
+// 		{
+// 			if (!ft_handle_words(&ctx))
+// 				return (0);
+// 		}
+// 	}
+// 	if (ft_valid_token(*ctx.head) == 0)
+// 	{
+// 		ft_printf_fd(STDERR_FILENO, "minishell: syntax error in token list\n");
+// 		return (0);
+// 	}
+// 	*head = *ctx.head;
+// 	return (1);
+// }
+
+
+
+
+
+
+
+
 
 void ft_handle_quotes(t_parse_context *ctx)
 {
@@ -221,7 +363,7 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 	if (check_variable_backslash_n_parse(var_value) == 1)
 	{
 		printf("1\n");
-		var_value = replace_with_space(var_value);
+		var_value = replace_with_space_parse(var_value);
 	}
 	if (!var_value)
 		return(0);
@@ -307,6 +449,22 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 	*head = *ctx.head;
 	return (1);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // void	ft_split_token(t_token **head, const char *input)
 // {
@@ -472,100 +630,3 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy)
 // 	ft_free_commande_lst(cmd_lst);
 // }
 
-// #include "minishell.h"
-
-// /*
-//  * ft_check_syntax
-//  * Vérifie la syntaxe de la chaîne d'entrée.
-//  * Retourne 1 si la syntaxe est valide, 0 sinon.
-//  *
-//  * Vérifications réalisées :
-//  *  - Les quotes simples et doubles doivent être correctement fermées.
-//  *  - Un pipe ('|') ne doit pas être en début de ligne, ni suivi uniquement d'espaces ou d'un autre opérateur.
-//  *  - Une redirection ('>' ou '<') doit être suivie d'un token non vide (après espaces) qui n'est pas un autre opérateur.
-//  *  - Pour les redirections, on autorise ">" ou ">>", et "<" ou "<<" uniquement.
-//  */
-// int ft_check_syntax(const char *input)
-// {
-//     int quote = 0;
-//     int i = 0;
-
-//     while (input[i])
-//     {
-//         // Gestion des quotes
-//         if (input[i] == '\'' || input[i] == '"')
-//         {
-//             if (quote == 0)
-//                 quote = input[i];           // Ouvre une quote
-//             else if (quote == input[i])
-//                 quote = 0;                  // Ferme la quote
-//             i++;
-//             continue;
-//         }
-//         // Vérifications hors quotes
-//         if (quote == 0)
-//         {
-//             // Vérifier le pipe
-//             if (input[i] == '|')
-//             {
-//                 // Erreur si pipe en début de ligne
-//                 if (i == 0)
-//                 {
-//                     ft_printf_fd(2, "minishell: syntax error near unexpected token `|'\n");
-//                     return (0);
-//                 }
-//                 // Vérifier le caractère suivant le pipe
-//                 int j = i + 1;
-//                 while (input[j] && (input[j] == ' ' || input[j] == '\t'))
-//                     j++;
-//                 if (!input[j])
-//                 {
-//                     ft_printf_fd(2, "minishell: syntax error near unexpected token `newline'\n");
-//                     return (0);
-//                 }
-//                 if (input[j] == '|' || input[j] == '>' || input[j] == '<')
-//                 {
-//                     ft_printf_fd(2, "minishell: syntax error near unexpected token `%c'\n", input[j]);
-//                     return (0);
-//                 }
-//             }
-//             // Vérifier les redirections
-//             if (input[i] == '>' || input[i] == '<')
-//             {
-//                 char op = input[i];
-//                 int count = 0;
-//                 // Compter le nombre d'opérateurs consécutifs
-//                 while (input[i] == op)
-//                 {
-//                     count++;
-//                     i++;
-//                 }
-//                 // Pour '>' et '<', on autorise 1 ou 2 caractères (pour >> et <<)
-//                 if ((op == '>' && (count < 1 || count > 2)) ||
-//                     (op == '<' && (count < 1 || count > 2)))
-//                 {
-//                     ft_printf_fd(2, "minishell: syntax error near unexpected token `%.*s'\n", count, &input[i - count]);
-//                     return (0);
-//                 }
-//                 // Sauter les espaces suivant la redirection
-//                 while (input[i] && (input[i] == ' ' || input[i] == '\t'))
-//                     i++;
-//                 if (!input[i] || input[i] == '|' || input[i] == '>' || input[i] == '<')
-//                 {
-//                     ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n",
-//                         (!input[i] ? "newline" : (input[i] == '|' ? "|" : (op == '>' ? ">" : "<"))));
-//                     return (0);
-//                 }
-//                 continue; // On continue sans i++ car i a déjà été avancé
-//             }
-//         }
-//         i++;
-//     }
-//     // Si une quote reste ouverte à la fin
-//     if (quote != 0)
-//     {
-//         ft_printf_fd(2, "minishell: syntax error: unclosed quote\n");
-//         return (0);
-//     }
-//     return (1);
-// }

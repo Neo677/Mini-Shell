@@ -36,7 +36,6 @@
 	need to return the name of the heredoc
 		(For my favorite executeur 💪)
 */
-
 t_token_type	ft_identify_token(char *str)
 {
 	t_token_type	type;

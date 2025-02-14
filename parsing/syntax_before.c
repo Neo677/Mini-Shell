@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_before.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:20:12 by thobenel          #+#    #+#             */
-/*   Updated: 2025/01/17 12:34:36 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/12 01:14:22 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// static bool	ft_set_syntax_quote(const char *input, int *quote)
+// {
+// 	if (*quote == 0)
+// 		*quote = *input;
+// 	else if (*quote == *input)
+// 		*quote = 0;
+//     return (*quote != 0);
+// }
 
 static void    ft_pass_this_bro(t_parse_context *ctx)
 {
@@ -138,6 +147,39 @@ int  ft_check_syntax(const char *input, t_parse_context *ctx)
     }
     return (1);
 }
+
+// int	ft_check_syntax(const char *input)
+// {
+// 	char	current;
+// 	int		quote;
+
+// 	quote = 0;
+// 	while (*input)
+// 	{
+// 		if (*input == ' ')
+// 			input++;
+// 		else if (*input == '\'' || *input == '\"')
+// 			ft_set_syntax_quote(input, &quote);
+// 		else if (*input == '|')
+// 		{
+// 			if (ft_set_syntax_pipe(input) == 0)
+// 				return (0);
+// 			input++;
+// 		}
+// 		else if (*input == '<' || *input == '>')
+// 		{
+// 			current = *input;
+// 			if (ft_set_syntax_redir(current, input) == 0)
+// 				return (0);
+// 			input++;
+// 				return (0);
+// 		}
+// 		input++;
+// 	}
+// 	if (quote != 0)
+// 		return (ft_printf("[🚨 ERROR 🚨] Syntax error: unclosed quote\n"), 0);
+// 	return (1);
+// }
 
 /*
     the purpose of the syntax fonction :

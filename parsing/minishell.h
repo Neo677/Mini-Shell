@@ -216,7 +216,7 @@ size_t ft_strnlen(const char *s, size_t max);
 char *ft_strncpy(char *dst, const char *src, size_t len);
 char *ft_strndup(const char *src, size_t size);
 int ft_strcmp_parsing(char *s1, char *s2);
-char    *replace_with_space(char *str);
+char    *replace_with_space_parse(char *str);
 int check_variable_backslash_n_parse(char *value);
 int ft_isspace(char c);
 

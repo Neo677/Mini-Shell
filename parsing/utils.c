@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:12:14 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/04 17:12:16 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/12 21:48:26 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int ft_strcmp_parsing(char *s1, char *s2)
 	return (s1[i]-s2[i]);
 }
 
-char    *replace_with_space(char *str)
+char    *replace_with_space_parse(char *str)
 {
     char    *new_str;
     int i;

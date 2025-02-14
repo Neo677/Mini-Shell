@@ -114,7 +114,6 @@ void ft_handle_word(t_token **head, const char **input)
 
     token = ft_get_next_token(input);
     ft_add_token(head, ft_create_token(TOKEN_WORD, token));
-    free(token);
 }
 
 /* Gestion des variables d'environnement */

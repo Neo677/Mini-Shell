@@ -38,17 +38,22 @@
 
 char *ft_get_pid_str(void)
 {
-    char    **argv;
+    char    *argv[4];
     char    *envp[1];
     int      fd_pipe[2];
     pid_t    pid;
     char     buffer[32];
     int      nread;
 
-    argv = (char*[]) { "/bin/sh", "-c", "echo $PPID", NULL };
+    argv[0] = "/bin/sh";
+    argv[1] = "-c";
+    argv[2] = "echo $PPID";
+    argv[3] = NULL;
     envp[0] = NULL;
+
     if (pipe(fd_pipe) == -1)
         return (ft_strdup("0"));
+
     pid = fork();
     if (pid == 0)
     {
@@ -100,14 +105,16 @@ char *ft_extract_env_var(const char **input)
     if ((*input)[0] == '$' && (*input)[1] == '?')
     {
         *input += 2;
-        return (ft_strdup("$?"));
+        return (ft_strdup("?"));
     }
     (*input)++;
     if (!ft_isalpha(**input) && **input != '_')
         return (ft_strdup("$"));
+
     start = *input;
     while (**input && (ft_isalnum(**input) || **input == '_'))
         (*input)++;
+
     var_name = ft_strndup(start, *input - start);
     return (var_name);
 }

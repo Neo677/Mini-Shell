@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
- 
 int ft_valid_redirections(const t_token *token)
 {
     while (token)
@@ -95,16 +94,16 @@ int ft_validate_pipes(t_token *token)
     
     prev = NULL;
     if (!token || token->type == TOKEN_PIPE)
-        return (ft_error_pipe(token->value), 0);
+        return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
 
     while (token) 
     {
         if (token->type == TOKEN_PIPE) 
         {
             if (!prev || prev->type == TOKEN_PIPE) 
-                return (ft_error_pipe(token->value), 0);
+                return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
             if (!token->next)
-                return (ft_error_pipe(token->value), 0);
+                return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error: pipe at the end\n"), 0);
         }
         prev = token;
         token = token->next;
@@ -134,19 +133,18 @@ int ft_valid_env_var(t_token *token)
 {
     if (!token)
         return (1);
+        
     while (token)
     {
         if (token->type == TOKEN_ENV_VAR)
         {
             if (!token->value || ft_is_empty_string(token->value))
             {
-                printf("here2\n");
                 ft_printf_fd(STDERR_FILENO, "minishell: invalid environment variable syntax\n");
                 return (0);
             }
             if (ft_strchr(token->value, '$') && ft_strlen(token->value) == 1)
             {
-                printf("here3\n");
                 ft_printf_fd(STDERR_FILENO, "minishell: $: ambiguous redirect\n");
                 return (0);
             }

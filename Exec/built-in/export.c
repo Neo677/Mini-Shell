@@ -156,7 +156,7 @@ void    ft_export(t_env **env_cpy1, char **key_value)
     }
     while (key_value[i])
     {
-        // printf("key = %s\n", key_value[i]);
+        printf("key = %s\n", key_value[i]);
         if ((key_value[i][0] >= 'a' && key_value[i][0] <= 'z') || (key_value[i][0] >= 'A' && key_value[i][0] <= 'Z') || key_value[i][0] == '_')
         {
             current = *env_cpy1;
