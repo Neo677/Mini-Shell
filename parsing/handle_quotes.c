@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 08:38:44 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/13 02:28:05 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/17 15:08:56 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ char    *ft_eof_quote(const char *input, t_parse_context *ctx)
             free(new_str);
             return (NULL);
         }
-        if (ft_strcmp2(line, "\"") == 0)
+        if (ft_strcmp(line, "\"") == 0)
         {
             free(line);
             break ;
@@ -130,30 +130,30 @@ char    *ft_eof_quote(const char *input, t_parse_context *ctx)
     return (test[1]);
 }
 
-char    *replace_with_space(char *str)
-{
-    char    *new_str;
-    int i;
-    int j;
+// char    *replace_with_space_parse(char *str)
+// {
+//     char    *new_str;
+//     int i;
+//     int j;
 
-    new_str = malloc(sizeof(char)* ft_strlen(str) + 1);
-    if (!new_str)
-        return (str);
-    i = 0;
-    j = 0;
-    while (str[i])
-    {
-        if (str[i] == '\n')
-            new_str[j] = ' ';
-        else  
-            new_str[j] = str[i];
-        i++;
-        j++;
-    }
-    new_str[j] = '\0';
-    printf("new_str sans space = %s\n", new_str);
-    return (new_str);
-}
+//     new_str = malloc(sizeof(char)* ft_strlen(str) + 1);
+//     if (!new_str)
+//         return (str);
+//     i = 0;
+//     j = 0;
+//     while (str[i])
+//     {
+//         if (str[i] == '\n')
+//             new_str[j] = ' ';
+//         else  
+//             new_str[j] = str[i];
+//         i++;
+//         j++;
+//     }
+//     new_str[j] = '\0';
+//     printf("new_str sans space = %s\n", new_str);
+//     return (new_str);
+// }
 
 static char *ft_handle_double_quote(const char **input, t_parse_context *ctx) 
 {

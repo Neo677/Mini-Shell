@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:24:46 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/14 00:09:36 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/17 00:17:09 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,13 @@ int main(int ac, char **av, char **env)
 		{
 			check_heredoc(token, &pipex);
 			check_file(token);
-			child_process(&pipex, cmd_lst, &exec, env);
+			if (cmd_lst->arg)
+				child_process(&pipex, cmd_lst, &exec, env);
 		}
 		clear_file(pipex.filename_hd);
 		free(exec.input);
 	}
+	free_env_list(exec.env_cpy);
 	free_tab(exec.tab);
 	ft_free_token(token);
 	rl_clear_history(); // (LINUX)

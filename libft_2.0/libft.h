@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:42:50 by thobenel          #+#    #+#             */
-/*   Updated: 2024/05/06 15:59:04 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:33:21 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <string.h>
 # include <unistd.h>
 
-# include "../Exec/libft/printf/ft_printf.h"
+# include "../exec/libft/printf/ft_printf.h"
 
 char					*ft_strrchr(const char *s, int c);
 char					*ft_strnstr(const char *s1, const char *s2, size_t n);
