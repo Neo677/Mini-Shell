@@ -51,10 +51,11 @@ int main(int ac, char **av, char **env)
 		clear_file(pipex.filename_hd);
 		free(exec.input);
 	}
+	if (exec.tab)
 	free_tab(exec.tab);
 	ft_free_token(token);
-	rl_clear_history(); // (LINUX)
-	// clear_history(); // (MACOS)
+	// rl_clear_history(); // (LINUX)
+	clear_history(); // (MACOS)
 }
 
 

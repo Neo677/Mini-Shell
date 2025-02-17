@@ -258,7 +258,6 @@ void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 					return ;
 				}
 			}
-
 			if (check_built_in(current->arg[0], exec) == 1)
 			{
 				save_stdin = dup(STDIN_FILENO);

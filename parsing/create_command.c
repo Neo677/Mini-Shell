@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 /*
-  Creates a new command and adds it to the end of the command list.
+  Creates a new command and adds it to the end ∫bof the command list.
  
   1) Allocates memory for a new command.
   2) Initializes the new command's fields:
@@ -55,26 +55,11 @@ t_command *ft_init_command(t_command **lst)
     return (new_cmd);
 }
 
-/*
-    1) PIPE = if we meet a pipe, on go to the next command
-    2) WORD = 
-        A) if there is not current command we creat it
-        B) and add the word as an arguments
-    3) REDIRECTION = 
-        A) if there is not current command we creat it
-        B) check if the next token is a word
-        C) sotck the file name 
-        D) add the redirections to a struct
-        E) advance of 2 token
-            1 = (<, >, <<, >>)
-            2 = the word it follow (filename)
-    4) ELSE no recognizes the token
-*/
-
 int ft_create_command_lst(t_token *token, t_command **lst)
 {
     t_command *current;
     const char *file;
+    int ret;
 
     current = NULL;
     while (token)
@@ -89,9 +74,9 @@ int ft_create_command_lst(t_token *token, t_command **lst)
         }
         else if (token->type == TOKEN_WORD)
         {
-            if (!current)
-                current = ft_init_command(lst);
-            if (!current || !ft_add_arguments(current, token->value))
+            if (!current && !(current = ft_init_command(lst)))
+                return (258);
+            if (!ft_add_arguments(current, token->value))
             {
                 ft_printf_fd(STDERR_FILENO, "minishell: failed to add argument\n");
                 return (258);
@@ -100,26 +85,26 @@ int ft_create_command_lst(t_token *token, t_command **lst)
         }
         else if (ft_is_redirection(token))
         {
-            if (!current)
-                current = ft_init_command(lst);
-            if (!current || !token->next || token->next->type != TOKEN_WORD)
+            if (!current && !(current = ft_init_command(lst)))
+                return (258);
+            if (!token->next || token->next->type != TOKEN_WORD)
             {
-                ft_printf_fd(STDERR_FILENO, "minishell: memory allocation failed for command\n");
+                ft_printf_fd(STDERR_FILENO, "minishell: syntax error near redirection\n");
                 return (258);
             }
             file = token->next->value;
             if (!ft_add_redirections_struct(current, token->type, file))
             {
-                ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token \n");
+                ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token\n");
                 return (258);
             }
             token = token->next->next;
         }
         else if (token->type == TOKEN_ENV_VAR)
         {
-            if (!current)
-                current = ft_init_command(lst);
-            if (!current || !ft_add_arguments(current, token->value))
+            if (!current && !(current = ft_init_command(lst)))
+                return (258);
+            if (!ft_add_arguments(current, token->value))
             {
                 ft_printf_fd(STDERR_FILENO, "minishell: failed to add envrionnement varibles as arugments\n");
                 return (258);
@@ -135,3 +120,132 @@ int ft_create_command_lst(t_token *token, t_command **lst)
     return (1);
 }
 
+
+// Add these at the top of the file
+static void	ft_free_redirections(t_redirections *redir)
+{
+	t_redirections	*tmp;
+
+	while (redir)
+	{
+		tmp = redir;
+		redir = redir->next;
+		free(tmp->file);
+		free(tmp);
+	}
+}
+
+static void	ft_free_command(t_command *cmd)
+{
+	if (!cmd)
+		return ;
+	if (cmd->arg)
+	{
+		ft_free_array(cmd->arg);  // Assuming this exists to free char **
+	}
+	if (cmd->redirections)
+	{
+		ft_free_redirections(cmd->redirections);
+	}
+	free(cmd);
+}
+
+void	ft_free_command_list(t_command **lst)
+{
+	t_command	*tmp;
+
+	if (!lst || !*lst)
+		return ;
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		ft_free_command(*lst);
+		*lst = tmp;
+	}
+	*lst = NULL;
+}
+
+t_command *ft_init_command(t_command **lst)
+{
+    t_command *new_cmd;
+    t_command *last;
+
+    new_cmd = malloc(sizeof(t_command));
+    if (!new_cmd)
+    {
+        ft_printf_fd(STDERR_FILENO, "minishell: memory failed for t_command\n");
+        return (NULL);
+    }
+    new_cmd->arg = NULL;
+    new_cmd->redirections = NULL;
+    new_cmd->p_pipe = 0;
+    new_cmd->next = NULL;
+    if (*lst)
+    {
+        last = *lst;
+        while (last->next)
+            last = last->next;
+        last->next = new_cmd;
+    }
+    else
+        *lst = new_cmd;
+    return (new_cmd);
+}
+
+int ft_create_command_lst(t_token *token, t_command **lst)
+{
+    t_command *current;
+    const char *file;
+    int ret;
+
+    current = NULL;
+    while (token)
+    {
+        if (token->type == TOKEN_PIPE)
+        {
+            if (current)
+                current->p_pipe = 1;
+            current = NULL;
+            token = token->next;
+            continue;
+        }
+        else if (token->type == TOKEN_WORD)
+        {
+            if (!current && !(current = ft_init_command(lst)))
+            {
+                ft_free_command_list(lst);
+                return (258);
+            }
+            if (!ft_add_arguments(current, token->value))
+            {
+                ft_printf_fd(STDERR_FILENO, "minishell: failed to add argument\n");
+                ft_free_command_list(lst);
+                return (258);
+            }
+            token = token->next;
+        }
+        else if (ft_is_redirection(token))
+        {
+            if (!current && !(current = ft_init_command(lst)))
+            {
+                ft_free_command_list(lst);
+                return (258);
+            }
+            if (!token->next || token->next->type != TOKEN_WORD)
+            {
+                ft_printf_fd(STDERR_FILENO, "minishell: syntax error near redirection\n");
+                ft_free_command_list(lst);
+                return (258);
+            }
+            file = token->next->value;
+            if (!ft_add_redirections_struct(current, token->type, file))
+            {
+                ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token\n");
+                ft_free_command_list(lst);
+                return (258);
+            }
+            token = token->next->next;
+        }
+        else if (token->type == TOKEN_ENV_VAR)
+        {
+            if (!current && !(
