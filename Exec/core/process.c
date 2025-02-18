@@ -206,47 +206,49 @@ int execute_built_in(t_buit_in *exec, t_command *cmd, int fd)
 	return (0);
 }
 
-void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
-{
-	int	i;
-	int	pipe_fd[2];
-	int	prev_pipe;
-	int	cmd_count;
-	int	save_stdin;
-	int	save_stdout;
-	pid_t	pid;
-	t_command	*current;
-
-	i = 0;
-	prev_pipe = -1;
-	cmd_count = count_cmd(cmd);
-	current = cmd;
-	save_stdout = dup(STDOUT_FILENO);
-	if (cmd_count == 1)
+	void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 	{
-		if (check_built_in(current->arg[0], exec) == 1)
-		{
-			redir_input(current, pipex, exec);
-			execute_built_in(exec, current, 1);
-		}
-		else
-		{
-			pid = fork();
-			if (pid < 0)
-			{
-				perror("fork");
-				return ;
-			}
+		int	i;
+		int	pipe_fd[2];
+		int	prev_pipe;
+		int	cmd_count;
+		int	save_stdin;
+		int	save_stdout;
+		pid_t	pid;
+		t_command	*current;
 
-			if (pid == 0)
+		i = 0;
+		prev_pipe = -1;
+		cmd_count = count_cmd(cmd);
+		current = cmd;
+		save_stdout = dup(STDOUT_FILENO);
+		if (cmd_count == 1)
+		{
+			if (check_built_in(current->arg[0], exec) == 1)
 			{
 				redir_input(current, pipex, exec);
-				execute_cmd(pipex, current->arg, env);
+				execute_built_in(exec, current, 1);
 			}
+			else
+			{
+				pid = fork();
+				if (pid < 0)
+				{
+					perror("fork");
+					return ;
+				}
+
+				if (pid == 0)
+				{
+					signal(SIGINT, SIG_DFL);
+					signal(SIGQUIT, SIG_DFL);
+					redir_input(current, pipex, exec);
+					execute_cmd(pipex, current->arg, env);
+				}
+			}
+			wait(NULL);
 		}
-		wait(NULL);
-	}
-	else
+		else
 	{
 		while (i < cmd_count)
 		{

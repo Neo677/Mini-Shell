@@ -35,7 +35,6 @@
 // # include "../Exec/include/pipex.h"
 
 /*
-
 https://segfault42.github.io/posts/minishell/
                 🚨    🚨    🚨
 the easyes way to split the input is :
@@ -126,6 +125,7 @@ typedef struct s_parse_context
 	t_command **current;
 	t_env **env_cpy;
 	int		exit_status;
+	int		*last_exit_status;
 }			t_parse_context;
 
 
@@ -175,7 +175,7 @@ t_command *ft_init_command(t_command **lst);
 // void    ft_init_cmd(t_command *cmd_lst, t_command *current, t_parse_context ctx);
 // void    ft_init_ctx(t_token **head, const char *input, t_env **env_cpy, t_parse_context ctx);
 
-t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst);
+t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst, int *last_exit_status);
 
 void	ft_print_tab(char **tab);
 void	ft_print_redirections(t_redirections *head);
@@ -186,7 +186,7 @@ void ft_handle_quotes(t_parse_context *ctx);
 int	ft_handle_operators(t_parse_context *ctx);
 int	ft_handle_env_vars(t_parse_context *ctx);
 int	ft_handle_words(t_parse_context *ctx);
-int	ft_split_token(t_token **head, const char *input, t_env **env_cpy);
+int	ft_split_token(t_token **head, const char *input, t_env **env_cpy, int *last_exit_status);
 
 void	ft_abort(char *input);
 void	ft_abort_parse(char *input);
@@ -225,7 +225,8 @@ char *ft_valid_quotes(char **current, char quote_type);
 int ft_validay_quotes(t_token *token);
 int ft_validate_pipes(t_token *token);
 int ft_valid_env_var(t_token *token);
-int ft_valid_token(t_token *token);
+int ft_valid_token(t_token *token, t_parse_context *ctx);
 
+void    ft_pass_this_bro(t_parse_context *ctx);
 
 #endif	

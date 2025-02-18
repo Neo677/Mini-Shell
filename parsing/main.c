@@ -20,7 +20,9 @@ int main(int ac, char **av, char **env)
 	t_command *cmd_lst;
 	t_buit_in exec;
 	t_pipex pipex;
-	
+	int last_exit_status;
+
+	last_exit_status = 0;
 	token = NULL;
 	init_var_builtin(&exec);
 	init_var(&pipex);
@@ -37,9 +39,8 @@ int main(int ac, char **av, char **env)
 			ft_printf("exit\n");
 			break ; // ✅
 		}
-		
 		add_history(exec.input);
-		token = ft_parse_token(exec.input, &exec.env_cpy, &cmd_lst);
+		token = ft_parse_token(exec.input, &exec.env_cpy, &cmd_lst, &last_exit_status);
 		if (!token)
 			continue;
 		else
@@ -49,15 +50,12 @@ int main(int ac, char **av, char **env)
 			child_process(&pipex, cmd_lst, &exec, env);
 		}
 		clear_file(pipex.filename_hd);
-		free(exec.input);
+		// free(exec.input);
 	}
-	if (exec.tab)
+	ft_free_token(token);
+	ft_free_commande_lst(cmd_lst);
 	free_tab(exec.tab);
 	ft_free_token(token);
-	// rl_clear_history(); // (LINUX)
-	clear_history(); // (MACOS)
+	rl_clear_history(); // (LINUX)
+	// clear_history(); // (MACOS)
 }
-
-
-// a faire 
-// fonction pour executer built in a la place de execve dans l'execution

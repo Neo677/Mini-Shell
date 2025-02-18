@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 int ft_valid_redirections(const t_token *token)
 {
     while (token)
@@ -111,11 +112,6 @@ int ft_validate_pipes(t_token *token)
     return (1);
 }
 
-// int ft_isspace(char c)
-// {
-//     return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
-// }
-
 static bool ft_is_empty_string(const char *str)
 {
     if (!str)
@@ -153,22 +149,32 @@ int ft_valid_env_var(t_token *token)
     }
     return (1);
 }
-
-int ft_valid_token(t_token *token)
+int ft_valid_token(t_token *token, t_parse_context *ctx) 
 {
-    t_token *current;
-
-    current = token;
-    if (!ft_validate_pipes(token))
+    t_token *current = token;
+    
+    if (!ft_validate_pipes(current))
+    {
+        ctx->exit_status = 2;
         return (0);
-    if (!ft_valid_redirections(token))
+    }    
+    if (!ft_valid_redirections(current))
+    {
+        ctx->exit_status = 2;
         return (0);
-    if (!ft_valid_env_var(token))
+    }    
+    if (!ft_valid_env_var(current))
+    {
+        ctx->exit_status = 2;
         return (0);
+    }    
     while (current != NULL)
     {
         if (!ft_validay_quotes(current))
+        {
+            ctx->exit_status = 2;
             return (0);
+        }
         current = current->next;
     }
     return (1);

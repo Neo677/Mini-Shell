@@ -105,7 +105,7 @@ char *ft_extract_env_var(const char **input)
     if ((*input)[0] == '$' && (*input)[1] == '?')
     {
         *input += 2;
-        return (ft_strdup("?"));
+        return (ft_strdup("$?"));
     }
     (*input)++;
     if (!ft_isalpha(**input) && **input != '_')

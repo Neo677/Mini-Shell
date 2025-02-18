@@ -21,7 +21,7 @@
 //     return (*quote != 0);
 // }
 
-static void    ft_pass_this_bro(t_parse_context *ctx)
+void    ft_pass_this_bro(t_parse_context *ctx)
 {
     ctx->exit_status = 2;
 }
@@ -31,7 +31,7 @@ void    ft_print_err_global(int i)
     if (i == 0)
         ft_printf_fd(2, "minishell: syntax error: unclosed quote\n");
     if (i == 1)
-        ft_printf_fd(2, "minishell: syntax error near unexpected token `|'");
+        ft_printf_fd(2, "minishell: syntax error near unexpected token `|'\n");
     if (i == 2)
         ft_printf_fd(2, "minishell: syntax error near unexpected token `newline'\n");
 }
@@ -127,7 +127,7 @@ int  ft_check_syntax(const char *input, t_parse_context *ctx)
     int i;
     int res;
 
-    ctx->exit_status = 0;
+    // ctx->exit_status = 0;
     if (ft_set_syntax_quote(input, ctx) == 0)
         return (0);
     i = 0;
