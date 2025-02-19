@@ -182,7 +182,7 @@ void	ft_print_redirections(t_redirections *head);
 void	ft_print_command_lst(t_command *head);
 void	ft_print_tokens(t_token *head);
 
-void ft_handle_quotes(t_parse_context *ctx);
+int ft_handle_quotes(t_parse_context *ctx);
 int	ft_handle_operators(t_parse_context *ctx);
 int	ft_handle_env_vars(t_parse_context *ctx);
 int	ft_handle_words(t_parse_context *ctx);
@@ -231,4 +231,4 @@ void    ft_pass_this_bro(t_parse_context *ctx);
 
 void	ft_introw(void);
 
-#endif	
+#endif

@@ -47,7 +47,7 @@
 	nettoyage (libere la liste de commandes)
 */
 
-void ft_handle_quotes(t_parse_context *ctx)
+int ft_handle_quotes(t_parse_context *ctx)
 {
 	char *quote_content;
 	const char *input_ptr;
@@ -57,7 +57,7 @@ void ft_handle_quotes(t_parse_context *ctx)
 	input_ptr = *ctx->input;
 	quote_content = ft_handle_quote(ctx);
 	if (!quote_content)
-		return (ft_err_split(*ctx->cmd_lst, *ctx->head));
+		return (0);
 	if (input_ptr > ctx->input_exec)
 		prev_char = *(input_ptr - 1); // (*input)
 	else
@@ -69,7 +69,7 @@ void ft_handle_quotes(t_parse_context *ctx)
 		{
 			free(quote_content);
 			ft_err_split(*ctx->cmd_lst, *ctx->head);	
-			return;
+			return (0);
 		}
 		ctx->last_token->value = new;
 		if (!ft_add_arguments(*ctx->current, quote_content))
@@ -77,10 +77,10 @@ void ft_handle_quotes(t_parse_context *ctx)
 			// ft_printf_fd(2, "minishell: adding arguments error\n");
 			free(quote_content);
 			ft_err_split(*ctx->cmd_lst, *ctx->head);
-			return;
+			return (0);
 		}
 		free(quote_content);
-		return;
+		return (1);
 	}
 	ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, quote_content));
 	if (!*ctx->current)
@@ -90,10 +90,11 @@ void ft_handle_quotes(t_parse_context *ctx)
 		// ft_printf_fd
 		ft_err_split(*ctx->cmd_lst, *ctx->head);
 		free(quote_content);
-		return;
+		return (0);
 	}
 	ctx->last_token = ft_last_token(*ctx->head);
 	free(quote_content);
+	return (1);
 }
 
 int	ft_handle_operators(t_parse_context *ctx)
@@ -176,7 +177,7 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 		*ctx->current = ft_init_command(ctx->cmd_lst);
 	if (!ft_add_arguments(*ctx->current, var_value))
 		return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
-	free(var_value);
+	// free(var_value);
 	return (1);
 }
 
@@ -245,7 +246,14 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy, int *last
 		if (**ctx.input == ' ' || **ctx.input == '\t' || **ctx.input == ':')
 			(*ctx.input)++;
 		else if (**ctx.input == '\'' || **ctx.input == '"')
-			ft_handle_quotes(&ctx);
+		{
+			if (ft_handle_quotes(&ctx) == 0)
+			{
+				ft_free_commande_lst(*ctx.cmd_lst);
+				ft_free_token(*ctx.head);
+				return (*last_exit_status = ctx.exit_status, 0);
+			}
+		}
 		if (**ctx.input == '!')
 		{
 			ctx.exit_status = 1;
@@ -255,7 +263,6 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy, int *last
 		{
 			if (!ft_handle_operators(&ctx))
 			{
-				// *last_exit_status = ctx.exit_status;
 				ft_free_commande_lst(*ctx.cmd_lst);
 				ft_free_token(*ctx.head);
 				return (*last_exit_status = ctx.exit_status, 0);
@@ -266,7 +273,6 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy, int *last
 			if (!ft_handle_env_vars(&ctx))
 			{
 				printf("\n");
-				// *last_exit_status = ctx.exit_status;
 				ft_free_commande_lst(*ctx.cmd_lst);
 				ft_free_token(*ctx.head);
 				return (*last_exit_status = ctx.exit_status, 0);

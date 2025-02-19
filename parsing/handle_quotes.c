@@ -332,7 +332,7 @@ char *ft_handle_quote(t_parse_context *ctx)
 
     if (!content)
     {
-        ft_printf_fd(STDERR_FILENO, "minishell: error while processing quotes\n");
+        ft_printf_fd(STDERR_FILENO, "bash: syntax error: unexpected end of file\n");
         return (NULL);
     }
     return (content);

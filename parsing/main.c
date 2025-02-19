@@ -30,7 +30,7 @@ int main(int ac, char **av, char **env)
 	signal(SIGQUIT, signal_handler);
 	copy_env(env, &exec.env_cpy);
 	modify_node_value(&exec.env_cpy, "_", "/usr/bin/env");
-	ft_introw();
+	// ft_introw();
 	while (1)
 	{
 		exec.input = readline("minishell> ");
