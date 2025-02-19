@@ -148,7 +148,6 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 		free(var_value);
 		return (1);
 	}
-	printf("var name = %s\n", var_name);
 	if (strcmp(var_name, "$?") == 0)
 	{
 		free(var_name);
@@ -243,10 +242,15 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy, int *last
 	}
 	while (**ctx.input)
 	{
-		if (**ctx.input == ' ' || **ctx.input == '\t')
+		if (**ctx.input == ' ' || **ctx.input == '\t' || **ctx.input == ':')
 			(*ctx.input)++;
 		else if (**ctx.input == '\'' || **ctx.input == '"')
 			ft_handle_quotes(&ctx);
+		if (**ctx.input == '!')
+		{
+			ctx.exit_status = 1;
+			return (*last_exit_status = ctx.exit_status, 0);
+		}
 		else if (**ctx.input == '|' || **ctx.input == '>' || **ctx.input == '<')
 		{
 			if (!ft_handle_operators(&ctx))
@@ -261,6 +265,7 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy, int *last
 		{
 			if (!ft_handle_env_vars(&ctx))
 			{
+				printf("\n");
 				// *last_exit_status = ctx.exit_status;
 				ft_free_commande_lst(*ctx.cmd_lst);
 				ft_free_token(*ctx.head);

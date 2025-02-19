@@ -11,11 +11,11 @@
 # **************************************************************************** #
 
 NAME = minishell
-CC = gcc -g
+CC = gcc -g -ltinfo
 CFLAGS = -Wall -Wextra -Werror -I include #-fsanitize=leak
 LIBFT_DIR = ../libft_2.0
 LIBFT = $(LIBFT_DIR)/libft.a
-LIBFT_DIR_MATE = ../Exec/libft/printf
+LIBFT_DIR_MATE = ../exec/libft/printf
 LIBFT_MATE = $(LIBFT_DIR_MATE)/libftprintf.a
 READLINE = -lreadline
 
@@ -40,33 +40,32 @@ SRCS =	add_arguments.c \
 		start_minishell.c \
 		valid_token.c \
 		replace_env.c \
-		../Exec/core/check_file.c \
-		../Exec/core/exec.c \
-		../Exec/core/cmd.c \
-		../Exec/core/utils.c \
-		../Exec/core/free.c \
-		../Exec/core/split.c \
-		../Exec/core/process.c \
-		../Exec/core/init.c \
-		../Exec/core/init_var.c \
-		../Exec/core/utils_error.c \
-		../Exec/core/utils_test.c \
-		../Exec/core/here_doc.c \
-		../Exec/built-in/cd.c \
-		../Exec/built-in/cmd_node.c \
-		../Exec/built-in/cpy_env.c \
-		../Exec/built-in/init.c \
-		../Exec/built-in/echo.c \
-		../Exec/built-in/env.c \
-		../Exec/built-in/exit.c \
-		../Exec/built-in/export.c \
-		../Exec/built-in/free.c \
-		../Exec/built-in/pwd.c \
-		../Exec/built-in/split.c \
-		../Exec/built-in/unset.c \
-		../Exec/built-in/utils_built_in.c \
-		../Exec/built-in/utils.c \
-		../Exec/built-in/signal.c
+		matrix.c \
+		../exec/core/check_file.c \
+		../exec/core/exec.c \
+		../exec/core/cmd.c \
+		../exec/core/utils.c \
+		../exec/core/free.c \
+		../exec/core/split.c \
+		../exec/core/process.c \
+		../exec/core/init_var.c \
+		../exec/core/utils_error.c \
+		../exec/core/here_doc.c \
+		../exec/built-in/cd.c \
+		../exec/built-in/cmd_node.c \
+		../exec/built-in/cpy_env.c \
+		../exec/built-in/init.c \
+		../exec/built-in/echo.c \
+		../exec/built-in/env.c \
+		../exec/built-in/exit.c \
+		../exec/built-in/export.c \
+		../exec/built-in/free.c \
+		../exec/built-in/pwd.c \
+		../exec/built-in/split.c \
+		../exec/built-in/unset.c \
+		../exec/built-in/utils_built_in.c \
+		../exec/built-in/utils.c \
+		../exec/built-in/signal.c
 
 OBJS = $(SRCS:.c=.o)
 

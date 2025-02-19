@@ -25,10 +25,22 @@
     3) after we got the size we can add it as a node
 */
 
+static void ft_add_arg_utls(t_command *cmd, char **new_arg)
+{
+    int i;
+
+    i = 0;
+    while (cmd->arg[i])
+    {
+        new_arg[i] = cmd->arg[i];
+        i++;
+    }
+}
+
 int ft_add_arguments(t_command *cmd, const char *arg)
 {
     int i;
-    int j;
+    // int j;
     char **new_arg;
 
     if (!cmd || !arg)
@@ -41,14 +53,7 @@ int ft_add_arguments(t_command *cmd, const char *arg)
     if (!new_arg)
         return (0);
     if (cmd->arg)
-    {
-        j = 0;
-        while (cmd->arg[j])
-        {
-            new_arg[j] = cmd->arg[j];
-            j++;
-        }
-    }
+        ft_add_arg_utls(cmd, new_arg);
     new_arg[i] = ft_strdup_v2(arg);
     if (!new_arg)
         return(free(new_arg), 0);

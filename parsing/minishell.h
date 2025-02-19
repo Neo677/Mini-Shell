@@ -13,7 +13,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../Exec/built-in/built_in.h"
+# include "../exec/include/exec.h"
 
 
 # include <unistd.h>
@@ -165,10 +165,10 @@ int	ft_update_ptr_input(const char **input, size_t *i, const char **start);
 char    *ft_strjoin_free(char *s1, char *s2);
 char    *ft_eof_double_quote(const char *input, t_parse_context *ctx);
 char    *ft_eof_single_quote(const char *input, t_parse_context *ctx);
-char *ft_handle_quote(t_parse_context *ctx); 
+char *ft_handle_quote(t_parse_context *ctx);
 
-void ft_handle_sig_int(int sig);
-void ft_handle_sig_quit(int sig);
+// void ft_handle_sig_int(int sig);
+// void ft_handle_sig_quit(int sig);
 
 t_command *ft_init_command(t_command **lst);
 
@@ -192,7 +192,7 @@ void	ft_abort(char *input);
 void	ft_abort_parse(char *input);
 void	ft_abort_cmd(char *input, t_token *token);
 
-void    ft_set_syntax_redir_1(int k, int len, char op);
+void ft_set_syntax_redir_1(int len, char op);
 void    ft_set_syntax_redir_2(const char *input, int j);
 int  ft_check_syntax(const char *input, t_parse_context *ctx);
 
@@ -223,10 +223,12 @@ int ft_isspace(char c);
 int ft_valid_redirections(const t_token *token);
 char *ft_valid_quotes(char **current, char quote_type); 
 int ft_validay_quotes(t_token *token);
-int ft_validate_pipes(t_token *token);
+int ft_validate_pipes(t_token *token, t_parse_context *ctx);
 int ft_valid_env_var(t_token *token);
 int ft_valid_token(t_token *token, t_parse_context *ctx);
 
 void    ft_pass_this_bro(t_parse_context *ctx);
+
+void	ft_introw(void);
 
 #endif	

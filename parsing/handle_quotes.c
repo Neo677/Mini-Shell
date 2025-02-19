@@ -108,12 +108,12 @@ char    *ft_eof_double_quote(const char *input, t_parse_context *ctx)
         line = readline("> ");
         if (line == NULL)
         {
-            ft_printf_fd(2, "bash: unexpected EOF while looking for matching `\"'");
+            ft_printf_fd(2, "bash: unexpected EOF while looking for matching `\"'\n");
             free(line);
             free(new_str);
             return (NULL);
         }
-        if (ft_strcmp2(line, "\"") == 0)
+        if (ft_strcmp(line, "\"") == 0)
         {
             free(line);
             break ;
@@ -239,12 +239,12 @@ char    *ft_eof_single_quote(const char *input, t_parse_context *ctx)
         line = readline("> ");
         if (line == NULL)
         {
-            ft_printf_fd(2, "bash: unexpected EOF while looking for matching `\''");
+            ft_printf_fd(2, "bash: unexpected EOF while looking for matching `\''\n");
             free(line);
             free(new_str);
             return (NULL);
         }
-        if (ft_strcmp2(line, "\'") == 0)
+        if (ft_strcmp(line, "\'") == 0)
         {
             free(line);
             break ;

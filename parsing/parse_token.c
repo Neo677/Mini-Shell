@@ -46,7 +46,7 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst,
     if (!ft_split_token(&token, input, env_cpy, last_exit_status))
     {
         // ft_printf_fd(STDERR_FILENO, "minishell: lexer error: failed to tokenize input\n");
-        ft_free_token(token);
+        // ft_free_token(token);
         return (NULL);
     }
     // if (!ft_valid_token(token))
@@ -63,6 +63,6 @@ t_token *ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst,
         ft_free_commande_lst(*cmd_lst);
         return (NULL);
     }
-//    ft_print_command_lst(*cmd_lst);
+    // ft_print_command_lst(*cmd_lst);
     return (token);
 }

@@ -30,7 +30,7 @@ int main(int ac, char **av, char **env)
 	signal(SIGQUIT, signal_handler);
 	copy_env(env, &exec.env_cpy);
 	modify_node_value(&exec.env_cpy, "_", "/usr/bin/env");
-	// ft_intro();
+	ft_introw();
 	while (1)
 	{
 		exec.input = readline("minishell> ");
@@ -47,15 +47,17 @@ int main(int ac, char **av, char **env)
 		{
 			check_heredoc(token, &pipex);
 			check_file(token);
-			child_process(&pipex, cmd_lst, &exec, env);
+			if (cmd_lst->arg)
+				child_process(&pipex, cmd_lst, &exec, env);
 		}
+		ft_free_token(token);
+		ft_free_commande_lst(cmd_lst);
+		free(exec.input);
 		clear_file(pipex.filename_hd);
-		// free(exec.input);
 	}
-	ft_free_token(token);
-	ft_free_commande_lst(cmd_lst);
-	free_tab(exec.tab);
-	ft_free_token(token);
+	free_env_list(exec.env_cpy);
+	// free_tab(exec.tab);
 	rl_clear_history(); // (LINUX)
+	// rl_clear_history(); // (LINUX)
 	// clear_history(); // (MACOS)
 }

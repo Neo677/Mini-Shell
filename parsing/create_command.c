@@ -223,21 +223,22 @@ int ft_create_command_lst(t_token *token, t_command **lst)
             current = NULL;
             token = token->next;
             continue;
+            // ft_create_cmd_pipe(t_command *current, t_token *token)
         }
         else if (token->type == TOKEN_WORD)
         {
             if (!current && !(current = ft_init_command(lst)))
             {
-                ft_free_command_list(lst);
-                return (258);
+                return (ft_free_command_list(lst), 0);
             }
             if (!ft_add_arguments(current, token->value))
             {
                 ft_printf_fd(STDERR_FILENO, "minishell: failed to add argument\n");
-                ft_free_command_list(lst);
-                return (258);
+                return (ft_free_command_list(lst), 0);
             }
             token = token->next;
+            // if (ft_create_cmd_word(t_command *current, t_token *token, t_command **lst) == 0)
+            //     return (0);
         }
         else if (ft_is_redirection(token))
         {
@@ -260,6 +261,8 @@ int ft_create_command_lst(t_token *token, t_command **lst)
                 return (258);
             }
             token = token->next->next;
+            // if (!ft_create_cmd_redirect(t_command *current, t_token *token, t_command **lst, const char *file) == 0)
+            //     return (0);
         }
         else if (token->type == TOKEN_ENV_VAR)
         {
@@ -275,12 +278,13 @@ int ft_create_command_lst(t_token *token, t_command **lst)
                 return (258);
             }
             token = token->next;
+            // if (!ft_create_cmd_env(t_command *current, t_token *token, t_command **lst) == 0)
+            //     return (0);
         }
         else
         {
             ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token '%s'\n", token->value);
-            ft_free_command_list(lst);
-            return (258);
+            return (ft_free_command_list(lst), 0);
         }
     }
     return (1);
