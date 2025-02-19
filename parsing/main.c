@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:24:46 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/17 00:17:09 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/18 15:02:44 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int main(int ac, char **av, char **env)
 	init_var_builtin(&exec);
 	init_var(&pipex);
 	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 	copy_env(env, &exec.env_cpy);
 	modify_node_value(&exec.env_cpy, "_", "/usr/bin/env");
 	// ft_intro();
@@ -47,18 +47,25 @@ int main(int ac, char **av, char **env)
 			check_heredoc(token, &pipex);
 			check_file(token);
 			if (cmd_lst->arg)
+			{
 				child_process(&pipex, cmd_lst, &exec, env);
+				signal(SIGINT, signal_handler);
+				if (exec.exit_bh == 1)
+				{
+					free_all(&exec);
+					ft_free_token(token);
+					clear_file(pipex.filename_hd);
+					rl_clear_history();
+					return (exec.exit_code_bh);
+				}
+			}	
+			
 		}
 		clear_file(pipex.filename_hd);
 		free(exec.input);
 	}
-	free_env_list(exec.env_cpy);
-	free_tab(exec.tab);
+	free_all(&exec);
 	ft_free_token(token);
 	rl_clear_history(); // (LINUX)
 	// clear_history(); // (MACOS)
 }
-
-
-// a faire 
-// fonction pour executer built in a la place de execve dans l'execution

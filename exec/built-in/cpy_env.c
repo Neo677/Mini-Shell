@@ -27,11 +27,46 @@ int check_value(char *str)
     return (1);
 }
 
-char    **split_in_two(char *str, char c)
+// char    **split_in_two(char *str, char c)
+// {
+//     int i;
+//     int j;
+//     char    **tab;
+
+//     tab = malloc(sizeof(char *) * 3);
+//     if (!tab)
+//         return (NULL);
+//     tab[0] = NULL;
+//     tab[1] = NULL;
+//     tab[2] = NULL;
+//     tab[0] = malloc(sizeof(char) * ft_strlen_c(str, 0, c) + 1);
+//     if (!tab[0])
+//     {
+//         free(tab);
+//         return (NULL);
+//     }
+//     i = 0;
+//     j = 0;
+//     while (str[i] && str[i] != c)
+//         tab[0][j++] = str[i++];
+//     tab[0][j] = '\0';
+//     i++;
+//     tab[1] = malloc(sizeof(char) * ft_strlen_c(str, i, '\0') + 1);
+//     if (!tab[1])
+//     {
+//         free_tab(tab);
+//         return (NULL);
+//     }
+//     j = 0;
+//     while (str[i])
+//         tab[1][j++] = str[i++];
+//     tab[1][j] = '\0';
+//     return (tab);
+// }
+
+char    **init_split_in_two(char *str, char c)
 {
-    int i;
-    int j;
-    char    **tab;
+    char **tab;
 
     tab = malloc(sizeof(char *) * 3);
     if (!tab)
@@ -45,6 +80,16 @@ char    **split_in_two(char *str, char c)
         free(tab);
         return (NULL);
     }
+    return (tab);
+}
+
+char    **split_in_two(char *str, char c)
+{
+    int i;
+    int j;
+    char    **tab;
+
+    tab = init_split_in_two(str, c);
     i = 0;
     j = 0;
     while (str[i] && str[i] != c)
@@ -91,33 +136,72 @@ char *parse_value(char *input)
     return (result);
 }
 
+// t_env    *create_key_value(char *env)
+// {
+//     t_env   *node;
+//     char **tab;
+//     char *tmp;
+
+//     if (check_value(env) == 0)
+//     {
+//         tab = split_in_two(env, '=');
+//         if (!tab)
+//             return (NULL);
+//         tmp = tab[1];
+//         tab[1] = parse_value(tab[1]);
+//         free(tmp);
+//         if (!tab[1])
+//         {
+//             free_tab(tab);
+//             return (NULL);
+//         }
+//         node = create_node(tab[0], tab[1]);
+//         if (!node)
+//         {
+//             free_tab(tab);
+//             return (NULL);
+//         }
+//         free_tab(tab);  
+//     }
+//     else
+//         node = create_node(env, NULL);
+//     return (node);
+// }
+
+char    **init_create_key_value(char *env)
+{
+    char    **tab;
+    char    *tmp;
+
+    tab = split_in_two(env, '=');
+    if (!tab)
+        return (NULL);
+    tmp = tab[1];
+    tab[1] = parse_value(tab[1]);
+    free(tmp);
+    if (!tab[1])
+    {
+        free_tab(tab);
+        return (NULL);
+    }
+    return (tab);
+}
+
 t_env    *create_key_value(char *env)
 {
     t_env   *node;
     char **tab;
-    char *tmp;
 
     if (check_value(env) == 0)
     {
-        tab = split_in_two(env, '=');
-        if (!tab)
-            return (NULL);
-        tmp = tab[1];
-        tab[1] = parse_value(tab[1]);
-        free(tmp);
-        if (!tab[1])
-        {
-            free_tab(tab);
-            return (NULL);
-        }
+        tab = init_create_key_value(env);
         node = create_node(tab[0], tab[1]);
         if (!node)
         {
             free_tab(tab);
             return (NULL);
         }
-        free_tab(tab);
-        
+        free_tab(tab);  
     }
     else
         node = create_node(env, NULL);

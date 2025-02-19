@@ -73,17 +73,89 @@ void    clear_file(char **filename)
     free(filename);
 }
 
-int check_heredoc(t_token *token, t_pipex *pipex)
+// int check_heredoc(t_token *token, t_pipex *pipex)
+// {
+//     t_token *current;
+//     char    *line;
+//     char    *filename;
+//     int i;
+//     int heredoc_fd;
+
+//     i = 0;
+//     current = token;
+//     init_hd(token, pipex);
+//     while (current)
+//     {
+//         if (current->type == 5)
+//         {
+//             if (current->next->type == 0)
+//             {
+//                 filename = heredoc_name(i);
+//                 if (access(filename, F_OK) == 0)
+//                     unlink(filename);
+//                 heredoc_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+//                 while (1)
+//                 {
+//                     pipex->line_hd++;
+//                     line = readline(">");
+//                     if (line == NULL)
+//                     {
+//                         ft_printf_fd(2, "bash: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n", pipex->line_hd, current->next->value);
+//                         free (line);
+//                         break ;
+//                     }
+//                     if (ft_strcmp(line, current->next->value) == 0)
+//                     {
+//                         free (line);
+//                         break ;
+//                     }
+//                     write (heredoc_fd, line, ft_strlen_dp(line));
+//                     write (heredoc_fd, "\n", 1);
+//                     free (line);
+//                 }
+//                 close(heredoc_fd);
+//                 pipex->filename_hd[i] = ft_strdup(filename);
+//                 i++;
+//                 free (filename);
+//             }
+//         }
+//         current = current->next;
+//     }
+//     return (0);
+// }
+
+void    while_hd(t_pipex *pipex, t_token *current, int heredoc_fd)
 {
-    t_token *current;
-    char    *line;
-    char    *filename;
-    int i;
+    char *line;
+
+    while (1)
+    {
+        pipex->line_hd++;
+        line = readline(">");
+        if (line == NULL)
+        {
+            ft_printf_fd(2, "bash: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n", pipex->line_hd, current->next->value);
+            free (line);
+            return ;
+        }
+        if (ft_strcmp(line, current->next->value) == 0)
+        {
+            free (line);
+            return ;
+        }
+        write (heredoc_fd, line, ft_strlen_dp(line));
+        write (heredoc_fd, "\n", 1);
+        free (line);
+    }
+}
+
+void    set_while_hd(t_pipex *pipex, t_token *current)
+{
     int heredoc_fd;
+    char *filename;
+    int i;
 
     i = 0;
-    current = token;
-    init_hd(token, pipex);
     while (current)
     {
         if (current->type == 5)
@@ -94,25 +166,7 @@ int check_heredoc(t_token *token, t_pipex *pipex)
                 if (access(filename, F_OK) == 0)
                     unlink(filename);
                 heredoc_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-                while (1)
-                {
-                    pipex->line_hd++;
-                    line = readline(">");
-                    if (line == NULL)
-                    {
-                        ft_printf_fd(2, "bash: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n", pipex->line_hd, current->next->value);
-                        free (line);
-                        break ;
-                    }
-                    if (ft_strcmp(line, current->next->value) == 0)
-                    {
-                        free (line);
-                        break ;
-                    }
-                    write (heredoc_fd, line, ft_strlen_dp(line));
-                    write (heredoc_fd, "\n", 1);
-                    free (line);
-                }
+                while_hd(pipex, current, heredoc_fd);
                 close(heredoc_fd);
                 pipex->filename_hd[i] = ft_strdup(filename);
                 i++;
@@ -121,5 +175,14 @@ int check_heredoc(t_token *token, t_pipex *pipex)
         }
         current = current->next;
     }
+}
+
+int check_heredoc(t_token *token, t_pipex *pipex)
+{
+    t_token *current;
+
+    current = token;
+    init_hd(token, pipex);
+    set_while_hd(pipex, current);
     return (0);
 }

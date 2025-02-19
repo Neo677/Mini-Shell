@@ -49,5 +49,5 @@ void	execute_cmd(t_pipex *pipex, char **arg, char **envp)
 	if (access("temp_null2", F_OK) == 0)
 		unlink("temp_null2");
 	if (execve(pipex->path, arg, envp) == -1)
-		free_error(pipex, "", 0);
+		free_error(pipex, "", 126);
 }

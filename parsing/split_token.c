@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:18 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/13 02:25:36 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/18 15:01:34 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -373,7 +373,7 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 		*ctx->current = ft_init_command(ctx->cmd_lst);
 	if (!ft_add_arguments(*ctx->current, var_value))
 		return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
-	free(var_value);
+	// free(var_value);
 	return (1);
 }
 

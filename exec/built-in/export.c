@@ -117,6 +117,60 @@ int check_variable_backslash_n(char *value)
     return (0);
 }
 
+int check_key_export(char *str)
+{
+    int i;
+
+    i = 0;
+    while (str[i])
+    {
+        if ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9') || str[i] == '\\' || str[i] == '_')
+        {
+            if (str[i] == '\\' && str[i + 1] == '\\')
+                return (1);
+            i++;
+        }
+        else
+            return (1);
+    }
+    return (0);
+}
+
+char    *remove_backslash(char *str)
+{
+    int i;
+    int j;
+    int len;
+    int egal;
+    char    *new_str;
+
+    i = 0;
+    len = 0;
+    while (str[i])
+    {
+        if (str[i] == '\\')
+            len++;
+        i++;
+    }
+    new_str = malloc(sizeof(char) * (ft_strlen(str) - len + 1));
+    if (!new_str)
+        return (NULL);
+    i = 0;
+    j = 0;
+    egal = 0;
+    while (str[i])
+    {
+        if (str[i] == '=')
+            egal = 1;
+        if (str[i] == '\\' && egal == 0)
+            i++;
+        new_str[j++] = str[i++];
+    }
+    new_str[j] = '\0';
+    printf("str = %s\n", new_str);
+    return (new_str);
+}
+
 void    ft_export(t_env **env_cpy1, char **key_value)
 {
     t_env   *current;
@@ -126,6 +180,7 @@ void    ft_export(t_env **env_cpy1, char **key_value)
     char **tab;
     char    *value;
     int i;
+    char    *temp;
 
     cpy_env_cpy = NULL;
     env_cpy = export_cpy(env_cpy1, &cpy_env_cpy);
@@ -136,17 +191,17 @@ void    ft_export(t_env **env_cpy1, char **key_value)
         current = *env_cpy;
         while (current)
         {
-            if ((current->key[0] >= 'a' && current->key[0] <= 'z') || (current->key[0] >= 'A' && current->key[0] <= 'Z') || current->key[0] == '_')
+            if ((current->key[0] >= 'a' && current->key[0] <= 'z') || (current->key[0] >= 'A' && current->key[0] <= 'Z') || current->key[0] == '_' || current->key[0] == '\\')
             {
-                if (check_variable_backslash_n(current->key) == 1)
-                    printf("declare -x %s=$\'%s\'\n", current->key, replace_backslash_n(current->value));
-                else
-                {
                     if (current->value)
-                        printf("declare -x %s=\"%s\"\n", current->key, current->value);
+                    {
+                        if (check_variable_backslash_n(current->value) == 1)
+                            printf("declare -x %s=$\'%s\'\n", current->key, replace_backslash_n(current->value));
+                        else
+                            printf("declare -x %s=\"%s\"\n", current->key, current->value);
+                    }         
                     else
                         printf("declare -x %s\n", current->key);
-                }
             }
             current = current->next;
         }
@@ -156,7 +211,7 @@ void    ft_export(t_env **env_cpy1, char **key_value)
     }
     while (key_value[i])
     {
-        if ((key_value[i][0] >= 'a' && key_value[i][0] <= 'z') || (key_value[i][0] >= 'A' && key_value[i][0] <= 'Z') || key_value[i][0] == '_')
+        if ((key_value[i][0] >= 'a' && key_value[i][0] <= 'z') || (key_value[i][0] >= 'A' && key_value[i][0] <= 'Z') || key_value[i][0] == '_' || key_value[i][0] == '\\')
         {
             current = *env_cpy1;
             if (check_value(key_value[i]) == 0)
@@ -168,6 +223,18 @@ void    ft_export(t_env **env_cpy1, char **key_value)
                     free_env_list(cpy_env_cpy);
                     return ;
                 }
+                if (check_key_export(tab[0]) == 1)
+                {
+                    ft_printf_fd(2, "bash: export: `%s': not a valid identifier\n", key_value[i]);
+                    free_tab(tab);
+                    free_tab(key_value);
+                    free_env_list(cpy_env_cpy);
+                    return ;
+                }
+                temp = tab[0];
+                tab[0] = remove_backslash(tab[0]);
+                printf("str2 = %s\n", tab[0]);
+                free(temp);
                 if (search_by_key(env_cpy1, tab[0]) == 0)
                 {
                     value = parse_value(tab[1]);
@@ -177,7 +244,7 @@ void    ft_export(t_env **env_cpy1, char **key_value)
                 }
                 else
                 {
-                    new_node = create_key_value(key_value[i]);
+                    new_node = create_key_value(remove_backslash(key_value[i]));
                     if (!new_node)
                     {
                         free_tab(tab);
@@ -198,6 +265,14 @@ void    ft_export(t_env **env_cpy1, char **key_value)
             }
             else
             {
+                if (check_key_export(key_value[i]) == 1)
+                {
+                    ft_printf_fd(2, "bash: export: `%s': not a valid identifier\n", key_value[i]);
+                    free_tab(key_value);
+                    free_env_list(cpy_env_cpy);
+                    return ;
+                }
+                key_value[i] = remove_backslash(key_value[i]);
                 if (search_by_key(env_cpy1, key_value[i]) == 0)
                     modify_node_value(env_cpy1, key_value[i], NULL);
                 else

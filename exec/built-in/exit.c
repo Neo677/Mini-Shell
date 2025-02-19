@@ -17,6 +17,55 @@ int ft_numeric(char *arg)
     return (1);
 }
 
+// long long ft_atol(char *str, int *error)
+// {
+//     long long res;
+//     int i;
+//     int sign;
+
+//     i = 0;
+//     sign = 1;
+//     res = 0;
+//     if (ft_strcmp(str, "-9223372036854775808") == 0)
+//         return (-9223372036854775807 -1);
+//     while (str[i] == ' ' || str[i] == '\t')
+//         i++;
+//     if (str[i] == '-' || str[i] == '+')
+//     {
+//         if (str[i] == '-')
+//         {
+//             sign *= -1;
+//         }
+//         i++;
+//     }
+//     while (str[i] >= '0' && str[i] <= '9')
+//     {
+//         res = res * 10 + (str[i] - '0');
+//         i++;
+//     }
+//     if (res < 0)
+//     {
+//         *error = 1;
+//         return (0);
+//     }
+//     return (res * sign);
+// }
+
+int atol_sign(char *str, int i, int *sign)
+{
+    while (str[i] == ' ' || str[i] == '\t')
+        i++;
+    if (str[i] == '-' || str[i] == '+')
+    {
+        if (str[i] == '-')
+        {
+            *sign *= -1;
+        }
+        i++;
+    }
+    return (i);
+}
+
 long long ft_atol(char *str, int *error)
 {
     long long res;
@@ -28,16 +77,7 @@ long long ft_atol(char *str, int *error)
     res = 0;
     if (ft_strcmp(str, "-9223372036854775808") == 0)
         return (-9223372036854775807 -1);
-    while (str[i] == ' ' || str[i] == '\t')
-        i++;
-    if (str[i] == '-' || str[i] == '+')
-    {
-        if (str[i] == '-')
-        {
-            sign *= -1;
-        }
-        i++;
-    }
+    i = atol_sign(str, i, &sign);
     while (str[i] >= '0' && str[i] <= '9')
     {
         res = res * 10 + (str[i] - '0');
@@ -51,6 +91,62 @@ long long ft_atol(char *str, int *error)
     return (res * sign);
 }
 
+// int    ft_exit(t_buit_in *exec, char **tab)
+// {
+//     long long   num;
+//     int error;
+
+//     num = 0;
+//     if (tab[1])
+//     {
+//         ft_printf_fd(1, "exit\n");
+//         if (tab[2])
+//         {
+//             printf("%s\n", tab[2]);
+//             ft_printf_fd(2, "bash: exit: too many arguments\n");
+//             return (0);
+//         }
+//         if (ft_numeric(tab[1]) == 0)
+//         {
+//             ft_printf_fd(2, "bash: exit: %s: numeric argument required\n", tab[1]);
+//             return (0);
+//         }
+//         error = 0;
+//         num = ft_atol(tab[1], &error);
+//         if (error == 1)
+//         {
+//             ft_printf_fd(2, "bash: exit: %s: numeric argument required\n", tab[1]);
+//             return (0);
+//         }
+//         if (num > 255 || num < 0)
+//         {
+//             num %= 256;
+//             if (num < 0)
+//                 num += 256;
+//         }
+//         printf("%lld\n", num);
+//     }
+//     exec->exit_bh = 1;
+//     exec->exit_code_bh = num;
+//     return(num);
+// }
+
+int error_ft_exit(char **tab)
+{
+    if (tab[2])
+    {
+        printf("%s\n", tab[2]);
+        ft_printf_fd(2, "bash: exit: too many arguments\n");
+        return (0);
+    }
+    if (ft_numeric(tab[1]) == 0)
+    {
+        ft_printf_fd(2, "bash: exit: %s: numeric argument required\n", tab[1]);
+        return (0);
+    }
+    return (1);
+}
+
 int    ft_exit(t_buit_in *exec, char **tab)
 {
     long long   num;
@@ -60,24 +156,12 @@ int    ft_exit(t_buit_in *exec, char **tab)
     if (tab[1])
     {
         ft_printf_fd(1, "exit\n");
-        if (tab[2])
-        {
-            printf("%s\n", tab[2]);
-            ft_printf_fd(2, "bash: exit: too many arguments\n");
+        if (error_ft_exit(tab) == 0)
             return (0);
-        }
-        if (ft_numeric(tab[1]) == 0)
-        {
-            ft_printf_fd(2, "bash: exit: %s: numeric argument required\n", tab[1]);
-            return (0);
-        }
         error = 0;
         num = ft_atol(tab[1], &error);
         if (error == 1)
-        {
-            ft_printf_fd(2, "bash: exit: %s: numeric argument required\n", tab[1]);
-            return (0);
-        }
+            return (ft_printf_fd(2, "bash: exit: %s: numeric argument required\n", tab[1]), 0);
         if (num > 255 || num < 0)
         {
             num %= 256;
@@ -86,7 +170,8 @@ int    ft_exit(t_buit_in *exec, char **tab)
         }
         printf("%lld\n", num);
     }
-    free_all(exec);
+    exec->exit_bh = 1;
+    exec->exit_code_bh = num;
     return(num);
 }
 
