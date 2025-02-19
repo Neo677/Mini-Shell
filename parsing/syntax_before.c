@@ -21,7 +21,7 @@
 //     return (*quote != 0);
 // }
 
-static void    ft_pass_this_bro(t_parse_context *ctx)
+void    ft_pass_this_bro(t_parse_context *ctx)
 {
     ctx->exit_status = 2;
 }
@@ -31,7 +31,7 @@ void    ft_print_err_global(int i)
     if (i == 0)
         ft_printf_fd(2, "minishell: syntax error: unclosed quote\n");
     if (i == 1)
-        ft_printf_fd(2, "minishell: syntax error near unexpected token `|'");
+        ft_printf_fd(2, "minishell: syntax error near unexpected token `|'\n");
     if (i == 2)
         ft_printf_fd(2, "minishell: syntax error near unexpected token `newline'\n");
 }
@@ -79,15 +79,48 @@ static int ft_set_syntax_pipe(const char *input, int i, t_parse_context *ctx)
     return (j);
 }
 
-void    ft_set_syntax_redir_1(int k, int len, char op)
+
+
+void ft_set_syntax_redir_1(int len, char op)
 {
-    ft_printf_fd(2,  "minishell: syntax error near unexpected token `");
-    while (k++ < len)
-        ft_printf_fd(2, "%c", op);
+    ft_printf_fd(2, "minishell: syntax error near unexpected token `");
+
+    if (op == '>')
+    {
+        if (len <= 2)
+        {
+            /* Pour '>' et '>>', l'argument manque → on affiche "newline" */
+            ft_printf_fd(2, "newline");
+        }
+        else if (len == 3)
+        {
+            /* Pour '>>>', on affiche le token ">" */
+            ft_printf_fd(2, "%c", op);
+        }
+        else /* len >= 4 */
+        {
+            /* Pour 4 '>' ou plus, on affiche toujours le token ">>" */
+            ft_printf_fd(2, ">>");
+        }
+    }
+    else if (op == '<')
+    {
+        if (len <= 3)
+        {
+            /* Pour '<', '<<' ou '<<<', l'argument manque → on affiche "newline" */
+            ft_printf_fd(2, "newline");
+        }
+        else if (len == 4)
+            ft_printf_fd(2, "<");
+        else if (len == 5)
+            ft_printf_fd(2, "<<");
+        else
+            ft_printf_fd(2, "<<<");
+    }
     ft_printf_fd(2, "'\n");
 }
 
-void    ft_set_syntax_redir_2(const char *input, int j)
+void ft_set_syntax_redir_2(const char *input, int j)
 {
     ft_printf_fd(2, "minishell: syntax error near unexpected token ");
     if (!input[j])
@@ -98,27 +131,40 @@ void    ft_set_syntax_redir_2(const char *input, int j)
 
 static int ft_set_syntax_ope(const char *input, int i, t_parse_context *ctx)
 {
-    char op;
-    int len;
-    int j;
-    int k;
+    char op = input[i];
+    int len = 0;
+    int j = i;
 
-    op = input[i];
-    len = 0;
-    k = -1;
-    while (input[i] == op)
+    /* Comptage des opérateurs consécutifs */
+    while (input[j] == op)
     {
         len++;
-        i++;
+        j++;
     }
-    if ((op == '>' || op == '<') && (len < 1 || len > 2))
-        return (ft_set_syntax_redir_1(k, len, op), ft_pass_this_bro(ctx), -1);
-    j = i;
+
+    /* Vérification de la validité du groupe d'opérateurs :
+     * - Pour '>' : seuls les groupes de 1 et 2 sont considérés comme syntaxiquement corrects.
+     * - Pour '<' : seul le groupe de 1 est correct.
+     */
+    if ((op == '>' && len > 2) || (op == '<' && len != 1))
+    {
+        ft_set_syntax_redir_1(len, op);
+        ft_pass_this_bro(ctx);  /* Met à jour le code d'erreur à 2 */
+        return -1;
+    }
+
+    /* On ignore les espaces ou tabulations après la redirection */
     while (input[j] && (input[j] == ' ' || input[j] == '\t'))
         j++;
+
+    /* Vérification de l'argument attendu après la redirection */
     if (!input[j] || input[j] == '|' || input[j] == '>' || input[j] == '<')
-        return (ft_set_syntax_redir_2(input, j), ft_pass_this_bro(ctx), -1);
-    return (j);
+    {
+        ft_set_syntax_redir_2(input, j);
+        ft_pass_this_bro(ctx);
+        return -1;
+    }
+    return j;
 }
 
 
@@ -127,7 +173,7 @@ int  ft_check_syntax(const char *input, t_parse_context *ctx)
     int i;
     int res;
 
-    ctx->exit_status = 0;
+    // ctx->exit_status = 0;
     if (ft_set_syntax_quote(input, ctx) == 0)
         return (0);
     i = 0;

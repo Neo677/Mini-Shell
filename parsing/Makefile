@@ -6,12 +6,12 @@
 #    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 17:24:52 by thobenel          #+#    #+#              #
-#    Updated: 2025/02/18 14:53:47 by dpascal          ###   ########.fr        #
+#    Updated: 2025/02/19 21:19:06 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-CC = gcc -g
+CC = gcc -g -ltinfo
 CFLAGS = -Wall -Wextra -Werror -I include #-fsanitize=leak
 LIBFT_DIR = ../libft_2.0
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -40,9 +40,10 @@ SRCS =	add_arguments.c \
 		start_minishell.c \
 		valid_token.c \
 		replace_env.c \
+		matrix.c \
 		../exec/core/check_file.c \
-		../exec/core/exec.c \
 		../exec/core/cmd.c \
+		../exec/core/exec.c \
 		../exec/core/utils.c \
 		../exec/core/free_exec.c \
 		../exec/core/split.c \

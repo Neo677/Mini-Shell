@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 int ft_valid_redirections(const t_token *token)
 {
     while (token)
@@ -88,33 +89,36 @@ int ft_validay_quotes(t_token *token)
     return (1);
 }
 
-int ft_validate_pipes(t_token *token)
+int ft_validate_pipes(t_token *token, t_parse_context *ctx)
 {
     t_token *prev;
     
     prev = NULL;
+    (void)ctx;
     if (!token || token->type == TOKEN_PIPE)
-        return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
+        return (ctx->exit_status = 0, 0);
 
     while (token) 
     {
         if (token->type == TOKEN_PIPE) 
         {
             if (!prev || prev->type == TOKEN_PIPE) 
-                return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error near unexpected token `|'\n"), 0);
+            {
+                ctx->exit_status = 2;
+                return (ft_printf_fd(STDERR_FILENO, "1minishell: syntax error near unexpected token `|'\n"), 0);
+            }
             if (!token->next)
-                return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error: pipe at the end\n"), 0);
+            {
+                ctx->exit_status = 2;
+                return (ft_printf_fd(STDERR_FILENO, "2minishell: syntax error: pipe at the end\n"), 0);
+            }
+                
         }
         prev = token;
         token = token->next;
     }
     return (1);
 }
-
-// int ft_isspace(char c)
-// {
-//     return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
-// }
 
 static bool ft_is_empty_string(const char *str)
 {
@@ -153,22 +157,31 @@ int ft_valid_env_var(t_token *token)
     }
     return (1);
 }
-
-int ft_valid_token(t_token *token)
+int ft_valid_token(t_token *token, t_parse_context *ctx) 
 {
-    t_token *current;
-
-    current = token;
-    if (!ft_validate_pipes(token))
+    t_token *current = token;
+    
+    if (!ft_validate_pipes(current, ctx))
+    {
         return (0);
-    if (!ft_valid_redirections(token))
+    }    
+    if (!ft_valid_redirections(current))
+    {
+        ctx->exit_status = 2;
         return (0);
-    if (!ft_valid_env_var(token))
+    }    
+    if (!ft_valid_env_var(current))
+    {
+        ctx->exit_status = 2;
         return (0);
+    }    
     while (current != NULL)
     {
         if (!ft_validay_quotes(current))
+        {
+            ctx->exit_status = 2;
             return (0);
+        }
         current = current->next;
     }
     return (1);

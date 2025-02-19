@@ -39,7 +39,7 @@ int pwd_with_cd(t_env **env, int cd)
 
     pwd = getcwd(NULL, 0);
     if (!pwd)
-        ft_printf_fd(2, "pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory");
+        ft_printf_fd(2, "pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
     else
     {
         printf("%s\n", pwd);

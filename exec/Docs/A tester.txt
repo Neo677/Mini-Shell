@@ -146,3 +146,8 @@ Ctrl-d
 message d'erreur = 
 bash: warning: here-document at line 7 delimited by end-of-file (wanted `1')
 
+mkdir test1
+cd test1
+rm -rf ../test1
+pwd
+

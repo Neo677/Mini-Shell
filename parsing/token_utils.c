@@ -65,20 +65,24 @@ t_token_type	ft_identify_token(char *str)
 	4) add the next and of course put it on NULL (chain list)
 */
 
-t_token	*ft_create_token(t_token_type type, char *value)
+t_token *ft_create_token(t_token_type type, char *value)
 {
-	t_token	*token;
+    t_token *token;
 
-	token = malloc(sizeof(t_token));
-	if (!token)
-		return (free(token), NULL);
-	token->type = type;
-	token->value = ft_strdup_v2(value);
-	if (!token->value)
-		return(free(token->value), NULL);
-	token->next = NULL;
-	return (token);
+    token = malloc(sizeof(t_token));
+    if (!token)
+        return (NULL);  // No need to free(token) here since token is NULL.
+    token->type = type;
+    token->value = ft_strdup_v2(value);
+    if (!token->value)
+    {
+        free(token);
+        return (NULL);
+    }
+    token->next = NULL;
+    return (token);
 }
+
 
 void	ft_add_token(t_token **head, t_token *new_token)
 {

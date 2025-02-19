@@ -22,6 +22,8 @@ void	ft_free_token(t_token *head)
 {
 	t_token	*tmp;
 
+	 if (!head)
+	 	return;
 	while (head)
 	{
 		tmp = head->next;
