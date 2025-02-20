@@ -20,7 +20,7 @@ void	free_list(t_env **lst)
         if (current->key)
             free(current->key);
         if (current->value)
-            free(current->value);
+            free(current->value); 
         free(current);
         current = next;
     }
@@ -33,13 +33,13 @@ void free_env_list(t_env *head)
 
     while (head)
     {
-        tmp = head;
-        head = head->next;
-        if (tmp->key)
-            free(tmp->key);
-        if (tmp->value)
-            free(tmp->value);
-        free(tmp);
+        tmp = head->next;
+        if (head->key)
+            free(head->key);
+        if (head->value)
+            free(head->value);
+        free(head);
+        head = tmp;
     }
 }
 
@@ -58,8 +58,12 @@ void	free_all(t_buit_in *exec)
 {
     if (!exec)
         return ;
-    free_char(exec->input);
-	free_tab(exec->tab);
-	free_list(&exec->env_cpy);
-    free_list(&exec->export_cpy);
+    if (exec->input)
+        free_char(exec->input);
+    if (exec->tab)
+	    free_tab(exec->tab);
+    if (exec->env_cpy)
+	    free_list(&exec->env_cpy);
+    if (exec->export_cpy)
+        free_list(&exec->export_cpy);
 }

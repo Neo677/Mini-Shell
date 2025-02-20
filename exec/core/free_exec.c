@@ -45,6 +45,6 @@ void	free_error(t_pipex *pipex, char *error, int key_error)
 {
 	free_all_core(pipex);
 	close_file(pipex);
-	ft_printf_fd(2, "%s", error);
+	ft_printf_fd(2, "bash: %s", error);
 	exit(key_error);
 }

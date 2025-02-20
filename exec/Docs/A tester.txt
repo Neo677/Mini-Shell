@@ -128,3 +128,26 @@ if (i < cmd_count - 1)
     dup2(pipe_fd[1], STDOUT_FILENO);
     close(pipe_fd[1]);
 }
+
+
+A check
+
+echo "1
+2
+Ctrl-D
+message d'erreur = 
+bash: unexpected EOF while looking for matching `"'
+bash: syntax error: unexpected end of file
+
+echo test1 | export | env | pwd
+
+<< 1
+Ctrl-d
+message d'erreur = 
+bash: warning: here-document at line 7 delimited by end-of-file (wanted `1')
+
+mkdir test1
+cd test1
+rm -rf ../test1
+pwd
+

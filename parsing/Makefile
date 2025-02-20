@@ -27,7 +27,8 @@ SRCS =	add_arguments.c \
 		handle_signal.c \
 		handle_error.c \
 		handle_error_2.c \
-		handle_quotes.c \
+		handle_quotes1.c \
+		handle_quotes2.c \
 		main.c \
 		parse_token.c \
 		prompt.c \
@@ -40,12 +41,15 @@ SRCS =	add_arguments.c \
 		start_minishell.c \
 		valid_token.c \
 		replace_env.c \
+		creat_command_utils.c \
 		matrix.c \
+		pid.c \
+		create_command_use.c \
 		../exec/core/check_file.c \
-		../exec/core/exec.c \
 		../exec/core/cmd.c \
+		../exec/core/exec.c \
 		../exec/core/utils.c \
-		../exec/core/free.c \
+		../exec/core/free_exec.c \
 		../exec/core/split.c \
 		../exec/core/process.c \
 		../exec/core/init_var.c \
@@ -59,7 +63,7 @@ SRCS =	add_arguments.c \
 		../exec/built-in/env.c \
 		../exec/built-in/exit.c \
 		../exec/built-in/export.c \
-		../exec/built-in/free.c \
+		../exec/built-in/free_bh.c \
 		../exec/built-in/pwd.c \
 		../exec/built-in/split.c \
 		../exec/built-in/unset.c \

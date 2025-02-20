@@ -133,14 +133,25 @@ int	ft_add_arguments(t_command *cmd, const char *arg);
 
 int	ft_add_redirections_struct(t_command *cmd, int type, const char *file);
 
+
+void	ft_free_command(t_command *cmd);
+void	ft_free_command_list(t_command **lst);
+t_command *ft_init_command(t_command **lst);
 int ft_create_command_lst(t_token *token, t_command **lst);
+
+
+
+void    ft_create_cmd_pipe(t_command **current);
+int ft_create_cmd_word(t_command **current, t_token *token, t_command **lst);
+int    ft_create_cmd_redirect(t_command **current, t_token *token, t_command **lst);
+int    ft_create_cmd_env(t_command **current, t_token *token, t_command **lst);
+
 
 char *ft_get_pid_str(void);
 char *ft_detec_var(const char **input);
 int     ft_detec_digit(int is_digit_param, const char **input);
 char *ft_extract_env_var(const char **input);
 
-int get_last_exit_status(void);
 
 void	error_exit(const char *error);
 void	ft_free_token(t_token *head);
@@ -164,13 +175,11 @@ char	*ft_concatent_content(char *content, char *tmp);
 int	ft_update_ptr_input(const char **input, size_t *i, const char **start);
 char    *ft_strjoin_free(char *s1, char *s2);
 char    *ft_eof_double_quote(const char *input, t_parse_context *ctx);
-char    *ft_eof_single_quote(const char *input, t_parse_context *ctx);
+char    *ft_eof_single_quote(t_parse_context *ctx);
 char *ft_handle_quote(t_parse_context *ctx);
 
 // void ft_handle_sig_int(int sig);
 // void ft_handle_sig_quit(int sig);
-
-t_command *ft_init_command(t_command **lst);
 
 // void    ft_init_cmd(t_command *cmd_lst, t_command *current, t_parse_context ctx);
 // void    ft_init_ctx(t_token **head, const char *input, t_env **env_cpy, t_parse_context ctx);

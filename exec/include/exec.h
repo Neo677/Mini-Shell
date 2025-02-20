@@ -35,7 +35,8 @@ typedef struct s_built_in
 	char			**tab;
 	char			*input;
 	int				cd;
-    int				exit;
+    int				exit_bh;
+    int             exit_code_bh;
     int             check_built_in;
 }					t_buit_in;
 
@@ -125,6 +126,7 @@ void				ft_pwd(t_env **env, int cd);
 
 /*  SIGNAL  */
 void				signal_handler(int sig);
+void				signal_handler2(int sig);
 
 /*  SPLIT  */
 int					ft_count(char *s, char c);
@@ -153,7 +155,7 @@ int check_heredoc(t_token *token, t_pipex *pipex);
 
 int	redir_input(t_command *cmd, t_pipex *pipex);
 int	redir_output(t_command *cmd, t_pipex *pipex);
-void	child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **envp);
+int child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env);
 
 
 int ft_strlen_exec(int nb);

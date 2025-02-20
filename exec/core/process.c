@@ -121,16 +121,22 @@ int execute_built_in(t_buit_in *exec, t_command *cmd)
 	return (0);
 }
 
-void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
+int child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 {
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, signal_handler);
+	signal(SIGINT, signal_handler2);
 	int	i;
 	int	pipe_fd[2];
 	int	prev_pipe;
 	int	cmd_count;
 	pid_t	pid;
 	t_command	*current;
+	t_parse_context ctx;
+	int	status;
 
 	i = 0;
+	(void)ctx;
 	prev_pipe = -1;
 	cmd_count = count_cmd(cmd);
 	current = cmd;
@@ -148,16 +154,29 @@ void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 			if (pid < 0)
 			{
 				perror("fork");
-				return ;
+				return (0);
 			}
 			if (pid == 0)
 			{
+				// signal(SIGINT, SIG_DFL);
+				
+				
+				signal(SIGQUIT, signal_handler);
 				redir_input(current, pipex);
 				redir_output(current, pipex);
 				execute_cmd(pipex, current->arg, env);
 			}
+			wait(&status);
+			if (WIFEXITED(status))
+			{
+				// printf("OG = code erreur = %d\n", WEXITSTATUS(status));
+				ctx.exit_status = WEXITSTATUS(status);
+				return (ctx.exit_status);
+				// printf("NOT OG = code erreur = %d\n", ctx.exit_status);
+			}	
+			signal(SIGQUIT, SIG_IGN);
+			signal(SIGINT, SIG_IGN);
 		}
-		wait(NULL);
 	}
 	else
 	{
@@ -168,17 +187,20 @@ void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 				if (pipe(pipe_fd) == -1)
 				{
 					perror("pipe");
-					return ;
+					return (0);
 				}
 			}
 			pid = fork();
 			if (pid < 0)
 			{
 				perror("fork");
-				return ;
+				return (0);
 			}
 			if (pid == 0)
 			{
+				signal(SIGINT, SIG_DFL);
+				signal(SIGQUIT, signal_handler);
+				// signal(SIGQUIT, SIG_DFL);
 				if (redir_input(current, pipex) != 1 && prev_pipe != -1)
 				{
 					dup2(prev_pipe, STDIN_FILENO);
@@ -204,11 +226,19 @@ void child_process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 			current = current->next;
 			i++;
 			}
-		i = 0;
+			i = 0;
 		while (i < cmd_count)
 		{
-			wait(NULL);
+			wait(&status);
+			if (WIFEXITED(status))
+			{
+				// printf("OG = code erreur = %d\n", WEXITSTATUS(status));
+				ctx.exit_status = WEXITSTATUS(status);
+				// printf("NOT OG = code erreur = %d\n", ctx.exit_status);
+			}
 			i++;
 		}
+		signal(SIGQUIT, SIG_IGN);
 	}
+	return (0);
 }

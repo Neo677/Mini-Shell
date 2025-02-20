@@ -9,6 +9,7 @@ void    init_var_builtin(t_buit_in *exec)
 	exec->tab = NULL;
 	exec->input = 0;
 	exec->cd = 0;
-	exec->exit = 0;
+	exec->exit_bh = 0;
+	exec->exit_code_bh = 0;
 	exec->check_built_in = 0;
 }
