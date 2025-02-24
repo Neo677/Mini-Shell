@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME = minishell
-CC = gcc -g -ltinfo
+CC = gcc -g #-ltinfo
 CFLAGS = -Wall -Wextra -Werror -I include #-fsanitize=leak
 LIBFT_DIR = ../libft_2.0
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -27,8 +27,11 @@ SRCS =	add_arguments.c \
 		handle_signal.c \
 		handle_error.c \
 		handle_error_2.c \
-		handle_quotes1.c \
-		handle_quotes2.c \
+		handle_quotes_d.c \
+		handle_quotes_s.c \
+		expander.c \
+		expander_double.c \
+		eof_quote.c \
 		main.c \
 		parse_token.c \
 		prompt.c \
@@ -43,6 +46,7 @@ SRCS =	add_arguments.c \
 		replace_env.c \
 		creat_command_utils.c \
 		matrix.c \
+		quote_utils.c \
 		pid.c \
 		create_command_use.c \
 		../exec/core/check_file.c \

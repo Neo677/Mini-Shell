@@ -83,7 +83,7 @@ int check_file_out(t_token *token, t_parse_context ctx)
 
 int check_file(t_token *token)
 {
-    t_parse_context ctx;
+    t_parse_context ctx = {0};
 
     while (token)
     {

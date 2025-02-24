@@ -36,53 +36,48 @@
     - Duplicates and returns the variable name.
 */
 
-static char *ft_handle_special_case(const char **input)
+static char	*ft_handle_special_case(const char **input)
 {
-    if ((*input)[1] == '$')
-    {
-        *input += 2;
-        return (ft_strdup("$$"));
-    }
-    if ((*input)[1] == '?')
-    {
-        *input += 2;
-        return (ft_strdup("$?"));
-    }
-    return (NULL);
+	if ((*input)[1] == '$')
+	{
+		*input += 2;
+		return (ft_strdup("$$"));
+	}
+	if ((*input)[1] == '?')
+	{
+		*input += 2;
+		return (ft_strdup("$?"));
+	}
+	return (NULL);
 }
 
-static char *ft_extract_digit_var(const char **input)
+static char	*ft_extract_digit_var(const char **input)
 {
-    const char *start;
-
-    start = *input;
-    while (ft_isdigit(**input))
-        (*input)++;
-    return (ft_strndup(start, *input - start));
+	const char	*start = *input;
+	(*input)++;  // N'extrait qu'un seul chiffre
+	return (ft_strndup(start, 1));
 }
 
-static char *ft_extract_alpha_var(const char **input)
+static char	*ft_extract_alpha_var(const char **input)
 {
-    const char *start;
-
-    start = *input;
-    while (**input && (ft_isalnum(**input) || **input == '_'))
-        (*input)++;
-    return (ft_strndup(start, *input - start));
+	const char	*start = *input;
+	while (**input && (ft_isalnum(**input) || **input == '_'))
+		(*input)++;
+	return (ft_strndup(start, *input - start));
 }
 
-char *ft_extract_env_var(const char **input)
+char	*ft_extract_env_var(const char **input)
 {
-    char *space;
+	char	*special;
 
-    if (**input != '$')
-        return (NULL);
-    if ((space = ft_handle_special_case(input)))
-        return (space);
-    (*input)++;
-    if (ft_isdigit(**input))
-        return (ft_extract_digit_var(input));
-    if (!ft_isalpha(**input) && **input != '_')
-        return (ft_strdup("$"));
-    return (ft_extract_alpha_var(input));
+	if (**input != '$')
+		return (NULL);
+	if ((special = ft_handle_special_case(input)))
+		return (special);
+	(*input)++;
+	if (ft_isdigit(**input))
+		return (ft_extract_digit_var(input));
+	if (!ft_isalpha(**input) && **input != '_')
+		return (ft_strdup("$"));
+	return (ft_extract_alpha_var(input));
 }

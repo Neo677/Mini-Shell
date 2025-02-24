@@ -22,8 +22,8 @@ void	ft_free_token(t_token *head)
 {
 	t_token	*tmp;
 
-	 if (!head)
-	 	return;
+	if (!head)
+		return ;
 	while (head)
 	{
 		tmp = head->next;
@@ -49,7 +49,7 @@ void	ft_free_redirection(t_redirections *redir)
 void	ft_free_commande_lst(t_command *command)
 {
 	t_command	*tmp;
-	int	i;
+	int			i;
 
 	while (command)
 	{

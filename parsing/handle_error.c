@@ -14,12 +14,14 @@
 
 void	ft_error_pipe(const char *context)
 {
-	ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n", context);
+	ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n",
+		context);
 }
 
 void	ft_error_redirections(const char *context)
 {
-	ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n", context);
+	ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n",
+		context);
 }
 
 int	ft_error_quote(void)
