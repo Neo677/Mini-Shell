@@ -13,27 +13,27 @@
 #include "minishell.h"
 
 /*
-    11/12/2024 :
-    Now that i almost fix the pipe issue i can attack 
-    the env variables : 
-    i need to check in my parsing if i find a '$'
-    once i get it ive got to 
-    1) check if the expression $VAR_NAME is correct
-    2) identifie the syntax error 
-        a. $ alone
-        b. $VAR$OTHER incorrect
-    3) associated the TOKEN_ENV_VAR in the enum
-        and allocate is value brut for the parseur
-    4) assure myself that the env var is use in a 
-        good context
+	11/12/2024 :
+	Now that i almost fix the pipe issue i can attack
+	the env variables :
+	i need to check in my parsing if i find a '$'
+	once i get it ive got to
+	1) check if the expression $VAR_NAME is correct
+	2) identifie the syntax error
+		a. $ alone
+		b. $VAR$OTHER incorrect
+	3) associated the TOKEN_ENV_VAR in the enum
+		and allocate is value brut for the parseur
+	4) assure myself that the env var is use in a
+		good context
 
-    Extracts the environment variable name from the input string.
-    - Skips the '$' character.
-    - Checks if the next character is a digit (Bash treats `$1` as a positional parameter).
-    - Reads a single digit if it's a positional parameter.
-    - Reads a standard identifier (alphanumeric + '_') otherwise.
-    - Returns the literal "$" if no valid variable name is found.
-    - Duplicates and returns the variable name.
+	Extracts the environment variable name from the input string.
+	- Skips the '$' character.
+	- Checks if the next character is a digit (Bash treats `$1` as a positional parameter).
+	- Reads a single digit if it's a positional parameter.
+	- Reads a standard identifier (alphanumeric + '_') otherwise.
+	- Returns the literal "$" if no valid variable name is found.
+	- Duplicates and returns the variable name.
 */
 
 static char	*ft_handle_special_case(const char **input)
@@ -54,13 +54,15 @@ static char	*ft_handle_special_case(const char **input)
 static char	*ft_extract_digit_var(const char **input)
 {
 	const char	*start = *input;
-	(*input)++;  // N'extrait qu'un seul chiffre
+
+	(*input)++;
 	return (ft_strndup(start, 1));
 }
 
 static char	*ft_extract_alpha_var(const char **input)
 {
 	const char	*start = *input;
+
 	while (**input && (ft_isalnum(**input) || **input == '_'))
 		(*input)++;
 	return (ft_strndup(start, *input - start));

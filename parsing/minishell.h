@@ -175,13 +175,23 @@ int							ft_update_ptr_input(const char **input, size_t *i,
 								const char **start);
 char						*ft_strjoin_free(char *s1, char *s2);
 char						*ft_space_swap(char *acc, char *tmp, char *line);
-char						*ft_eof_double_quote(const char *input,
-								t_parse_context *ctx);
-char						*ft_read_until_S_quote(void);
+
+char						*ft_eof_double_quote(void);
 char						*ft_eof_single_quote(t_parse_context *ctx);
+
 int							ft_handle_env_vars_quote(t_parse_context *ctx);
+
+size_t						ft_get_var_len(const char *input, size_t i);
+char						*get_env_var_value(char *var, t_parse_context *ctx);
+char						*get_var_value(const char *input, size_t var_len,
+								t_parse_context *ctx);
+char						*process_variable(const char *input, size_t *i,
+								char *resl, t_parse_context *ctx);
+char						*append_char(char *res, char c);
+
 char						*ft_expand_vars(const char *input,
 								t_parse_context *ctx);
+
 char						*ft_handle_double_quote(const char **input,
 								t_parse_context *ctx);
 char						*ft_handle_single_quote(const char **input,
@@ -200,6 +210,11 @@ int							ft_handle_quotes(t_parse_context *ctx);
 int							ft_handle_operators(t_parse_context *ctx);
 int							ft_handle_env_vars(t_parse_context *ctx);
 int							ft_handle_words(t_parse_context *ctx);
+
+
+int	process_tokens(t_parse_context *ctx, int *last_exit_status);
+int	error_cleanup(t_parse_context *ctx, int *last_exit_status);
+void	init_context(t_parse_context *ctx, t_token **head, const char *input, t_env **env_cpy);
 int							ft_split_token(t_token **head, const char *input,
 								t_env **env_cpy, int *last_exit_status);
 

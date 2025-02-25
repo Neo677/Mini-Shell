@@ -19,7 +19,7 @@ void	ft_print_tab(char **tab)
 	if (!tab)
 	{
 		ft_printf("[DEBUG] tab est NULL\n");
-		return;
+		return ;
 	}
 	i = 0;
 	while (tab[i])
@@ -37,13 +37,17 @@ void	ft_print_redirections(t_redirections *head)
 	while (current != NULL)
 	{
 		if (current->type == TOKEN_IN)
-			ft_printf("[DEBUG] redirec file = TOKEN_IN = %s '<'\n", current->file);
+			ft_printf("[DEBUG] redirec file = TOKEN_IN = %s '<'\n",
+				current->file);
 		else if (current->type == TOKEN_OUT)
-			ft_printf("[DEBUG] redirec file = TOKEN_OUT = %s '>'\n", current->file);
+			ft_printf("[DEBUG] redirec file = TOKEN_OUT = %s '>'\n",
+				current->file);
 		else if (current->type == TOKEN_APPEND)
-			ft_printf("[DEBUG] redirec file = TOKEN APPEND  = %s '>>'\n", current->file);
+			ft_printf("[DEBUG] redirec file = TOKEN APPEND  = %s '>>'\n",
+				current->file);
 		else if (current->type == TOKEN_HEREDOC)
-			ft_printf("[DEBUG] redirec file = TOKEN_HEREDOC  = %s '<<'\n", current->file);
+			ft_printf("[DEBUG] redirec file = TOKEN_HEREDOC  = %s '<<'\n",
+				current->file);
 		if (current->file)
 			ft_printf("[DEBUG] filename = %s\n", current->file);
 		else
@@ -54,20 +58,19 @@ void	ft_print_redirections(t_redirections *head)
 
 void	ft_print_command_lst(t_command *head)
 {
-	t_command *current;
+	t_command	*current;
 
 	current = head;
 	if (current == NULL)
-	{	
+	{
 		ft_printf("[DEBUG] no command\n");
-		return;
+		return ;
 	}
 	ft_printf("\n-------------[DEBUG]---------------\n");
 	while (current)
 	{
-		//ft_printf("head = %s\n", head->arg);
-		ft_printf("\n[DEBUG] t_command = pipe: %d\n", current->p_pipe); // Si on l’utilises
-		ft_print_tab(current->arg);          // Affiche arg[]
+		ft_printf("\n[DEBUG] t_command = pipe: %d\n", current->p_pipe);
+		ft_print_tab(current->arg);
 		ft_print_redirections(current->redirections);
 		current = current->next;
 	}
@@ -78,7 +81,8 @@ void	ft_print_command_lst(t_command *head)
 void	ft_print_tokens(t_token *head)
 {
 	t_token	*current;
-	const char	*token_type_name[] = {
+
+	const char *token_type_name[] = {
 		[TOKEN_WORD] = "TOKEN_WORD",
 		[TOKEN_PIPE] = "TOKEN_PIPE",
 		[TOKEN_IN] = "TOKEN_IN",
@@ -90,9 +94,7 @@ void	ft_print_tokens(t_token *head)
 		[TOKEN_DBL_QUOTE] = "TOKEN_DBL_QUOTE",
 		[TOKEN_ERROR] = "TOKEN_ERROR",
 	};
-
 	current = head;
-	// ft_printf(" 👨‍🍳     LEXER PART     👨‍🍳 \n");
 	while (current)
 	{
 		printf("Type: %s, Value: '%s'\n", token_type_name[current->type],

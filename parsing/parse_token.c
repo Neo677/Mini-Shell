@@ -36,13 +36,19 @@ t_token	*ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst,
 		int *last_exit_status)
 {
 	t_token	*token;
+	// t_parse_context *ctx;
 
 	*cmd_lst = NULL;
 	token = NULL;
 	if (!input || !*input)
 		return (NULL);
 	if (!ft_split_token(&token, input, env_cpy, last_exit_status))
+	{
+                // ft_free_commande_lst(*ctx.cmd_lst);
+                // ft_free_token(*ctx.head);
 		return (NULL);
+	}
+		
 	// ft_print_tokens(token);
 	if (ft_create_command_lst(token, cmd_lst) == 0)
 	{

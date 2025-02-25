@@ -66,30 +66,17 @@ int ft_handle_quotes(t_parse_context *ctx)
     {
         new = ft_strjoin_v2(ctx->last_token->value, quote_content);
         if (!new)
-        {
-            free(quote_content);
-            ft_err_split(*ctx->cmd_lst, *ctx->head);  
-            return (0);
-        }
+            return (free(quote_content), ft_err_split(*ctx->cmd_lst, *ctx->head), 0);
         ctx->last_token->value = new;
         if (!ft_add_arguments(*ctx->current, quote_content))
-        {
-            free(quote_content);
-            ft_err_split(*ctx->cmd_lst, *ctx->head);
-            return (0);
-        }
-        free(quote_content);
-        return (1);
+            return (free(quote_content), ft_err_split(*ctx->cmd_lst, *ctx->head), 0);
+        return (free(quote_content), 1);
     }
     ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, quote_content));
     if (!*ctx->current)
         *ctx->current = ft_init_command(ctx->cmd_lst);
     if (!ft_add_arguments(*ctx->cmd_lst, quote_content))
-    {
-        ft_err_split(*ctx->cmd_lst, *ctx->head);
-        free(quote_content);
-        return (0);
-    }
+        return (free(quote_content), ft_err_split(*ctx->cmd_lst, *ctx->head), 0);
     ctx->last_token = ft_last_token(*ctx->head);
     free(quote_content);
     return (1);
@@ -116,117 +103,197 @@ int	ft_handle_operators(t_parse_context *ctx)
 		if (!*ctx->current)
 			*ctx->current = ft_init_command(ctx->cmd_lst);
 		if (!ft_add_redirections_struct(*ctx->current, ft_identify_token((char *)(*ctx->input)), file))
-		{
-			ft_printf_fd(STDERR_FILENO, "minishell: error: failed to add redirection for file `%s`\n", file);
-			free(file);
-			return (ft_err_split_ope(*ctx->cmd_lst, *ctx->head), 0);
-		}
+			return (free(file), ft_err_split_ope(*ctx->cmd_lst, *ctx->head), 0);
 		free(file);
 	}
 	return (1);
 }
 
-int	ft_handle_env_vars(t_parse_context *ctx)
-{
-    char	*var_name;
-    char	*var_value;
+// static int	handle_dollar_dollar(t_parse_context *ctx, char *var_name)
+// {
+// 	char	*var_value;
 
-	var_name = ft_extract_env_var(ctx->input);
-	if (!var_name)
-		return(ft_printf_fd(STDERR_FILENO, "minishell: error: invalid environment variable name\n"), free(var_name), 0);
-	if (ft_strcmp(var_name, "$$") == 0)
-	{
-		free(var_name);
-		var_value = ft_get_pid_str();
-		if (!var_value)
-			return (0);
-		ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
-		if (!*ctx->current)
-			*ctx->current = ft_init_command(ctx->cmd_lst);
-		if (!ft_add_arguments(*ctx->current, var_value))
-			return (ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
-		free(var_value);
-		return (1);
-	}
-	if (strcmp(var_name, "$?") == 0)
-	{
-		free(var_name);
-		var_value = ft_itoa(ctx->exit_status);
-		if (!var_value)
-			return (0);
-		ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
-		if (!*ctx->current)
-			*ctx->current = ft_init_command(ctx->cmd_lst);
-		if (!ft_add_arguments(*ctx->current, var_value))
-			return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
-		free(var_value);
-		return (1);
-	}
-	var_value = print_node_by_key(ctx->env_cpy, var_name);
-	if (!var_value)
-	{
-		// ft_printf("\n");
-		return (free(var_value), 0);
-	}
+// 	free(var_name);
+// 	var_value = ft_get_pid_str();
+// 	if (!var_value)
+// 		return (0);
+// 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
+// 	if (!*ctx->current)
+// 		*ctx->current = ft_init_command(ctx->cmd_lst);
+// 	if (!ft_add_arguments(*ctx->current, var_value))
+// 		return (ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"),
+// 			free(var_value), 0);
+// 	free(var_value);
+// 	return (1);
+// }
+
+
+
+// static int	handle_dollar_question(t_parse_context *ctx, char *var_name)
+// {
+// 	char	*var_value;
+
+// 	free(var_name);
+// 	var_value = ft_itoa(ctx->exit_status);
+// 	if (!var_value)
+// 		return (0);
+// 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
+// 	if (!*ctx->current)
+// 		*ctx->current = ft_init_command(ctx->cmd_lst);
+// 	if (!ft_add_arguments(*ctx->current, var_value))
+// 		return (ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"),
+// 			free(var_value), 0);
+// 	free(var_value);
+// 	return (1);
+// }
+
+// static int	handle_regular_env(t_parse_context *ctx, char *var_name)
+// {
+// 	char	*var_value;
+
+// 	var_value = print_node_by_key(ctx->env_cpy, var_name);
+// 	if (!var_value)
+// 	{
+// 		free(var_name);
+// 		return (0);
+// 	}
+// 	if (check_variable_backslash_n_parse(var_value) == 1)
+// 		var_value = replace_with_space_parse(var_value);
+// 	if (!var_value)
+// 	{
+// 		free(var_name);
+// 		return (0);
+// 	}
+// 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
+// 	free(var_name);
+// 	if (!*ctx->current)
+// 		*ctx->current = ft_init_command(ctx->cmd_lst);
+// 	if (!ft_add_arguments(*ctx->current, var_value))
+// 		return (ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"),
+// 			free(var_value), 0);
+// 	free(var_value);
+// 	return (1);
+// }
+
+// int	ft_handle_env_vars(t_parse_context *ctx)
+// {
+// 	char	*var_name;
+
+// 	var_name = ft_extract_env_var(ctx->input);
+// 	if (!var_name)
+// 		return (ft_printf_fd(STDERR_FILENO,
+// 				"minishell: error: invalid environment variable name\n"),
+// 			free(var_name), 0);
+// 	if (ft_strcmp(var_name, "$$") == 0)
+// 		return (handle_dollar_dollar(ctx, var_name));
+// 	if (ft_strcmp(var_name, "$?") == 0)
+// 		return (handle_dollar_question(ctx, var_name));
+// 	return (handle_regular_env(ctx, var_name));
+// }
+
+// int	ft_handle_env_vars(t_parse_context *ctx)
+// {
+//     char	*var_name;
+//     char	*var_value;
+
+// 	var_name = ft_extract_env_var(ctx->input);
+// 	if (!var_name)
+// 		return(ft_printf_fd(STDERR_FILENO, "minishell: error: invalid environment variable name\n"), free(var_name), 0);
+// 	if (ft_strcmp(var_name, "$$") == 0)
+// 	{
+// 		free(var_name);
+// 		var_value = ft_get_pid_str();
+// 		if (!var_value)
+// 			return (0);
+// 		ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
+// 		if (!*ctx->current)
+// 			*ctx->current = ft_init_command(ctx->cmd_lst);
+// 		if (!ft_add_arguments(*ctx->current, var_value))
+// 			return (ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
+// 		free(var_value);
+// 		return (1);
+// 	}
+// 	if (strcmp(var_name, "$?") == 0)
+// 	{
+// 		free(var_name);
+// 		var_value = ft_itoa(ctx->exit_status);
+// 		if (!var_value)
+// 			return (0);
+// 		ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
+// 		if (!*ctx->current)
+// 			*ctx->current = ft_init_command(ctx->cmd_lst);
+// 		if (!ft_add_arguments(*ctx->current, var_value))
+// 			return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
+// 		free(var_value);
+// 		return (1);
+// 	}
+// 	var_value = print_node_by_key(ctx->env_cpy, var_name);
+// 	if (!var_value)
+// 	{
+// 		// ft_printf("\n");
+// 		return (free(var_value), 0);
+// 	}
 		
-	if (check_variable_backslash_n_parse(var_value) == 1)
-		var_value = replace_with_space_parse(var_value);
-	if (!var_value)
-		return(0);
-	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));	
-	free(var_name);
-	if (!*ctx->current)
-		*ctx->current = ft_init_command(ctx->cmd_lst);
-	if (!ft_add_arguments(*ctx->current, var_value))
-		return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
-	return (1);
-}
+// 	if (check_variable_backslash_n_parse(var_value) == 1)
+// 		var_value = replace_with_space_parse(var_value);
+// 	if (!var_value)
+// 		return(0);
+// 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));	
+// 	free(var_name);
+// 	if (!*ctx->current)
+// 		*ctx->current = ft_init_command(ctx->cmd_lst);
+// 	if (!ft_add_arguments(*ctx->current, var_value))
+// 		return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
+// 	return (1);
+// }
 
-int	ft_handle_words(t_parse_context *ctx)
-{
-	char	*token_value;
-	t_token *new_token;
+// int	ft_handle_words(t_parse_context *ctx)
+// {
+// 	char	*token_value;
+// 	t_token *new_token;
 
-	token_value = ft_get_next_token(ctx->input);
-	if (strcmp(token_value, "~") == 0)
-	{
-		char *var_value = print_node_by_key(ctx->env_cpy, "HOME");
-		free(token_value);
-		if (!var_value)
-			return (0);
-		ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));	
-		if (!ctx->head)
-			return (free(var_value), 0);
-		if (!*ctx->current)
-			*ctx->current = ft_init_command(ctx->cmd_lst);
-		if (!ft_add_arguments(*ctx->current, var_value))
-			return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
-		return (1);
-	}
-	if (token_value && *token_value != '\0')
-	{
-		new_token = ft_create_token(TOKEN_WORD, token_value);
-		if (!new_token)
-			return (ft_free_token(new_token), 0);
-		ft_add_token(ctx->head, new_token);
-		if (!ctx->head)
-			return (ft_free_token(new_token), 0);
-		ctx->last_token = new_token;
-		if (!*ctx->current)
-			*ctx->current = ft_init_command(ctx->cmd_lst);
-		if (!ft_add_arguments(*ctx->current, token_value))
-			return (free(token_value), 0);
-	}
-	free(token_value);
-	return (1);
-}
+// 	token_value = ft_get_next_token(ctx->input);
+
+// 	if (strcmp(token_value, "~") == 0)
+// 	{
+// 		char *var_value = print_node_by_key(ctx->env_cpy, "HOME");
+// 		free(token_value);
+// 		if (!var_value)
+// 			return (0);
+// 		ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));	
+// 		if (!ctx->head)
+// 			return (free(var_value), 0);
+// 		if (!*ctx->current)
+// 			*ctx->current = ft_init_command(ctx->cmd_lst);
+// 		if (!ft_add_arguments(*ctx->current, var_value))
+// 			return(ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"), free(var_value), 0);
+// 		return (1);
+// 	}
+// 	if (token_value && *token_value != '\0')
+// 	{
+// 		new_token = ft_create_token(TOKEN_WORD, token_value);
+// 		if (!new_token)
+// 			return (ft_free_token(new_token), 0);
+// 		ft_add_token(ctx->head, new_token);
+// 		if (!ctx->head)
+// 			return (ft_free_token(new_token), 0);
+// 		ctx->last_token = new_token;
+// 		if (!*ctx->current)
+// 			*ctx->current = ft_init_command(ctx->cmd_lst);
+// 		if (!ft_add_arguments(*ctx->current, token_value))
+// 			return (free(token_value), 0);
+// 	}
+// 	return (free(token_value), 1);
+// }
 
 int ft_split_token(t_token **head, const char *input, t_env **env_cpy, int *last_exit_status)
 {
     t_parse_context ctx;
-    t_command *cmd_lst = NULL;
-    t_command *current = NULL;
+    t_command *cmd_lst;
+    t_command *current;
 
+    cmd_lst = NULL;
+    current = NULL;
     ctx.cmd_lst = &cmd_lst;
     ctx.current = &current;
     ctx.head = head;
@@ -236,6 +303,7 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy, int *last
     ctx.last_token = NULL;
     ctx.exit_status = *last_exit_status;
 
+    // init_context(&ctx, head, input, env_cpy);
     if (!ft_check_syntax(input, &ctx))
     {
         *last_exit_status = ctx.exit_status;
@@ -269,12 +337,7 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy, int *last
             }
         }
         else if (**ctx.input == '$')
-        {
-            if (!ft_handle_env_vars(&ctx))
-            {
-                /* Gestion d'erreur si nécessaire */
-            }
-        }
+            ft_handle_env_vars(&ctx);
         else
         {
             if (!ft_handle_words(&ctx))
@@ -286,11 +349,8 @@ int ft_split_token(t_token **head, const char *input, t_env **env_cpy, int *last
         }
     }
     if (!ft_valid_token(*ctx.head, &ctx))
-    {
-        *last_exit_status = ctx.exit_status;
-        return (0);
-    }
-    ft_free_commande_lst(cmd_lst);
+        return (*last_exit_status = ctx.exit_status, 0);
+    ft_free_commande_lst(*ctx.cmd_lst);
     *head = *ctx.head;
     *last_exit_status = 0;
     return (1);

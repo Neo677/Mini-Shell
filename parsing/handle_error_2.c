@@ -59,3 +59,11 @@ void	ft_err_bad_redirec(t_command *cmd_lst, t_token *head)
 	ft_free_commande_lst(cmd_lst);
 	return ;
 }
+
+int	error_cleanup(t_parse_context *ctx, int *last_exit_status)
+{
+	ft_free_commande_lst(*ctx->cmd_lst);
+	ft_free_token(*ctx->head);
+	*last_exit_status = ctx->exit_status;
+	return (0);
+}

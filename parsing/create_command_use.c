@@ -13,18 +13,19 @@ void	ft_free_redirections(t_redirections *redir)
 	}
 }
 
-void    ft_free_array(char **av)
+void	ft_free_array(char **av)
 {
-    int i = 0;
+	int	i;
 
-    if (!*av || !av)
-        return;
-    while (av[i])
-    {
-        free(av[i]);
-        i++;
-    }
-    free(av);
+	i = 0;
+	if (!*av || !av)
+		return ;
+	while (av[i])
+	{
+		free(av[i]);
+		i++;
+	}
+	free(av);
 }
 
 void	ft_free_command(t_command *cmd)
@@ -44,7 +45,7 @@ void	ft_free_command(t_command *cmd)
 
 void	ft_free_command_list(t_command **lst)
 {
-	t_command	*tmp;
+	t_command *tmp;
 
 	if (!lst || !*lst)
 		return ;

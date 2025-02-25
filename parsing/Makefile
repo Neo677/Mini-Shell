@@ -24,7 +24,6 @@ SRCS =	add_arguments.c \
 		create_command.c \
 		env_var_dct.c \
 		free.c \
-		handle_signal.c \
 		handle_error.c \
 		handle_error_2.c \
 		handle_quotes_d.c \
@@ -32,9 +31,14 @@ SRCS =	add_arguments.c \
 		expander.c \
 		expander_double.c \
 		eof_quote.c \
+		expander_use.c \
 		main.c \
 		parse_token.c \
 		prompt.c \
+		init_parsing.c \
+		process_token.c \
+		handle_env.c \
+		handle_word.c \
 		split_token.c \
 		token_handle.c \
 		token_utils.c \

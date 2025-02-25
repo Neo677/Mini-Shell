@@ -1,7 +1,6 @@
 #include "minishell.h"
 
-static char	*ft_use_double(const char *start, t_parse_context *ctx,
-		const char **input)
+char	*ft_use_double(const char *start, t_parse_context *ctx)
 {
 	char	*first_line;
 	char	*rest;
@@ -11,9 +10,13 @@ static char	*ft_use_double(const char *start, t_parse_context *ctx,
 
 	len_first = ft_strlen_v2(start);
 	first_line = ft_extract_quotent(start, len_first);
-	rest = ft_eof_double_quote(*input, ctx);
+	rest = ft_eof_double_quote();
 	if (!rest)
+	{
+		ft_printf_fd(2,
+			"bash: unexpected EOF while looking for matching `\"'\n");
 		return (NULL);
+	}
 	combined = ft_strjoin(first_line, rest);
 	free(first_line);
 	free(rest);
@@ -24,7 +27,7 @@ static char	*ft_use_double(const char *start, t_parse_context *ctx,
 	return (tmp);
 }
 
-static char	*handle_dollar_in_quote(const char **input, t_parse_context *ctx,
+char	*handle_dollar_in_quote(const char **input, t_parse_context *ctx,
 		t_quote *state, char *content)
 {
 	char	*tmp;
@@ -33,26 +36,25 @@ static char	*handle_dollar_in_quote(const char **input, t_parse_context *ctx,
 	content = ft_concatent_content(content, tmp);
 	if (!content)
 		return (NULL);
-	if (!ft_handle_env_vars_quote(ctx))
-		return (printf("\n"), NULL);
+	ft_handle_env_vars_quote(ctx);
 	state->start = *input;
 	state->i = 0;
 	return (content);
 }
 
-static char	*ft_missing_quote(const char **input, t_quote state,
+char	*ft_missing_quote(const char **input, t_quote state,
 		t_parse_context *ctx)
 {
 	char	*tmp;
 
-	tmp = ft_use_double(state.start, ctx, input);
+	tmp = ft_use_double(state.start, ctx);
 	if (!tmp)
 		return (NULL);
 	*input += state.i + 1;
 	return (tmp);
 }
 
-static char	*ft_closing_quote(const char **input, t_quote state, char *content)
+char	*ft_closing_quote(const char **input, t_quote state, char *content)
 {
 	char	*tmp;
 

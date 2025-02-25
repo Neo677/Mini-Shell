@@ -68,7 +68,6 @@ int	main(int ac, char **av, char **env)
 			last_exit_status = ctx.exit_status;
 		}
 		ft_free_token(token);
-		ft_free_commande_lst(cmd_lst);
 		free(exec.input);
 		clear_file(pipex.filename_hd);
 	}
