@@ -29,7 +29,8 @@
 
 	Extracts the environment variable name from the input string.
 	- Skips the '$' character.
-	- Checks if the next character is a digit (Bash treats `$1` as a positional parameter).
+	- Checks if the next character is a digit 
+		(Bash treats `$1` as a positional parameter).
 	- Reads a single digit if it's a positional parameter.
 	- Reads a standard identifier (alphanumeric + '_') otherwise.
 	- Returns the literal "$" if no valid variable name is found.

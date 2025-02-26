@@ -46,8 +46,10 @@ SRCS =	add_arguments.c \
 		utils_main.c \
 		utils.c \
 		syntax_before.c \
+		syntax_before_two.c \
 		start_minishell.c \
 		valid_token.c \
+		valid_token_two.c \
 		replace_env.c \
 		creat_command_utils.c \
 		matrix.c \

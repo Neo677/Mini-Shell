@@ -44,8 +44,8 @@ t_token	*ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst,
 		return (NULL);
 	if (!ft_split_token(&token, input, env_cpy, last_exit_status))
 	{
-                // ft_free_commande_lst(*ctx.cmd_lst);
-                // ft_free_token(*ctx.head);
+		// ft_free_commande_lst(*ctx.cmd_lst);
+		// ft_free_token(*ctx.head);
 		return (NULL);
 	}
 		

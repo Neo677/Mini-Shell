@@ -65,35 +65,34 @@ t_token_type	ft_identify_token(char *str)
 	4) add the next and of course put it on NULL (chain list)
 */
 
-t_token *ft_create_token(t_token_type type, char *value)
+t_token	*ft_create_token(t_token_type type, char *value)
 {
-    t_token *token;
+	t_token	*token;
 
-    token = malloc(sizeof(t_token));
-    if (!token)
-        return (NULL);  // No need to free(token) here since token is NULL.
-    token->type = type;
-    token->value = ft_strdup_v2(value);
-    if (!token->value)
-    {
-        free(token);
-        return (NULL);
-    }
-    token->next = NULL;
-    return (token);
+	token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->type = type;
+	token->value = ft_strdup_v2(value);
+	if (!token->value)
+	{
+		free(token);
+		return (NULL);
+	}
+	token->next = NULL;
+	return (token);
 }
-
 
 void	ft_add_token(t_token **head, t_token *new_token)
 {
 	t_token	*current;
 
 	if (!head || !new_token)
-		return;
+		return ;
 	if (*head == NULL)
 	{
 		*head = new_token;
-		return;
+		return ;
 	}
 	current = *head;
 	while (current->next)
@@ -109,14 +108,15 @@ char	*ft_get_next_token(const char **input)
 
 	start = *input;
 	while (**input && **input != ' ' && **input != '\t' && **input != '|'
-		&& **input != '<' && **input != '>' && **input != '\"' && **input != '\'')
+		&& **input != '<' && **input != '>' && **input != '\"'
+		&& **input != '\'')
 		(*input)++;
 	return (ft_strndup(start, *input - start));
 }
 
-t_token *ft_last_token(t_token *head)
+t_token	*ft_last_token(t_token *head)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	tmp = head;
 	if (!tmp)

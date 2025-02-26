@@ -12,12 +12,8 @@ int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 				return (error_cleanup(ctx, last_exit_status));
 		}
 		if (**ctx->input == '!')
-		{
-			ctx->exit_status = 1;
-			return (error_cleanup(ctx, last_exit_status));
-		}
-		if (**ctx->input == '|' || **ctx->input == '>' ||
-			**ctx->input == '<')
+			return (ctx->exit_status = 1, error_cleanup(ctx, last_exit_status));
+		if (**ctx->input == '|' || **ctx->input == '>' || **ctx->input == '<')
 		{
 			if (!ft_handle_operators(ctx))
 				return (error_cleanup(ctx, last_exit_status));

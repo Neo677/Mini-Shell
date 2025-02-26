@@ -206,45 +206,48 @@ void						ft_print_redirections(t_redirections *head);
 void						ft_print_command_lst(t_command *head);
 void						ft_print_tokens(t_token *head);
 
-
-
 int							ft_handle_quotes(t_parse_context *ctx);
-
 
 int							ft_handle_operators(t_parse_context *ctx);
 int							ft_handle_env_vars(t_parse_context *ctx);
 int							ft_handle_words(t_parse_context *ctx);
 
+int							process_tokens(t_parse_context *ctx,
+								int *last_exit_status);
+int							error_cleanup(t_parse_context *ctx,
+								int *last_exit_status);
 
-int	process_tokens(t_parse_context *ctx, int *last_exit_status);
-int	error_cleanup(t_parse_context *ctx, int *last_exit_status);
-
-void	ft_let_go_split(t_parse_context ctx, int *last_exit_status);
-void	init_cmd_ctx(t_parse_context *ctx, t_command **cmd_lst,
-		t_command **current);
-void	init_env_ctx(t_parse_context *ctx, t_token **head,
-		const char *input, t_env **env_cpy);
-int	finalize_ctx(t_parse_context *ctx, int *last_exit_status);
+void						ft_let_go_split(t_parse_context ctx,
+								int *last_exit_status);
+void						init_cmd_ctx(t_parse_context *ctx,
+								t_command **cmd_lst, t_command **current);
+void						init_env_ctx(t_parse_context *ctx, t_token **head,
+								const char *input, t_env **env_cpy);
+int							finalize_ctx(t_parse_context *ctx,
+								int *last_exit_status);
 
 int							ft_split_token(t_token **head, const char *input,
 								t_env **env_cpy, int *last_exit_status);
-
-
 
 void						ft_abort(char *input);
 void						ft_abort_parse(char *input);
 void						ft_abort_cmd(char *input, t_token *token);
 
-void						ft_set_syntax_redir_1(int len, char op);
-void						ft_set_syntax_redir_2(const char *input, int j);
 int							ft_check_syntax(const char *input,
 								t_parse_context *ctx);
+int							ft_set_syntax_ope(const char *input, int i,
+								t_parse_context *ctx);
+void						ft_set_syntax_redir_2(const char *input, int j);
+void						ft_set_syntax_redir_1(int len, char op);
+int							ft_set_syntax_pipe(const char *input, int i,
+								t_parse_context *ctx);
+int							ft_set_syntax_quote(const char *input,
+								t_parse_context *ctx);
+void						ft_print_err_global(int i);
+void						ft_pass_this_bro(t_parse_context *ctx);
 
 int							ft_is_redirection(t_token *token);
 int							ft_handle_operator(t_token **head,
-								const char **input);
-void						ft_handle_word(t_token **head, const char **input);
-int							ft_handle_env_var(t_token **head,
 								const char **input);
 
 t_token_type				ft_identify_token(char *str);
@@ -256,7 +259,6 @@ t_token						*ft_last_token(t_token *head);
 void						ft_clean_up(t_token **token, char **input);
 int							ft_handle_exit(char *input);
 void						ft_intro(void);
-char						**ft_token_to_tab(t_token *token);
 
 size_t						ft_strnlen(const char *s, size_t max);
 char						*ft_strncpy(char *dst, const char *src, size_t len);
