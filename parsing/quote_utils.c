@@ -58,7 +58,7 @@ char	*ft_concatent_content(char *content, char *tmp)
 	if (content)
 	{
 		new = ft_strjoin_v2(content, tmp);
-		free(content);
+		// free(content);
 		free(tmp);
 		if (!new)
 			ft_printf_fd(STDERR_FILENO,
