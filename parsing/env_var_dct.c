@@ -29,7 +29,7 @@
 
 	Extracts the environment variable name from the input string.
 	- Skips the '$' character.
-	- Checks if the next character is a digit 
+	- Checks if the next character is a digit
 		(Bash treats `$1` as a positional parameter).
 	- Reads a single digit if it's a positional parameter.
 	- Reads a standard identifier (alphanumeric + '_') otherwise.
@@ -54,16 +54,18 @@ static char	*ft_handle_special_case(const char **input)
 
 static char	*ft_extract_digit_var(const char **input)
 {
-	const char	*start = *input;
+	const char	*start;
 
+	start = *input;
 	(*input)++;
 	return (ft_strndup(start, 1));
 }
 
 static char	*ft_extract_alpha_var(const char **input)
 {
-	const char	*start = *input;
+	const char	*start;
 
+	start = *input;
 	while (**input && (ft_isalnum(**input) || **input == '_'))
 		(*input)++;
 	return (ft_strndup(start, *input - start));
@@ -75,7 +77,8 @@ char	*ft_extract_env_var(const char **input)
 
 	if (**input != '$')
 		return (NULL);
-	if ((special = ft_handle_special_case(input)))
+	special = ft_handle_special_case(input);
+	if (special)
 		return (special);
 	(*input)++;
 	if (ft_isdigit(**input))

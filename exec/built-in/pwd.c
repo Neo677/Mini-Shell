@@ -65,8 +65,8 @@ void    ft_pwd(t_env **env, int cd)
     else
     {
         printf("%s\n", print_node_by_key(env, "PWD"));
-        if (access(print_node_by_key(env, "OLDPWD"), F_OK) != 0)
-            ft_printf_fd(2, "bash: %s: %s\n", print_node_by_key(env, "OLDPWD"), strerror(errno));
+        // if (access(print_node_by_key(env, "OLDPWD"), F_OK) != 0)
+        //     ft_printf_fd(2, "bash: %s: %s\n", print_node_by_key(env, "OLDPWD"), strerror(errno));
     }
 }
 // mettre a jour la variable d'environnement OLDPWD

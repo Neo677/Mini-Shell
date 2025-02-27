@@ -7,8 +7,6 @@
 	Renvoie le contenu accumulé (les retours à la ligne sont conservés).
  */
 
-#include "minishell.h"
-
 static char	*append_line(char *acc, char *line)
 {
 	char	*tmp;
@@ -47,7 +45,7 @@ char	*ft_eof_double_quote(void)
 	return (new_str);
 }
 
-char	*ft_read_until_S_quote(void)
+char	*ft_read_until_s_quote(void)
 {
 	char	*line;
 	char	*acc;
@@ -84,7 +82,7 @@ char	*ft_eof_single_quote(t_parse_context *ctx)
 	new_str2 = ft_strdup_v2(ctx->input_exec);
 	if (!new_str2)
 		return (NULL);
-	extra = ft_read_until_S_quote();
+	extra = ft_read_until_s_quote();
 	if (!extra)
 	{
 		ft_printf_fd(2,

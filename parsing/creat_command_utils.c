@@ -9,10 +9,11 @@ void	ft_create_cmd_pipe(t_command **current)
 
 int	ft_create_cmd_word(t_command **current, t_token *token, t_command **lst)
 {
-	if (!(*current) && !(*current = ft_init_command(lst)))
+	if (!(*current))
 	{
-		ft_free_command_list(lst);
-		return (0);
+		*current = ft_init_command(lst);
+		if (!*current)
+			return (ft_free_command_list(lst), 0);
 	}
 	if (!ft_add_arguments(*current, token->value))
 	{
@@ -27,8 +28,12 @@ int	ft_create_cmd_redirect(t_command **current, t_token *token, t_command **lst)
 {
 	const char	*file;
 
-	if (!(*current) && !(*current = ft_init_command(lst)))
-		return (ft_free_command_list(lst), 0);
+	if (!(*current))
+	{
+		*current = ft_init_command(lst);
+		if (!*current)
+			return (ft_free_command_list(lst), 0);
+	}
 	if (!token->next || token->next->type != TOKEN_WORD)
 		return (ft_free_command_list(lst), 0);
 	file = token->next->value;
@@ -39,8 +44,12 @@ int	ft_create_cmd_redirect(t_command **current, t_token *token, t_command **lst)
 
 int	ft_create_cmd_env(t_command **current, t_token *token, t_command **lst)
 {
-	if (!(*current) && !(*current = ft_init_command(lst)))
-		return (ft_free_command_list(lst), 0);
+	if (!(*current))
+	{
+		*current = ft_init_command(lst);
+		if (!*current)
+			return (ft_free_command_list(lst), 0);
+	}
 	if (!ft_add_arguments(*current, token->value))
 		return (ft_free_command_list(lst), 0);
 	return (1);

@@ -45,7 +45,7 @@ void	ft_free_command(t_command *cmd)
 
 void	ft_free_command_list(t_command **lst)
 {
-	t_command *tmp;
+	t_command	*tmp;
 
 	if (!lst || !*lst)
 		return ;

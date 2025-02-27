@@ -70,16 +70,19 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 	{
 		if (!ft_handle_doldol(ctx, var_name))
 			return (0);
+		return (1);
 	}
 	if (ft_strcmp(var_name, "$?") == 0)
 	{
 		if (!ft_handle_dolquest(ctx, var_name))
 			return (0);
+		return (1);
 	}
 	else
 	{
 		if (!ft_handle_dol(ctx, var_name))
 			return (0);
+		return (1);
 	}
 	return (1);
 }

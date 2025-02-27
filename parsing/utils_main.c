@@ -51,38 +51,3 @@ void	ft_intro(void)
 	ft_printf("Par Dpascal--Thobenel\n");
 	ft_printf("Tapez 'exit' pour quitter.\n\n");
 }
-
-// char **ft_token_to_tab(t_token *token)
-// {
-// 	int count;
-// 	int i;
-// 	t_token *tmp;
-// 	char **tab;
-
-// 	count = 0;
-// 	tmp = token;
-// 	while (tmp)
-// 	{
-// 		count++;
-// 		tmp = tmp->next;
-// 	}
-// 	tab = malloc(sizeof(char *) * (count + 1));
-// 	if (!tab)
-// 		return (NULL);
-// 	tmp = token;
-// 	i = 0;
-// 	while (tmp)
-// 	{
-// 		tab[i] = ft_strdup_v2(tmp->value);
-// 		if (!tab[i])
-// 		{
-// 			while (i > 0)
-// 				free(tab[i--]);
-// 			return (free(tab), NULL);
-// 		}
-// 		i++;
-// 		tmp = tmp->next;
-// 	}
-// 	tab[i] = NULL;
-// 	return (tab);
-// }

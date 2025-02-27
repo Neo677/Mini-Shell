@@ -84,10 +84,7 @@ void	ft_let_go_split(t_parse_context ctx, int *last_exit_status)
 int	finalize_ctx(t_parse_context *ctx, int *last_exit_status)
 {
 	if (!ft_valid_token(*ctx->head, ctx))
-	{
-		*last_exit_status = ctx->exit_status;
-		return (0);
-	}
+		return (*last_exit_status = ctx->exit_status, 0);
 	ft_free_commande_lst(*ctx->cmd_lst);
 	return (1);
 }
@@ -99,10 +96,14 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy,
 	t_command		*cmd_lst;
 	t_command		*current;
 
-	cmd_lst = NULL;
-	current = NULL;
 	init_cmd_ctx(&ctx, &cmd_lst, &current);
-	init_env_ctx(&ctx, head, input, env_cpy);
+	ctx.head = head;
+	ctx.input = &input;
+	ctx.input_exec = input;
+	ctx.env_cpy = env_cpy;
+	ctx.last_token = NULL;
+	init_cmd_ctx(&ctx, &cmd_lst, &current);
+	ctx.exit_status = *last_exit_status;
 	ctx.exit_status = *last_exit_status;
 	if (!ft_check_syntax(input, &ctx))
 		return (*last_exit_status = ctx.exit_status, 0);

@@ -25,6 +25,12 @@ static char	*handle_missing_quote_part(char *result)
 		return (NULL);
 	}
 	combined = ft_strjoin(result, tmp);
+	if (!combined)
+	{
+		free(result);
+		free(tmp);
+		return (NULL);
+	}
 	free(result);
 	free(tmp);
 	return (combined);

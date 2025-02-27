@@ -54,8 +54,11 @@ int	ft_add_arguments(t_command *cmd, const char *arg)
 	if (cmd->arg)
 		ft_add_arg_utls(cmd, new_arg);
 	new_arg[i] = ft_strdup_v2(arg);
-	if (!new_arg)
-		return (free(new_arg), 0);
+	if (!new_arg[i])
+	{
+		free(new_arg);
+		return (0);
+	}
 	new_arg[i + 1] = NULL;
 	free(cmd->arg);
 	cmd->arg = new_arg;

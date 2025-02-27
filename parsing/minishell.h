@@ -260,6 +260,7 @@ void						ft_clean_up(t_token **token, char **input);
 int							ft_handle_exit(char *input);
 void						ft_intro(void);
 
+
 size_t						ft_strnlen(const char *s, size_t max);
 char						*ft_strncpy(char *dst, const char *src, size_t len);
 char						*ft_strndup(const char *src, size_t size);

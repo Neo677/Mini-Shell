@@ -44,7 +44,9 @@ SRCS =	add_arguments.c \
 		token_handle.c \
 		token_utils.c \
 		utils_main.c \
+		utils_main2.c \
 		utils.c \
+		utils_2.c \
 		syntax_before.c \
 		syntax_before_two.c \
 		start_minishell.c \

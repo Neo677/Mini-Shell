@@ -18,23 +18,29 @@ static void	ft_exec_child(char **av, char **envp, int fd_pipe[2])
 	exit(EXIT_FAILURE);
 }
 
+void ft_fork_pid(char **av, char **envp, int *fd_pipe)
+{
+	pid_t pid;
+
+	pid = fork();
+	if (pid == 0)
+		ft_exec_child(av, envp, fd_pipe);
+	close(fd_pipe[1]);
+	waitpid(pid, NULL, 0);
+}
+
 char	*ft_get_pid_str(void)
 {
 	char	*av[4];
 	char	*envp[1];
 	int		fd_pipe[2];
-	pid_t	pid;
 	char	buffer[32];
 	int		nread;
 
 	ft_init_av_envp(av, envp);
 	if (pipe(fd_pipe) == -1)
 		return (ft_strdup("0"));
-	pid = fork();
-	if (pid == 0)
-		ft_exec_child(av, envp, fd_pipe);
-	close(fd_pipe[1]);
-	waitpid(pid, NULL, 0);
+	ft_fork_pid(av, envp, fd_pipe);
 	nread = read(fd_pipe[0], buffer, sizeof(buffer) - 1);
 	close(fd_pipe[0]);
 	if (nread <= 0)
