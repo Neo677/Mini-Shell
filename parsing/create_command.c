@@ -127,28 +127,28 @@
 //     return (1);
 // }
 
-t_command	*ft_init_command(t_command **lst)
+t_command *ft_init_command(t_command **lst)
 {
-	t_command	*new_cmd;
-	t_command	*last;
+    t_command *new_cmd;
+    t_command *last;
 
-	new_cmd = malloc(sizeof(t_command));
-	if (!new_cmd)
-		return (NULL);
-	new_cmd->arg = NULL;
-	new_cmd->redirections = NULL;
-	new_cmd->p_pipe = 0;
-	new_cmd->next = NULL;
-	if (*lst)
-	{
-		last = *lst;
-		while (last->next)
-			last = last->next;
-		last->next = new_cmd;
-	}
-	else
-		*lst = new_cmd;
-	return (new_cmd);
+    new_cmd = malloc(sizeof(t_command));
+    if (!new_cmd)
+        return NULL;
+    new_cmd->arg = NULL;
+    new_cmd->redirections = NULL;
+    new_cmd->p_pipe = 0;
+    new_cmd->next = NULL;
+    if (*lst)
+    {
+        last = *lst;
+        while (last->next)
+            last = last->next;
+        last->next = new_cmd;
+    }
+    else
+        *lst = new_cmd;
+    return new_cmd;
 }
 
 int	ft_create_command_lst(t_token *token, t_command **lst)

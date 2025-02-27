@@ -53,7 +53,7 @@ int	ft_handle_words(t_parse_context *ctx)
 	if (ft_strcmp(token_value, "~") == 0)
 	{
 		if (!ft_handle_wave(ctx, token_value))
-			return (0);
+			return (free(token_value), 0);
 	}
 	if (token_value && *token_value != '\0')
 	{

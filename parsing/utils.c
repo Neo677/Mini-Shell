@@ -44,7 +44,7 @@ char	*ft_strndup(const char *src, size_t size)
 	len = ft_strnlen(src, size);
 	dst = (char *)malloc(len + 1);
 	if (!dst)
-		return (free(dst), NULL);
+		return (NULL);
 	ft_strncpy(dst, src, len);
 	dst[len] = '\0';
 	return (dst);
