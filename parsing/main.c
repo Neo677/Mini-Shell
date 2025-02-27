@@ -73,7 +73,7 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst,
 		ctx.exit_status = child_process(pipex, *cmd_lst, exec, env);
 		signal(SIGINT, signal_handler);
 		if (exec->exit_bh == 1)
-			return (util_proc(exec, token, pipex), clear_history(),
+			return (util_proc(exec, token, pipex), rl_clear_history(),
 				exec->exit_code_bh);
 		*lst = ctx.exit_status;
 	}
@@ -105,6 +105,6 @@ int	main(int ac, char **av, char **env)
 			return (ret);
 	}
 	free_all(&exec);
-	clear_history();
+	rl_clear_history();
 	return (0);
 }

@@ -147,7 +147,9 @@ t_command *ft_init_command(t_command **lst)
         last->next = new_cmd;
     }
     else
+    {
         *lst = new_cmd;
+    }
     return new_cmd;
 }
 
