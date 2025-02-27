@@ -37,6 +37,7 @@ int	ft_handle_wds(t_parse_context *ctx, char *token_value, t_token *new)
 		*ctx->current = ft_init_command(ctx->cmd_lst);
 	if (!*ctx->current || !ft_add_arguments(*ctx->current, token_value))
 		return (free(token_value), 0);
+	free(token_value);
 	return (1);
 }
 
