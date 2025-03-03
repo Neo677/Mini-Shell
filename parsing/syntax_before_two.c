@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   syntax_before_two.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/03 08:27:49 by thobenel          #+#    #+#             */
+/*   Updated: 2025/03/03 08:27:51 by thobenel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_pass_this_bro(t_parse_context *ctx)
 {
-	ctx->exit_status = 258;
+	ctx->exit_status = 2;
 }
 
 void	ft_print_err_global(int i)

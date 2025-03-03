@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pid.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/03 09:25:57 by thobenel          #+#    #+#             */
+/*   Updated: 2025/03/03 09:26:42 by thobenel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	ft_init_av_envp(char **av, char **envp)
@@ -18,9 +30,9 @@ static void	ft_exec_child(char **av, char **envp, int fd_pipe[2])
 	exit(EXIT_FAILURE);
 }
 
-void ft_fork_pid(char **av, char **envp, int *fd_pipe)
+void	ft_fork_pid(char **av, char **envp, int *fd_pipe)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	pid = fork();
 	if (pid == 0)

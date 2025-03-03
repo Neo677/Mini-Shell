@@ -3,40 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   token_handle.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 17:12:07 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/11 20:37:03 by dpascal          ###   ########.fr       */
+/*   Created: 2025/03/03 09:24:45 by thobenel          #+#    #+#             */
+/*   Updated: 2025/03/03 09:25:38 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdlib.h>
-#include <string.h>
 
 /*
 					🚨    🚨    🚨
 	03/12/24
-	here we gonna check if the token is ok with the rest of the str :
-	and if its good we gonna add it :
-	1) clear the space
-	2) identify word
-	3) identify Heredoc
-
-	(at the begining i've got a main fonction for handle the token
-	(in the utils you can find the utils fonction for add the token to
-	the chain list), but i have to split in 3 fonction form the norm and also
-	it will make the code better to read)
-	Utils for the lexer :
-	the purpsoe of the fonction is to extract the quote at the begining and
-	create a new node on the chain list or signal an error that mean is not closed
-	utility :
-	1) detect a quote open et search for the closing
-	2) if a quote close is missing, return (NULL)
-	3) allocate memory dynamicilly to a chain list wo can
-		contain the str betwin the quote
-		ex = input = "hello my name is tom"
-						0------------------\0
+ here we gonna check if the token is ok with the rest of the str :
+ and if its good we gonna add it :
+ 1) clear the space
+ 2) identify word
+ 3) identify Heredoc
+ (at the begining i've got a main fonction for handle the token
+ (in the utils you can find the utils fonction for add the token to
+ the chain list), but i have to split in 3 fonction form the norm and also
+ it will make the code better to read)
+ Utils for the lexer :
+ the purpsoe of the fonction is to extract the quote at the begining and
+ create a new node on the chain list or signal an error that mean is not closed
+ utility :
+ 1) detect a quote open et search for the closing
+ 2) if a quote close is missing, return (NULL)
+ 3) allocate memory dynamicilly to a chain list wo can
+  contain the str betwin the quote
+ex = input = "hello my name is tom"
+             0------------------\0
 */
 
 int	ft_is_redirection(t_token *token)

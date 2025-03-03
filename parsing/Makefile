@@ -33,6 +33,7 @@ SRCS =	add_arguments.c \
 		eof_quote.c \
 		expander_use.c \
 		main.c \
+		main_use.c \
 		parse_token.c \
 		prompt.c \
 		init_parsing.c \

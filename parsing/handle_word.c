@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_word.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/03 09:28:48 by thobenel          #+#    #+#             */
+/*   Updated: 2025/03/03 09:32:03 by thobenel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_handle_wave(t_parse_context *ctx, char *token_value)
@@ -41,28 +53,28 @@ int	ft_handle_wds(t_parse_context *ctx, char *token_value, t_token *new)
 	return (1);
 }
 
-int ft_handle_words(t_parse_context *ctx)
+int	ft_handle_words(t_parse_context *ctx)
 {
-    char *token_value;
-    t_token *new;
+	char	*token_value;
+	t_token	*new;
 
-    if (!ctx || !ctx->input)
-        return 0;
-    token_value = ft_get_next_token(ctx->input);
-    if (!token_value)
-        return 0;
-    if (ft_strcmp(token_value, "~") == 0)
-    {
-        if (!ft_handle_wave(ctx, token_value))
-            return (free(token_value), 0);  // Free token_value on error
-    }
-    if (token_value && *token_value != '\0')
-    {
-        new = ft_create_token(TOKEN_WORD, token_value);
-        if (!new)
-            return (free(token_value), 0);  // Free token_value on error
-        if (!ft_handle_wds(ctx, token_value, new))
-            return (free(token_value), ft_free_token(new), 0);  // Free both on error
-    }
-    return 1;
+	if (!ctx || !ctx->input)
+		return (0);
+	token_value = ft_get_next_token(ctx->input);
+	if (!token_value)
+		return (0);
+	if (ft_strcmp(token_value, "~") == 0)
+	{
+		if (!ft_handle_wave(ctx, token_value))
+			return (free(token_value), 0);
+	}
+	if (token_value && *token_value != '\0')
+	{
+		new = ft_create_token(TOKEN_WORD, token_value);
+		if (!new)
+			return (free(token_value), 0);
+		if (!ft_handle_wds(ctx, token_value, new))
+			return (free(token_value), ft_free_token(new), 0);
+	}
+	return (1);
 }

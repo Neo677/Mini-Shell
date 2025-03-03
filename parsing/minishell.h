@@ -6,7 +6,7 @@
 /*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/13 05:01:31 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/03 09:23:01 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,18 @@ void						ft_free_commande_lst(t_command *command);
 void						ft_main_free(t_command *cmd, t_redirections *redir,
 								t_token *head);
 
+void						ft_setup_signal(void);
+void						ft_setup_env(t_buit_in *exec, char **env);
+void						util_proc(t_buit_in *exec, t_token *token,
+								t_pipex *pipex);
+void						ft_end_process(t_token *token, t_buit_in *exec,
+								t_pipex *pipex);
+void						ft_mid_process(t_token *token, t_pipex *pipex);
+void						ft_init_proc(t_parse_context ctx, int *lst,
+								t_buit_in *exec);
+int							process_line(t_buit_in *exec, t_pipex *pipex,
+								t_command **cmd_lst, int *lst);
+
 void						ft_free_split(t_token **head, t_command **cmd_lst,
 								const char *error_msg, const char *token);
 ;
@@ -259,7 +271,6 @@ t_token						*ft_last_token(t_token *head);
 void						ft_clean_up(t_token **token, char **input);
 int							ft_handle_exit(char *input);
 void						ft_intro(void);
-
 
 size_t						ft_strnlen(const char *s, size_t max);
 char						*ft_strncpy(char *dst, const char *src, size_t len);

@@ -97,10 +97,6 @@ int	ft_check_syntax(const char *input, t_parse_context *ctx)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '!')
-			return (ft_printf_fd(2,
-					"bash: syntax error near unexpected token `newline'\n"),
-				ft_pass_this_bro(ctx), 0);
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
 			if (input[i] == '|')

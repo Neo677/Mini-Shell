@@ -30,6 +30,7 @@ typedef struct s_built_in
 {
 	int				ac;
 	char			**av;
+    char            **env_dup;
 	t_env			*env_cpy;
 	t_env			*export_cpy;
 	char			**tab;

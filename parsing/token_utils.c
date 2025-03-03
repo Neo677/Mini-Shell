@@ -6,7 +6,7 @@
 /*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:30 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/12 17:25:31 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/03 09:24:22 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 		3) check if this is > redirec OUT
 		4) check if this is >> Append mode
 		5) check if this is  << heredoc
-		6) handle if this is a quote (do we need to verify if there is a end ???)
+		6) handle if this is a quote 
+		(do we need to verify if there is a end ???)
 		7) and of course add an end (TOKEN_END)
 	while we verrify this we gonna check if the token is valid
 	check bottom ⬇️
@@ -29,9 +30,9 @@
 	After that we gonna need 2 more fonction :
 		1) create token
 		2) identifier le token
-
 	if we got 2 pipe ex : (ls -a | pwd | cat < hello)
-	for the pipe we can agree that there is 3 state of the input that we need to parse
+	for the pipe we can agree that there is 
+	3 state of the input that we need to parse
 
 	need to return the name of the heredoc
 		(For my favorite executeur 💪)
