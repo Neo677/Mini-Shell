@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:12:14 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/12 21:48:26 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/21 23:46:15 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char    *replace_with_space_parse(char *str)
     return (new_str);
 }
 
-int check_variable_backslash_n_parse(char *value)
+int check_b_n_parse(char *value)
 {
     int i;
 

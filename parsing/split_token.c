@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:18 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/13 02:25:36 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/21 23:46:15 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 	var_value = print_node_by_key(ctx->env_cpy, var_name);
 	if (!var_value)
 		return (free(var_value), 0);
-	if (check_variable_backslash_n_parse(var_value) == 1)
+	if (check_b_n_parse(var_value) == 1)
 		var_value = replace_with_space_parse(var_value);
 	if (!var_value)
 		return(0);

@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/19 21:39:13 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/21 23:46:15 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ char *ft_strncpy(char *dst, const char *src, size_t len);
 char *ft_strndup(const char *src, size_t size);
 int ft_strcmp_parsing(char *s1, char *s2);
 char    *replace_with_space_parse(char *str);
-int check_variable_backslash_n_parse(char *value);
+int check_b_n_parse(char *value);
 int ft_isspace(char c);
 
 int ft_valid_redirections(const t_token *token);

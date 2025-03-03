@@ -1,5 +1,3 @@
-
-
 #include "../include/exec.h"
 
 int	ft_count_pipex(char *s, char c)
@@ -52,7 +50,7 @@ char	**ft_split_init_pipex(t_pipex *pipex, char *str, char c, char **tab)
 			i++;
 		tab[start] = malloc(sizeof(char) * ft_len_pipex(str, c, i) + 1);
 		if (!tab[start])
-			free_error(pipex, "Erreur allocation ft_split(tab[start])", 0);
+			free_error(pipex, 0);
 		j = 0;
 		while (str[i] && str[i] != c)
 			tab[start][j++] = str[i++];
@@ -71,7 +69,7 @@ char	**ft_split_pipex(t_pipex *pipex, char *str, char c)
 	words = ft_count_pipex(str, c);
 	tab = malloc(sizeof(char *) * (words + 1));
 	if (!tab)
-		free_error(pipex, "Erreur allocation ft_split(tab)", 0);
+		free_error(pipex, 0);
 	tab = ft_split_init_pipex(pipex, str, c, tab);
 	return (tab);
 }

@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 08:38:44 by thobenel          #+#    #+#             */
-/*   Updated: 2025/02/13 02:28:05 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/02/25 17:04:27 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char    *ft_strjoin_free(char *s1, char *s2)
         
     result = ft_strjoin(s1, s2);
     free(s1);
-    free(s2);
+    // free(s2);
     return (result);
 }
 

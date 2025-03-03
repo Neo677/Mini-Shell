@@ -1,54 +1,54 @@
 #include "../include/exec.h"
 
-int ft_strlen(char *s)
+int	ft_strlen(char *s)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while(s[i])
-        i++;
-    return (i);
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
 
-char    *ft_strdup(char *src)
+char	*ft_strdup(char *src)
 {
-    char *dst;
-    int j;
-    int i;
-	int	len;
+	char	*dst;
+	int		j;
+	int		i;
+	int		len;
 
-    len = ft_strlen(src);
-    dst = malloc(sizeof(char) * len + 1);
-    if(!dst)
-    {
-        return (0);
-    }
+	len = ft_strlen(src);
+	dst = malloc(sizeof(char) * len + 1);
+	if (!dst)
+	{
+		return (0);
+	}
 	j = 0;
-    i = 0;
-    while (src[i])
-    {
-        dst[j] = src[i];
-        i++;
-        j++;
-    }
-    dst[j] = '\0';
-    return (dst);
+	i = 0;
+	while (src[i])
+	{
+		dst[j] = src[i];
+		i++;
+		j++;
+	}
+	dst[j] = '\0';
+	return (dst);
 }
 
-int ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(char *s1, char *s2)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    if (!s1)
-        return (1);
-    while (s1[i] || s2[i])
-    {
-        if (s1[i] != s2[i])
-            return (s1[i] - s2[i]);
-        i++;
-    }
-    return (0);
+	i = 0;
+	if (!s1)
+		return (1);
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (0);
 }
 
 char	*ft_join(char *join, char *s1, char *s2)

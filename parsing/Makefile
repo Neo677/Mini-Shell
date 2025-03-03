@@ -6,7 +6,7 @@
 #    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 17:24:52 by thobenel          #+#    #+#              #
-#    Updated: 2025/02/19 21:19:06 by dpascal          ###   ########.fr        #
+#    Updated: 2025/02/22 14:48:57 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,31 +41,39 @@ SRCS =	add_arguments.c \
 		valid_token.c \
 		replace_env.c \
 		matrix.c \
-		../exec/core/check_file.c \
-		../exec/core/cmd.c \
-		../exec/core/exec.c \
-		../exec/core/utils.c \
-		../exec/core/free_exec.c \
-		../exec/core/split.c \
-		../exec/core/process.c \
-		../exec/core/init_var.c \
-		../exec/core/utils_error.c \
-		../exec/core/here_doc.c \
 		../exec/built-in/cd.c \
 		../exec/built-in/cmd_node.c \
 		../exec/built-in/cpy_env.c \
-		../exec/built-in/init.c \
 		../exec/built-in/echo.c \
 		../exec/built-in/env.c \
 		../exec/built-in/exit.c \
 		../exec/built-in/export.c \
+		../exec/built-in/export2.c \
+		../exec/built-in/export3.c \
 		../exec/built-in/free_bh.c \
+		../exec/built-in/init.c \
 		../exec/built-in/pwd.c \
+		../exec/built-in/signal.c \
+		../exec/built-in/split_var.c \
 		../exec/built-in/split.c \
 		../exec/built-in/unset.c \
 		../exec/built-in/utils_built_in.c \
+		../exec/built-in/utils_cmd_node.c \
+		../exec/built-in/utils_export.c \
 		../exec/built-in/utils.c \
-		../exec/built-in/signal.c
+		../exec/core/builtin.c \
+		../exec/core/check_file.c \
+		../exec/core/cmd.c \
+		../exec/core/free_exec.c \
+		../exec/core/here_doc.c \
+		../exec/core/init_var.c \
+		../exec/core/process.c \
+		../exec/core/redir.c \
+		../exec/core/split.c \
+		../exec/core/utils_error.c \
+		../exec/core/utils.c \
+		../exec/core/utils2.c \
+		
 
 OBJS = $(SRCS:.c=.o)
 
