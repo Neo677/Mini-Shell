@@ -53,42 +53,34 @@ void	ft_init_proc(t_parse_context ctx, int *lst, t_buit_in *exec)
 	ctx.exit_status = *lst;
 }
 
-int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst,
-        int *lst, char **env)
+int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst, char **env)
 {
-    t_token         *token;
-    t_parse_context ctx;
+	t_token			*token;
+	t_parse_context	ctx;
 
-    ctx.cmd_lst = cmd_lst;
-    ft_init_proc(ctx, lst, exec);
-    exec->input = readline("minishell> ");
-    if (!exec->input)
-        return (ft_printf("exit\n"), -1);
-    add_history(exec->input);
-    token = ft_parse_token(exec->input, &exec->env_cpy, cmd_lst, lst);
-    if (!token)
-        return (free(exec->input), 0);
-    ft_mid_process(token, pipex);
-    if (*cmd_lst && (*cmd_lst)->arg)
-    {
-        ctx.exit_status = child_process(pipex, *cmd_lst, exec, env);
-        signal(SIGINT, signal_handler);
-        if (exec->exit_bh == 1)
-        {
-            util_proc(exec, token, pipex);
-            rl_clear_history();
-            ft_free_commande_lst(*cmd_lst); // Libère la liste de commandes
-            *cmd_lst = NULL;
-            return (exec->exit_code_bh);
-        }
-        *lst = ctx.exit_status;
-    }
-    ft_end_process(token, exec, pipex);
-    ft_free_commande_lst(*cmd_lst); // Libération en fin de traitement
-    *cmd_lst = NULL;
-    return (0);
+	ctx.cmd_lst = cmd_lst;
+	ft_init_proc(ctx, lst, exec);
+	exec->input = readline("minishell> ");
+	if (!exec->input)
+		return (ft_printf("exit\n"), -1);
+	add_history(exec->input);
+	token = ft_parse_token(exec->input, &exec->env_cpy, cmd_lst, lst);
+	if (!token)
+		return (free(exec->input), 0);
+	ft_mid_process(token, pipex);
+	if (*cmd_lst && (*cmd_lst)->arg)
+	{
+		ctx.exit_status = child_process(pipex, *cmd_lst, exec, env);
+		signal(SIGINT, signal_handler);
+		if (exec->exit_bh == 1)
+			return (util_proc(exec, token, pipex), clear_history(),
+				ft_free_commande_lst(*cmd_lst), *cmd_lst = NULL,
+				exec->exit_code_bh);
+		*lst = ctx.exit_status;
+	}
+	return (ft_end_process(token, exec, pipex), ft_free_commande_lst(*cmd_lst),
+		*cmd_lst = NULL, 0);
 }
-
 
 int	main(int ac, char **av, char **env)
 {
@@ -114,7 +106,5 @@ int	main(int ac, char **av, char **env)
 		else if (ret != 0)
 			return (ret);
 	}
-	free_all(&exec);
-	rl_clear_history();
-	return (0);
+	return (free_all(&exec), clear_history(), 0);
 }

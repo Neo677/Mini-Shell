@@ -94,11 +94,11 @@ $(NAME): $(OBJS) $(LIBFT) $(LIBFT_MATE)
 
 $(LIBFT):
 	@echo "Compilation de la libft..."
-	make -C $(LIBFT_DIR) 
+	make -C $(LIBFT_DIR)
 
 $(LIBFT_MATE):
 	@echo "Compilation de la libft du Mate..."
-	make -C $(LIBFT_DIR_MATE) 
+	make -C $(LIBFT_DIR_MATE)
 
 %.o: %.c
 	@echo "Compilation de $<..."
