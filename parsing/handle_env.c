@@ -92,7 +92,7 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 	}
 	else
 	{
-		if (!ft_handle_dol(ctx, var_name))
+		if (!ft_handle_dol(ctx, var_name))	
 			return (free(var_name), 0);
 		return (1);
 	}

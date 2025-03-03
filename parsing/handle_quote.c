@@ -51,6 +51,7 @@ static int	add_quote_as_new_token(t_parse_context *ctx, char *quote_content)
 {
 	t_token	*token;
 
+
 	token = ft_create_token(TOKEN_WORD, quote_content);
 	ft_add_token(ctx->head, token);
 	if (!*ctx->current)
