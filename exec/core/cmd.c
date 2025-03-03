@@ -1,8 +1,32 @@
-
-
 #include "../include/exec.h"
 
-char	*find_cmd(t_pipex *pipex, char *cmd, char **paths)
+char	*error_execute_cmd(t_buit_in *exec, t_pipex *pipex, char *cmd)
+{
+	struct stat	path_stat;
+
+	if (access(cmd, F_OK) == 0)
+	{
+		stat(cmd, &path_stat);
+		if (S_ISDIR(path_stat.st_mode))
+		{
+			ft_printf_fd(2, "bash: %s: Is a directory\n", cmd);
+			free_error(pipex, exec->status = 126);
+		}
+		else
+			ft_printf_fd(2, "bash: %s: No such file or directory\n", cmd);
+	}
+	else
+	{
+		if (ft_strchr_exec(cmd, '/') == 0)
+			ft_printf_fd(2, "bash: %s: No such file or directory\n", cmd);
+		else
+			ft_printf_fd(2, "%s: command not found\n", cmd);
+	}
+	free_error(pipex, exec->status = 127);
+	return (NULL);
+}
+
+char	*find_cmd(t_buit_in *exec, t_pipex *pipex, char *cmd, char **paths)
 {
 	int	i;
 
@@ -14,7 +38,7 @@ char	*find_cmd(t_pipex *pipex, char *cmd, char **paths)
 		pipex->paths_cmd = malloc(sizeof(char) * ft_strlen_pipex(cmd)
 				+ ft_strlen_pipex(pipex->paths[i]) + 2);
 		if (!pipex->paths_cmd)
-			free_error(pipex, "Erreur allocation paths_cmd", 0);
+			free_error(pipex, 0);
 		ft_strcpy(pipex->paths_cmd, paths[i]);
 		ft_strcat(pipex->paths_cmd, "/");
 		ft_strcat(pipex->paths_cmd, cmd);
@@ -23,13 +47,11 @@ char	*find_cmd(t_pipex *pipex, char *cmd, char **paths)
 		free(pipex->paths_cmd);
 		i++;
 	}
-	if (pipex->error != 1 && access("temp_null", F_OK) != 0)
-		write_error(cmd);
-	free_error(pipex, "", 127);
+	error_execute_cmd(exec, pipex, cmd);
 	return (NULL);
 }
 
-char	*find_path(t_pipex *pipex, char *cmd, char **envp)
+char	*find_path(t_buit_in *exec, t_pipex *pipex, char *cmd, char **envp)
 {
 	int	i;
 
@@ -37,17 +59,34 @@ char	*find_path(t_pipex *pipex, char *cmd, char **envp)
 	while (str_search(envp[i], "PATH", 4) == 0)
 		i++;
 	pipex->paths = ft_split_pipex(pipex, envp[i] + 5, ':');
-	pipex->path_cmd = find_cmd(pipex, cmd, pipex->paths);
+	pipex->path_cmd = find_cmd(exec, pipex, cmd, pipex->paths);
 	return (pipex->path_cmd);
 }
 
-void	execute_cmd(t_pipex *pipex, char **arg, char **envp)
+void	execute_cmd(t_buit_in *exec, t_pipex *pipex, char **arg, char **envp)
 {
-	pipex->path = find_path(pipex, arg[0], envp);
-	if (access("temp_null", F_OK) == 0)
-		unlink("temp_null");
-	if (access("temp_null2", F_OK) == 0)
-		unlink("temp_null2");
+	pipex->path = find_path(exec, pipex, arg[0], envp);
 	if (execve(pipex->path, arg, envp) == -1)
-		free_error(pipex, "", 126);
+	{
+		if (ft_strcmp(arg[0], ".") == 0)
+		{
+			if (!arg[1])
+			{
+				ft_printf_fd(2, CMD_EXEC CMD_EXEC2);
+				free_error(pipex, 2);
+			}
+			else
+			{
+				ft_printf_fd(2, "%s: command not found\n", arg[0]);
+				free_error(pipex, exec->status = 127);
+			}
+		}
+		else if (ft_strcmp(arg[0], "..") == 0)
+		{
+			ft_printf_fd(2, "%s: command not found\n", arg[0]);
+			free_error(pipex, exec->status = 127);
+		}
+		ft_printf_fd(2, "bash: %s: Is a directory\n", arg[0]);
+		free_error(pipex, exec->status = 126);
+	}
 }

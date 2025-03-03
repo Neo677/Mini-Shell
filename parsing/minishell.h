@@ -161,7 +161,7 @@ void						util_proc(t_buit_in *exec, t_token *token,
 								t_pipex *pipex);
 void						ft_end_process(t_token *token, t_buit_in *exec,
 								t_pipex *pipex);
-void						ft_mid_process(t_token *token, t_pipex *pipex);
+void						ft_mid_process(t_token *token, t_pipex *pipex, t_buit_in *exec);
 void						ft_init_proc(t_parse_context ctx, int *lst,
 								t_buit_in *exec);
 int							process_line(t_buit_in *exec, t_pipex *pipex,

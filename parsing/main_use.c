@@ -39,8 +39,8 @@ void	ft_end_process(t_token *token, t_buit_in *exec, t_pipex *pipex)
 	clear_file(pipex->filename_hd);
 }
 
-void	ft_mid_process(t_token *token, t_pipex *pipex)
+void	ft_mid_process(t_token *token, t_pipex *pipex, t_buit_in *exec)
 {
 	check_heredoc(token, pipex);
-	check_file(token);
+	check_file(exec, token);
 }

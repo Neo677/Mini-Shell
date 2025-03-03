@@ -1,4 +1,3 @@
-
 #include "../include/exec.h"
 
 int	ft_count(char *s, char c)

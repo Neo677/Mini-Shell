@@ -1,5 +1,3 @@
-
-
 #include "../include/exec.h"
 
 void	free_tab(char **tab)
@@ -7,7 +5,7 @@ void	free_tab(char **tab)
 	int	i;
 
 	if (!tab)
-		return;
+		return ;
 	i = 0;
 	while (tab[i])
 	{
@@ -15,22 +13,15 @@ void	free_tab(char **tab)
 		i++;
 	}
 	free(tab);
+	tab = NULL;
 }
 
 void	free_all_core(t_pipex *pipex)
 {
-	if (pipex->cmd)
-		free_tab(pipex->cmd);
 	if (pipex->paths)
 		free_tab(pipex->paths);
 	if (pipex->path)
 		free(pipex->path);
-	if (pipex->pid)
-		free(pipex->pid);
-	if (access("temp_null", F_OK) == 0)
-		unlink("temp_null");
-	if (access("temp_null2", F_OK) == 0)
-		unlink("temp_null2");
 }
 
 void	close_file(t_pipex *pipex)
@@ -41,10 +32,9 @@ void	close_file(t_pipex *pipex)
 		close(pipex->outfile);
 }
 
-void	free_error(t_pipex *pipex, char *error, int key_error)
+void	free_error(t_pipex *pipex, int key_error)
 {
 	free_all_core(pipex);
 	close_file(pipex);
-	ft_printf_fd(2, "bash: %s", error);
 	exit(key_error);
 }

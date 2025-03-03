@@ -26,10 +26,11 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 	token = ft_parse_token(exec->input, &exec->env_cpy, cmd_lst, lst);
 	if (!token)
 		return (free(exec->input), 0);
-	ft_mid_process(token, pipex);
+	ft_mid_process(token, pipex, exec);
 	if (*cmd_lst && (*cmd_lst)->arg)
 	{
-		ctx.exit_status = child_process(pipex, *cmd_lst, exec, exec->env_dup);
+		process(pipex, *cmd_lst, exec, exec->env_dup);
+		ctx.exit_status = exec->status;
 		signal(SIGINT, signal_handler);
 		if (exec->exit_bh == 1)
 			return (util_proc(exec, token, pipex), rl_clear_history(),
