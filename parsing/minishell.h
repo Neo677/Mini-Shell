@@ -161,7 +161,8 @@ void						util_proc(t_buit_in *exec, t_token *token,
 								t_pipex *pipex);
 void						ft_end_process(t_token *token, t_buit_in *exec,
 								t_pipex *pipex);
-void						ft_mid_process(t_token *token, t_pipex *pipex, t_buit_in *exec);
+void						ft_mid_process(t_token *token, t_pipex *pipex,
+								t_buit_in *exec);
 void						ft_init_proc(t_parse_context ctx, int *lst,
 								t_buit_in *exec);
 int							process_line(t_buit_in *exec, t_pipex *pipex,
@@ -233,8 +234,6 @@ void						ft_let_go_split(t_parse_context ctx,
 								int *last_exit_status);
 void						init_cmd_ctx(t_parse_context *ctx,
 								t_command **cmd_lst, t_command **current);
-void						init_env_ctx(t_parse_context *ctx, t_token **head,
-								const char *input, t_env **env_cpy);
 int							finalize_ctx(t_parse_context *ctx,
 								int *last_exit_status);
 
@@ -252,8 +251,6 @@ int							ft_set_syntax_ope(const char *input, int i,
 void						ft_set_syntax_redir_2(const char *input, int j);
 void						ft_set_syntax_redir_1(int len, char op);
 int							ft_set_syntax_pipe(const char *input, int i,
-								t_parse_context *ctx);
-int							ft_set_syntax_quote(const char *input,
 								t_parse_context *ctx);
 void						ft_print_err_global(int i);
 void						ft_pass_this_bro(t_parse_context *ctx);

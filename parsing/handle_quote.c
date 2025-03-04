@@ -51,7 +51,6 @@ static int	add_quote_as_new_token(t_parse_context *ctx, char *quote_content)
 {
 	t_token	*token;
 
-
 	token = ft_create_token(TOKEN_WORD, quote_content);
 	ft_add_token(ctx->head, token);
 	if (!*ctx->current)
@@ -86,44 +85,3 @@ int	ft_handle_quotes(t_parse_context *ctx)
 	else
 		return (add_quote_as_new_token(ctx, quote_content));
 }
-
-// int ft_handle_quotes(t_parse_context *ctx)
-// {
-//     char *quote_content;
-//     const char *input_ptr;
-//     char prev_char;
-//     char *new;
-
-//     input_ptr = *ctx->input;
-//     quote_content = ft_handle_quote(ctx);
-//     if (!quote_content)
-//         return (0);
-//     if (input_ptr > ctx->input_exec)
-//         prev_char = *(input_ptr - 1);
-//     else
-//         prev_char = ' ';
-//     if (!ft_isspace(prev_char) && ctx->last_token && ctx->last_token->value)
-//     {
-//         new = ft_strjoin_v2(ctx->last_token->value, quote_content);
-//         if (!new)
-//             return (free(quote_content), ft_err_split(*ctx->cmd_lst,
-		// *ctx->head), 0);
-//         ctx->last_token->value = new;
-//         if (!ft_add_arguments(*ctx->current, quote_content))
-//             return (free(quote_content), ft_err_split(*ctx->cmd_lst,
-		// *ctx->head), 0);
-//         return (free(quote_content), 1);
-//         if (!ft_handle_space(ctx, quote_content))
-//             return (free(quote_content), ft_err_split(*ctx->cmd_lst,
-		// *ctx->head), 0);
-//         return (free(quote_content), 1);
-//     }
-//     ft_add_token(ctx->head, ft_create_token(TOKEN_WORD, quote_content));
-//     if (!*ctx->current)
-//         *ctx->current = ft_init_command(ctx->cmd_lst);
-//     if (!ft_add_arguments(*ctx->cmd_lst, quote_content))
-//         return (free(quote_content), ft_err_split(*ctx->cmd_lst, *ctx->head),
-	// 0);
-//     ctx->last_token = ft_last_token(*ctx->head);
-//     return (free(quote_content), 1);
-// }
