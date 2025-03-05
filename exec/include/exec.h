@@ -5,6 +5,7 @@
 # include "../libft/printf/ft_printf.h"
 # include <errno.h>
 # include <fcntl.h>
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -16,7 +17,7 @@
 # include <unistd.h>
 
 # define CD_ERR "cd: error retrieving current directory: getcwd: cannot "
-# define CD_ERR2 "access parent directories: No such file or directory"
+# define CD_ERR2 "access parent directories: No such file or directory\n"
 # define EXIT_ERR "bash: exit: %s: numeric argument required\n"
 # define CMD_EXEC "bash: .: filename argument required\n.: "
 # define CMD_EXEC2 "usage: . filename [arguments]\n"
@@ -35,6 +36,7 @@ typedef struct s_built_in
 {
 	t_env						*env_cpy;
 	t_env						*export_cpy;
+	char						**env_dup;
 	char						**tab;
 	char						*input;
 	int							cd;
@@ -282,5 +284,9 @@ void							clear_file(char **filename);
 int								str_search(char *big, char *little, int len);
 char							*ft_strcpy(char *dst, char *cpy);
 char							*ft_strcat(char *dst, char *src);
+
+int	check_file_in2(t_buit_in *exec, t_redirections *current);
+int	check_file_out2(t_buit_in *exec, t_redirections *current);
+int	check_file2(t_buit_in *exec, t_command *cmd);
 
 #endif

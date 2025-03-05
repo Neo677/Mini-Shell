@@ -6,7 +6,7 @@
 /*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:30 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/12 17:25:31 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/03 09:24:22 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 		3) check if this is > redirec OUT
 		4) check if this is >> Append mode
 		5) check if this is  << heredoc
-		6) handle if this is a quote (do we need to verify if there is a end ???)
+		6) handle if this is a quote 
+		(do we need to verify if there is a end ???)
 		7) and of course add an end (TOKEN_END)
 	while we verrify this we gonna check if the token is valid
 	check bottom ⬇️
@@ -29,9 +30,9 @@
 	After that we gonna need 2 more fonction :
 		1) create token
 		2) identifier le token
-
 	if we got 2 pipe ex : (ls -a | pwd | cat < hello)
-	for the pipe we can agree that there is 3 state of the input that we need to parse
+	for the pipe we can agree that there is 
+	3 state of the input that we need to parse
 
 	need to return the name of the heredoc
 		(For my favorite executeur 💪)
@@ -65,35 +66,34 @@ t_token_type	ft_identify_token(char *str)
 	4) add the next and of course put it on NULL (chain list)
 */
 
-t_token *ft_create_token(t_token_type type, char *value)
+t_token	*ft_create_token(t_token_type type, char *value)
 {
-    t_token *token;
+	t_token	*token;
 
-    token = malloc(sizeof(t_token));
-    if (!token)
-        return (NULL);  // No need to free(token) here since token is NULL.
-    token->type = type;
-    token->value = ft_strdup_v2(value);
-    if (!token->value)
-    {
-        free(token);
-        return (NULL);
-    }
-    token->next = NULL;
-    return (token);
+	token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->type = type;
+	token->value = ft_strdup_v2(value);
+	if (!token->value)
+	{
+		free(token);
+		return (NULL);
+	}
+	token->next = NULL;
+	return (token);
 }
-
 
 void	ft_add_token(t_token **head, t_token *new_token)
 {
 	t_token	*current;
 
 	if (!head || !new_token)
-		return;
+		return ;
 	if (*head == NULL)
 	{
 		*head = new_token;
-		return;
+		return ;
 	}
 	current = *head;
 	while (current->next)
@@ -109,14 +109,15 @@ char	*ft_get_next_token(const char **input)
 
 	start = *input;
 	while (**input && **input != ' ' && **input != '\t' && **input != '|'
-		&& **input != '<' && **input != '>' && **input != '\"' && **input != '\'')
+		&& **input != '<' && **input != '>' && **input != '\"'
+		&& **input != '\'')
 		(*input)++;
 	return (ft_strndup(start, *input - start));
 }
 
-t_token *ft_last_token(t_token *head)
+t_token	*ft_last_token(t_token *head)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	tmp = head;
 	if (!tmp)
