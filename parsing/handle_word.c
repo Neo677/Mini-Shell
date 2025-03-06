@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:28:48 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 09:32:03 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:38:46 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	ft_handle_wave(t_parse_context *ctx, char *token_value)
 	if (!ctx || !token_value)
 		return (0);
 	var_value = print_node_by_key(ctx->env_cpy, "HOME");
-	free(token_value);
 	if (!var_value)
 		return (0);
 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
@@ -49,7 +48,6 @@ int	ft_handle_wds(t_parse_context *ctx, char *token_value, t_token *new)
 		*ctx->current = ft_init_command(ctx->cmd_lst);
 	if (!*ctx->current || !ft_add_arguments(*ctx->current, token_value))
 		return (free(token_value), 0);
-	free(token_value);
 	return (1);
 }
 
@@ -76,5 +74,5 @@ int	ft_handle_words(t_parse_context *ctx)
 		if (!ft_handle_wds(ctx, token_value, new))
 			return (free(token_value), ft_free_token(new), 0);
 	}
-	return (1);
+	return (free(token_value), 1);
 }

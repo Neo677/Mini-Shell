@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_token.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 08:27:58 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 08:28:00 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:35:52 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 			if (!ft_handle_operators(ctx))
 				return (ft_let_go_split(*ctx, last_exit_status), 0);
 		}
-		else if (**ctx->input == '$')
+		if (ft_handle_env_vars(ctx) == 2)
 		{
-			if (!ft_handle_env_vars(ctx))
-				return (ft_let_go_split_env(*ctx, last_exit_status), 0);
+			while (**ctx->input != ' ' && **ctx->input)
+				(*ctx->input)++;
 		}
-		else if (!ft_handle_words(ctx))
+		if (!ft_handle_words(ctx))
 			return (ft_let_go_split(*ctx, last_exit_status), 0);
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 15:14:13 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/06 09:38:32 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,10 @@ char						*ft_detec_var(const char **input);
 int							ft_detec_digit(int is_digit_param,
 								const char **input);
 char						*ft_extract_env_var(const char **input);
+char	*ft_handle_special_case(const char **input);
+char	*ft_extract_digit_var(const char **input);
+char	*ft_extract_alpha_var(const char **input);
+
 
 void						error_exit(const char *error);
 void						ft_free_token(t_token *head);
@@ -161,7 +165,8 @@ void						util_proc(t_buit_in *exec, t_token *token,
 								t_pipex *pipex);
 void						ft_end_process(t_token *token, t_buit_in *exec,
 								t_pipex *pipex);
-void						ft_mid_process(t_token *token, t_pipex *pipex, t_buit_in *exec);
+void						ft_mid_process(t_token *token, t_pipex *pipex,
+								t_buit_in *exec);
 void						ft_init_proc(t_parse_context ctx, int *lst,
 								t_buit_in *exec);
 int							process_line(t_buit_in *exec, t_pipex *pipex,
@@ -169,6 +174,7 @@ int							process_line(t_buit_in *exec, t_pipex *pipex,
 
 void						ft_free_split(t_token **head, t_command **cmd_lst,
 								const char *error_msg, const char *token);
+;
 void						ft_err_split(t_command *cmd_lst, t_token *head);
 void						ft_err_split_ope(t_command *cmd_lst, t_token *head);
 void						ft_err_bad_redirec(t_command *cmd_lst,
@@ -232,8 +238,6 @@ void						ft_let_go_split(t_parse_context ctx,
 								int *last_exit_status);
 void						init_cmd_ctx(t_parse_context *ctx,
 								t_command **cmd_lst, t_command **current);
-void						init_env_ctx(t_parse_context *ctx, t_token **head,
-								const char *input, t_env **env_cpy);
 int							finalize_ctx(t_parse_context *ctx,
 								int *last_exit_status);
 
@@ -251,8 +255,6 @@ int							ft_set_syntax_ope(const char *input, int i,
 void						ft_set_syntax_redir_2(const char *input, int j);
 void						ft_set_syntax_redir_1(int len, char op);
 int							ft_set_syntax_pipe(const char *input, int i,
-								t_parse_context *ctx);
-int							ft_set_syntax_quote(const char *input,
 								t_parse_context *ctx);
 void						ft_print_err_global(int i);
 void						ft_pass_this_bro(t_parse_context *ctx);

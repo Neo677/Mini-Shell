@@ -27,29 +27,6 @@ void	ft_print_err_global(int i)
 		ft_printf_fd(2, "bash: syntax error near unexpected token `newline'\n");
 }
 
-int	ft_set_syntax_quote(const char *input, t_parse_context *ctx)
-{
-	int	quote;
-	int	i;
-
-	quote = 0;
-	i = 0;
-	while (input[i] == '\'' || input[i] == '"')
-	{
-		if (input[i] == '\'' || input[i] == '"')
-		{
-			if (quote == 0)
-				quote = input[i];
-			else if (quote == input[i])
-				quote = 0;
-		}
-		i++;
-	}
-	if (quote != 0)
-		return (ft_print_err_global(0), ft_pass_this_bro(ctx), 0);
-	return (1);
-}
-
 int	ft_set_syntax_pipe(const char *input, int i, t_parse_context *ctx)
 {
 	int	j;

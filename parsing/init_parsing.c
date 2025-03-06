@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   init_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:26:55 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/05 08:02:43 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/03 09:27:06 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	ft_free_process_line(t_buit_in *exec, t_pipex *pipex,
+		t_command **cmd_lst, t_token *token)
+{
+	util_proc(exec, token, pipex);
+	rl_clear_history();
+	ft_free_commande_lst(*cmd_lst);
+	*cmd_lst = NULL;
+	return (exec->exit_code_bh);
+}
 
 int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 {
@@ -33,17 +43,15 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 		ctx.exit_status = exec->status;
 		signal(SIGINT, signal_handler);
 		if (exec->exit_bh == 1)
-			return (util_proc(exec, token, pipex), rl_clear_history(),
-				ft_free_commande_lst(*cmd_lst), *cmd_lst = NULL,
-				exec->exit_code_bh);
+			return (ft_free_process_line(exec, pipex, cmd_lst, token));
+		*lst = ctx.exit_status;
 	}
-	*lst = ctx.exit_status;
-	return (ft_end_process(token, exec, pipex),
-		ft_free_commande_lst(*cmd_lst), *cmd_lst = NULL, 0);
+	return (ft_end_process(token, exec, pipex), ft_free_commande_lst(*cmd_lst),
+		*cmd_lst = NULL, 0);
 }
 
 void	init_cmd_ctx(t_parse_context *ctx, t_command **cmd_lst,
-							t_command **current)
+		t_command **current)
 {
 	*cmd_lst = NULL;
 	*current = NULL;

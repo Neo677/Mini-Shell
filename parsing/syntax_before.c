@@ -92,11 +92,11 @@ int	ft_check_syntax(const char *input, t_parse_context *ctx)
 	int	i;
 	int	res;
 
-	if (ft_set_syntax_quote(input, ctx) == 0)
-		return (0);
 	i = 0;
 	while (input[i])
 	{
+		if (input[i] == '\'' || input[i] == '"')
+			return (1);
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
 			if (input[i] == '|')

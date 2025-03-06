@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_var_dct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:24:32 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/12 17:24:33 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:00:25 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 	- Duplicates and returns the variable name.
 */
 
-static char	*ft_handle_special_case(const char **input)
+char	*ft_handle_special_case(const char **input)
 {
 	if ((*input)[1] == '$')
 	{
@@ -52,7 +52,7 @@ static char	*ft_handle_special_case(const char **input)
 	return (NULL);
 }
 
-static char	*ft_extract_digit_var(const char **input)
+char	*ft_extract_digit_var(const char **input)
 {
 	const char	*start;
 
@@ -61,7 +61,7 @@ static char	*ft_extract_digit_var(const char **input)
 	return (ft_strndup(start, 1));
 }
 
-static char	*ft_extract_alpha_var(const char **input)
+char	*ft_extract_alpha_var(const char **input)
 {
 	const char	*start;
 
@@ -74,12 +74,20 @@ static char	*ft_extract_alpha_var(const char **input)
 char	*ft_extract_env_var(const char **input)
 {
 	char	*special;
+	char *test;
+	char	*test2;
 
 	if (**input != '$')
 		return (NULL);
 	special = ft_handle_special_case(input);
 	if (special)
-		return (special);
+	{
+		test2 = ft_strdup_v2(*input);
+		test = ft_strjoin(special, test2);
+		free (test2);
+		free(special);
+		return (test);
+	}
 	(*input)++;
 	if (ft_isdigit(**input))
 		return (ft_extract_digit_var(input));
