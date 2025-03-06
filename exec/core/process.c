@@ -11,25 +11,7 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 		execute_built_in(exec, current);
 	}
 	else
-	{
-		pipex->pid = fork();
-		if (pipex->pid < 0)
-			return (perror("fork"), 0);
-		if (pipex->pid == 0)
-		{
-			signal(SIGQUIT, signal_handler);
-			redir_input(exec, current, pipex);
-			redir_output(exec, current, pipex);
-			if (check_file2(exec, current) == 1)
-				exit(1);
-			execute_cmd(exec, pipex, current->arg, env);
-		}
-		wait(&pipex->status);
-		if (WIFEXITED(pipex->status))
-			return (exec->status = WEXITSTATUS(pipex->status));
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, SIG_IGN);
-	}
+		return (no_built_in(pipex, exec, env, current));
 	return (0);
 }
 
@@ -52,13 +34,9 @@ int	child_process(t_pipex *pipex, t_buit_in *exec, char **env,
 	}
 	close(pipex->pipe_fd[0]);
 	if (check_file2(exec, current) == 1)
-	{
 		exit(1);
-	}
 	if (check_built_in(current->arg[0]) == 1)
-	{
 		execute_built_in(exec, current);
-	}
 	else
 		execute_cmd(exec, pipex, current->arg, env);
 	exit(0);

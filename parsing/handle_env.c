@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:16:22 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/06 13:40:39 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/06 14:29:21 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,10 @@ char	*replace_quest(char *var_value, char *var_name)
 		if (var_name[i] == '$' && var_name[i + 1] == '?')
 		{
 			if (var_name[i + 2])
-				i += 1;
+				i += 2;
 			while (var_value[j])
 				result[k++] = var_value[j++];
-			if (j == 1)
+			if (j == 1 && !var_name[i])
 				quest++;
 		}
 		if (i == 0)
@@ -126,7 +126,7 @@ char	*replace_dol(char *var_value, char *var_name)
 				i += 2;
 			while (var_value[j])
 				result[k++] = var_value[j++];
-			if (j == 1)
+			if (j == 1 && !var_name[i])
 				quest++;
 		}
 		if (i == 0)
@@ -167,14 +167,15 @@ int	ft_handle_doldol(t_parse_context *ctx, char *var_name)
 
 int	ft_handle_dolquest(t_parse_context *ctx, char *var_name)
 {
-	char	*test;
+	char	*val;
 	char *var_value;
 
-	test = ft_itoa(ctx->exit_status);
-	if (!test)
+	val = ft_itoa(ctx->exit_status);
+	if (!val)
 		return (0);
-	var_value = replace_quest(test, var_name);
+	var_value = replace_quest(val, var_name);
 	free(var_name);
+	free(val);
 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
 	if (!*ctx->current)
 		*ctx->current = ft_init_command(ctx->cmd_lst);

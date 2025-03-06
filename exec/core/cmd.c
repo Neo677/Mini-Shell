@@ -1,29 +1,33 @@
 #include "../include/exec.h"
 
-char	*error_execute_cmd(t_buit_in *exec, t_pipex *pipex, char *cmd)
+void	error_access(t_buit_in *exec, t_pipex *pipex, char *cmd)
 {
 	struct stat	path_stat;
-	if (access(cmd, F_OK) == 0)
+
+	stat(cmd, &path_stat);
+	if (S_ISDIR(path_stat.st_mode))
 	{
-		stat(cmd, &path_stat);
-		if (S_ISDIR(path_stat.st_mode))
-		{
-				ft_printf_fd(2, "bash: %s: Is a directory\n", cmd);
-				free_error(pipex, exec->status = 126);
-		}
-		if (access(cmd, X_OK) != 0)
-		{
-			if (access(cmd, R_OK) == 0 && access(cmd, W_OK) == 0)
-				ft_printf_fd(2, "%s: command not found\n", cmd);
-			else
-			{
-				ft_printf_fd(2, "bash: %s: Permission denied\n", cmd);
-				free_error(pipex, exec->status = 126);
-			}
-		}
-		else
-			ft_printf_fd(2, "bash: %s: No such file or directory\n", cmd);
+		ft_printf_fd(2, "bash: %s: Is a directory\n", cmd);
+		free_error(pipex, exec->status = 126);
 	}
+	if (access(cmd, X_OK) != 0)
+	{
+		if (access(cmd, R_OK) == 0 && access(cmd, W_OK) == 0)
+			ft_printf_fd(2, "%s: command not found\n", cmd);
+		else
+		{
+			ft_printf_fd(2, "bash: %s: Permission denied\n", cmd);
+			free_error(pipex, exec->status = 126);
+		}
+	}
+	else
+		ft_printf_fd(2, "bash: %s: No such file or directory\n", cmd);
+}
+
+char	*error_execute_cmd(t_buit_in *exec, t_pipex *pipex, char *cmd)
+{
+	if (access(cmd, F_OK) == 0)
+		error_access(exec, pipex, cmd);
 	else
 	{
 		if (ft_strchr_exec(cmd, '/') == 0)
@@ -90,16 +94,12 @@ void	execute_cmd(t_buit_in *exec, t_pipex *pipex, char **arg, char **envp)
 				free_error(pipex, exec->status = 127);
 			}
 		}
-		else if (ft_strcmp(arg[0], "..") == 0 || ft_strchr_exec(arg[0], '/') != 0)
+		else if (ft_strcmp(arg[0], "..") == 0 || ft_strchr_exec(arg[0],
+				'/') != 0)
 		{
 			ft_printf_fd(2, "%s: command not found\n", arg[0]);
 			free_error(pipex, exec->status = 127);
 		}
-		// if (ft_strchr_exec(arg[0], '/') != 0)
-		// {
-		// 	ft_printf_fd(2, "%s: command not found\n", arg[0]);
-		// 	free_error(pipex, exec->status = 127);
-		// }
 		ft_printf_fd(2, "bash: %s: Is a directory\n", arg[0]);
 		free_error(pipex, exec->status = 126);
 	}
