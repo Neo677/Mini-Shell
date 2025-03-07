@@ -8,7 +8,6 @@ void	check_redir_2(t_buit_in *exec, t_pipex *pipex,
 		pipex->infile = open(redirection->file, O_RDONLY, 0644);
 		if (pipex->infile < 0)
 		{
-			perror(redirection->file);
 			exec->status = EXIT_FAILURE;
 			return ;
 		}
@@ -68,7 +67,6 @@ void	check_n_change_out(t_buit_in *exec, t_pipex *pipex, t_redirections *dir)
 		pipex->outfile = open(dir->file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		if (pipex->outfile < 0)
 		{
-			perror(dir->file);
 			exec->status = EXIT_FAILURE;
 			return ;
 		}
@@ -80,7 +78,6 @@ void	check_n_change_out(t_buit_in *exec, t_pipex *pipex, t_redirections *dir)
 		pipex->outfile = open(dir->file, O_CREAT | O_APPEND | O_WRONLY, 0644);
 		if (pipex->outfile < 0)
 		{
-			perror(dir->file);
 			exec->status = EXIT_FAILURE;
 			return ;
 		}

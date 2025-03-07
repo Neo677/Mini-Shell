@@ -66,22 +66,65 @@ static int	add_quote_as_new_token(t_parse_context *ctx, char *quote_content)
 	return (1);
 }
 
+
+char	*ft_strdup_v2_quote(const char *src)
+{
+	char	*dst;
+	int		i;
+
+	i = 0;
+	while (src[i] && src[i] == ' ')
+		i++;
+	dst = malloc(sizeof(char) * (i + 1));
+	if (dst == NULL)
+		return (NULL);
+	i = 0;
+	while (src[i] && src[i] == ' ')
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (dst);
+}
+
+
 int	ft_handle_quotes(t_parse_context *ctx)
 {
-	char		*quote_content;
-	const char	*input_ptr;
-	char		prev_char;
+    char    *quote_content;
+    char    *prefix;
 
-	input_ptr = *ctx->input;
-	quote_content = ft_handle_quote(ctx);
-	if (!quote_content)
-		return (0);
-	if (input_ptr > ctx->input_exec)
-		prev_char = *(input_ptr - 1);
-	else
-		prev_char = ' ';
-	if (!ft_isspace(prev_char) && ctx->last_token && ctx->last_token->value)
-		return (merge_quote_with_last(ctx, quote_content));
-	else
-		return (add_quote_as_new_token(ctx, quote_content));
+    prefix = ft_strdup_v2_quote(*ctx->input);
+    printf("Préfixe: %s\n", prefix);
+    
+    // Extraire le contenu entre quotes
+    quote_content = ft_handle_quote(ctx);
+    if (!quote_content)
+    {
+        free(prefix);
+        return (0);
+    }
+    char *combined = ft_strjoin(prefix, quote_content);
+    free(prefix);
+    if (!combined)
+    {
+        free(quote_content);
+        return (0);
+    }
+    if (*ctx->input && !ft_isspace(**ctx->input))
+    {
+        char *rest = ft_get_next_token(ctx->input);
+        char *merged = ft_strjoin(combined, rest);
+        free(rest);
+        free(combined);
+        if (!merged)
+            return (0);
+        return (merge_quote_with_last(ctx, merged));
+    }
+    else
+    {
+        free(quote_content);
+        free(combined);
+        return (add_quote_as_new_token(ctx, combined));
+    }
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 09:23:01 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/06 09:38:32 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,10 @@ char						*ft_detec_var(const char **input);
 int							ft_detec_digit(int is_digit_param,
 								const char **input);
 char						*ft_extract_env_var(const char **input);
+char	*ft_handle_special_case(const char **input);
+char	*ft_extract_digit_var(const char **input);
+char	*ft_extract_alpha_var(const char **input);
+
 
 void						error_exit(const char *error);
 void						ft_free_token(t_token *head);

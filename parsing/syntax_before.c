@@ -78,7 +78,7 @@ int	ft_set_syntax_ope(const char *input, int i, t_parse_context *ctx)
 		len++;
 		j++;
 	}
-	if ((op == '>' && len > 2) || (op == '<' && len != 1))
+	if ((op == '>' && len > 2) || (op == '<' && len != 2))
 		return (ft_set_syntax_redir_1(len, op), ft_pass_this_bro(ctx), -1);
 	while (input[j] && (input[j] == ' ' || input[j] == '\t'))
 		j++;

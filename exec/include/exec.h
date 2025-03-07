@@ -16,7 +16,7 @@
 # include <unistd.h>
 
 # define CD_ERR "cd: error retrieving current directory: getcwd: cannot "
-# define CD_ERR2 "access parent directories: No such file or directory"
+# define CD_ERR2 "access parent directories: No such file or directory\n"
 # define EXIT_ERR "bash: exit: %s: numeric argument required\n"
 # define CMD_EXEC "bash: .: filename argument required\n.: "
 # define CMD_EXEC2 "usage: . filename [arguments]\n"
@@ -203,6 +203,13 @@ int								check_file_in(t_buit_in *exec, t_token *token);
 int								check_file_out(t_buit_in *exec, t_token *token);
 int								check_file(t_buit_in *exec, t_token *token);
 
+/*  CHECK_FILE  */
+int								check_file_in2(t_buit_in *exec,
+									t_redirections *current);
+int								check_file_out2(t_buit_in *exec,
+									t_redirections *current);
+int								check_file2(t_buit_in *exec, t_command *cmd);
+
 /*  CMD  */
 char							*error_execute_cmd(t_buit_in *exec,
 									t_pipex *pipex, char *cmd);
@@ -244,6 +251,10 @@ int								more_commands(t_pipex *pipex,
 void							process(t_pipex *pipex, t_command *cmd,
 									t_buit_in *exec, char **env);
 
+/*  PROCESS  */
+int								no_built_in(t_pipex *pipex, t_buit_in *exec,
+									char **env, t_command *current);
+
 /*  REDIR  */
 void							check_redir_2(t_buit_in *exec, t_pipex *pipex,
 									t_redirections *redirection);
@@ -283,5 +294,11 @@ void							clear_file(char **filename);
 int								str_search(char *big, char *little, int len);
 char							*ft_strcpy(char *dst, char *cpy);
 char							*ft_strcat(char *dst, char *src);
+
+int								check_file_in2(t_buit_in *exec,
+									t_redirections *current);
+int								check_file_out2(t_buit_in *exec,
+									t_redirections *current);
+int								check_file2(t_buit_in *exec, t_command *cmd);
 
 #endif

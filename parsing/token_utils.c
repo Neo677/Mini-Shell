@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:30 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 09:24:22 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:27:35 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	ft_add_token(t_token **head, t_token *new_token)
 
 char	*ft_get_next_token(const char **input)
 {
-	const char	*start;
+	const char	*start;	
 
 	start = *input;
 	while (**input && **input != ' ' && **input != '\t' && **input != '|'
