@@ -1,23 +1,23 @@
 #include "../include/exec.h"
 
-void	check_redir_2(t_buit_in *exec, t_pipex *pipex,
-		t_redirections *redirection)
+int	check_redir_2(t_pipex *pipex, t_redirections *redirection, int in)
 {
 	if (redirection->type == 2)
 	{
 		pipex->infile = open(redirection->file, O_RDONLY, 0644);
 		if (pipex->infile < 0)
 		{
-			exec->status = EXIT_FAILURE;
-			return ;
+			perror(redirection->file);
+			return (-1);
 		}
+		in = 1;
 		dup2(pipex->infile, STDIN_FILENO);
 		close(pipex->infile);
 	}
+	return (in);
 }
 
-void	check_dir_5(t_buit_in *exec, t_pipex *pipex,
-		t_redirections *redirection, int *i)
+int	check_dir_5(t_pipex *pipex, t_redirections *redirection, int in, int *i)
 {
 	if (redirection->type == 5)
 	{
@@ -28,48 +28,52 @@ void	check_dir_5(t_buit_in *exec, t_pipex *pipex,
 			if (pipex->infile < 0)
 			{
 				perror(pipex->filename_hd[*i]);
-				exec->status = EXIT_FAILURE;
-				return ;
+				return (-1);
 			}
+			in = 1;
 			dup2(pipex->infile, STDIN_FILENO);
 			close(pipex->infile);
 			(*i)++;
 		}
 	}
+	return (in);
 }
 
-int	redir_input(t_buit_in *exec, t_command *cmd, t_pipex *pipex)
+int	redir_input(t_command *cmd, t_pipex *pipex)
 {
 	t_redirections	*redirection;
 	int				i;
+	int				in;
 
 	i = 0;
+	in = 0;
 	redirection = cmd->redirections;
 	if (!redirection)
-		return (EXIT_FAILURE);
+		return (-1);
 	while (redirection)
 	{
-		check_redir_2(exec, pipex, redirection);
-		if (exec->status == EXIT_FAILURE)
-			return (EXIT_FAILURE);
-		check_dir_5(exec, pipex, redirection, &i);
-		if (exec->status == EXIT_FAILURE)
-			return (EXIT_FAILURE);
+		in = check_redir_2(pipex, redirection, in);
+		if (in < 0)
+			return (-1);
+		in = check_dir_5(pipex, redirection, in, &i);
+		if (in < 0)
+			return (-1);
 		redirection = redirection->next;
 	}
-	return (exec->status);
+	return (in);
 }
 
-void	check_n_change_out(t_buit_in *exec, t_pipex *pipex, t_redirections *dir)
+int	check_n_change_out(t_pipex *pipex, t_redirections *dir, int out)
 {
 	if (dir->type == 3)
 	{
 		pipex->outfile = open(dir->file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		if (pipex->outfile < 0)
 		{
-			exec->status = EXIT_FAILURE;
-			return ;
+			perror(dir->file);
+			return (-1);
 		}
+		out = 1;
 		dup2(pipex->outfile, STDOUT_FILENO);
 		close(pipex->outfile);
 	}
@@ -78,27 +82,31 @@ void	check_n_change_out(t_buit_in *exec, t_pipex *pipex, t_redirections *dir)
 		pipex->outfile = open(dir->file, O_CREAT | O_APPEND | O_WRONLY, 0644);
 		if (pipex->outfile < 0)
 		{
-			exec->status = EXIT_FAILURE;
-			return ;
+			perror(dir->file);
+			return (-1);
 		}
+		out = 1;
 		dup2(pipex->outfile, STDOUT_FILENO);
 		close(pipex->outfile);
 	}
+	return (out);
 }
 
-int	redir_output(t_buit_in *exec, t_command *cmd, t_pipex *pipex)
+int	redir_output(t_command *cmd, t_pipex *pipex)
 {
 	t_redirections	*redirection;
+	int				out;
 
 	redirection = cmd->redirections;
+	out = 0;
 	if (!redirection)
-		return (EXIT_FAILURE);
+		return (-1);
 	while (redirection)
 	{
-		check_n_change_out(exec, pipex, redirection);
-		if (exec->status == EXIT_FAILURE)
-			return (EXIT_FAILURE);
+		out = check_n_change_out(pipex, redirection, out);
+		if (out < 0)
+			return (-1);
 		redirection = redirection->next;
 	}
-	return (exec->status);
+	return (out);
 }

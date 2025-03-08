@@ -45,6 +45,7 @@ int	split_n_check(t_buit_in *exec, char **key_value, int i)
 	exec->tab_export = split_in_two(key_value[i], '=');
 	if (!exec->tab_export)
 	{
+		// free_tab(key_value);
 		free_env_list(exec->cpy_env_cpy_export);
 		return (0);
 	}
@@ -53,8 +54,8 @@ int	split_n_check(t_buit_in *exec, char **key_value, int i)
 		ft_printf_fd(2, "bash: export: `%s': not a valid identifier\n",
 			key_value[i]);
 		free_tab(exec->tab_export);
+		// free_tab(key_value);
 		free_env_list(exec->cpy_env_cpy_export);
-		exec->status = EXIT_FAILURE;
 		return (0);
 	}
 	temp = exec->tab_export[0];
@@ -65,14 +66,11 @@ int	split_n_check(t_buit_in *exec, char **key_value, int i)
 
 int	create_new_node(t_buit_in *exec, t_env **env_cpy, char **key_value, int i)
 {
-	char	*temp;
-
-	temp = remove_backslash(key_value[i]);
-	exec->new_node_export = create_key_value(temp);
-	free(temp);
+	exec->new_node_export = create_key_value(remove_backslash(key_value[i]));
 	if (!exec->new_node_export)
 	{
 		free_tab(exec->tab_export);
+		// free_tab(key_value);
 		free_env_list(exec->cpy_env_cpy_export);
 		return (0);
 	}
@@ -94,6 +92,7 @@ int	c_var_key(t_buit_in *exec, t_env **env_cpy, char **key_value, int i)
 	if (!exec->new_node_export)
 	{
 		free_tab(exec->tab_export);
+		// free_tab(key_value);
 		free_env_list(exec->cpy_env_cpy_export);
 		return (0);
 	}

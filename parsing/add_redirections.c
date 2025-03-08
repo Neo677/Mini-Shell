@@ -13,22 +13,22 @@
 #include "minishell.h"
 
 /*
-					🚨    🚨    🚨
-	here we need to add a 'redirection' in a struct command
-	the command is compose in 2️⃣parts :
-				A)  type        B)      value
-	A = the type of redirections (TOKEN_IN TOKEN OUT etc...)
-	B = the value of (nom de fichier, delim de Heredoc, etc...)
+                    🚨    🚨    🚨
+    here we need to add a 'redirection' in a struct command
+    the command is compose in 2️⃣parts :
+             A)  type        B)      value
+    A = the type of redirections (TOKEN_IN TOKEN OUT etc...)
+    B = the value of (nom de fichier, delim de Heredoc, etc...)
 
-	we can do a fonction gonna return a Boolean response for check
-	if is in capacity of doing that :
+    we can do a fonction gonna return a Boolean response for check
+    if is in capacity of doing that :
 
-	Be ready we gonna do :
-	1) check parametre
-	2) take memory for the specified file
-	3) initialise the rediction (leak safe)
-	4) add the redirections to the chain list of redirection
-	5) return a true (1)
+    Be ready we gonna do :
+    1) check parametre
+    2) take memory for the specified file
+    3) initialise the rediction (leak safe)
+    4) add the redirections to the chain list of redirection
+    5) return a true (1) 
 */
 
 int	ft_add_redirections_struct(t_command *cmd, int type, const char *file)

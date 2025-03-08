@@ -1,3 +1,0 @@
-les commandes du type : 
-echo hi | echo >>./outfiles/outfile01 bye >./test_files/invalid_permission 
-casse minishell

@@ -16,7 +16,7 @@
 # include <unistd.h>
 
 # define CD_ERR "cd: error retrieving current directory: getcwd: cannot "
-# define CD_ERR2 "access parent directories: No such file or directory\n"
+# define CD_ERR2 "access parent directories: No such file or directory"
 # define EXIT_ERR "bash: exit: %s: numeric argument required\n"
 # define CMD_EXEC "bash: .: filename argument required\n.: "
 # define CMD_EXEC2 "usage: . filename [arguments]\n"
@@ -35,7 +35,6 @@ typedef struct s_built_in
 {
 	t_env						*env_cpy;
 	t_env						*export_cpy;
-	char						**env_dup;
 	char						**tab;
 	char						*input;
 	int							cd;
@@ -47,7 +46,6 @@ typedef struct s_built_in
 	t_env						*cpy_env_cpy_export;
 	char						**tab_export;
 	char						*value_export;
-	int							status;
 }								t_buit_in;
 
 typedef struct s_pipex
@@ -77,9 +75,8 @@ typedef struct s_parse_context	t_parse_context;
 
 /*  CD  */
 char							*modify_pwd_with_arg(char *path, char *arg);
-int								modify_path(char *arg, t_env **env);
-int								arg_cd(t_buit_in *exec, char *arg, t_env **env);
-int								ft_cd(t_buit_in *exec, t_env **env, char **arg);
+int								arg_cd(char *arg, t_env **env);
+int								ft_cd(t_env **env, char *arg);
 
 /*  CMD_NODE  */
 t_env							*create_node(char *key, char *value);
@@ -107,7 +104,7 @@ void							ft_env(t_env **env_cpy);
 int								ft_numeric(char *arg);
 int								atol_sign(char *str, int i, int *sign);
 long long						ft_atol(char *str, int *error);
-int								error_ft_exit(t_buit_in *exec, char **tab);
+int								error_ft_exit(char **tab);
 int								ft_exit(t_buit_in *exec, char **tab);
 
 /*  EXPORT  */
@@ -166,8 +163,7 @@ char							**ft_split_init(char *str, char c, char **tab);
 char							**ft_split_built(char *str, char c);
 
 /*  UNSET  */
-void							ft_unset(t_buit_in *exec, t_env **env_cpy,
-									char *key);
+void							ft_unset(t_env **env_cpy, char *key);
 
 /*  UTILS_BUILT_IN  */
 int								ft_strlen(char *s);
@@ -199,26 +195,20 @@ int								execute_built_in(t_buit_in *exec,
 									t_command *cmd);
 
 /*  CHECK_FILE  */
-int								check_file_in(t_buit_in *exec, t_token *token);
-int								check_file_out(t_buit_in *exec, t_token *token);
-int								check_file(t_buit_in *exec, t_token *token);
-
-/*  CHECK_FILE  */
-int								check_file_in2(t_buit_in *exec,
-									t_redirections *current);
-int								check_file_out2(t_buit_in *exec,
-									t_redirections *current);
-int								check_file2(t_buit_in *exec, t_command *cmd);
+int								check_file_in(t_token *token,
+									t_parse_context ctx);
+int								check_file_out(t_token *token,
+									t_parse_context ctx);
+int								check_file(t_token *token);
 
 /*  CMD  */
-char							*error_execute_cmd(t_buit_in *exec,
-									t_pipex *pipex, char *cmd);
-char							*find_cmd(t_buit_in *exec, t_pipex *pipex,
-									char *cmd, char **paths);
-char							*find_path(t_buit_in *exec, t_pipex *pipex,
-									char *cmd, char **envp);
-void							execute_cmd(t_buit_in *exec, t_pipex *pipex,
-									char **arg, char **envp);
+char							*error_execute_cmd(t_pipex *pipex, char *cmd);
+char							*find_cmd(t_pipex *pipex, char *cmd,
+									char **paths);
+char							*find_path(t_pipex *pipex, char *cmd,
+									char **envp);
+void							execute_cmd(t_pipex *pipex, char **arg,
+									char **envp);
 
 /*  FREE_EXEC  */
 void							free_tab(char **tab);
@@ -244,29 +234,23 @@ int								one_command(t_pipex *pipex, t_buit_in *exec,
 int								child_process(t_pipex *pipex, t_buit_in *exec,
 									char **env, t_command *current);
 int								while_commands(t_pipex *pipex, t_buit_in *exec,
-									char **env, t_command **current);
+									char **env, t_command *current);
 int								more_commands(t_pipex *pipex,
 									t_command *current, t_buit_in *exec,
 									char **env);
-void							process(t_pipex *pipex, t_command *cmd,
+int								process(t_pipex *pipex, t_command *cmd,
 									t_buit_in *exec, char **env);
 
-/*  PROCESS  */
-int								no_built_in(t_pipex *pipex, t_buit_in *exec,
-									char **env, t_command *current);
-
 /*  REDIR  */
-void							check_redir_2(t_buit_in *exec, t_pipex *pipex,
-									t_redirections *redirection);
-void							check_dir_5(t_buit_in *exec, t_pipex *pipex,
-									t_redirections *redirection, int *i);
-int								redir_input(t_buit_in *exec, t_command *cmd,
-									t_pipex *pipex);
-void							check_n_change_out(t_buit_in *exec,
-									t_pipex *pipex,
-									t_redirections *redirection);
-int								redir_output(t_buit_in *exec, t_command *cmd,
-									t_pipex *pipex);
+int								check_redir_2(t_pipex *pipex,
+									t_redirections *redirection, int in);
+int								check_dir_5(t_pipex *pipex,
+									t_redirections *redirection, int in,
+									int *i);
+int								redir_input(t_command *cmd, t_pipex *pipex);
+int								check_n_change_out(t_pipex *pipex,
+									t_redirections *redirection, int out);
+int								redir_output(t_command *cmd, t_pipex *pipex);
 
 /*  SPLIT  */
 int								ft_count_pipex(char *s, char c);
@@ -294,11 +278,5 @@ void							clear_file(char **filename);
 int								str_search(char *big, char *little, int len);
 char							*ft_strcpy(char *dst, char *cpy);
 char							*ft_strcat(char *dst, char *src);
-
-int								check_file_in2(t_buit_in *exec,
-									t_redirections *current);
-int								check_file_out2(t_buit_in *exec,
-									t_redirections *current);
-int								check_file2(t_buit_in *exec, t_command *cmd);
 
 #endif

@@ -14,20 +14,20 @@
 
 void	ft_error_pipe(const char *context)
 {
-	ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n",
-		context);
+	ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n", context);
+	// return (258);
 }
 
 void	ft_error_redirections(const char *context)
 {
-	ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n",
-		context);
+	ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n", context);
+	// return (258);
 }
 
 int	ft_error_quote(void)
 {
 	ft_printf_fd(2, "minishell: syntax error: unclosed quote\n");
-	return (1);
+	return (258);
 }
 
 int	ft_error_general(const char *context)

@@ -1,68 +1,58 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   creat_command_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 09:19:07 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 09:20:24 by thobenel         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-void	ft_create_cmd_pipe(t_command **current)
+void    ft_create_cmd_pipe(t_command *current, t_token *token)
 {
-	if (*current)
-		(*current)->p_pipe = 1;
-	*current = NULL;
+    if (current)
+        current->p_pipe = 1;
+    current = NULL;
+    token = token->next;
 }
 
-int	ft_create_cmd_word(t_command **current, t_token *token, t_command **lst)
+int    ft_create_cmd_word(t_command *current, t_token *token, t_command **lst)
 {
-	if (!(*current))
-	{
-		*current = ft_init_command(lst);
-		if (!*current)
-			return (ft_free_command_list(lst), 0);
-	}
-	if (!ft_add_arguments(*current, token->value))
-	{
-		ft_printf_fd(STDERR_FILENO, "minishell: failed to add argument\n");
-		ft_free_command_list(lst);
-		return (0);
-	}
-	return (1);
+    if (!current && !(current = ft_init_command(lst)))
+    {
+        return (ft_free_command_list(lst), 0);
+    }
+    if (!ft_add_arguments(current, token->value))
+    {
+        ft_printf_fd(2, "minishell: failed to add argument\n");
+        return (ft_free_command_list(lst), 0);
+    }
+    token = token->next;
+    return (1);
 }
 
-int	ft_create_cmd_redirect(t_command **current, t_token *token, t_command **lst)
+int    ft_create_cmd_redirect(t_command *current, t_token *token, t_command **lst, const char *file)
 {
-	const char	*file;
-
-	if (!(*current))
-	{
-		*current = ft_init_command(lst);
-		if (!*current)
-			return (ft_free_command_list(lst), 0);
-	}
-	if (!token->next || token->next->type != TOKEN_WORD)
-		return (ft_free_command_list(lst), 0);
-	file = token->next->value;
-	if (!ft_add_redirections_struct(*current, token->type, file))
-		return (ft_free_command_list(lst), 0);
-	return (1);
+    if (!current && !(current = ft_init_command(lst)))
+    {
+        return (ft_free_command_list(lst), 0);
+    }
+    if (!token->next || token->next->type != TOKEN_WORD)
+    {
+        ft_printf_fd(2, "minishell: syntax error near redirection\n");
+        return (ft_free_command_list(lst), 0);
+    }
+    file = token->next->value;
+    if (!ft_add_redirections_struct(current, token->type, file))
+    {
+        ft_printf_fd(2, "minishell: syntax error near unexpected token\n");
+        return (ft_free_command_list(lst), 0);
+    }
+    token = token->next;
+    return (1);
 }
 
-int	ft_create_cmd_env(t_command **current, t_token *token, t_command **lst)
+int    ft_create_cmd_env(t_command *current, t_token *token, t_command **lst)
 {
-	if (!(*current))
-	{
-		*current = ft_init_command(lst);
-		if (!*current)
-			return (ft_free_command_list(lst), 0);
-	}
-	if (!ft_add_arguments(*current, token->value))
-		return (ft_free_command_list(lst), 0);
-	return (1);
+    if (!current && !(current = ft_init_command(lst)))
+        return (ft_free_command_list(lst), 0);
+    if (!ft_add_arguments(current, token->value))
+    {
+        ft_printf_fd(2, "minishell: failed to add envrionnement varibles as arugments\n");
+        return (ft_free_command_list(lst), 0);
+    }
+    token = token->next;
+    return (1);
 }

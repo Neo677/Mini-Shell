@@ -28,7 +28,7 @@
 *.so.*
 *.dylib
 
-# Executables
+# executables
 *.exe
 *.out
 *.app
@@ -50,3 +50,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Others
+.DS_Store

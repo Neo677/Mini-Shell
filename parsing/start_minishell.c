@@ -16,14 +16,14 @@ void	ft_abort(char *input)
 {
 	ft_printf("\n Bye bye ! 👋 \n");
 	free(input);
-	return ;
+	return;
 }
 
 void	ft_abort_parse(char *input)
 {
 	printf("[ERROR] Invalid syntax\n");
 	free(input);
-	return ;
+	return;
 }
 
 void	ft_abort_cmd(char *input, t_token *token)
@@ -34,7 +34,7 @@ void	ft_abort_cmd(char *input, t_token *token)
 	if (token)
 		free(token);
 	ft_clean_up(&token, &input);
-	return ;
+	return;
 }
 
 // void	ft_start_minishell(void)
@@ -53,7 +53,7 @@ void	ft_abort_cmd(char *input, t_token *token)
 // 			break ; // ✅
 // 		}
 // 		if (ft_handle_exit(input) == 0)
-// 			break ; // ✅
+// 			break; // ✅
 // 		if (input[0] == '\0')
 // 		{
 // 			free(input);
@@ -66,7 +66,7 @@ void	ft_abort_cmd(char *input, t_token *token)
 // 		{
 // 			ft_printf("[ERROR] start error creating cmd\n");
 // 			ft_clean_up(&token, &input); // ✅
-// 			return ;
+// 			return;
 // 		}
 // 		// exec ...
 // 		ft_clean_up(&token, &input);

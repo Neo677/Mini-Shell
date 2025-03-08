@@ -26,7 +26,6 @@ int	check_n_c_key(t_buit_in *exec, t_env **env_cpy, char **key_value, int i)
 		ft_printf_fd(2, "bash: export: `%s': not a valid identifier\n",
 			key_value[i]);
 		free_env_list(exec->cpy_env_cpy_export);
-		exec->status = EXIT_FAILURE;
 		return (0);
 	}
 	key_value[i] = remove_backslash(key_value[i]);
@@ -62,14 +61,14 @@ int	value_exist(t_buit_in *exec, t_env **env_cpy, char **key_value, int i)
 	{
 		ft_printf_fd(2, "bash: export: `%s': not a valid identifier\n",
 			key_value[i]);
-		exec->status = 1;
 		free_env_list(exec->cpy_env_cpy_export);
+		// // free_tab(key_value);
 		return (0);
 	}
 	return (1);
 }
 
-int	ft_export(t_buit_in *exec, t_env **env_cpy, char **key_value)
+int ft_export(t_buit_in *exec, t_env **env_cpy, char **key_value)
 {
 	int	i;
 
@@ -83,9 +82,9 @@ int	ft_export(t_buit_in *exec, t_env **env_cpy, char **key_value)
 	while (key_value[i])
 	{
 		if (value_exist(exec, env_cpy, key_value, i) == 0)
-			return (1);
+            return (value_exist(exec, env_cpy, key_value, i));
 		i++;
 	}
 	free_env_list(exec->cpy_env_cpy_export);
-	return (0);
+    return (0);
 }

@@ -15,5 +15,4 @@ void	init_var_builtin(t_buit_in *exec)
 	exec->cpy_env_cpy_export = NULL;
 	exec->tab_export = NULL;
 	exec->value_export = NULL;
-	exec->status = 0;
 }

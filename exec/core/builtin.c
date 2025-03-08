@@ -19,15 +19,15 @@ int	execute_built_in(t_buit_in *exec, t_command *cmd)
 	else if (ft_strcmp(cmd->arg[0], "pwd") == 0)
 		ft_pwd(&exec->env_cpy, exec->cd);
 	else if (ft_strcmp(cmd->arg[0], "export") == 0)
-		ft_export(exec, &exec->env_cpy, cmd->arg);
+		return (ft_export(exec, &exec->env_cpy, cmd->arg));
 	else if (ft_strcmp(cmd->arg[0], "unset") == 0)
-		ft_unset(exec, &exec->env_cpy, cmd->arg[1]);
+		ft_unset(&exec->env_cpy, cmd->arg[1]);
 	else if (ft_strcmp(cmd->arg[0], "echo") == 0)
 		ft_echo(cmd);
 	else if (ft_strcmp(cmd->arg[0], "exit") == 0)
 		return (ft_exit(exec, cmd->arg));
 	else if (ft_strcmp(cmd->arg[0], "cd") == 0)
-		exec->cd = ft_cd(exec, &exec->env_cpy, cmd->arg);
+		exec->cd = ft_cd(&exec->env_cpy, cmd->arg[1]);
 	else
 		printf("error : execute_built_in\n");
 	return (0);
