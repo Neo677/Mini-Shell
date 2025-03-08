@@ -43,8 +43,7 @@ static int	merge_quote_with_last(t_parse_context *ctx, char *quote_content)
 		ft_err_split(*ctx->cmd_lst, *ctx->head);
 		return (0);
 	}
-	free(quote_content);
-	return (1);
+	return (free(quote_content), 1);
 }
 
 static int	add_quote_as_new_token(t_parse_context *ctx, char *quote_content)
@@ -62,10 +61,8 @@ static int	add_quote_as_new_token(t_parse_context *ctx, char *quote_content)
 		return (0);
 	}
 	ctx->last_token = ft_last_token(*ctx->head);
-	free(quote_content);
-	return (1);
+	return (free(quote_content), 1);
 }
-
 
 char	*ft_strdup_v2_quote(const char *src)
 {
@@ -88,43 +85,31 @@ char	*ft_strdup_v2_quote(const char *src)
 	return (dst);
 }
 
-
 int	ft_handle_quotes(t_parse_context *ctx)
 {
-    char    *quote_content;
-    char    *prefix;
+	char	*quote_content;
+	char	*prefix;
+	char	*combined;
+	char	*rest;
+	char	*merged;
 
-    prefix = ft_strdup_v2_quote(*ctx->input);
-    printf("Préfixe: %s\n", prefix);
-    
-    // Extraire le contenu entre quotes
-    quote_content = ft_handle_quote(ctx);
-    if (!quote_content)
-    {
-        free(prefix);
-        return (0);
-    }
-    char *combined = ft_strjoin(prefix, quote_content);
-    free(prefix);
-    if (!combined)
-    {
-        free(quote_content);
-        return (0);
-    }
-    if (*ctx->input && !ft_isspace(**ctx->input))
-    {
-        char *rest = ft_get_next_token(ctx->input);
-        char *merged = ft_strjoin(combined, rest);
-        free(rest);
-        free(combined);
-        if (!merged)
-            return (0);
-        return (merge_quote_with_last(ctx, merged));
-    }
-    else
-    {
-        free(quote_content);
-        free(combined);
-        return (add_quote_as_new_token(ctx, combined));
-    }
+	prefix = ft_strdup_v2_quote(*ctx->input);
+	quote_content = ft_handle_quote(ctx);
+	if (!quote_content)
+		return (free(prefix), 0);
+	combined = ft_strjoin(prefix, quote_content);
+	free(prefix);
+	if (!combined)
+		return (free(quote_content), 0);
+	if (*ctx->input && !ft_isspace(**ctx->input))
+	{
+		rest = ft_get_next_token(ctx->input);
+		merged = ft_strjoin(combined, rest);
+		if (!merged)
+			return (free(rest), free(combined), 0);
+		return (free(rest), free(combined), merge_quote_with_last(ctx, merged));
+	}
+	else
+		return (free(quote_content), free(combined), add_quote_as_new_token(ctx,
+				combined));
 }

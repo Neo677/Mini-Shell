@@ -64,5 +64,6 @@ int	ft_create_cmd_env(t_command **current, t_token *token, t_command **lst)
 	}
 	if (!ft_add_arguments(*current, token->value))
 		return (ft_free_command_list(lst), 0);
+	token = token->next;
 	return (1);
 }

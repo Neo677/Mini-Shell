@@ -139,7 +139,7 @@ int							ft_create_cmd_word(t_command **current,
 								t_token *token, t_command **lst);
 int							ft_create_cmd_redirect(t_command **current,
 								t_token *token, t_command **lst);
-int							ft_create_cmd_env(t_command **current,
+int						ft_create_cmd_env(t_command **current,
 								t_token *token, t_command **lst);
 
 char						*ft_get_pid_str(void);
