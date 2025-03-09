@@ -139,7 +139,7 @@ int							ft_create_cmd_word(t_command **current,
 								t_token *token, t_command **lst);
 int							ft_create_cmd_redirect(t_command **current,
 								t_token *token, t_command **lst);
-int						ft_create_cmd_env(t_command **current,
+int							ft_create_cmd_env(t_command **current,
 								t_token *token, t_command **lst);
 
 char						*ft_get_pid_str(void);
@@ -147,10 +147,9 @@ char						*ft_detec_var(const char **input);
 int							ft_detec_digit(int is_digit_param,
 								const char **input);
 char						*ft_extract_env_var(const char **input);
-char	*ft_handle_special_case(const char **input);
-char	*ft_extract_digit_var(const char **input);
-char	*ft_extract_alpha_var(const char **input);
-
+char						*ft_handle_special_case(const char **input);
+char						*ft_extract_digit_var(const char **input);
+char						*ft_extract_alpha_var(const char **input);
 
 void						error_exit(const char *error);
 void						ft_free_token(t_token *head);
@@ -224,6 +223,27 @@ void						ft_print_command_lst(t_command *head);
 void						ft_print_tokens(t_token *head);
 
 int							ft_handle_quotes(t_parse_context *ctx);
+int							handle_quote_with_next(t_parse_context *ctx,
+								char *quote);
+int							merge_with_next(t_parse_context *ctx, char *quote);
+char						*build_quote_content(t_parse_context *ctx);
+
+char						*extract_str(char *var_name);
+int							ft_strchr_comp_dol(char *var_name);
+int							ft_strchr_comp_quest(char *var_name);
+
+int							ft_handle_doles(t_parse_context *ctx,
+								char *var_name);
+int							ft_handle_dolquestes(t_parse_context *ctx,
+								char *var_name);
+int							ft_handle_doldoles(t_parse_context *ctx,
+								char *var_name);
+
+char						*replace_dol(char *var_value, char *var_name);
+char						*replace_quest(char *var_value, char *var_name);
+int							count_replace_quest(char *var_value,
+								char *var_name);
+int							count_replace_dol(char *var_value, char *var_name);
 
 int							ft_handle_operators(t_parse_context *ctx);
 int							ft_handle_env_vars(t_parse_context *ctx);
@@ -291,6 +311,11 @@ int							ft_valid_token(t_token *token,
 								t_parse_context *ctx);
 
 void						ft_pass_this_bro(t_parse_context *ctx);
+char						*ft_strdup_v2_quote(const char *src);
+int							merge_quote_with_last(t_parse_context *ctx,
+								char *quote_content);
+int							add_quote_as_new_token(t_parse_context *ctx,
+								char *quote_content);
 
 // void						ft_introw(void);
 

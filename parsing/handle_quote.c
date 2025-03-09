@@ -25,7 +25,7 @@ int	ft_handle_space(t_parse_context *ctx, char *quote_content)
 	return (1);
 }
 
-static int	merge_quote_with_last(t_parse_context *ctx, char *quote_content)
+int	merge_quote_with_last(t_parse_context *ctx, char *quote_content)
 {
 	char	*new;
 
@@ -46,7 +46,7 @@ static int	merge_quote_with_last(t_parse_context *ctx, char *quote_content)
 	return (free(quote_content), 1);
 }
 
-static int	add_quote_as_new_token(t_parse_context *ctx, char *quote_content)
+int	add_quote_as_new_token(t_parse_context *ctx, char *quote_content)
 {
 	t_token	*token;
 
@@ -87,29 +87,29 @@ char	*ft_strdup_v2_quote(const char *src)
 
 int	ft_handle_quotes(t_parse_context *ctx)
 {
-	char	*quote_content;
-	char	*prefix;
-	char	*combined;
-	char	*rest;
-	char	*merged;
+	const char	*qstart;
+	char		prev;
+	char		next;
+	char		*quote;
+	int			ret;
 
-	prefix = ft_strdup_v2_quote(*ctx->input);
-	quote_content = ft_handle_quote(ctx);
-	if (!quote_content)
-		return (free(prefix), 0);
-	combined = ft_strjoin(prefix, quote_content);
-	free(prefix);
-	if (!combined)
-		return (free(quote_content), 0);
-	if (*ctx->input && !ft_isspace(**ctx->input))
-	{
-		rest = ft_get_next_token(ctx->input);
-		merged = ft_strjoin(combined, rest);
-		if (!merged)
-			return (free(rest), free(combined), 0);
-		return (free(rest), free(combined), merge_quote_with_last(ctx, merged));
-	}
+	prev = ' ';
+	next = ' ';
+	qstart = *ctx->input;
+	quote = build_quote_content(ctx);
+	if (!quote)
+		return (0);
+	if (qstart > ctx->input_exec)
+		prev = *(qstart - 1);
+	if (**ctx->input)
+		next = **ctx->input;
+	if (!ft_isspace(prev) && !ft_isspace(next))
+		ret = merge_with_next(ctx, quote);
+	else if (!ft_isspace(prev) && ft_isspace(next))
+		ret = merge_quote_with_last(ctx, quote);
+	else if (ft_isspace(prev) && !ft_isspace(next))
+		ret = handle_quote_with_next(ctx, quote);
 	else
-		return (free(quote_content), free(combined), add_quote_as_new_token(ctx,
-				combined));
+		ret = add_quote_as_new_token(ctx, quote);
+	return (ret);
 }

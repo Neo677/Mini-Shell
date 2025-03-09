@@ -49,6 +49,8 @@ char	*ft_handle_special_case(const char **input)
 		*input += 2;
 		return (ft_strdup("$?"));
 	}
+	if ((*input)[1] == ' ')
+		return (ft_strdup("$ "));
 	return (NULL);
 }
 
@@ -74,19 +76,14 @@ char	*ft_extract_alpha_var(const char **input)
 char	*ft_extract_env_var(const char **input)
 {
 	char	*special;
-	char *test;
-	char	*test2;
 
 	if (**input != '$')
 		return (NULL);
 	special = ft_handle_special_case(input);
 	if (special)
 	{
-		test2 = ft_strdup_v2(*input);
-		test = ft_strjoin(special, test2);
-		free (test2);
-		free(special);
-		return (test);
+		printf("SPECIAL == %s\n", special);
+		return (special);
 	}
 	(*input)++;
 	if (ft_isdigit(**input))

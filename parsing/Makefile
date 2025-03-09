@@ -39,7 +39,9 @@ SRCS =	add_arguments.c \
 		init_parsing.c \
 		process_token.c \
 		handle_env.c \
+		handle_env_use.c \
 		handle_quote.c \
+		build_quote.c \
 		handle_word.c \
 		split_token.c \
 		token_handle.c \

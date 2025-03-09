@@ -59,3 +59,24 @@ int	ft_strcmp_parsing(char *s1, char *s2)
 		i++;
 	return (s1[i] - s2[i]);
 }
+char	*extract_str(char *var_name)
+{
+	int		i;
+	char	*new_str;
+
+	i = 0;
+	while (var_name[i] && var_name[i] != ' ')
+		i++;
+	new_str = malloc(sizeof(char) * i + 1);
+	if (!new_str)
+		return (NULL);
+	i = 0;
+	while (var_name[i] && var_name[i] != ' ')
+	{
+		new_str[i] = var_name[i];
+		i++;
+	}
+	new_str[i] = '\0';
+	free(var_name);
+	return (new_str);
+}
