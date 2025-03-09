@@ -59,6 +59,7 @@ int	ft_strcmp_parsing(char *s1, char *s2)
 		i++;
 	return (s1[i] - s2[i]);
 }
+
 char	*extract_str(char *var_name)
 {
 	int		i;

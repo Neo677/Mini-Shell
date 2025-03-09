@@ -23,7 +23,6 @@ int	ft_is_redirec_pipe(t_parse_context *ctx)
 
 void	ft_let_go_split_env(t_parse_context ctx, int *last_exit_status)
 {
-	printf("\n");
 	ft_free_commande_lst(*ctx.cmd_lst);
 	ft_free_token(*ctx.head);
 	*last_exit_status = ctx.exit_status;
@@ -54,11 +53,7 @@ int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 				return (ft_let_go_split(*ctx, last_exit_status), 0);
 		}
 		else if (**ctx->input == '$')
-		{
-			if (!ft_handle_env_vars(ctx))
-					// return (ft_let_go_split_env(*ctx, last_exit_status);
-			(*ctx->input)++;
-		}
+			ft_handle_env_vars(ctx);
 		else
 		{
 			if (!ft_handle_words(ctx))

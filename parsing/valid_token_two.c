@@ -58,12 +58,6 @@ int	ft_valid_env_var(t_token *token)
 					"minishell: invalid environment variable syntax\n");
 				return (0);
 			}
-			// if (ft_strchr(token->value, '$') && ft_strlen(token->value) == 1)
-			// {
-			// 	ft_printf_fd(STDERR_FILENO,
-			// 		"minishell: $: ambiguous redirect\n");
-			// 	return (0);
-			// }
 		}
 		token = token->next;
 	}

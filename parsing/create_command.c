@@ -55,32 +55,29 @@ t_command	*ft_init_command(t_command **lst)
 int	ft_create_command_lst(t_token *token, t_command **lst)
 {
 	t_command	*current;
+	int redir;
 
 	current = NULL;
 	while (token)
 	{
+		redir = 0;
 		if (token->type == TOKEN_PIPE)
-		{
-			token = token->next;
 			ft_create_cmd_pipe(&current);
-		}
 		else if (token->type == TOKEN_ENV_VAR)
-		{
 			ft_create_cmd_env(&current, token, lst);
-			token = token->next;
-		}
 		else if (ft_is_redirection(token))
 		{
 			ft_create_cmd_redirect(&current, token, lst);
-			token = token->next->next;
+			redir = 1;
 		}
 		else if (token->type == TOKEN_WORD)
-		{
 			ft_create_cmd_word(&current, token, lst);
-			token = token->next;
-		}
 		else
 			return (ft_free_command_list(lst), 0);
+		if (redir == 1)
+			token = token->next->next;
+		else
+			token = token->next;
 	}
 	return (1);
 }

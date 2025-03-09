@@ -48,16 +48,6 @@ char	*get_env_var_value(char *var, t_parse_context *ctx)
 	return (var_value);
 }
 
-int ft_strcmp_dollars(char *varname)
-{
-    if (!varname)
-        return 1;
-    if (varname[0] == '$' && (varname[1] == '\0' || varname[1] == ' '))
-        return 0;
-    return 1;
-}
-
-
 char	*get_var_value(const char *input, size_t var_len, t_parse_context *ctx)
 {
 	char	*var_name;
@@ -66,27 +56,17 @@ char	*get_var_value(const char *input, size_t var_len, t_parse_context *ctx)
 	var_name = ft_strndup(input, var_len);
 	if (!var_name)
 		return (NULL);
-	if (ft_strcmp_dollars(var_name) == 0)
+	if (ft_strcmp_dollar(var_name) == 0)
 	{
-		// if (!ft_handle_alones(ctx, var_name))
-		// 	return (free(var_name), NULL);
 		var_value = ft_strdup("$");
 		return (var_value);
 	}
 	if (ft_strcmp(var_name, "$$") == 0)
-	{
-		free(var_name);
 		var_value = ft_get_pid_str();
-	}
 	else if (ft_strcmp(var_name, "$?") == 0)
-	{
-		free(var_name);
 		var_value = ft_itoa(ctx->exit_status);
-	}
 	else
-	{
 		var_value = get_env_var_value(var_name, ctx);
-		free(var_name);
-	}
+	free(var_name);
 	return (var_value);
 }

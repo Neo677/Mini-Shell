@@ -107,11 +107,6 @@ int	ft_check_syntax(const char *input, t_parse_context *ctx)
 				return (0);
 			i = res;
 		}
-		// if (input[i] == '{' || input[i] == '}')
-		// {
-		// 	char rst = input[i];
-		// 	return (ft_printf_fd(2, "syntax error near unexpected token `%c'\n", rst), 0);
-		// }
 		i++;
 	}
 	return (1);
