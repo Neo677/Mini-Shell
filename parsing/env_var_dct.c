@@ -50,7 +50,7 @@ char	*ft_handle_special_case(const char **input)
 		return (ft_strdup("$?"));
 	}
 	if ((*input)[1] == ' ')
-		return (ft_strdup("$ "));
+		return (ft_strdup("$"));
 	return (NULL);
 }
 
@@ -82,7 +82,6 @@ char	*ft_extract_env_var(const char **input)
 	special = ft_handle_special_case(input);
 	if (special)
 	{
-		printf("SPECIAL == %s\n", special);
 		return (special);
 	}
 	(*input)++;

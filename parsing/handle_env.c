@@ -143,6 +143,27 @@ char	*replace_dol(char *var_value, char *var_name)
 	return (result);
 }
 
+int ft_strcmp_dollar(char *varname)
+{
+    if (!varname)
+        return 1;
+    if (varname[0] == '$' && (varname[1] == '\0' || varname[1] == ' '))
+        return 0;
+    return 1;
+}
+
+int	ft_handle_alones(t_parse_context *ctx, char *var_name)
+{
+	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_name));
+	if (!*ctx->current)
+		*ctx->current = ft_init_command(ctx->cmd_lst);
+	if (!ft_add_arguments(*ctx->current, var_name))
+		return (ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"),
+			free(var_name), 0);
+	return (1);
+}
+
+
 int	ft_handle_env_vars(t_parse_context *ctx)
 {
 	char	*var_name;
@@ -150,13 +171,17 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 	var_name = ft_extract_env_var(ctx->input);
 	if (!var_name)
 		return (free(var_name), 0);
-	if (ft_strcmp(var_name, "$") == 0)
-		return (free(var_name), 2);
+	if (ft_strcmp_dollar(var_name) == 0)
+	{
+		if (!ft_handle_alones(ctx, var_name))
+			return (free(var_name), 0);
+		return (2);
+	}
 	if (ft_strchr_comp_dol(var_name) == 0)
 	{
 		var_name = extract_str(var_name);
 		if (!ft_handle_doldoles(ctx, var_name))
-			return (free(var_name), 0);
+			return (free(var_name), 0);;
 		return (1);
 	}
 	if (ft_strchr_comp_quest(var_name) == 0)

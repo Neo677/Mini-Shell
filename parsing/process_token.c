@@ -35,13 +35,6 @@ void	ft_handle_exclam(t_parse_context *ctx, int *last_exit_status)
 	*last_exit_status = ctx->exit_status;
 }
 
-void	ft_handle_alone(t_parse_context *ctx, int *last_exit_status)
-{
-	ft_printf("$\n");
-	ctx->exit_status = 127;
-	*last_exit_status = ctx->exit_status;
-}
-
 int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 {
 	while (**ctx->input)
@@ -62,10 +55,11 @@ int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 		}
 		else if (**ctx->input == '$')
 		{
-			if (ft_handle_env_vars(ctx) == 2)
-				return (ft_handle_alone(ctx, last_exit_status), 0);
+			if (!ft_handle_env_vars(ctx))
+					// return (ft_let_go_split_env(*ctx, last_exit_status);
+			(*ctx->input)++;
 		}
-		else 
+		else
 		{
 			if (!ft_handle_words(ctx))
 				return (ft_let_go_split(*ctx, last_exit_status), 0);
