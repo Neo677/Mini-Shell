@@ -90,22 +90,27 @@ int	ft_set_syntax_ope(const char *input, int i, t_parse_context *ctx)
 int	ft_check_syntax(const char *input, t_parse_context *ctx)
 {
 	int	i;
-	int	res;
+	// int	res;
 
 	i = 0;
 	while (input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
 			return (1);
-		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
+		// if (input[i] == '|' || input[i] == '>' || input[i] == '<')
+		// {
+		// 	if (input[i] == '|')
+		// 		res = ft_set_syntax_pipe(input, i, ctx);
+		// 	if (input[i] == '>' || input[i] == '<')
+		// 		res = ft_set_syntax_ope(input, i, ctx);
+		// 	if (res < 0)
+		// 		return (0);
+		// 	i = res;
+		// }
+		if (input[i] == '|')
 		{
 			if (input[i] == '|')
-				res = ft_set_syntax_pipe(input, i, ctx);
-			if (input[i] == '>' || input[i] == '<')
-				res = ft_set_syntax_ope(input, i, ctx);
-			if (res < 0)
-				return (0);
-			i = res;
+				ft_set_syntax_pipe(input, i, ctx);
 		}
 		i++;
 	}

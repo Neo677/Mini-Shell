@@ -72,11 +72,11 @@ int	ft_validate_pipes(t_token *token, t_parse_context *ctx)
 		{
 			if (!prev || prev->type == TOKEN_PIPE)
 				return (ctx->exit_status = 2, ft_printf_fd(2,
-						"1minishell: syntax error near unexpected token `|'\n"),
+						"minishell: syntax error near unexpected token `|'\n"),
 					0);
 			if (!token->next)
 				return (ctx->exit_status = 2, ft_printf_fd(2,
-						"2minishell: syntax error: pipe at the end\n"), 0);
+						"minishell: syntax error: pipe at the end\n"), 0);
 		}
 		prev = token;
 		token = token->next;
@@ -91,11 +91,11 @@ int	ft_valid_token(t_token *token, t_parse_context *ctx)
 	current = token;
 	if (!ft_validate_pipes(current, ctx))
 		return (0);
-	if (!ft_valid_redirections(current))
-	{
-		ctx->exit_status = 2;
-		return (0);
-	}
+	// if (!ft_valid_redirections(current))
+	// {
+	// 	ctx->exit_status = 2;
+	// 	return (0);
+	// }
 	if (!ft_valid_env_var(current))
 		return (ctx->exit_status = 2, 0);
 	while (current != NULL)

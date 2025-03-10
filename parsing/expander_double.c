@@ -20,8 +20,7 @@ static int	ft_handle_doldol(t_parse_context *ctx, char *var_name)
 	var_value = ft_get_pid_str();
 	if (!var_value)
 		return (ft_printf_fd(STDERR_FILENO,
-				"minishell: error: invalid environment variable name\n"),
-			free(var_name), 0);
+				"minishell: error: invalid environment variable name\n"), 0);
 	ft_add_token(ctx->head, ft_create_token(TOKEN_ENV_VAR, var_value));
 	if (!*ctx->current)
 		*ctx->current = ft_init_command(ctx->cmd_lst);

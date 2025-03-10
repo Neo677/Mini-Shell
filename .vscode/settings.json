@@ -19,6 +19,8 @@
         "stdio.h": "c",
         "fcntl.h": "c",
         "exec.h": "c",
-        "__node_handle": "c"
+        "__node_handle": "c",
+        "types.h": "c",
+        "time.h": "c"
     }
 }
