@@ -55,6 +55,26 @@ void	ft_set_syntax_redir_1(int len, char op)
 	ft_printf_fd(2, "'\n");
 }
 
+int	ft_set_syntax_redir_3(int len, char op, char op_tw)
+{
+	ft_printf_fd(2, "bash: syntax error near unexpected token `");
+	if (op == '<')
+	{
+		if (len <= 3 && op_tw == '|')
+			return(ft_printf_fd(2, "|'\n"), 1);
+		if (len <= 3 && op_tw != '|')
+			return(ft_printf_fd(2, "newline'\n"), 1);
+		else if (len == 4)
+			return(ft_printf_fd(2, "<'\n"), 1);
+		else if (len == 5)
+			return(	ft_printf_fd(2, "<<'\n"), 1);
+		else
+			return(	ft_printf_fd(2, "<<<'\n"), 1);
+	}
+	// return (ft_printf_fd(2, "'\n"), 0);
+	return 	(0);
+}
+
 void	ft_set_syntax_redir_2(const char *input, int j)
 {
 	ft_printf_fd(2, "bash: syntax error near unexpected token ");
@@ -78,6 +98,8 @@ int	ft_set_syntax_ope(const char *input, int i, t_parse_context *ctx)
 		len++;
 		j++;
 	}
+	if ((op == '<' && len != 2 && input[i + 1] == '|'))
+		return (ft_set_syntax_redir_3(len, op, input[i + 1]), ft_pass_this_bro(ctx), -1);
 	if ((op == '>' && len > 2) || (op == '<' && len != 2))
 		return (ft_set_syntax_redir_1(len, op), ft_pass_this_bro(ctx), -1);
 	while (input[j] && (input[j] == ' ' || input[j] == '\t'))
@@ -108,10 +130,7 @@ int	ft_check_syntax(const char *input, t_parse_context *ctx)
 		// 	i = res;
 		// }
 		if (input[i] == '|')
-		{
-			if (input[i] == '|')
-				ft_set_syntax_pipe(input, i, ctx);
-		}
+			ft_set_syntax_pipe(input, i, ctx);
 		i++;
 	}
 	return (1);

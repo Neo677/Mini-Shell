@@ -26,6 +26,7 @@ void	print_echo(t_command *cmd, int i, int line_break)
 	{
 		printf("%s", cmd->arg[i]);
 		if (cmd->arg[i + 1])
+		
 			printf(" ");
 		i++;
 	}

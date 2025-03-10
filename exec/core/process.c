@@ -4,7 +4,7 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 {
 	if (check_built_in(current->arg[0]) == 1)
 	{
-		redir_input(exec, current, pipex);
+		// redir_input(exec, current, pipex);
 		redir_output(exec, current, pipex);
 		if (check_file2(exec, current) == 1)
 			return (1);
@@ -82,6 +82,10 @@ int	more_commands(t_pipex *pipex, t_command *current, t_buit_in *exec,
 	pipex->i = 0;
 	while (pipex->i < pipex->cmd_count)
 	{
+		/*
+			while (wait(&pipex->status) < 0)
+				;
+		*/
 		wait(&pipex->status);
 		if (WIFEXITED(pipex->status))
 			exec->status = WEXITSTATUS(pipex->status);

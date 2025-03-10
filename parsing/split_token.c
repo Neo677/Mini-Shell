@@ -47,6 +47,17 @@
 	nettoyage (libere la liste de commandes)
 */
 
+char	*ft_get_next_token_redir(const char **input)
+{
+	const char	*start;	
+
+	start = *input;
+	while (**input && **input != ' ' && **input != '\t' && **input != '|'
+		 && **input != '\"' && **input != '\'')
+		(*input)++;
+	return (ft_strndup(start, *input - start));
+}
+
 int	ft_handle_operators(t_parse_context *ctx)
 {
 	char	*file;

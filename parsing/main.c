@@ -33,7 +33,7 @@ int	main(int ac, char **av, char **env)
 		ret = process_line(&exec, &pipex, &cmd_lst, &lst);
 		if (ret == -1)
 			break ;
-		else if (ret != 0)
+		else if (ret != 0 || exec.exit_bh == 1)
 			return (ret);
 	}
 	return (free_all(&exec), rl_clear_history(), 0);

@@ -100,7 +100,7 @@ void	execute_cmd(t_buit_in *exec, t_pipex *pipex, char **arg, char **envp)
 			ft_printf_fd(2, "%s: command not found\n", arg[0]);
 			free_error(pipex, exec->status = 127);
 		}
-		ft_printf_fd(2, "bash: %s: is a directory\n", arg[0]);
+		ft_printf_fd(2, "bash: %s: Is a directory\n", arg[0]);
 		free_error(pipex, exec->status = 126);
 	}
 }
