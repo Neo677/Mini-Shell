@@ -76,10 +76,13 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 {
 	char	*var_name;
 	int		res;
+	// t_token *token;
 
 	var_name = ft_extract_env_var(ctx->input);
 	if (!var_name)
 		return (free(var_name), 0);
+	// if (token->type == TOKEN_HEREDOC)
+		// return (NULL);
 	if (ft_strcmp_dollar(var_name) == 0)
 	{
 		res = ft_handle_alones(ctx, var_name);
