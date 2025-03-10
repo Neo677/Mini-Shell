@@ -60,6 +60,13 @@ int	arg_cd(t_buit_in *exec, char *arg, t_env **env)
 	}
 	else
 	{
+		if (ft_strcmp(arg, "-") == 0)
+		{
+			modify_node_value(env, "PWD", print_node_by_key(env, "OLDPWD"));
+			modify_node_value(env, "OLDPWD", print_node_by_key(env, "PWD"));
+			printf("%s\n", print_node_by_key(env, "PWD"));
+			return (modify_path(arg, env));
+		}
 		ft_printf_fd(2, "bash: cd: %s: %s\n", arg, strerror(errno));
 		exec->status = 1;
 	}
@@ -82,6 +89,12 @@ int	ft_cd(t_buit_in *exec, t_env **env, char **arg)
 	}
 	else
 	{
+		if (print_node_by_key(env, "HOME") == NULL)
+		{
+			printf("bash: cd: HOME not set\n");
+			exec->status = 1;
+			return (0);
+		}
 		path_user = ft_strjoin("/home/", print_node_by_key(env, "USER"));
 		if (!path_user)
 		{

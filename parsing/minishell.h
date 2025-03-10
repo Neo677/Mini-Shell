@@ -15,11 +15,11 @@
 
 # include "../exec/include/exec.h"
 # include "../libft_2.0/libft.h"
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/types.h>
@@ -249,6 +249,21 @@ int							ft_handle_operators(t_parse_context *ctx);
 int							ft_handle_env_vars(t_parse_context *ctx);
 int							ft_handle_words(t_parse_context *ctx);
 
+int							ft_handle_alones(t_parse_context *ctx,
+								char *var_name);
+int							count_replace_quest(char *var_value,
+								char *var_name);
+int							count_replace_dol(char *var_value, char *var_name);
+
+int							ft_strcmp_dollar(char *varname);
+char						*replace_dol(char *var_value, char *var_name);
+int							fill_result_dol(char *result, char *var_value,
+								char *var_name);
+int							fill_result_quest(char *result, char *var_value,
+								char *var_name);
+
+char						*replace_quest(char *var_value, char *var_name);
+
 int							process_tokens(t_parse_context *ctx,
 								int *last_exit_status);
 int							error_cleanup(t_parse_context *ctx,
@@ -317,6 +332,8 @@ int							merge_quote_with_last(t_parse_context *ctx,
 int							add_quote_as_new_token(t_parse_context *ctx,
 								char *quote_content);
 
+int							ft_handle_alones(t_parse_context *ctx,
+								char *var_name);
 // void						ft_introw(void);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:26:55 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 09:27:06 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/10 14:59:17 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	ft_free_process_line(t_buit_in *exec, t_pipex *pipex,
 	clear_history();
 	ft_free_commande_lst(*cmd_lst);
 	*cmd_lst = NULL;
-	return (exec->exit_code_bh);
+	return (exec->status);
 }
 
 int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)

@@ -32,7 +32,7 @@ int	atol_sign(char *str, int i, int *sign)
 	return (i);
 }
 
-long long	ft_atol(char *str, int *error)
+long long	ft_atol(t_buit_in *exec, char *str, int *error)
 {
 	long long	res;
 	int			i;
@@ -52,6 +52,8 @@ long long	ft_atol(char *str, int *error)
 	if (res < 0)
 	{
 		*error = 1;
+		exec->status = 2;
+		exec->exit_bh = 1;
 		return (0);
 	}
 	return (res * sign);
@@ -62,12 +64,14 @@ int	error_ft_exit(t_buit_in *exec, char **tab)
 	if (tab[2])
 	{
 		ft_printf_fd(2, "bash: exit: too many arguments\n");
+		exec->exit_bh = 1;
 		exec->status = 1;
 		return (0);
 	}
 	if (ft_numeric(tab[1]) == 0)
 	{
 		ft_printf_fd(2, "bash: exit: %s: numeric argument required\n", tab[1]);
+		exec->exit_bh = 1;
 		exec->status = 2;
 		return (0);
 	}
@@ -86,7 +90,7 @@ int	ft_exit(t_buit_in *exec, char **tab)
 		if (error_ft_exit(exec, tab) == 0)
 			return (0);
 		error = 0;
-		num = ft_atol(tab[1], &error);
+		num = ft_atol(exec, tab[1], &error);
 		if (error == 1)
 			return (ft_printf_fd(2, EXIT_ERR, tab[1]), 0);
 		if (num > 255 || num < 0)
@@ -97,6 +101,6 @@ int	ft_exit(t_buit_in *exec, char **tab)
 		}
 	}
 	exec->exit_bh = 1;
-	exec->exit_code_bh = num;
+	exec->status = num;
 	return (num);
 }

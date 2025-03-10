@@ -30,7 +30,10 @@ void	ft_pwd(t_env **env, int cd)
 		cd = pwd_with_cd(env, cd);
 	else
 	{
-		printf("%s\n", print_node_by_key(env, "PWD"));
+		if (print_node_by_key(env, "PWD") == NULL)
+			printf("%s\n", getcwd(NULL, 0));
+		else
+			printf("%s\n", print_node_by_key(env, "PWD"));
 		if (access(print_node_by_key(env, "OLDPWD"), F_OK) != 0)
 			ft_printf_fd(2, "bash: %s: %s\n", print_node_by_key(env, "OLDPWD"),
 				strerror(errno));

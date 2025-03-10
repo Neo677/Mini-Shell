@@ -84,11 +84,8 @@ int	handle_redirection(t_token **head, const char **input)
 		operateur[2] = '\0';
 	}
 	if (!**input || **input == '|' || **input == '<' || **input == '>')
-	{
-		ft_error_redirections(operateur);
-		ft_free_token(*head);
-		return (*head = NULL, (*input)++, 0);
-	}
+		return (ft_error_redirections(operateur),
+			ft_free_token(*head), *head = NULL, (*input)++, 0);
 	new_token = ft_create_token(ft_identify_token(operateur), operateur);
 	if (!new_token)
 		return (ft_free_token(new_token), *head = NULL, 0);
