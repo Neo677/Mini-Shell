@@ -28,6 +28,7 @@ int	main(int ac, char **av, char **env)
 	init_var(&pipex);
 	ft_setup_signal();
 	ft_setup_env(&exec, env);
+	ft_intro();
 	while (1)
 	{
 		ret = process_line(&exec, &pipex, &cmd_lst, &lst);
@@ -36,5 +37,5 @@ int	main(int ac, char **av, char **env)
 		else if (ret != 0 || exec.exit_bh == 1)
 			return (ret);
 	}
-	return (free_all(&exec), rl_clear_history(), 0);
+	return (free_all(&exec), clear_history(), 0);
 }

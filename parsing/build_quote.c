@@ -12,25 +12,35 @@
 
 #include "minishell.h"
 
-char	*build_quote_content(t_parse_context *ctx)
+char *build_quote_content(t_parse_context *ctx)
 {
-	char	*pref;
-	char	*qcont;
-	char	*result;
-
-	pref = ft_strdup_v2_quote(*ctx->input);
-	if (!pref)
-		return (NULL);
-	qcont = ft_handle_quote(ctx);
-	if (!qcont)
-	{
-		free(pref);
-		return (NULL);
-	}
-	result = ft_strjoin(pref, qcont);
-	free(pref);
-	free(qcont);
-	return (result);
+    if (!ctx || !ctx->input || !(*ctx->input))
+        return NULL;
+    
+    char *pref = ft_strdup_v2_quote(*ctx->input);
+    if (!pref)
+        return NULL;
+    
+    /* 
+    ** Ici on utilise ft_handle_quote qui devrait lui-même effectuer
+    ** toutes les vérifications. Vous pourriez, si besoin, le remplacer
+    ** par safe_ft_valid_quotes ou une fonction de traitement "safe".
+    */
+    char *qcont = ft_handle_quote(ctx);
+    if (!qcont)
+    {
+        free(pref);
+        return NULL;
+    }
+    char *result = ft_strjoin(pref, qcont);
+    free(pref);
+    free(qcont);
+    if (!result)
+    {
+        ft_printf_fd(2, "minishell: memory allocation failed\n");
+        return NULL;
+    }
+    return result;
 }
 
 int	merge_with_next(t_parse_context *ctx, char *quote)
