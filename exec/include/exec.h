@@ -9,6 +9,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/stat.h>
@@ -106,7 +107,7 @@ void							ft_env(t_env **env_cpy);
 /*  EXIT  */
 int								ft_numeric(char *arg);
 int								atol_sign(char *str, int i, int *sign);
-long long						ft_atol(char *str, int *error);
+long long						ft_atol(t_buit_in *exec, char *str, int *error);
 int								error_ft_exit(t_buit_in *exec, char **tab);
 int								ft_exit(t_buit_in *exec, char **tab);
 

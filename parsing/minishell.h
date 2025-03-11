@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/06 09:38:32 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/11 10:49:23 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef enum e_token_type
 	TOKEN_DBL_QUOTE,
 	TOKEN_END,
 	TOKEN_ERROR,
-}							t_token_type;
+}				t_token_type;
 
 typedef struct s_token
 {
@@ -164,8 +164,6 @@ void						util_proc(t_buit_in *exec, t_token *token,
 								t_pipex *pipex);
 void						ft_end_process(t_token *token, t_buit_in *exec,
 								t_pipex *pipex);
-void						ft_mid_process(t_token *token, t_pipex *pipex,
-								t_buit_in *exec);
 void						ft_init_proc(t_parse_context ctx, int *lst,
 								t_buit_in *exec);
 int							process_line(t_buit_in *exec, t_pipex *pipex,
@@ -246,7 +244,8 @@ int							count_replace_quest(char *var_value,
 int							count_replace_dol(char *var_value, char *var_name);
 
 int							ft_handle_operators(t_parse_context *ctx);
-int							ft_handle_env_vars(t_parse_context *ctx);
+int							ft_handle_env_vars(t_parse_context *ctx,
+								int *last_exit_status);
 int							ft_handle_words(t_parse_context *ctx);
 
 int							ft_handle_alones(t_parse_context *ctx,

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   build_quote.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/11 14:26:12 by thobenel          #+#    #+#             */
+/*   Updated: 2025/03/11 14:26:13 by thobenel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*build_quote_content(t_parse_context *ctx)
@@ -23,12 +35,9 @@ char	*build_quote_content(t_parse_context *ctx)
 
 int	merge_with_next(t_parse_context *ctx, char *quote)
 {
-	char	*rest;
 	char	*merged;
 
-	rest = ft_get_next_token(ctx->input);
-	merged = ft_strjoin(quote, rest);
-	free(rest);
+	merged = ft_get_next_token(ctx->input);
 	free(quote);
 	if (!merged)
 		return (0);

@@ -3,28 +3,16 @@
 char	*modify_pwd_with_arg(char *path, char *arg)
 {
 	char	*new_path;
-	int		i;
-	int		j;
+	char	*result;
 
-	if (!arg)
-		return (path);
-	new_path = malloc(sizeof(char) * (ft_strlen(path) + ft_strlen(arg) + 1));
+	if (!arg || !path)
+		return (NULL);
+	new_path = ft_strjoin(path, "/");
 	if (!new_path)
-		return (path);
-	i = 0;
-	j = 0;
-	while (path[i])
-	{
-		new_path[j++] = path[i++];
-	}
-	i = 0;
-	new_path[j++] = '/';
-	while (arg[i])
-	{
-		new_path[j++] = arg[i++];
-	}
-	new_path[j] = '\0';
-	return (new_path);
+		return (NULL);
+	result = ft_strjoin(new_path, arg);
+	free(new_path);
+	return (result);
 }
 
 int	modify_path(char *arg, t_env **env)
@@ -36,9 +24,8 @@ int	modify_path(char *arg, t_env **env)
 	{
 		ft_printf_fd(2, CD_ERR CD_ERR2);
 		path = modify_pwd_with_arg(print_node_by_key(env, "PWD"), arg);
-		modify_node_value(env, "PWD", path);
-		free(path);
-		return (0);
+		if (!path)
+			return (0);
 	}
 	modify_node_value(env, "PWD", path);
 	free(path);
@@ -47,7 +34,9 @@ int	modify_path(char *arg, t_env **env)
 
 int	arg_cd(t_buit_in *exec, char *arg, t_env **env)
 {
-	int	validity_path;
+	char	*temp;
+	char	*oldpwd;
+	int		validity_path;
 
 	if (access(arg, F_OK) == 0)
 	{
@@ -60,6 +49,29 @@ int	arg_cd(t_buit_in *exec, char *arg, t_env **env)
 	}
 	else
 	{
+		if (ft_strcmp(arg, "-") == 0)
+		{
+			oldpwd = ft_strdup(print_node_by_key(env, "OLDPWD"));
+			if (!oldpwd)
+			{
+				ft_printf_fd(2, "bash: cd: OLDPWD not set\n");
+				exec->status = 1;
+				return (0);
+			}
+			temp = ft_strdup(print_node_by_key(env, "PWD"));
+			if (chdir(oldpwd) == -1)
+			{
+				ft_printf_fd(2, "bash: cd: %s: %s\n", oldpwd, strerror(errno));
+				free(oldpwd);
+				return (0);
+			}
+			modify_node_value(env, "PWD", oldpwd);
+			modify_node_value(env, "OLDPWD", temp);
+			printf("%s\n", oldpwd);
+			free(oldpwd);
+			free(temp);
+			return (0);
+		}
 		ft_printf_fd(2, "bash: cd: %s: %s\n", arg, strerror(errno));
 		exec->status = 1;
 	}
@@ -68,7 +80,7 @@ int	arg_cd(t_buit_in *exec, char *arg, t_env **env)
 
 int	ft_cd(t_buit_in *exec, t_env **env, char **arg)
 {
-	char	*path_user;
+	char	*path;
 
 	if (arg[1])
 	{
@@ -80,17 +92,18 @@ int	ft_cd(t_buit_in *exec, t_env **env, char **arg)
 		}
 		return (arg_cd(exec, arg[1], env));
 	}
-	else
-	{
-		path_user = ft_strjoin("/home/", print_node_by_key(env, "USER"));
-		if (!path_user)
-		{
-			ft_printf_fd(2, "bash: cd: %s: %s\n", arg, strerror(errno));
-			return (0);
-		}
-		chdir(path_user);
-		modify_node_value(env, "PWD", path_user);
-		free(path_user);
-	}
-	return (0);
+	path = print_node_by_key(env, "HOME");
+	if (!path)
+    {
+        ft_printf_fd(2, "bash: cd: HOME not set\n");
+        exec->status = 1;
+        return (0);
+    }
+    if (chdir(path) == -1)
+    {
+        ft_printf_fd(2, "bash: cd: %s: %s\n", path, strerror(errno));
+        return (0);
+    }
+    modify_node_value(env, "PWD", path);
+	return (1);
 }

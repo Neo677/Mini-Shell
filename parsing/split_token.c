@@ -115,7 +115,6 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy,
 	ctx.last_token = NULL;
 	init_cmd_ctx(&ctx, &cmd_lst, &current);
 	ctx.exit_status = *last_exit_status;
-	ctx.exit_status = *last_exit_status;
 	if (!ft_check_syntax(input, &ctx))
 		return (*last_exit_status = ctx.exit_status, 0);
 	if (!process_tokens(&ctx, last_exit_status))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:26:55 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 09:27:06 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:47:48 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 	token = ft_parse_token(exec->input, &exec->env_cpy, cmd_lst, lst);
 	if (!token)
 		return (free(exec->input), 0);
-	ft_mid_process(token, pipex, exec);
+	check_heredoc(token, pipex);
 	if (*cmd_lst && (*cmd_lst)->arg)
 	{
 		process(pipex, *cmd_lst, exec, exec->env_dup);

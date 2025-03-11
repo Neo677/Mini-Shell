@@ -104,12 +104,20 @@ int	ft_handle_quotes(t_parse_context *ctx)
 	if (**ctx->input)
 		next = **ctx->input;
 	if (!ft_isspace(pr) && !ft_isspace(next))
+	{
 		ret = merge_with_next(ctx, quote);
+	}
 	else if (!ft_isspace(pr) && ft_isspace(next) && (pr != '<' && pr != '>'))
+	{
 		ret = merge_quote_with_last(ctx, quote);
+	}
 	else if (ft_isspace(pr) && !ft_isspace(next))
-		ret = handle_quote_with_next(ctx, quote);	
+	{
+		ret = handle_quote_with_next(ctx, quote);
+	}
 	else
+	{
 		ret = add_quote_as_new_token(ctx, quote);
+	}
 	return (ret);
 }
