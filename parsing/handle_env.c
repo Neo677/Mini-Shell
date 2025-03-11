@@ -69,6 +69,7 @@ int	ft_handle_alones(t_parse_context *ctx, char *var_name)
 	if (!ft_add_arguments(*ctx->current, var_name))
 		return (ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"),
 			free(var_name), 0);
+	ctx->exit_status = 127;
 	return (1);
 }
 

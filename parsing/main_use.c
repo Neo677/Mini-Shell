@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_use.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 08:27:38 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 08:27:41 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:49:11 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,4 @@ void	ft_end_process(t_token *token, t_buit_in *exec, t_pipex *pipex)
 	ft_free_token(token);
 	free(exec->input);
 	clear_file(pipex->filename_hd);
-}
-
-void	ft_mid_process(t_token *token, t_pipex *pipex, t_buit_in *exec)
-{
-	check_heredoc(token, pipex);
-	check_file(exec, token);
 }

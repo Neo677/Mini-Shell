@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/06 09:38:32 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/11 10:49:23 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,8 +164,6 @@ void						util_proc(t_buit_in *exec, t_token *token,
 								t_pipex *pipex);
 void						ft_end_process(t_token *token, t_buit_in *exec,
 								t_pipex *pipex);
-void						ft_mid_process(t_token *token, t_pipex *pipex,
-								t_buit_in *exec);
 void						ft_init_proc(t_parse_context ctx, int *lst,
 								t_buit_in *exec);
 int							process_line(t_buit_in *exec, t_pipex *pipex,

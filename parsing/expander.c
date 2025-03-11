@@ -27,6 +27,8 @@ char	*process_variable(const char *input, size_t *i, char *resl,
 		resl = ft_strjoin(resl, var_value);
 		free(tmp);
 		free(var_value);
+		*i += var_len;
+		return (resl);
 	}
 	else
 	{

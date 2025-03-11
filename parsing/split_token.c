@@ -76,7 +76,7 @@ int	ft_handle_operators(t_parse_context *ctx)
 		if (!file)
 			return (ft_err_bad_redirec(*ctx->cmd_lst, *ctx->head), 0);
 		if (!*ctx->current)
-			*ctx->current = ft_init_command(ctx->cmd_lst);
+			*ctx->current = ft_init_command(ctx->cmd_lst);	
 		if (!ft_add_redirections_struct(*ctx->current,
 				ft_identify_token((char *)(*ctx->input)), file))
 			return (free(file), ft_err_split_ope(*ctx->cmd_lst, *ctx->head), 0);

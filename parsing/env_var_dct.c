@@ -81,9 +81,7 @@ char	*ft_extract_env_var(const char **input)
 		return (NULL);
 	special = ft_handle_special_case(input);
 	if (special)
-	{
 		return (special);
-	}
 	(*input)++;
 	if (ft_isdigit(**input))
 		return (ft_extract_digit_var(input));

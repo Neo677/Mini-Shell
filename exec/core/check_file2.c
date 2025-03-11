@@ -32,9 +32,15 @@ int	check_file_in2(t_buit_in *exec, t_redirections *current)
 int	check_file_out2(t_buit_in *exec, t_redirections *current)
 {
 	int	outfile;
-
 	if ((current->type == 3 || current->type == 4) && current->file)
 	{
+		outfile = open(current->file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
+		if (outfile < 0)
+		{
+			ft_printf_fd(2, "bash: ");
+			perror(current->file);
+			return (exec->status = EXIT_FAILURE);
+		}
 		if (access(current->file, F_OK) != 0)
 		{
 			ft_printf_fd(2, "bash: %s: No such file or directory\n",
@@ -44,13 +50,6 @@ int	check_file_out2(t_buit_in *exec, t_redirections *current)
 		if (access(current->file, W_OK) != 0)
 		{
 			ft_printf_fd(2, "bash: %s: Permission denied\n", current->file);
-			return (exec->status = EXIT_FAILURE);
-		}
-		outfile = open(current->file, O_TRUNC | O_CREAT | O_WRONLY, 0644);
-		if (outfile < 0)
-		{
-			ft_printf_fd(2, "bash: ");
-			perror(current->file);
 			return (exec->status = EXIT_FAILURE);
 		}
 		close(outfile);

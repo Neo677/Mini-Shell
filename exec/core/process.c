@@ -2,11 +2,11 @@
 
 int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 {
+	if (check_file2(exec, current) == 1)
+			return (1);
 	if (check_built_in(current->arg[0]) == 1)
 	{
 		redir_output(exec, current, pipex);
-		if (check_file2(exec, current) == 1)
-			return (1);
 		execute_built_in(exec, current);
 	}
 	else
@@ -102,6 +102,7 @@ void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 	signal(SIGINT, signal_handler2);
 	current = cmd;
 	init_process(pipex, cmd);
+	exec->status = 0;
 	if (pipex->cmd_count == 1)
 		one_command(pipex, exec, env, current);
 	else
