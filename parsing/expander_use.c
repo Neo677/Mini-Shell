@@ -30,7 +30,6 @@ char	*get_env_var_value(char *var, t_parse_context *ctx)
 	char	*var_value;
 	char	*old;
 
-	// printf("")
 	env_value = print_node_by_key(ctx->env_cpy, var + 1);
 	if (env_value)
 	{
@@ -94,9 +93,6 @@ char	*get_var_value(const char *input, size_t var_len, t_parse_context *ctx)
 	else if (ft_strcmp(var_name, "$?") == 0)
 		var_value = ft_itoa(ctx->exit_status);
 	else
-	{
 		var_value = get_env_var_value(var_name, ctx);
-	}
-	free(var_name);
-	return (var_value);
+	return (free(var_name), var_value);
 }
