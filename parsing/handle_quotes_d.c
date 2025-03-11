@@ -20,7 +20,7 @@ static char	*append_char_to_result(char *result, char c)
 	letter[0] = c;
 	letter[1] = '\0';
 	tmp = result;
-	result = ft_strjoin(result, letter);
+	result = ft_strjoin(tmp, letter);
 	free(tmp);
 	return (result);
 }
@@ -48,27 +48,78 @@ static char	*handle_missing_quote_part(char *result)
 	return (combined);
 }
 
+int ft_count_quote(const char **input)
+{
+	char	*str;
+	int	i = 0;
+	int	quote = 0;
+
+	str = ft_strdup_v2(*input);
+
+	while (str[i])
+	{
+		if (str[i] == '"')
+			quote++;
+		i++;
+	}
+	free(str);
+	return (quote);
+}
+
 char	*ft_collect_double_quote(const char **input)
 {
 	char	*result;
+	int quote;
 
+	quote = ft_count_quote(input);
 	if (**input != '"')
 		return (NULL);
+	if (**input == '"' && **input + 1 == '"')
+		return (ft_strdup(""));
 	(*input)++;
 	result = ft_strdup("");
 	if (!result)
 		return (NULL);
+	while(**input == '"')
+		(*input)++;
 	while (**input && **input != '"')
 	{
 		result = append_char_to_result(result, **input);
 		(*input)++;
 	}
-	if (**input == '"')
+	while (**input == '"')
 		(*input)++;
-	else
+	if (quote % 2 != 0)
 		result = handle_missing_quote_part(result);
 	return (result);
 }
+
+// char	*ft_collect_double_quote(const char **input)
+// {
+// 	char	*result;
+
+// 	if (**input != '"')
+// 		return (NULL);
+// 	if (**input == '"' && **input + 1 == '"')
+// 	{
+// 		return (ft_strdup(""));
+// 	}
+// 	(*input)++;
+// 	result = ft_strdup("");
+// 	if (!result)
+// 		return (NULL);
+// 	while (**input)
+// 	{
+// 		result = append_char_to_result(result, **input);
+// 		printf("{DEBUG} Result == %s\n", result);
+// 		(*input)++;
+// 	}
+// 	if (**input == '"')
+// 		(*input)++;
+// 	else if (**input != '"')
+// 		result = handle_missing_quote_part(result);
+// 	return (result);
+// }
 
 char	*ft_handle_double_quote(const char **input, t_parse_context *ctx)
 {
@@ -78,7 +129,16 @@ char	*ft_handle_double_quote(const char **input, t_parse_context *ctx)
 	quoted_content = ft_collect_double_quote(input);
 	if (!quoted_content)
 		return (NULL);
-	expanded_content = ft_expand_vars(quoted_content, ctx);
-	free(quoted_content);
-	return (expanded_content);
+	int i = 0;
+	while (quoted_content[i])
+	{
+		if (quoted_content[i] == '$')
+		{
+			expanded_content = ft_expand_vars(quoted_content, ctx);
+			free(quoted_content);
+			return (expanded_content);
+		}
+		i++;
+	}
+	return (quoted_content);
 }

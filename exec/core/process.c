@@ -104,6 +104,7 @@ void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 	signal(SIGINT, signal_handler2);
 	current = cmd;
 	init_process(pipex, cmd);
+	exec->status = 0;
 	if (pipex->cmd_count == 1)
 		one_command(pipex, exec, env, current);
 	else

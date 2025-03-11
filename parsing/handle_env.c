@@ -69,6 +69,7 @@ int	ft_handle_alones(t_parse_context *ctx, char *var_name)
 	if (!ft_add_arguments(*ctx->current, var_name))
 		return (ft_printf_fd(STDERR_FILENO, "minishell: unbound variable\n"),
 			free(var_name), 0);
+	ctx->exit_status = 127;
 	return (1);
 }
 
@@ -76,13 +77,10 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 {
 	char	*var_name;
 	int		res;
-	// t_token *token;
 
 	var_name = ft_extract_env_var(ctx->input);
 	if (!var_name)
 		return (free(var_name), 0);
-	// if (token->type == TOKEN_HEREDOC)
-		// return (NULL);
 	if (ft_strcmp_dollar(var_name) == 0)
 	{
 		res = ft_handle_alones(ctx, var_name);

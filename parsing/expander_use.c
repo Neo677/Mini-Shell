@@ -30,6 +30,7 @@ char	*get_env_var_value(char *var, t_parse_context *ctx)
 	char	*var_value;
 	char	*old;
 
+	// printf("")
 	env_value = print_node_by_key(ctx->env_cpy, var + 1);
 	if (env_value)
 	{
@@ -57,6 +58,17 @@ char	*ft_extract_digit_var_quote(char *input)
 	return (ft_strndup(start, 1));
 }
 
+int ft_get_this_digit(char *str)
+{
+	str++;
+	while (*str)
+	{
+		if (*str >= '0' && *str <= '9')
+			return (1);
+		str++;
+	}
+	return (0);
+}
 
 char	*get_var_value(const char *input, size_t var_len, t_parse_context *ctx)
 {
@@ -71,15 +83,20 @@ char	*get_var_value(const char *input, size_t var_len, t_parse_context *ctx)
 		var_value = ft_strdup("$");
 		return (var_value);
 	}
-	if (ft_isdigit(*var_name))
-		return (ft_extract_digit_var_quote(var_name));
+	if (ft_get_this_digit(var_name) == 1)
+	{
+		ft_extract_digit_var_quote(var_name);
+		var_name += 2;
+		return (var_name);
+	}
 	if (ft_strcmp(var_name, "$$") == 0)
 		var_value = ft_get_pid_str();
 	else if (ft_strcmp(var_name, "$?") == 0)
 		var_value = ft_itoa(ctx->exit_status);
 	else
+	{
 		var_value = get_env_var_value(var_name, ctx);
-	printf("1\n");
+	}
 	free(var_name);
 	return (var_value);
 }
