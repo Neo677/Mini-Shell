@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:24:46 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/12 11:46:52 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/12 21:54:52 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,5 @@ int	main(int ac, char **av, char **env)
 		else if (ret != 0 || exec.exit_bh == 1)
 			return (ret);
 	}
-	return (free_all(&exec), clear_history(), 0);
+	return (free_all(&exec), rl_clear_history(), 0);
 }

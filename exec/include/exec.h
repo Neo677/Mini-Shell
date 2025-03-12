@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 10:54:07 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/12 21:52:32 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 # include "../libft/printf/ft_printf.h"
 # include <errno.h>
 # include <fcntl.h>
-# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/stat.h>
@@ -77,7 +77,7 @@ typedef struct s_pipex
 	int							prev_pipe;
 	int							cmd_count;
 	int							status;
-	pid_t						pid;
+	pid_t						*pid;
 	int							i;
 }								t_pipex;
 
@@ -247,7 +247,7 @@ int								check_heredoc(t_token *token, t_pipex *pipex);
 
 /*  INIT_VAR  */
 void							init_var(t_pipex *pipex);
-void							init_process(t_pipex *pipex, t_command *cmd);
+int								init_process(t_pipex *pipex, t_command *cmd);
 
 /*  PROCESS  */
 int								one_command(t_pipex *pipex, t_buit_in *exec,

@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:26:55 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/12 11:50:35 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/11 10:47:48 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	ft_free_process_line(t_buit_in *exec, t_pipex *pipex,
 		t_command **cmd_lst, t_token *token)
 {
 	util_proc(exec, token, pipex);
-	clear_history();
+	rl_clear_history();
 	ft_free_commande_lst(*cmd_lst);
 	*cmd_lst = NULL;
 	return (exec->status);
@@ -37,7 +37,7 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 	if (!token)
 		return (free(exec->input), 0);
 	check_heredoc(token, pipex);
-	if (*cmd_lst && ((*cmd_lst)->arg || (*cmd_lst)->redirections))
+	if (*cmd_lst && (*cmd_lst)->arg)
 	{
 		process(pipex, *cmd_lst, exec, exec->env_dup);
 		ctx.exit_status = exec->status;

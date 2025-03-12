@@ -66,17 +66,17 @@ int	ft_count_quote(const char **input)
 	free(str);
 	return (quote);
 }
+
 char	*ft_collect_double_quote(const char **input)
 {
 	char	*result;
 
 	if (**input != '"')
 		return (NULL);
-	(*input)++; /* Sauter la quote ouvrante */
+	(*input)++;
 	result = ft_strdup("");
 	if (!result)
 		return (NULL);
-	/* Accumuler les caractères jusqu'à la prochaine quote fermante */
 	while (**input && **input != '"')
 	{
 		result = append_char_to_result(result, **input);
@@ -84,11 +84,9 @@ char	*ft_collect_double_quote(const char **input)
 			return (NULL);
 		(*input)++;
 	}
-	/* Si on trouve la quote fermante, on la saute */
 	if (**input == '"')
 		(*input)++;
 	else
-		/* La quote fermante est manquante : on gère l'EOF */
 		result = handle_missing_quote_part(result);
 	return (result);
 }
