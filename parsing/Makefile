@@ -3,19 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: thobenel <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 17:24:52 by thobenel          #+#    #+#              #
-#    Updated: 2024/12/12 17:24:55 by thobenel         ###   ########.fr        #
+#    Updated: 2025/03/12 08:34:11 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-CC = gcc
+CC = gcc -g #-ltinfo
 CFLAGS = -Wall -Wextra -Werror -I include #-fsanitize=leak
 LIBFT_DIR = ../libft_2.0
 LIBFT = $(LIBFT_DIR)/libft.a
-LIBFT_DIR_MATE = ../Exec/libft/printf
+LIBFT_DIR_MATE = ../exec/libft/printf
 LIBFT_MATE = $(LIBFT_DIR_MATE)/libftprintf.a
 READLINE = -lreadline
 
@@ -24,44 +24,77 @@ SRCS =	add_arguments.c \
 		create_command.c \
 		env_var_dct.c \
 		free.c \
-		handle_signal.c \
 		handle_error.c \
 		handle_error_2.c \
-		handle_quotes.c \
+		handle_quotes_d.c \
+		handle_quotes_s.c \
+		expander.c \
+		expander_double.c \
+		eof_quote.c \
+		expander_use.c \
 		main.c \
+		main_use.c \
 		parse_token.c \
 		prompt.c \
+		init_parsing.c \
+		process_token.c \
+		handle_env.c \
+		handle_env_two.c \
+		handle_env_use.c \
+		handle_quote.c \
+		build_quote.c \
+		handle_word.c \
 		split_token.c \
 		token_handle.c \
 		token_utils.c \
 		utils_main.c \
+		utils_main2.c \
 		utils.c \
+		utils_2.c \
 		syntax_before.c \
+		syntax_before_two.c \
 		start_minishell.c \
 		valid_token.c \
-		double_quote.c \
+		valid_token_two.c \
 		replace_env.c \
-		../Exec/core/cmd.c \
-		../Exec/core/utils.c \
-		../Exec/core/free.c \
-		../Exec/core/split.c \
-		../Exec/core/process.c \
-		../Exec/core/init.c \
-		../Exec/core/init_var.c \
-		../Exec/core/utils_error.c \
-		../Exec/core/here_doc.c \
-		../Exec/built-in/cd.c \
-		../Exec/built-in/cmd_node.c \
-		../Exec/built-in/cpy_env.c \
-		../Exec/built-in/echo.c \
-		../Exec/built-in/env.c \
-		../Exec/built-in/exit.c \
-		../Exec/built-in/export.c \
-		../Exec/built-in/free.c \
-		../Exec/built-in/pwd.c \
-		../Exec/built-in/split.c \
-		../Exec/built-in/unset.c \
-		../Exec/built-in/utils_built_in.c
+		creat_command_utils.c \
+		matrix.c \
+		quote_utils.c \
+		pid.c \
+		create_command_use.c \
+		../exec/built-in/cd.c \
+		../exec/built-in/cmd_node.c \
+		../exec/built-in/cpy_env.c \
+		../exec/built-in/echo.c \
+		../exec/built-in/env.c \
+		../exec/built-in/exit.c \
+		../exec/built-in/export.c \
+		../exec/built-in/export2.c \
+		../exec/built-in/export3.c \
+		../exec/built-in/free_bh.c \
+		../exec/built-in/init.c \
+		../exec/built-in/pwd.c \
+		../exec/built-in/signal.c \
+		../exec/built-in/split_var.c \
+		../exec/built-in/split.c \
+		../exec/built-in/unset.c \
+		../exec/built-in/utils_built_in.c \
+		../exec/built-in/utils_cmd_node.c \
+		../exec/built-in/utils_export.c \
+		../exec/core/builtin.c \
+		../exec/core/change_dir.c \
+		../exec/core/check_dir.c \
+		../exec/core/cmd.c \
+		../exec/core/free_exec.c \
+		../exec/core/here_doc.c \
+		../exec/core/init_var.c \
+		../exec/core/process.c \
+		../exec/core/process2.c \
+		../exec/core/redir.c \
+		../exec/core/split.c \
+		../exec/core/utils_error.c \
+		../exec/core/utils.c \
+		../exec/core/utils2.c \
 
 OBJS = $(SRCS:.c=.o)
 
@@ -73,11 +106,11 @@ $(NAME): $(OBJS) $(LIBFT) $(LIBFT_MATE)
 
 $(LIBFT):
 	@echo "Compilation de la libft..."
-	make -C $(LIBFT_DIR) 
+	make -C $(LIBFT_DIR)
 
 $(LIBFT_MATE):
 	@echo "Compilation de la libft du Mate..."
-	make -C $(LIBFT_DIR_MATE) 
+	make -C $(LIBFT_DIR_MATE)
 
 %.o: %.c
 	@echo "Compilation de $<..."

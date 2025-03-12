@@ -3,155 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:24:46 by thobenel          #+#    #+#             */
-/*   Updated: 2024/12/12 17:24:48 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/02/14 00:09:36 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_intro(void)
+int	main(int ac, char **av, char **env)
 {
-	ft_printf("\033[32m");
-	ft_printf("\n  ███╗   ███╗██╗███╗   ██╗██╗\
-	███████╗██╗  ██╗███████╗██╗     ██╗     \n");
-	ft_printf("  ████╗ ████║██║████╗  ██║██║\
-	██╔════╝██║  ██║██╔════╝██║     ██║\n");
-	ft_printf("  ██╔████╔██║██║██╔██╗ ██║██║\
-	███████╗███████║█████╗  ██║     ██║\n");
-	ft_printf("  ██║╚██╔╝██║██║██║╚██╗██║██║\
-	╚════██║██╔══██║██╔══╝  ██║     ██║\n");
-	ft_printf("  ██║ ╚═╝ ██║██║██║ ╚████║██║\
-	███████║██║  ██║███████╗███████╗███████╗\n");
-	ft_printf("  ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝\
-	╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
-	ft_printf("\033[0m\n");
-    ft_printf("Bienvenue dans Minishell 🎉\n");
-	ft_printf("Par Dpascal--Thobenel\n");
-    ft_printf("Tapez 'exit' pour quitter.\n\n");
-}
+	t_buit_in	exec;
+	t_pipex		pipex;
+	t_command	*cmd_lst;
+	int			lst;
+	int			ret;
 
-// int main(int ac, char **av, char **env)
-// {
-//     (void)ac;
-//     (void)av;
-//     (void)env;
-
-// 	// ft_intro();
-//     ft_start_minishell(); // Lancer Minishell
-//     return (0);
-// }
-
-char **ft_token_to_tab(t_token *token)
-{
-	int count;
-	int i;
-	t_token *tmp;
-	char **tab;
-
-	count = 0;
-	tmp = token;
-	while (tmp)
-	{
-		count++;
-		tmp = tmp->next;
-	}
-	tab = malloc(sizeof(char *) * (count + 1));
-	if (!tab)
-		return (NULL);
-	tmp = token;
-	i = 0;
-	while (tmp)
-	{
-		tab[i] = ft_strdup_v2(tmp->value);
-		if (!tab[i])
-		{
-			while (i > 0)
-				free(tab[i--]);
-			free(tab);
-			return (NULL);
-		}
-		i++;
-		tmp = tmp->next;
-	}
-	tab[i] = NULL;
-	return (tab);
-}
-
-
-
-int main(int ac, char **av, char **env)
-{
 	(void)ac;
 	(void)av;
-	t_buit_in exec;
-	t_token *token;
-	
-	token = NULL;
-	init_var(&exec);
-
-	ft_set_signal_handler();
-
-	copy_env(env, &exec.env_cpy);
-
-	modify_node_value(&exec.env_cpy, "_", "/usr/bin/env");
-
-	// ft_intro();
-
+	lst = 0;
+	cmd_lst = NULL;
+	init_var_builtin(&exec);
+	init_var(&pipex);
+	ft_setup_signal();
+	ft_setup_env(&exec, env);
+	ft_intro();
 	while (1)
 	{
-
-		exec.input = readline("minishell> ");
-
-		if (!exec.input)
-		{
-			ft_printf("CTRL-D\n");
-			free(exec.input);
-			// need to content a free fonction
-			// also return te right code
-			break ; // ✅
-		}
-
-		token = ft_parse_token(exec.input, &exec.env_cpy);
-
-		exec.tab = ft_token_to_tab(token);
-		// exec.tab = ft_split_built(exec.input, ' ');
-
-		if (ft_strcmp(exec.tab[0], "env") == 0)
-			ft_env(&exec.env_cpy);
-
-		else if (ft_strcmp(exec.tab[0], "pwd") == 0)
-			ft_pwd(&exec.env_cpy, exec.cd);
-
-		else if (ft_strcmp(exec.tab[0], "export") == 0)
-			ft_export(&exec.env_cpy, exec.tab[1]);
-		
-		else if (ft_strcmp(exec.tab[0], "unset") == 0)
-			ft_unset(&exec.env_cpy, exec.tab[1]);
-
-		else if (ft_strcmp(exec.tab[0], "echo") == 0)
-			ft_echo(exec.tab);
-
-		else if (ft_strcmp(exec.tab[0], "exit") == 0)
-			return(ft_exit(&exec, exec.tab));
-					/*
-						[DEBUG] arg = [exit]
-					----------------------------------
-					*** stack smashing detected ***: terminated
-					Aborted (core dumped)
-					*/
-		else if (ft_strcmp(exec.tab[0], "cd") == 0)
-			exec.cd = ft_cd(&exec.env_cpy, exec.tab[1]);
-		// else if (ft_strcmp(exec.tab[0], "./minishell") == 0)
-		// 	main(ac, av, exec.tab);
-		add_history(exec.input);
+		ret = process_line(&exec, &pipex, &cmd_lst, &lst);
+		if (ret == -1)
+			break ;
+		else if (ret != 0 || exec.exit_bh == 1)
+			return (ret);
 	}
-	free(exec.input);
-	free(exec.tab);
-	free_tab(exec.tab);
-	ft_free_token(token);
-	clear_history(); // (MACOS)
-	//rl_clear_history(); // (LINUX)
+	return (free_all(&exec), rl_clear_history(), 0);
 }

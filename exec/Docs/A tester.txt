@@ -1,0 +1,153 @@
+//////////////////
+pwd
+
+char *getcwd(char *buf, size_t size) :
+
+Récupère le chemin d'accès du répertoire de travail actuel,
+et le place dans SIZE octets de BUF. Renvoie NULL si le
+répertoire n'a pas pu être déterminé ou si SIZE était trop petit.
+En cas de succès, renvoie BUF. Dans GNU, si BUF est NULL,
+un tableau est alloué avec `malloc' ; le tableau fait SIZE
+octets de long, sauf si SIZE == 0, auquel cas il est
+aussi grand que nécessaire.
+
+- creer un dossier rentre dedans
+- creer un autre dossier rentre dedans
+- supprime le premier dossier
+- pwd doit retourner un message d'erreur :
+pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+
+En bash :
+mkdir test1 ; cd test1 ; mkdir test2 ; cd test2 ;  rm -rf ../../test1 ; pwd
+En a.out
+mkdir test1 ; cd test1 ; mkdir test2 ; cd test2 ;  rm -rf ../../test1 ; ../../a.out
+=
+pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+//////////////////
+
+
+//////////////////
+unset :
+
+Permet de supprimer une variable ou une fonction
+unset [VARIABLE] = supprime la variable de l'environnement
+fontion pour chercher dans ma stucture env(copie de l'environnement)
+Sans options, unset essaie d'abord de supprimer une variable, et si cela échoue,
+essaie de désactiver une fonction. 
+//////////////////
+
+
+//////////////////
+Export :
+
+Caractere accepter en debut de KEY :
+_test = _test
+\test = test
+
+Erreur :
+export /test1 = bash: export: `/test1=': not a valid identifier
+export !test1 = bash: !test1=: event not found
+export $? = bash: export: `1': not a valid identifier
+
+A voir :
+export # = ???
+export & = ???
+//////////////////
+
+
+//////////////////
+Exit :
+
+exit
+exit 256 == 0
+exit 255 == 255
+exit 9223372036854775807 == 255
+exit -9223372036854775808 == 0
+exit -9223372036854775807 == 1
+
+error
+exit -9223372036854775809 == bash: exit: -9223372036854775809: numeric argument required
+exit 9223372036854775808 == bash: exit: 9223372036854775808: numeric argument required
+//////////////////
+
+
+//////////////////
+env
+
+retourne toutes les variables d'environement sans trie
+env ne doit pas afficher les variable qui sont definit sans =
+
+//////////////////
+
+
+//////////////////
+cd
+
+cd .. = remonte un repertoire en arriere
+cd = remonte au repertoire source [USER] de l'utilisateur
+cd /chemin = accede au repertoire indiquer par le chemin
+cd ..//.////..//////////////// = remonte 2 dossier en arriere
+il peut y avoir 1 ou 2 . max mais une infinite de /
+cd / = repertoire source /
+cd // = repertoire source //
+
+error
+cd no_path = bash: cd: [no_path]: No such file or directory
+cd "no_permissions" = bash: cd: [no_permissions]: Permission denied
+
+
+
+
+
+export a=1 a=2 test1 _test2 \test3
+
+
+Probleme a resoudre 
+- leak quand export plus valeur sans egal
+export test
+- Pb quand change variable deja existante sans egal
+export test ; export test
+- Pb pas de "" quand variable avec juste =
+export test= doit donner test=""
+donc il faut check si il y a un egal ou non 
+
+Voir split_in_two et tab_export 
+si cela est pas faisable, refaire fonction export avec une structure propre
+
+
+14/02
+- dans le process faire une condiction, si il ny a pas de redirection outfile alors prendre le pipe_fd[1]
+- faire deux fonctions, une in et une out avec dews return, si il y a pas de redirection, executer em fonction de si il n' a pas de in et/ou de out
+if (prev_pipe != -1)
+{
+    dup2(prev_pipe, STDIN_FILENO);
+    close(prev_pipe);
+}
+if (i < cmd_count - 1)
+{
+    dup2(pipe_fd[1], STDOUT_FILENO);
+    close(pipe_fd[1]);
+}
+
+
+A check
+
+echo "1
+2
+Ctrl-D
+message d'erreur = 
+bash: unexpected EOF while looking for matching `"'
+bash: syntax error: unexpected end of file
+
+echo test1 | export | env | pwd
+
+<< 1
+Ctrl-d
+message d'erreur = 
+bash: warning: here-document at line 7 delimited by end-of-file (wanted `1')
+
+mkdir test1
+cd test1
+rm -rf ../test1
+pwd
+

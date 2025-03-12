@@ -15,6 +15,9 @@ Vous pouvez aussi trouver un pdf qui details le projet, c'etait notre 1er semain
 
 ![WELCOME](parsing/docs/adding_struct_cmd.drawio.png)
 
+https://github.com/Dsite42/minishell/blob/master/minishell_evalsheet.pdf?utm_source=chatgpt.com
+
+https://github.com/mharriso/school21-checklists?utm_source=chatgpt.com
 
 
      10/12/2024:
@@ -301,6 +304,8 @@ thobenel@c1r6p2:~/Mini-Shell/parsing$ $PATH
 bash: /home/thobenel/bin:/home/thobenel/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin: No such file or directory
 thobenel@c1r6p2:~/Mini-Shell/parsing$ 
 
+![List_Error_Code](parsing/docs/error-code_list.png)
+
 -- Need to add some error message and some code error :
 	•	Par convention :
 	•	0 : Standard Input (stdin)
@@ -308,3 +313,26 @@ thobenel@c1r6p2:~/Mini-Shell/parsing$
 	•	2 : Standard Error (stderr)
           (l'un ou l'autre peu importe) (use ft_printf_fd qui a etait par mon super mate DPascal)
 
+10/02/2025 :
+Wouah Hou
+     nouvelle erreur :
+          syntax sur les builts-in = 
+          minishell> pwd
+               /Users/benelgorch/Documents/GitHub/Mini-Shell/parsing
+               minishell> pwddddddd
+               /Users/benelgorch/Documents/GitHub/Mini-Shell/parsing
+               minishell> pwde
+               /Users/benelgorch/Documents/GitHub/Mini-Shell/parsing
+               minishell> pwdenculee
+               /Users/benelgorch/Documents/GitHub/Mini-Shell/parsing
+          minishell> echoooooo hello
+               hello
+     donc au niveau de la syntax apres le lexer je doit implementer une fonctions qui va 
+     regarder si le nom des commande concorde avec la liste des built-in 
+# need to be fix (GLHF) 🪖🪖:
+          
+
+     bash-5.2$ echo test"45"
+test45
+bash-5.2$ echo test "45"
+test 45

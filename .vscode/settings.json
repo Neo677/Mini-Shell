@@ -15,6 +15,12 @@
         "history.h": "c",
         "stdbool.h": "c",
         "string.h": "c",
-        "signal.h": "c"
+        "signal.h": "c",
+        "stdio.h": "c",
+        "fcntl.h": "c",
+        "exec.h": "c",
+        "__node_handle": "c",
+        "types.h": "c",
+        "time.h": "c"
     }
 }
