@@ -66,6 +66,7 @@ int	ft_count_quote(const char **input)
 	free(str);
 	return (quote);
 }
+
 char	*ft_collect_double_quote(const char **input)
 {
 	char	*result;

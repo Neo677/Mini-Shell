@@ -72,7 +72,7 @@ int	ft_handle_alones(t_parse_context *ctx, char *var_name)
 	ctx->exit_status = 127;
 	return (1);
 }
-
+	
 int	ft_handle_env_vars(t_parse_context *ctx, int *last_exit_status)
 {
 	char	*var_name;

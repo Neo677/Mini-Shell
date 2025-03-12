@@ -39,11 +39,5 @@ int	ft_set_syntax_pipe(const char *input, int i, t_parse_context *ctx)
 		j++;
 	if (!input[j])
 		return (ft_print_err_global(2), ft_pass_this_bro(ctx), -1);
-	if (input[j] == '|' || input[j] == '<' || input[j] == '>')
-	{
-		ft_printf_fd(2, "bash: syntax error near unexpected token `%c'\n",
-			input[j]);
-		return (ft_pass_this_bro(ctx), -1);
-	}
 	return (j);
 }
