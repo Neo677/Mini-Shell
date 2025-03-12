@@ -73,13 +73,13 @@ t_token	*ft_create_token(t_token_type type, char *value)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->type = type;
 	token->value = ft_strdup_v2(value);
 	if (!token->value)
 	{
 		free(token);
 		return (NULL);
 	}
+	token->type = type;
 	token->next = NULL;
 	return (token);
 }
