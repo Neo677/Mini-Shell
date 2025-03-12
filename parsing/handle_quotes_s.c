@@ -64,19 +64,21 @@ char	*ft_handle_quote(t_parse_context *ctx)
 
 	if (!ctx || !ctx->input || !(*ctx->input))
 	{
-		ft_printf_fd(2, "minishell: unexpected end of input while processing quote\n");
+		ft_printf_fd(2,
+			"minishell: unexpected end of input while processing quote\n");
 		return (NULL);
 	}
 	if (**ctx->input == '\'')
 		content = ft_handle_single_quote(ctx->input, ctx);
-    else if (**ctx->input == '\"')
+	else if (**ctx->input == '\"')
 		content = ft_handle_double_quote(ctx->input, ctx);
-    else
+	else
 		content = NULL;
 	if (!content)
 	{
 		if (!(*ctx->input) || **ctx->input == '\0')
-			ft_printf_fd(2, "minishell: unexpected EOF while processing quote\n");
+			ft_printf_fd(2,
+				"minishell: unexpected EOF while processing quote\n");
 		else
 			ft_printf_fd(2, "\n");
 		return (NULL);
