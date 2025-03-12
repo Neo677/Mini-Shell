@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:54 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 21:54:03 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/12 22:15:22 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ int	no_built_in(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 		exec->status = WEXITSTATUS(pipex->status);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
+	free(pipex->pid);
 	return (0);
 }
