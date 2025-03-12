@@ -94,7 +94,7 @@ SRCS =	parsing/add_arguments.c \
 		exec/core/split.c \
 		exec/core/utils_error.c \
 		exec/core/utils.c \
-		exec/core/utils2.c \
+		exec/core/utils2.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -106,11 +106,11 @@ $(NAME): $(OBJS) $(LIBFT) $(LIBFT_MATE)
 
 $(LIBFT):
 	@echo "Compilation de la libft..."
-	make -C $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT_DIR)
 
 $(LIBFT_MATE):
 	@echo "Compilation de la libft du Mate..."
-	make -C $(LIBFT_DIR_MATE)
+	$(MAKE) -C $(LIBFT_DIR_MATE)
 
 %.o: %.c
 	@echo "Compilation de $<..."
@@ -119,12 +119,14 @@ $(LIBFT_MATE):
 clean:
 	@echo "Suppression des fichiers objets..."
 	rm -f $(OBJS)
-	make -C $(LIBFT_DIR) $(LIBFT_DIR_MATE)  clean
+	$(MAKE) -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(LIBFT_DIR_MATE) clean
 
 fclean: clean
 	@echo "Suppression de $(NAME) et de la libft..."
 	rm -f $(NAME)
-	make -C $(LIBFT_DIR) $(LIBFT_DIR_MATE) fclean
+	$(MAKE) -C $(LIBFT_DIR) fclean
+	$(MAKE) -C $(LIBFT_DIR_MATE) fclean
 
 re: fclean all
 
