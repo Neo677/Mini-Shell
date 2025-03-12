@@ -12,43 +12,32 @@
 
 #include "minishell.h"
 
-char *ft_valid_quotes(char **current, char quote_type)
+char	*ft_valid_quotes(char **current, char quote_type)
 {
-    if (!current || !*current || !**current)
-    {
-        ft_error_quote();
-        return NULL;
-    }
-    (*current)++;  // On passe le guillemet ouvrant.
-    char *start = *current;
-    size_t len = 0;
-    while (**current && **current != quote_type)
-    {
-        /*
-         * On gère ici une éventuelle séquence d’échappement si l’on
-         * est dans une double quote.
-         */
-        if (**current == '\\' && quote_type == '\"' && *(*current + 1) != '\0' &&
-            (*(*current + 1) == quote_type || *(*current + 1) == '\\'))
-        {
-            (*current)++;
-        }
-        (*current)++;
-        len++;
-    }
-    if (!**current)   // Fin de chaîne sans fermeture de la quote.
-    {
-        ft_error_quote();
-        return NULL;
-    }
-    char *value = ft_strndup(start, len);
-    if (!value)
-    {
-        ft_printf_fd(2, "minishell: memory allocation failed\n");
-        return NULL;
-    }
-    (*current)++; // Passe le guillemet fermant.
-    return value;
+	char	*start;
+	size_t	len;
+	char	*value;
+
+	if (!current || !*current || !**current)
+		return (ft_error_quote(), NULL);
+	(*current)++;
+	start = *current;
+	len = 0;
+	while (**current && **current != quote_type)
+	{
+		if (**current == '\\' && quote_type == '\"' && *(*current + 1) != '\0'
+			&& (*(*current + 1) == quote_type || *(*current + 1) == '\\'))
+			(*current)++;
+		(*current)++;
+		len++;
+	}
+	if (!**current)
+		return (ft_error_quote(), NULL);
+	value = ft_strndup(start, len);
+	if (!value)
+		return (ft_printf_fd(2, "minishell: memory allocation failed\n"), NULL);
+	(*current)++;
+	return (value);
 }
 
 int	ft_validay_quotes(t_token *token)

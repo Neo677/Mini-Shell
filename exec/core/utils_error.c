@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_error.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 10:49:09 by dpascal           #+#    #+#             */
+/*   Updated: 2025/03/12 10:49:10 by dpascal          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/exec.h"
 
 char	*ft_join_pipex(char *join, char *s1, char *s2)
@@ -34,15 +46,4 @@ char	*ft_strjoin_pipex(char *s1, char *s2)
 	if (!join)
 		return (NULL);
 	return (ft_join_pipex(join, s1, s2));
-}
-
-void	write_error(char *cmd)
-{
-	char	*msg_error;
-	char	*buffer;
-
-	msg_error = ": command not found\n";
-	buffer = ft_strjoin_pipex(cmd, msg_error);
-	write(2, buffer, ft_strlen_pipex(buffer));
-	free(buffer);
 }

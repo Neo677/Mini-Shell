@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_dir.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 10:48:29 by dpascal           #+#    #+#             */
+/*   Updated: 2025/03/12 10:48:30 by dpascal          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/exec.h"
 
 int	check_dir_out(t_command *cmd)
 {
-	t_redirections *dir;
+	t_redirections	*dir;
 
 	dir = cmd->redirections;
 	while (dir)
@@ -16,7 +28,7 @@ int	check_dir_out(t_command *cmd)
 
 int	check_dir_in(t_command *cmd)
 {
-	t_redirections *dir;
+	t_redirections	*dir;
 
 	dir = cmd->redirections;
 	while (dir)
