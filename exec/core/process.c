@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 10:48:50 by dpascal           #+#    #+#             */
+/*   Updated: 2025/03/12 11:45:36 by dpascal          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/exec.h"
 
 int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
@@ -8,7 +20,7 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
 	if (change_dir(exec, current) == 1)
-			return (1);
+		return (1);
 	redir_input(exec, current, pipex);
 	redir_output(exec, current, pipex);
 	if (check_built_in(current->arg[0]) == 1)

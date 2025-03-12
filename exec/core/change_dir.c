@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   change_dir.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 10:48:25 by dpascal           #+#    #+#             */
+/*   Updated: 2025/03/12 10:48:26 by dpascal          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/exec.h"
 
 int	change_dir_in(t_buit_in *exec, t_redirections *current)
@@ -32,6 +44,7 @@ int	change_dir_in(t_buit_in *exec, t_redirections *current)
 int	change_dir_out(t_buit_in *exec, t_redirections *current)
 {
 	int	outfile;
+
 	if ((current->type == 3 || current->type == 4) && current->file)
 	{
 		outfile = open(current->file, O_TRUNC | O_CREAT | O_WRONLY, 0644);

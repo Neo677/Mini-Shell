@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
+/*   Updated: 2025/03/12 10:54:07 by dpascal          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXEC_H
 # define EXEC_H
 
@@ -5,10 +17,10 @@
 # include "../libft/printf/ft_printf.h"
 # include <errno.h>
 # include <fcntl.h>
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/stat.h>
@@ -54,6 +66,7 @@ typedef struct s_pipex
 {
 	int							infile;
 	int							outfile;
+	int							one_cmd;
 	char						**paths;
 	char						*path;
 	char						*paths_cmd;
@@ -78,6 +91,7 @@ typedef struct s_parse_context	t_parse_context;
 /*  CD  */
 char							*modify_pwd_with_arg(char *path, char *arg);
 int								modify_path(char *arg, t_env **env);
+int								cd_less(t_buit_in *exec, t_env **env);
 int								arg_cd(t_buit_in *exec, char *arg, t_env **env);
 int								ft_cd(t_buit_in *exec, t_env **env, char **arg);
 
@@ -189,8 +203,6 @@ char							*remove_backslash(char *str);
 char							*replace_b_n(char *value);
 int								check_b_n(char *value);
 
-/*  UTILS  */
-
 /*  CORE  */
 
 /*  BUILTIN  */
@@ -278,7 +290,6 @@ char							**ft_split_pipex(t_pipex *pipex, char *str,
 /*  UTILS_ERROR  */
 char							*ft_join_pipex(char *join, char *s1, char *s2);
 char							*ft_strjoin_pipex(char *s1, char *s2);
-void							write_error(char *cmd);
 
 /*  UTILS  */
 int								ft_strchr_exec(char *str, char c);

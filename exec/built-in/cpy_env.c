@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cpy_env.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 10:47:14 by dpascal           #+#    #+#             */
+/*   Updated: 2025/03/12 10:47:15 by dpascal          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/exec.h"
 
 int	check_value(char *str)
@@ -44,19 +56,10 @@ char	*parse_value(char *input)
 char	**init_create_key_value(char *env)
 {
 	char	**tab;
-	// char	*tmp;
 
 	tab = split_in_two(env, '=');
 	if (!tab)
 		return (NULL);
-	// tmp = tab[1];
-	// tab[1] = parse_value(tab[1]);
-	// free(tmp);
-	// if (!tab[1])
-	// {
-	// 	free_tab(tab);
-	// 	return (NULL);
-	// }
 	return (tab);
 }
 

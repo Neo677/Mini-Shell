@@ -83,29 +83,28 @@ void	ft_set_syntax_redir_2(const char *input, int j)
 		ft_printf_fd(2, "`%c'\n", input[j]);
 }
 
-int ft_set_syntax_ope(const char *input, int i, t_parse_context *ctx)
+int	ft_set_syntax_ope(const char *input, int i, t_parse_context *ctx)
 {
-    char op;
-    int len;
-    int j;
+	char	op;
+	int		len;
+	int		j;
 
-    op = input[i];
-    len = 0;
-    j = i;
-    while (input[j] == op)
-    {
-        len++;
-        j++;
-    }
-    if ((op == '>' && len > 2) || (op == '<' && len > 2))
-        return (ft_set_syntax_redir_1(len, op), ft_pass_this_bro(ctx), -1);
-    while (input[j] && (input[j] == ' ' || input[j] == '\t'))
-        j++;
-    if (input[j] && input[j] != '|' && input[j] != '>' && input[j] != '<')
-        return (j);
-    return (ft_set_syntax_redir_2(input, j), ft_pass_this_bro(ctx), -1);
+	op = input[i];
+	len = 0;
+	j = i;
+	while (input[j] == op)
+	{
+		len++;
+		j++;
+	}
+	if ((op == '>' && len > 2) || (op == '<' && len > 2))
+		return (ft_set_syntax_redir_1(len, op), ft_pass_this_bro(ctx), -1);
+	while (input[j] && (input[j] == ' ' || input[j] == '\t'))
+		j++;
+	if (input[j] && input[j] != '|' && input[j] != '>' && input[j] != '<')
+		return (j);
+	return (ft_set_syntax_redir_2(input, j), ft_pass_this_bro(ctx), -1);
 }
-
 
 int	ft_check_syntax(const char *input, t_parse_context *ctx)
 {
@@ -131,4 +130,3 @@ int	ft_check_syntax(const char *input, t_parse_context *ctx)
 	}
 	return (1);
 }
-

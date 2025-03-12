@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 10:46:57 by dpascal           #+#    #+#             */
+/*   Updated: 2025/03/12 10:55:41 by dpascal          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/exec.h"
 
 char	*modify_pwd_with_arg(char *path, char *arg)
@@ -32,10 +44,36 @@ int	modify_path(char *arg, t_env **env)
 	return (1);
 }
 
-int	arg_cd(t_buit_in *exec, char *arg, t_env **env)
+int	cd_less(t_buit_in *exec, t_env **env)
 {
 	char	*temp;
 	char	*oldpwd;
+
+	oldpwd = ft_strdup(print_node_by_key(env, "OLDPWD"));
+	if (!oldpwd)
+	{
+		ft_printf_fd(2, "bash: cd: OLDPWD not set\n");
+		exec->status = 1;
+		return (0);
+	}
+	temp = ft_strdup(print_node_by_key(env, "PWD"));
+	if (chdir(oldpwd) == -1)
+	{
+		ft_printf_fd(2, "bash: cd: %s: %s\n", oldpwd, strerror(errno));
+		exec->status = 1;
+		free(oldpwd);
+		return (0);
+	}
+	modify_node_value(env, "PWD", oldpwd);
+	modify_node_value(env, "OLDPWD", temp);
+	printf("%s\n", oldpwd);
+	free(oldpwd);
+	free(temp);
+	return (0);
+}
+
+int	arg_cd(t_buit_in *exec, char *arg, t_env **env)
+{
 	int		validity_path;
 
 	if (access(arg, F_OK) == 0)
@@ -51,26 +89,7 @@ int	arg_cd(t_buit_in *exec, char *arg, t_env **env)
 	{
 		if (ft_strcmp(arg, "-") == 0)
 		{
-			oldpwd = ft_strdup(print_node_by_key(env, "OLDPWD"));
-			if (!oldpwd)
-			{
-				ft_printf_fd(2, "bash: cd: OLDPWD not set\n");
-				exec->status = 1;
-				return (0);
-			}
-			temp = ft_strdup(print_node_by_key(env, "PWD"));
-			if (chdir(oldpwd) == -1)
-			{
-				ft_printf_fd(2, "bash: cd: %s: %s\n", oldpwd, strerror(errno));
-				exec->status = 1;
-				free(oldpwd);
-				return (0);
-			}
-			modify_node_value(env, "PWD", oldpwd);
-			modify_node_value(env, "OLDPWD", temp);
-			printf("%s\n", oldpwd);
-			free(oldpwd);
-			free(temp);
+			cd_less(exec, env);
 			return (0);
 		}
 		ft_printf_fd(2, "bash: cd: %s: %s\n", arg, strerror(errno));
@@ -95,16 +114,15 @@ int	ft_cd(t_buit_in *exec, t_env **env, char **arg)
 	}
 	path = print_node_by_key(env, "HOME");
 	if (!path)
-    {
-        ft_printf_fd(2, "bash: cd: HOME not set\n");
-        exec->status = 1;
-        return (0);
-    }
-    if (chdir(path) == -1)
-    {
-        ft_printf_fd(2, "bash: cd: %s: %s\n", path, strerror(errno));
-        return (0);
-    }
-    modify_node_value(env, "PWD", path);
-	return (1);
+	{
+		ft_printf_fd(2, "bash: cd: HOME not set\n");
+		exec->status = 1;
+		return (0);
+	}
+	if (chdir(path) == -1)
+	{
+		ft_printf_fd(2, "bash: cd: %s: %s\n", path, strerror(errno));
+		return (0);
+	}
+	return (modify_node_value(env, "PWD", path), 1);
 }
