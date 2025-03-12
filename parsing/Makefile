@@ -6,7 +6,7 @@
 #    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 17:24:52 by thobenel          #+#    #+#              #
-#    Updated: 2025/03/06 14:18:58 by dpascal          ###   ########.fr        #
+#    Updated: 2025/03/12 08:34:11 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,8 +82,8 @@ SRCS =	add_arguments.c \
 		../exec/built-in/utils_cmd_node.c \
 		../exec/built-in/utils_export.c \
 		../exec/core/builtin.c \
-		../exec/core/check_file.c \
-		../exec/core/check_file2.c \
+		../exec/core/change_dir.c \
+		../exec/core/check_dir.c \
 		../exec/core/cmd.c \
 		../exec/core/free_exec.c \
 		../exec/core/here_doc.c \

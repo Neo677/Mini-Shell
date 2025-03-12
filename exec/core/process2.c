@@ -8,8 +8,6 @@ int	no_built_in(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 	if (pipex->pid == 0)
 	{
 		signal(SIGQUIT, signal_handler);
-		redir_input(exec, current, pipex);
-		redir_output(exec, current, pipex);
 		execute_cmd(exec, pipex, current->arg, env);
 	}
 	wait(&pipex->status);

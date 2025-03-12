@@ -73,7 +73,7 @@ int	ft_handle_alones(t_parse_context *ctx, char *var_name)
 	return (1);
 }
 
-int	ft_handle_env_vars(t_parse_context *ctx)
+int	ft_handle_env_vars(t_parse_context *ctx, int *last_exit_status)
 {
 	char	*var_name;
 	int		res;
@@ -98,5 +98,6 @@ int	ft_handle_env_vars(t_parse_context *ctx)
 	}
 	if (!ft_handle_doles(ctx, var_name))
 		return (free(var_name), 0);
+	*last_exit_status = ctx->exit_status;
 	return (1);
 }

@@ -49,11 +49,11 @@
 
 char	*ft_get_next_token_redir(const char **input)
 {
-	const char	*start;	
+	const char	*start;
 
 	start = *input;
 	while (**input && **input != ' ' && **input != '\t' && **input != '|'
-		 && **input != '\"' && **input != '\'')
+		&& **input != '\"' && **input != '\'')
 		(*input)++;
 	return (ft_strndup(start, *input - start));
 }
@@ -76,7 +76,7 @@ int	ft_handle_operators(t_parse_context *ctx)
 		if (!file)
 			return (ft_err_bad_redirec(*ctx->cmd_lst, *ctx->head), 0);
 		if (!*ctx->current)
-			*ctx->current = ft_init_command(ctx->cmd_lst);	
+			*ctx->current = ft_init_command(ctx->cmd_lst);
 		if (!ft_add_redirections_struct(*ctx->current,
 				ft_identify_token((char *)(*ctx->input)), file))
 			return (free(file), ft_err_split_ope(*ctx->cmd_lst, *ctx->head), 0);
@@ -114,7 +114,6 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy,
 	ctx.env_cpy = env_cpy;
 	ctx.last_token = NULL;
 	init_cmd_ctx(&ctx, &cmd_lst, &current);
-	ctx.exit_status = *last_exit_status;
 	ctx.exit_status = *last_exit_status;
 	if (!ft_check_syntax(input, &ctx))
 		return (*last_exit_status = ctx.exit_status, 0);

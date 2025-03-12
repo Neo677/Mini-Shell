@@ -48,14 +48,15 @@ static char	*handle_missing_quote_part(char *result)
 	return (combined);
 }
 
-int ft_count_quote(const char **input)
+int	ft_count_quote(const char **input)
 {
 	char	*str;
-	int	i = 0;
-	int	quote = 0;
+	int		i;
+	int		quote;
 
+	i = 0;
+	quote = 0;
 	str = ft_strdup_v2(*input);
-
 	while (str[i])
 	{
 		if (str[i] == '"')
@@ -69,7 +70,7 @@ int ft_count_quote(const char **input)
 char	*ft_collect_double_quote(const char **input)
 {
 	char	*result;
-	int quote;
+	int		quote;
 
 	quote = ft_count_quote(input);
 	if (**input != '"')
@@ -80,7 +81,7 @@ char	*ft_collect_double_quote(const char **input)
 	result = ft_strdup("");
 	if (!result)
 		return (NULL);
-	while(**input == '"')
+	while (**input == '"')
 		(*input)++;
 	while (**input && **input != '"')
 	{
@@ -125,11 +126,12 @@ char	*ft_handle_double_quote(const char **input, t_parse_context *ctx)
 {
 	char	*quoted_content;
 	char	*expanded_content;
+	int		i;
 
 	quoted_content = ft_collect_double_quote(input);
 	if (!quoted_content)
 		return (NULL);
-	int i = 0;
+	i = 0;
 	while (quoted_content[i])
 	{
 		if (quoted_content[i] == '$')

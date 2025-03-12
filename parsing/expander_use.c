@@ -6,7 +6,7 @@
 /*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:16:03 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 09:16:04 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:55:28 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*ft_extract_digit_var_quote(char *input)
 	return (ft_strndup(start, 1));
 }
 
-int ft_get_this_digit(char *str)
+int	ft_get_this_digit(char *str)
 {
 	str++;
 	while (*str)

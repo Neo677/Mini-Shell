@@ -1,6 +1,6 @@
 #include "../include/exec.h"
 
-int	check_file_in2(t_buit_in *exec, t_redirections *current)
+int	change_dir_in(t_buit_in *exec, t_redirections *current)
 {
 	int	infile;
 
@@ -29,7 +29,7 @@ int	check_file_in2(t_buit_in *exec, t_redirections *current)
 	return (0);
 }
 
-int	check_file_out2(t_buit_in *exec, t_redirections *current)
+int	change_dir_out(t_buit_in *exec, t_redirections *current)
 {
 	int	outfile;
 	if ((current->type == 3 || current->type == 4) && current->file)
@@ -57,7 +57,7 @@ int	check_file_out2(t_buit_in *exec, t_redirections *current)
 	return (0);
 }
 
-int	check_file2(t_buit_in *exec, t_command *cmd)
+int	change_dir(t_buit_in *exec, t_command *cmd)
 {
 	t_redirections	*current;
 	int				error;
@@ -66,9 +66,9 @@ int	check_file2(t_buit_in *exec, t_command *cmd)
 	current = cmd->redirections;
 	while (current)
 	{
-		if (check_file_in2(exec, current) == EXIT_FAILURE)
+		if (change_dir_in(exec, current) == EXIT_FAILURE)
 			return (exec->status = EXIT_FAILURE);
-		if (check_file_out2(exec, current) == EXIT_FAILURE)
+		if (change_dir_out(exec, current) == EXIT_FAILURE)
 			return (exec->status = EXIT_FAILURE);
 		current = current->next;
 	}

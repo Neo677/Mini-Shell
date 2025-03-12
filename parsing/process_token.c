@@ -53,10 +53,7 @@ int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 				return (ft_let_go_split(*ctx, last_exit_status), 0);
 		}
 		else if (**ctx->input == '$')
-		{
-			ft_handle_env_vars(ctx);
-			*last_exit_status = ctx->exit_status;
-		}
+			ft_handle_env_vars(ctx, last_exit_status);
 		else
 		{
 			if (!ft_handle_words(ctx))

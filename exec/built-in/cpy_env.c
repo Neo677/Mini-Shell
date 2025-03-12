@@ -44,19 +44,19 @@ char	*parse_value(char *input)
 char	**init_create_key_value(char *env)
 {
 	char	**tab;
-	char	*tmp;
+	// char	*tmp;
 
 	tab = split_in_two(env, '=');
 	if (!tab)
 		return (NULL);
-	tmp = tab[1];
-	tab[1] = parse_value(tab[1]);
-	free(tmp);
-	if (!tab[1])
-	{
-		free_tab(tab);
-		return (NULL);
-	}
+	// tmp = tab[1];
+	// tab[1] = parse_value(tab[1]);
+	// free(tmp);
+	// if (!tab[1])
+	// {
+	// 	free_tab(tab);
+	// 	return (NULL);
+	// }
 	return (tab);
 }
 
