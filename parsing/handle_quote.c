@@ -15,10 +15,13 @@
 int	ft_handle_space(t_parse_context *ctx, char *quote_content)
 {
 	char	*new;
+	char	*old;
 
-	new = ft_strjoin_v2(ctx->last_token->value, quote_content);
+	old = ctx->last_token->value;
+	new = ft_strjoin_v2(old, quote_content);
 	if (!new)
 		return (0);
+	free(old);
 	ctx->last_token->value = new;
 	if (!ft_add_arguments(*ctx->current, quote_content))
 		return (0);
@@ -28,14 +31,17 @@ int	ft_handle_space(t_parse_context *ctx, char *quote_content)
 int	merge_quote_with_last(t_parse_context *ctx, char *quote_content)
 {
 	char	*new;
+	char	*old;
 
-	new = ft_strjoin_v2(ctx->last_token->value, quote_content);
+	old = ctx->last_token->value;
+	new = ft_strjoin_v2(old, quote_content);
 	if (!new)
 	{
 		free(quote_content);
 		ft_err_split(*ctx->cmd_lst, *ctx->head);
 		return (0);
 	}
+	free(old);
 	ctx->last_token->value = new;
 	if (!ft_add_arguments(*ctx->current, quote_content))
 	{
