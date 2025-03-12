@@ -42,6 +42,8 @@ void	ft_echo(t_command *cmd)
 	line_break = 0;
 	if (!cmd->arg[1])
 	{
+		if (cmd->redirections)
+			return ;
 		write(1, "\n", 1);
 		return ;
 	}

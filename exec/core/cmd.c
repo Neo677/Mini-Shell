@@ -21,7 +21,10 @@ void	error_access(t_buit_in *exec, t_pipex *pipex, char *cmd)
 		}
 	}
 	else
+	{
 		ft_printf_fd(2, "bash: %s: No such file or directory\n", cmd);
+		exec->status = 1;
+	}
 }
 
 char	*error_execute_cmd(t_buit_in *exec, t_pipex *pipex, char *cmd)

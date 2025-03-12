@@ -7,3 +7,16 @@ os_specific    =   10 | 11   1 errors
 redirects      =   30 | 75   45 errors
 
 ALL            =  100 | 146
+
+
+export a=ls
+ls
+
+
+
+echo test | <"./test_files/infile" grep hello
+
+
+<"./test_files/infile" | grep hello
+echo $?
+1

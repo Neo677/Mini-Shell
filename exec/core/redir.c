@@ -23,7 +23,7 @@ void	check_dir_5(t_buit_in *exec, t_pipex *pipex,
 	{
 		if (pipex->filename_hd && pipex->filename_hd[*i])
 		{
-			pipex->infile = open(pipex->filename_hd[*i], O_CREAT | O_RDONLY,
+			pipex->infile = open(pipex->filename_hd[*i], O_RDONLY,
 					0644);
 			if (pipex->infile < 0)
 			{

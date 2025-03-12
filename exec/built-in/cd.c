@@ -62,6 +62,7 @@ int	arg_cd(t_buit_in *exec, char *arg, t_env **env)
 			if (chdir(oldpwd) == -1)
 			{
 				ft_printf_fd(2, "bash: cd: %s: %s\n", oldpwd, strerror(errno));
+				exec->status = 1;
 				free(oldpwd);
 				return (0);
 			}
