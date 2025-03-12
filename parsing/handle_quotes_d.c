@@ -66,31 +66,29 @@ int	ft_count_quote(const char **input)
 	free(str);
 	return (quote);
 }
-
 char	*ft_collect_double_quote(const char **input)
 {
 	char	*result;
-	int		quote;
 
-	quote = ft_count_quote(input);
 	if (**input != '"')
 		return (NULL);
-	if (**input == '"' && **input + 1 == '"')
-		return (ft_strdup(""));
-	(*input)++;
+	(*input)++; /* Sauter la quote ouvrante */
 	result = ft_strdup("");
 	if (!result)
 		return (NULL);
-	while (**input == '"')
-		(*input)++;
+	/* Accumuler les caractères jusqu'à la prochaine quote fermante */
 	while (**input && **input != '"')
 	{
 		result = append_char_to_result(result, **input);
+		if (!result)
+			return (NULL);
 		(*input)++;
 	}
-	while (**input == '"')
+	/* Si on trouve la quote fermante, on la saute */
+	if (**input == '"')
 		(*input)++;
-	if (quote % 2 != 0)
+	else
+		/* La quote fermante est manquante : on gère l'EOF */
 		result = handle_missing_quote_part(result);
 	return (result);
 }

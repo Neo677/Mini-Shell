@@ -12,35 +12,69 @@
 
 #include "minishell.h"
 
-char *build_quote_content(t_parse_context *ctx)
+char	*build_quote_content(t_parse_context *ctx)
 {
-    if (!ctx || !ctx->input || !(*ctx->input))
-        return NULL;
-    
-    char *pref = ft_strdup_v2_quote(*ctx->input);
-    if (!pref)
-        return NULL;
-    
-    /* 
-    ** Ici on utilise ft_handle_quote qui devrait lui-même effectuer
-    ** toutes les vérifications. Vous pourriez, si besoin, le remplacer
-    ** par safe_ft_valid_quotes ou une fonction de traitement "safe".
-    */
-    char *qcont = ft_handle_quote(ctx);
-    if (!qcont)
-    {
-        free(pref);
-        return NULL;
-    }
-    char *result = ft_strjoin(pref, qcont);
-    free(pref);
-    free(qcont);
-    if (!result)
-    {
-        ft_printf_fd(2, "minishell: memory allocation failed\n");
-        return NULL;
-    }
-    return result;
+	char	*result;
+	char	*temp;
+	char	*pref;
+	char	*joined;
+
+	if (!ctx || !ctx->input || !(*ctx->input))
+		return (NULL);
+	result = ft_strdup_v2_quote(*ctx->input);
+	if (!result)
+		return (NULL);
+	temp = ft_handle_quote(ctx);
+	if (!temp)
+	{
+		free(result);
+		return (NULL);
+	}
+	joined = ft_strjoin(result, temp);
+	free(result);
+	free(temp);
+	if (!joined)
+	{
+		ft_printf_fd(2, "minishell: memory allocation failed\n");
+		return (NULL);
+	}
+	result = joined;
+	while (**ctx->input == '\"' || **ctx->input == '\'')
+	{
+		pref = ft_strdup_v2_quote(*ctx->input);
+		if (!pref)
+		{
+			free(result);
+			return (NULL);
+		}
+		temp = ft_handle_quote(ctx);
+		if (!temp)
+		{
+			free(pref);
+			free(result);
+			return (NULL);
+		}
+		joined = ft_strjoin(result, pref);
+		free(pref);
+		if (!joined)
+		{
+			free(temp);
+			free(result);
+			ft_printf_fd(2, "minishell: memory allocation failed\n");
+			return (NULL);
+		}
+		pref = ft_strjoin(joined, temp);
+		free(temp);
+		free(joined);
+		if (!pref)
+		{
+			free(result);
+			ft_printf_fd(2, "minishell: memory allocation failed\n");
+			return (NULL);
+		}
+		result = pref;
+	}
+	return (result);
 }
 
 int	merge_with_next(t_parse_context *ctx, char *quote)
