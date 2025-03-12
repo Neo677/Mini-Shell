@@ -93,6 +93,8 @@ int	ft_handle_quotes(t_parse_context *ctx)
 	char		*quote;
 	int			ret;
 
+	if (!ctx || !ctx->input || !(*ctx->input))
+		return (0);
 	pr = ' ';
 	next = ' ';
 	quote = build_quote_content(ctx);

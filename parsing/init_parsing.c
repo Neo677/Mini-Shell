@@ -35,7 +35,7 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 	add_history(exec->input);
 	token = ft_parse_token(exec->input, &exec->env_cpy, cmd_lst, lst);
 	if (!token)
-		return (free(exec->input), 0);
+		return (free(exec->input), ft_free_commande_lst(*cmd_lst), 0);
 	check_heredoc(token, pipex);
 	if (*cmd_lst && (*cmd_lst)->arg)
 	{
