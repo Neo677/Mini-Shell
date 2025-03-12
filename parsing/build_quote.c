@@ -12,67 +12,68 @@
 
 #include "minishell.h"
 
-char	*build_quote_content(t_parse_context *ctx)
+char	*init_quote_content(t_parse_context *ctx)
 {
 	char	*result;
 	char	*temp;
-	char	*pref;
 	char	*joined;
 
-	if (!ctx || !ctx->input || !(*ctx->input))
-		return (NULL);
 	result = ft_strdup_v2_quote(*ctx->input);
 	if (!result)
 		return (NULL);
 	temp = ft_handle_quote(ctx);
 	if (!temp)
-	{
-		free(result);
-		return (NULL);
-	}
+		return (free(result), NULL);
 	joined = ft_strjoin(result, temp);
 	free(result);
 	free(temp);
 	if (!joined)
-	{
-		ft_printf_fd(2, "minishell: memory allocation failed\n");
 		return (NULL);
-	}
-	result = joined;
+	return (joined);
+}
+
+char	*extract_quote_segment(t_parse_context *ctx, const char *current_result)
+{
+	char	*pref;
+	char	*temp;
+	char	*joined;
+	char	*new_result;
+
+	pref = ft_strdup_v2_quote(*ctx->input);
+	if (!pref)
+		return (NULL);
+	temp = ft_handle_quote(ctx);
+	if (!temp)
+		return (free(pref), NULL);
+	joined = ft_strjoin((char *)current_result, pref);
+	free(pref);
+	if (!joined)
+		return (free(temp), NULL);
+	new_result = ft_strjoin(joined, temp);
+	free(temp);
+	free(joined);
+	if (!new_result)
+		return (NULL);
+	return (new_result);
+}
+
+char	*build_quote_content(t_parse_context *ctx)
+{
+	char	*result;
+	char	*temp_result;
+
+	if (!ctx || !ctx->input || !(*ctx->input))
+		return (NULL);
+	result = init_quote_content(ctx);
+	if (!result)
+		return (NULL);
 	while (**ctx->input == '\"' || **ctx->input == '\'')
 	{
-		pref = ft_strdup_v2_quote(*ctx->input);
-		if (!pref)
-		{
-			free(result);
+		temp_result = extract_quote_segment(ctx, result);
+		free(result);
+		if (!temp_result)
 			return (NULL);
-		}
-		temp = ft_handle_quote(ctx);
-		if (!temp)
-		{
-			free(pref);
-			free(result);
-			return (NULL);
-		}
-		joined = ft_strjoin(result, pref);
-		free(pref);
-		if (!joined)
-		{
-			free(temp);
-			free(result);
-			ft_printf_fd(2, "minishell: memory allocation failed\n");
-			return (NULL);
-		}
-		pref = ft_strjoin(joined, temp);
-		free(temp);
-		free(joined);
-		if (!pref)
-		{
-			free(result);
-			ft_printf_fd(2, "minishell: memory allocation failed\n");
-			return (NULL);
-		}
-		result = pref;
+		result = temp_result;
 	}
 	return (result);
 }
