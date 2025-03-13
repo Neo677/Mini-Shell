@@ -58,7 +58,6 @@ SRCS =	parsing/add_arguments.c \
 		parsing/valid_token_two.c \
 		parsing/replace_env.c \
 		parsing/creat_command_utils.c \
-		parsing/matrix.c \
 		parsing/quote_utils.c \
 		parsing/pid.c \
 		parsing/create_command_use.c \
