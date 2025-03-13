@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:36 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 10:48:37 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/13 07:33:33 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	free_all_core(t_pipex *pipex)
 		free_tab(pipex->paths);
 	if (pipex->path)
 		free(pipex->path);
+	if (pipex->pid)
+		free(pipex->pid);
 }
 
 void	close_file(t_pipex *pipex)

@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:45 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 21:53:56 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/13 07:32:32 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	init_process(t_pipex *pipex, t_command *cmd)
 {
 	pipex->infile = dup(STDIN_FILENO);
 	pipex->outfile = dup(STDOUT_FILENO);
-	pipex->one_cmd = 0;
 	pipex->i = 0;
 	pipex->prev_pipe = -1;
 	pipex->cmd_count = count_cmd(cmd);

@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 21:52:32 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/13 07:32:49 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ typedef struct s_pipex
 {
 	int							infile;
 	int							outfile;
-	int							one_cmd;
 	char						**paths;
 	char						*path;
 	char						*paths_cmd;
