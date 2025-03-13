@@ -102,6 +102,7 @@ int	ft_handle_quotes(t_parse_context *ctx)
 	pr = ' ';
 	next = ' ';
 	quote = build_quote_content(ctx);
+	printf("{ft_handle_quotes}  quote == %s\n", quote);
 	if (!quote)
 		return (0);
 	if (qstart > ctx->input_exec)

@@ -121,6 +121,7 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy,
 		return (0);
 	if (!finalize_ctx(&ctx, last_exit_status))
 		return (0);
+	ft_print_tokens(*head);
 	*head = *ctx.head;
 	*last_exit_status = 0;
 	return (1);

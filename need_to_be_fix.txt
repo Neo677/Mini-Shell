@@ -1,0 +1,436 @@
+inishell> echo "$USER"
+{process_tokens}  1  input == .echo "$USER".
+{process_tokens}  2  input == . "$USER".
+{process_tokens}  1  input == . "$USER".
+{process_tokens}  2  input == ."$USER".
+{process_tokens}  1  input == ."$USER".
+{ft_handle_quotes}  quote == thobenel
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'thobenel'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [thobenel]
+----------------------------------
+thobenel
+minishell> echo home "$USER"
+{process_tokens}  1  input == .echo home "$USER".
+{process_tokens}  2  input == . home "$USER".
+{process_tokens}  1  input == . home "$USER".
+{process_tokens}  2  input == .home "$USER".
+{process_tokens}  1  input == .home "$USER".
+{process_tokens}  2  input == . "$USER".
+{process_tokens}  1  input == . "$USER".
+{process_tokens}  2  input == ."$USER".
+{process_tokens}  1  input == ."$USER".
+{ft_handle_quotes}  quote == thobenel
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'home'
+Type: TOKEN_WORD, Value: 'thobenel'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [home]
+[DEBUG] arg = [thobenel]
+----------------------------------
+home thobenel
+minishell> echo home"$USER"
+{process_tokens}  1  input == .echo home"$USER".
+{process_tokens}  2  input == . home"$USER".
+{process_tokens}  1  input == . home"$USER".
+{process_tokens}  2  input == .home"$USER".
+{process_tokens}  1  input == .home"$USER".
+{process_tokens}  2  input == ."$USER".
+{process_tokens}  1  input == ."$USER".
+{ft_handle_quotes}  quote == thobenel
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'homethobenel'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [homethobenel]
+----------------------------------
+homethobenel
+minishell> echo home$USER"$USER"
+{process_tokens}  1  input == .echo home$USER"$USER".
+{process_tokens}  2  input == . home$USER"$USER".
+{process_tokens}  1  input == . home$USER"$USER".
+{process_tokens}  2  input == .home$USER"$USER".
+{process_tokens}  1  input == .home$USER"$USER".
+{process_tokens}  2  input == ."$USER".
+{process_tokens}  1  input == ."$USER".
+{ft_handle_quotes}  quote == thobenel
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'home$USERthobenel'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [home$USERthobenel]
+----------------------------------
+home$USERthobenel
+minishell> echo home $USER "$USER"
+{process_tokens}  1  input == .echo home $USER "$USER".
+{process_tokens}  2  input == . home $USER "$USER".
+{process_tokens}  1  input == . home $USER "$USER".
+{process_tokens}  2  input == .home $USER "$USER".
+{process_tokens}  1  input == .home $USER "$USER".
+{process_tokens}  2  input == . $USER "$USER".
+{process_tokens}  1  input == . $USER "$USER".
+{process_tokens}  2  input == .$USER "$USER".
+{process_tokens}  1  input == .$USER "$USER".
+{process_tokens}  2  input == . "$USER".
+{process_tokens}  1  input == . "$USER".
+{process_tokens}  2  input == ."$USER".
+{process_tokens}  1  input == ."$USER".
+{ft_handle_quotes}  quote == thobenel
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'home'
+Type: TOKEN_ENV_VAR, Value: 'thobenel'
+Type: TOKEN_WORD, Value: 'thobenel'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [home]
+[DEBUG] arg = [thobenel]
+[DEBUG] arg = [thobenel]
+----------------------------------
+home thobenel thobenel
+minishell> echo $USER$USER"$USER"
+{process_tokens}  1  input == .echo $USER$USER"$USER".
+{process_tokens}  2  input == . $USER$USER"$USER".
+{process_tokens}  1  input == . $USER$USER"$USER".
+{process_tokens}  2  input == .$USER$USER"$USER".
+{process_tokens}  1  input == .$USER$USER"$USER".
+{process_tokens}  2  input == .$USER"$USER".
+{process_tokens}  1  input == .$USER"$USER".
+{process_tokens}  2  input == ."$USER".
+{process_tokens}  1  input == ."$USER".
+{ft_handle_quotes}  quote == thobenel
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echothobenel'
+Type: TOKEN_ENV_VAR, Value: 'thobenel'
+Type: TOKEN_ENV_VAR, Value: 'thobenel'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echothobenel]
+[DEBUG] arg = [thobenel]
+[DEBUG] arg = [thobenel]
+----------------------------------
+echothobenel: command not found
+minishell> echo $USER$USER
+{process_tokens}  1  input == .echo $USER$USER.
+{process_tokens}  2  input == . $USER$USER.
+{process_tokens}  1  input == . $USER$USER.
+{process_tokens}  2  input == .$USER$USER.
+{process_tokens}  1  input == .$USER$USER.
+{process_tokens}  2  input == .$USER.
+{process_tokens}  1  input == .$USER.
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_ENV_VAR, Value: 'thobenel'
+Type: TOKEN_ENV_VAR, Value: 'thobenel'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [thobenel]
+[DEBUG] arg = [thobenel]
+----------------------------------
+thobenel thobenel
+minishell> echo $USER$USE
+{process_tokens}  1  input == .echo $USER$USE.
+{process_tokens}  2  input == . $USER$USE.
+{process_tokens}  1  input == . $USER$USE.
+{process_tokens}  2  input == .$USER$USE.
+{process_tokens}  1  input == .$USER$USE.
+{process_tokens}  2  input == .$USE.
+{process_tokens}  1  input == .$USE.
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_ENV_VAR, Value: 'thobenel'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [thobenel]
+----------------------------------
+thobenel
+minishell> echo $USERhome
+{process_tokens}  1  input == .echo $USERhome.
+{process_tokens}  2  input == . $USERhome.
+{process_tokens}  1  input == . $USERhome.
+{process_tokens}  2  input == .$USERhome.
+{process_tokens}  1  input == .$USERhome.
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+----------------------------------
+
+minishell> echo $USER home
+{process_tokens}  1  input == .echo $USER home.
+{process_tokens}  2  input == . $USER home.
+{process_tokens}  1  input == . $USER home.
+{process_tokens}  2  input == .$USER home.
+{process_tokens}  1  input == .$USER home.
+{process_tokens}  2  input == . home.
+{process_tokens}  1  input == . home.
+{process_tokens}  2  input == .home.
+{process_tokens}  1  input == .home.
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_ENV_VAR, Value: 'thobenel'
+Type: TOKEN_WORD, Value: 'home'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [thobenel]
+[DEBUG] arg = [home]
+----------------------------------
+thobenel home
+minishell> echo $USER'home'
+{process_tokens}  1  input == .echo $USER'home'.
+{process_tokens}  2  input == . $USER'home'.
+{process_tokens}  1  input == . $USER'home'.
+{process_tokens}  2  input == .$USER'home'.
+{process_tokens}  1  input == .$USER'home'.
+{process_tokens}  2  input == .'home'.
+{process_tokens}  1  input == .'home'.
+{ft_handle_quotes}  quote == home
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echohome'
+Type: TOKEN_ENV_VAR, Value: 'thobenel'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echohome]
+[DEBUG] arg = [thobenel]
+----------------------------------
+echohome: command not found
+
+
+minishell> echo "HOME"
+{process_tokens}  1  input == .echo "HOME".
+{process_tokens}  2  input == . "HOME".
+{process_tokens}  1  input == . "HOME".
+{process_tokens}  2  input == ."HOME".
+{process_tokens}  1  input == ."HOME".
+{build_quote_content}  result == HOME
+{ft_handle_quotes}  quote == HOME
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'HOME'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [HOME]
+----------------------------------
+HOME
+minishell> echo ls"HOME"
+{process_tokens}  1  input == .echo ls"HOME".
+{process_tokens}  2  input == . ls"HOME".
+{process_tokens}  1  input == . ls"HOME".
+{process_tokens}  2  input == .ls"HOME".
+{process_tokens}  1  input == .ls"HOME".
+{process_tokens}  2  input == ."HOME".
+{process_tokens}  1  input == ."HOME".
+{build_quote_content}  result == HOME
+{ft_handle_quotes}  quote == HOME
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'lsHOME'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [lsHOME]
+----------------------------------
+lsHOME
+minishell> echo $HOME"HOME"
+{process_tokens}  1  input == .echo $HOME"HOME".
+{process_tokens}  2  input == . $HOME"HOME".
+{process_tokens}  1  input == . $HOME"HOME".
+{process_tokens}  2  input == .$HOME"HOME".
+{process_tokens}  1  input == .$HOME"HOME".
+{process_tokens}  2  input == ."HOME".
+{process_tokens}  1  input == ."HOME".
+{build_quote_content}  result == HOME
+{ft_handle_quotes}  quote == HOME
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echoHOME'
+Type: TOKEN_ENV_VAR, Value: '/home/thobenel'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echoHOME]
+[DEBUG] arg = [/home/thobenel]
+----------------------------------
+echoHOME: command not found
+minishell> echo "home""HOME"
+{process_tokens}  1  input == .echo "home""HOME".
+{process_tokens}  2  input == . "home""HOME".
+{process_tokens}  1  input == . "home""HOME".
+{process_tokens}  2  input == ."home""HOME".
+{process_tokens}  1  input == ."home""HOME".
+{build_quote_content}  result == homeHOME
+{ft_handle_quotes}  quote == homeHOME
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'homeHOME'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [homeHOME]
+----------------------------------
+homeHOME
+minishell> echo ls"HOME"
+{process_tokens}  1  input == .echo ls"HOME".
+{process_tokens}  2  input == . ls"HOME".
+{process_tokens}  1  input == . ls"HOME".
+{process_tokens}  2  input == .ls"HOME".
+{process_tokens}  1  input == .ls"HOME".
+{process_tokens}  2  input == ."HOME".
+{process_tokens}  1  input == ."HOME".
+{build_quote_content}  result == HOME
+{ft_handle_quotes}  quote == HOME
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'lsHOME'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [lsHOME]
+----------------------------------
+lsHOME
+minishell> echo ls "HOME"
+{process_tokens}  1  input == .echo ls "HOME".
+{process_tokens}  2  input == . ls "HOME".
+{process_tokens}  1  input == . ls "HOME".
+{process_tokens}  2  input == .ls "HOME".
+{process_tokens}  1  input == .ls "HOME".
+{process_tokens}  2  input == . "HOME".
+{process_tokens}  1  input == . "HOME".
+{process_tokens}  2  input == ."HOME".
+{process_tokens}  1  input == ."HOME".
+{build_quote_content}  result == HOME
+{ft_handle_quotes}  quote == HOME
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'ls'
+Type: TOKEN_WORD, Value: 'HOME'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [ls]
+[DEBUG] arg = [HOME]
+----------------------------------
+ls HOME
+minishell> echo ls "HmakeOME"
+{process_tokens}  1  input == .echo ls "HmakeOME".
+{process_tokens}  2  input == . ls "HmakeOME".
+{process_tokens}  1  input == . ls "HmakeOME".
+{process_tokens}  2  input == .ls "HmakeOME".
+{process_tokens}  1  input == .ls "HmakeOME".
+{process_tokens}  2  input == . "HmakeOME".
+{process_tokens}  1  input == . "HmakeOME".
+{process_tokens}  2  input == ."HmakeOME".
+{process_tokens}  1  input == ."HmakeOME".
+{build_quote_content}  result == HmakeOME
+{ft_handle_quotes}  quote == HmakeOME
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'ls'
+Type: TOKEN_WORD, Value: 'HmakeOME'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [ls]
+[DEBUG] arg = [HmakeOME]
+----------------------------------
+ls HmakeOME
+
+
+minishell> echo $HOME"HOME"
+{process_tokens}  1  input == .echo $HOME"HOME".
+{process_tokens}  2  input == . $HOME"HOME".
+{process_tokens}  1  input == . $HOME"HOME".
+{process_tokens}  2  input == .$HOME"HOME".
+{process_tokens}  1  input == .$HOME"HOME".
+{ft_extract_env_var}  special == .(null).
+{ft_extract_env_var}  input == ."HOME".
+{process_tokens}  2  input == ."HOME".
+{process_tokens}  1  input == ."HOME".
+{build_quote_content}  result == HOME
+{ft_handle_quotes}  quote == HOME
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echoHOME'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echoHOME]
+----------------------------------
+echoHOME: command not found
+minishell> echo $HOME "HOME"
+{process_tokens}  1  input == .echo $HOME "HOME".
+{process_tokens}  2  input == . $HOME "HOME".
+{process_tokens}  1  input == . $HOME "HOME".
+{process_tokens}  2  input == .$HOME "HOME".
+{process_tokens}  1  input == .$HOME "HOME".
+{ft_extract_env_var}  special == .(null).
+{ft_extract_env_var}  input == . "HOME".
+{process_tokens}  2  input == . "HOME".
+{process_tokens}  1  input == . "HOME".
+{process_tokens}  2  input == ."HOME".
+{process_tokens}  1  input == ."HOME".
+{build_quote_content}  result == HOME
+{ft_handle_quotes}  quote == HOME
+{process_tokens}  2  input == ..
+Type: TOKEN_WORD, Value: 'echo'
+Type: TOKEN_WORD, Value: 'HOME'
+
+-------------[DEBUG]---------------
+
+[DEBUG] t_command = pipe: 0
+[DEBUG] arg = [echo]
+[DEBUG] arg = [HOME]
+----------------------------------
+HOME
+minishell> 

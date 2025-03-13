@@ -38,6 +38,7 @@ int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 {
 	while (**ctx->input)
 	{
+		printf("{process_tokens}  1  input == .%s.\n", *ctx->input);
 		if (**ctx->input == ' ' || **ctx->input == '\t' || **ctx->input == ':')
 			(*ctx->input)++;
 		else if (**ctx->input == '\'' || **ctx->input == '"')
@@ -59,6 +60,7 @@ int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 			if (!ft_handle_words(ctx))
 				return (ft_let_go_split(*ctx, last_exit_status), 0);
 		}
+		printf("{process_tokens}  2  input == .%s.\n", *ctx->input);
 	}
 	return (1);
 }
