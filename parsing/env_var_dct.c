@@ -80,7 +80,6 @@ char	*ft_extract_env_var(const char **input)
 	if (**input != '$')
 		return (NULL);
 	special = ft_handle_special_case(input);
-	printf("{ft_extract_env_var}  special == .%s.\n", special);
 	if (special)
 		return (special);
 	(*input)++;
@@ -88,7 +87,9 @@ char	*ft_extract_env_var(const char **input)
 		return (ft_extract_digit_var(input));
 	if (!ft_isalpha(**input) && **input != '_')
 		return (ft_strdup("$"));
-	ft_extract_alpha_var(input);
-	printf("{ft_extract_env_var}  input == .%s.\n", *input);
-	return (ft_extract_alpha_var(input));
+	if (**input != '"' || **input != '\'')
+	{
+		return (ft_extract_alpha_var(input));
+	}
+	return (NULL);
 }

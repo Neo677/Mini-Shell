@@ -66,7 +66,6 @@ int	add_quote_as_new_token(t_parse_context *ctx, char *quote_content)
 		ft_err_split(*ctx->cmd_lst, *ctx->head);
 		return (0);
 	}
-	ctx->last_token = ft_last_token(*ctx->head);
 	return (free(quote_content), 1);
 }
 
@@ -102,7 +101,6 @@ int	ft_handle_quotes(t_parse_context *ctx)
 	pr = ' ';
 	next = ' ';
 	quote = build_quote_content(ctx);
-	printf("{ft_handle_quotes}  quote == %s\n", quote);
 	if (!quote)
 		return (0);
 	if (qstart > ctx->input_exec)
@@ -110,13 +108,14 @@ int	ft_handle_quotes(t_parse_context *ctx)
 	if (**ctx->input)
 		next = **ctx->input;
 	ret = 0;
-	if (!ft_isspace(pr) && !ft_isspace(next) && (pr != '<' && pr != '>'))
-		ret = merge_with_next(ctx, quote);
-	else if (!ft_isspace(pr) && ft_isspace(next) && (pr != '<' && pr != '>'))
-		ret = merge_quote_with_last(ctx, quote);
-	else if (ft_isspace(pr) && !ft_isspace(next))
+	if (ft_isspace(pr) && !ft_isspace(next))
 		ret = handle_quote_with_next(ctx, quote);
 	else
 		ret = add_quote_as_new_token(ctx, quote);
 	return (ret);
 }
+
+// if (!ft_isspace(pr) && !ft_isspace(next) && (pr != '<' && pr != '>'))
+// 	ret = merge_with_next(ctx, quote);
+// else if (!ft_isspace(pr) && ft_isspace(next) && (pr != '<' && pr != '>'))
+// 	ret = merge_quote_with_last(ctx, quote);
