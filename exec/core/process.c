@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:50 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 11:45:36 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/13 07:41:45 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdout);
 	close(saved_stdin);
+	free(pipex->pid);
 	return (0);
 }
 
@@ -74,13 +75,13 @@ int	while_commands(t_pipex *pipex, t_buit_in *exec, char **env,
 			return (exec->status = EXIT_FAILURE);
 		}
 	}
-	pipex->pid = fork();
-	if (pipex->pid < 0)
+	pipex->pid[pipex->i] = fork();
+	if (pipex->pid[pipex->i] < 0)
 	{
 		perror("fork");
 		return (exec->status = EXIT_FAILURE);
 	}
-	if (pipex->pid == 0)
+	if (pipex->pid[pipex->i] == 0)
 		child_process(pipex, exec, env, *current);
 	if (pipex->prev_pipe != -1)
 		close(pipex->prev_pipe);
@@ -103,11 +104,13 @@ int	more_commands(t_pipex *pipex, t_command *current, t_buit_in *exec,
 	pipex->i = 0;
 	while (pipex->i < pipex->cmd_count)
 	{
-		wait(&pipex->status);
-		if (WIFEXITED(pipex->status))
+		if (waitpid(pipex->pid[pipex->i], &pipex->status, 0) == -1)
+			perror("waitpid");
+		else if (WIFEXITED(pipex->status))
 			exec->status = WEXITSTATUS(pipex->status);
 		pipex->i++;
 	}
+	free(pipex->pid);
 	signal(SIGQUIT, SIG_IGN);
 	return (exec->status);
 }
@@ -120,7 +123,8 @@ void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 	signal(SIGQUIT, signal_handler);
 	signal(SIGINT, signal_handler2);
 	current = cmd;
-	init_process(pipex, cmd);
+	if (init_process(pipex, cmd) != 0)
+		return ;
 	exec->status = 0;
 	if (pipex->cmd_count == 1)
 		one_command(pipex, exec, env, current);
