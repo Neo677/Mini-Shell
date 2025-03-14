@@ -28,7 +28,7 @@ int	main(int ac, char **av, char **env)
 	init_var(&pipex);
 	ft_setup_signal();
 	ft_setup_env(&exec, env);
-	// ft_intro();
+	ft_intro();
 	while (1)
 	{
 		ret = process_line(&exec, &pipex, &cmd_lst, &lst);

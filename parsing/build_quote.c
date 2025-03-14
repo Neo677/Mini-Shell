@@ -75,7 +75,6 @@ char	*build_quote_content(t_parse_context *ctx)
 			return (NULL);
 		result = temp_result;
 	}
-	printf("{build_quote_content}  result == %s\n", result);
 	return (result);
 }
 
