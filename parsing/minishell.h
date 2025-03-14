@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/11 10:49:23 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/14 18:29:50 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,5 +334,8 @@ int							add_quote_as_new_token(t_parse_context *ctx,
 int							ft_handle_alones(t_parse_context *ctx,
 								char *var_name);
 // void						ft_introw(void);
+
+int							run_shell(t_buit_in *exec);
+int							ft_strcmp_shell(char *s1, char *s2);
 
 #endif

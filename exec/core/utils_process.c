@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:54 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/13 07:41:40 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/14 16:42:54 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,43 @@ int	no_built_in(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
 	return (0);
+}
+
+int	count_t_env(t_env *env_cpy)
+{
+	t_env	*current;
+	int		i;
+
+	current = env_cpy;
+	i = 0;
+	while (current)
+	{
+		current = current->next;
+		i++;
+	}
+	return (i);
+}
+
+char	**change_t_env_to_tab(t_env *env_cpy)
+{
+	t_env	*current;
+	char	**tab;
+	char	*temp;
+	int		i;
+
+	current = env_cpy;
+	tab = malloc(sizeof(char *) * (count_t_env(env_cpy) + 1));
+	if (!tab)
+		return (NULL);
+	i = 0;
+	while (current)
+	{
+		temp = ft_strjoin(current->key, "=");
+		tab[i] = ft_strjoin(temp, current->value);
+		free(temp);
+		i++;
+		current = current->next;
+	}
+	tab[i] = NULL;
+	return (tab);
 }

@@ -6,7 +6,7 @@
 #    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 17:24:52 by thobenel          #+#    #+#              #
-#    Updated: 2025/03/12 08:34:11 by dpascal          ###   ########.fr        #
+#    Updated: 2025/03/14 18:26:36 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ SRCS =	add_arguments.c \
 		valid_token.c \
 		valid_token_two.c \
 		replace_env.c \
+		shell_process.c \
 		creat_command_utils.c \
 		matrix.c \
 		quote_utils.c \
@@ -89,10 +90,11 @@ SRCS =	add_arguments.c \
 		../exec/core/here_doc.c \
 		../exec/core/init_var.c \
 		../exec/core/process.c \
-		../exec/core/process2.c \
 		../exec/core/redir.c \
 		../exec/core/split.c \
+		../exec/core/utils_cmd.c \
 		../exec/core/utils_error.c \
+		../exec/core/utils_process.c \
 		../exec/core/utils.c \
 		../exec/core/utils2.c \
 

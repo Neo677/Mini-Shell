@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:00 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 10:49:01 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/14 13:23:41 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	check_n_change_out(t_buit_in *exec, t_pipex *pipex, t_redirections *dir)
 	}
 	if (dir->type == 4)
 	{
-		pipex->outfile = open(dir->file, O_CREAT | O_APPEND | O_WRONLY, 0644);
+		pipex->outfile = open(dir->file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 		if (pipex->outfile < 0)
 		{
 			exec->status = EXIT_FAILURE;

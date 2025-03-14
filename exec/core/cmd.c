@@ -6,60 +6,20 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:32 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 10:48:33 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/14 17:51:22 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/exec.h"
 
-void	error_access(t_buit_in *exec, t_pipex *pipex, char *cmd)
-{
-	struct stat	path_stat;
-
-	stat(cmd, &path_stat);
-	if (S_ISDIR(path_stat.st_mode))
-	{
-		ft_printf_fd(2, "bash: %s: Is a directory\n", cmd);
-		free_error(pipex, exec->status = 126);
-	}
-	if (access(cmd, X_OK) != 0)
-	{
-		if (access(cmd, R_OK) == 0 && access(cmd, W_OK) == 0)
-			ft_printf_fd(2, "%s: command not found\n", cmd);
-		else
-		{
-			ft_printf_fd(2, "bash: %s: Permission denied\n", cmd);
-			free_error(pipex, exec->status = 126);
-		}
-	}
-	else
-	{
-		ft_printf_fd(2, "bash: %s: No such file or directory\n", cmd);
-		exec->status = 1;
-	}
-}
-
-char	*error_execute_cmd(t_buit_in *exec, t_pipex *pipex, char *cmd)
-{
-	if (access(cmd, F_OK) == 0)
-		error_access(exec, pipex, cmd);
-	else
-	{
-		if (ft_strchr_exec(cmd, '/') == 0)
-			ft_printf_fd(2, "bash: %s: No such file or directory\n", cmd);
-		else
-			ft_printf_fd(2, "%s: command not found\n", cmd);
-	}
-	free_error(pipex, exec->status = 127);
-	return (NULL);
-}
-
 char	*find_cmd(t_buit_in *exec, t_pipex *pipex, char *cmd, char **paths)
 {
-	int	i;
+	int			i;
+	struct stat	path_stat;
 
 	i = 0;
-	if (access(cmd, X_OK) == 0)
+	stat(cmd, &path_stat);
+	if (access(cmd, X_OK) == 0 && !(S_ISDIR(path_stat.st_mode)))
 		return (cmd);
 	while (paths[i])
 	{
@@ -79,22 +39,27 @@ char	*find_cmd(t_buit_in *exec, t_pipex *pipex, char *cmd, char **paths)
 	return (NULL);
 }
 
-char	*find_path(t_buit_in *exec, t_pipex *pipex, char *cmd, char **envp)
+char	*find_path(t_buit_in *exec, t_pipex *pipex, char *cmd, char **env)
 {
 	int	i;
 
 	i = 0;
-	while (str_search(envp[i], "PATH", 4) == 0)
+	while (env[i] && str_search(env[i], "PATH", 4) == 0)
 		i++;
-	pipex->paths = ft_split_pipex(pipex, envp[i] + 5, ':');
+	if (env[i] == NULL)
+	{
+		ft_printf_fd(2, PATH_1 PATH_2, cmd);
+		free_error(pipex, exec->status = 127);
+	}
+	pipex->paths = ft_split_pipex(pipex, env[i] + 5, ':');
 	pipex->path_cmd = find_cmd(exec, pipex, cmd, pipex->paths);
 	return (pipex->path_cmd);
 }
 
-void	execute_cmd(t_buit_in *exec, t_pipex *pipex, char **arg, char **envp)
+void	execute_cmd(t_buit_in *exec, t_pipex *pipex, char **arg, char **env)
 {
-	pipex->path = find_path(exec, pipex, arg[0], envp);
-	if (execve(pipex->path, arg, envp) == -1)
+	pipex->path = find_path(exec, pipex, arg[0], env);
+	if (execve(pipex->path, arg, env) == -1)
 	{
 		if (ft_strcmp(arg[0], ".") == 0)
 		{

@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:47:19 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/13 07:37:13 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/14 17:52:25 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	check_option_echo(char *str)
 void	print_echo(t_command *cmd, int i, int line_break)
 {
 	char	*str;
-	
+
 	while (cmd->arg[i])
 	{
 		str = remove_backslash(cmd->arg[i]);

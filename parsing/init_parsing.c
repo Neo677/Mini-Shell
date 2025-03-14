@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:26:55 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/13 07:40:21 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/14 18:23:52 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,21 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 	token = ft_parse_token(exec->input, &exec->env_cpy, cmd_lst, lst);
 	if (!token)
 		return (free(exec->input), ft_free_commande_lst(*cmd_lst), 0);
+	if (ft_strcmp_shell(exec->input, "./minishell") == 0)
+	{
+		run_shell(exec);
+		ctx.exit_status = exec->status;
+		*lst = ctx.exit_status;
+		free_tab(exec->env);
+		ft_end_process(token, exec, pipex);
+		ft_free_commande_lst(*cmd_lst);
+		return (0);
+	}
 	check_heredoc(token, pipex);
 	if (*cmd_lst && (*cmd_lst)->arg)
 	{
-		process(pipex, *cmd_lst, exec, exec->env_dup);
+		process(pipex, *cmd_lst, exec, exec->env_cpy);
+		free_tab(exec->env);
 		ctx.exit_status = exec->status;
 		signal(SIGINT, signal_handler);
 		if (exec->exit_bh == 1)
