@@ -7,3 +7,10 @@ minishell> cat <"1""2""3""4""5"
 > "
 Segmentation fault (core dumped)
 thobenel@c2r5p2:~/Mini-Shell/parsing$ 
+
+
+minishell> /bin/echo -nn test
+-nn test
+minishell> /bin/echo -n test
+testminishell>
+minishell> bash

@@ -87,29 +87,13 @@ char	*ft_strdup_v2_quote(const char *src)
 
 int	ft_handle_quotes(t_parse_context *ctx)
 {
-	const char	*qstart = *ctx->input;
-	char		pr;
-	char		next;
 	char		*quote;
 	int			ret;
 
-	pr = ' ';
-	next = ' ';
 	quote = build_quote_content(ctx);
 	if (!quote)
 		return (0);
-	if (qstart > ctx->input_exec)
-		pr = *(qstart - 1);
-	if (**ctx->input)
-		next = **ctx->input;
 	ret = 0;
-	if (!ft_isspace(pr) && !ft_isspace(next) && (pr != '<' && pr != '>'))
-		ret = merge_with_next(ctx, quote);
-	else if (!ft_isspace(pr) && ft_isspace(next) && (pr != '<' && pr != '>'))
-		ret = merge_quote_with_last(ctx, quote);
-	else if (ft_isspace(pr) && !ft_isspace(next))
-		ret = handle_quote_with_next(ctx, quote);
-	else
-		ret = add_quote_as_new_token(ctx, quote);
+	ret = add_quote_as_new_token(ctx, quote);
 	return (ret);
 }
