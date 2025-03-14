@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:52:09 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/14 18:13:54 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/14 18:45:55 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	run_shell(t_buit_in *exec)
 	status = 0;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-    
 	exec->env = change_t_env_to_tab(exec->env_cpy);
 	pid = fork();
 	if (pid == 0)
