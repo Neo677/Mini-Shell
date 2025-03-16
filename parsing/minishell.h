@@ -191,7 +191,7 @@ char						*ft_strjoin_free(char *s1, char *s2);
 char						*ft_space_swap(char *acc, char *tmp, char *line);
 
 char						*ft_eof_double_quote(void);
-char						*ft_eof_single_quote(t_parse_context *ctx);
+char						*ft_eof_single_quote(void);
 
 int							ft_handle_env_vars_quote(t_parse_context *ctx);
 

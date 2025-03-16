@@ -30,31 +30,57 @@
 	- Fin de l'analyse des quotes
 */
 
+static char	*append_char_to_result(char *result, char c)
+{
+	char	letter[2];
+	char	*tmp;
+
+	letter[0] = c;
+	letter[1] = '\0';
+	tmp = result;
+	result = ft_strjoin(tmp, letter);
+	free(tmp);
+	return (result);
+}
+
+char *ft_missing_quote(char *content)
+{
+	char *tmp;
+	char *combined;
+
+	tmp = ft_eof_single_quote();
+	if (!tmp)
+		return (free(content), NULL);
+	combined = ft_strjoin(content, tmp);
+	if (!combined)
+		return (free(combined), free(tmp), NULL);
+	free(content);
+	free(tmp);
+	return (combined);
+}
+
 char	*ft_handle_single_quote(const char **input, t_parse_context *ctx)
 {
-	const char	*start;
-	char		*content;
-	size_t		i;
+	char	*content;
 
-	content = NULL;
-	i = 0;
+	(void)ctx;
 	if (**input != '\'')
 		return (NULL);
-	start = ++(*input);
-	while ((*input)[i] && (*input)[i] != '\'')
-		i++;
-	if ((*input)[i] != '\'')
-	{
-		content = ft_eof_single_quote(ctx);
-		if (!content)
-			return (NULL);
-		(*input) += i + 1;
-		return (content);
-	}
-	content = ft_strndup(start, i);
+	(*input)++;
+	content = ft_strdup("");
 	if (!content)
 		return (NULL);
-	(*input) += i + 1;
+	while (**input && **input != '\'')
+	{
+		content = append_char_to_result(content, **input);
+		if (!content)
+			return (NULL);
+		(*input)++;
+	}
+	if (**input == '\'')
+		(*input)++;
+	else
+		content = ft_missing_quote(content);
 	return (content);
 }
 
