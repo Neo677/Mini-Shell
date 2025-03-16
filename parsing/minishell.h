@@ -15,11 +15,11 @@
 
 # include "../exec/include/exec.h"
 # include "../libft_2.0/libft.h"
-# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/types.h>
@@ -76,7 +76,7 @@ typedef enum e_token_type
 	TOKEN_DBL_QUOTE,
 	TOKEN_END,
 	TOKEN_ERROR,
-}				t_token_type;
+}							t_token_type;
 
 typedef struct s_token
 {
@@ -123,10 +123,21 @@ typedef struct s_parse_context
 	int						*last_exit_status;
 }							t_parse_context;
 
+typedef struct s_shell_context
+{
+	t_buit_in				*exec;
+	t_pipex					*pipex;
+	t_command				**cmd_lst;
+	int						*lst;
+}							t_shell_context;
+
 int							ft_add_arguments(t_command *cmd, const char *arg);
 
 int							ft_add_redirections_struct(t_command *cmd, int type,
 								const char *file);
+
+int							run_shell(t_buit_in *exec);
+int							ft_strcmp_shell(char *s1, char *s2);
 
 void						ft_free_command(t_command *cmd);
 void						ft_free_command_list(t_command **lst);
@@ -168,6 +179,17 @@ void						ft_init_proc(t_parse_context ctx, int *lst,
 								t_buit_in *exec);
 int							process_line(t_buit_in *exec, t_pipex *pipex,
 								t_command **cmd_lst, int *lst);
+
+int							ft_free_process_line(t_buit_in *exec,
+								t_pipex *pipex, t_command **cmd_lst,
+								t_token *token);
+int							read_input(t_buit_in *exec);
+
+int							is_minishell_call(t_shell_context *ctx);
+
+int							handle_minishell_cmd(t_shell_context *ctx,
+								t_token *token);
+int							process_cmd(t_shell_context *ctx, t_token *token);
 
 void						ft_free_split(t_token **head, t_command **cmd_lst,
 								const char *error_msg, const char *token);

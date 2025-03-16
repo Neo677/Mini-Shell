@@ -14,11 +14,11 @@
 
 int	main(int ac, char **av, char **env)
 {
-	t_buit_in exec;
-	t_pipex pipex;
-	t_command *cmd_lst;
-	int lst;
-	int ret;
+	t_buit_in	exec;
+	t_pipex		pipex;
+	t_command	*cmd_lst;
+	int			lst;
+	int			ret;
 
 	(void)ac;
 	(void)av;
@@ -27,9 +27,8 @@ int	main(int ac, char **av, char **env)
 	init_var_builtin(&exec);
 	init_var(&pipex);
 	ft_setup_signal();
-	// signal(SIGINT, SIG_IGN);
 	ft_setup_env(&exec, env);
-	// ft_intro();
+	ft_intro();
 	while (1)
 	{
 		ret = process_line(&exec, &pipex, &cmd_lst, &lst);

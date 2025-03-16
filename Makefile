@@ -33,10 +33,12 @@ SRCS =	parsing/add_arguments.c \
 		parsing/eof_quote.c \
 		parsing/expander_use.c \
 		parsing/main.c \
+		parsing/shell_process.c \
 		parsing/main_use.c \
 		parsing/parse_token.c \
 		parsing/prompt.c \
 		parsing/init_parsing.c \
+		parsing/init_parse_help.c \
 		parsing/process_token.c \
 		parsing/handle_env.c \
 		parsing/handle_env_two.c \
@@ -88,12 +90,13 @@ SRCS =	parsing/add_arguments.c \
 		exec/core/here_doc.c \
 		exec/core/init_var.c \
 		exec/core/process.c \
-		exec/core/process2.c \
 		exec/core/redir.c \
 		exec/core/split.c \
+		exec/core/utils_cmd.c \
 		exec/core/utils_error.c \
+		exec/core/utils_process.c \
 		exec/core/utils.c \
-		exec/core/utils2.c
+		exec/core/utils2.c \
 
 OBJS = $(SRCS:.c=.o)
 

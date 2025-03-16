@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int			g_signal = 0;
+int		g_signal = 0;
 
 void	signal_handler(int sig)
 {
@@ -47,58 +47,32 @@ void	signal_handler2(int sig)
 	}
 }
 
-static int	ft_free_process_line(t_buit_in *exec, t_pipex *pipex,
-		t_command **cmd_lst, t_token *token)
-{
-	util_proc(exec, token, pipex);
-	rl_clear_history();
-	ft_free_commande_lst(*cmd_lst);
-	*cmd_lst = NULL;
-	return (exec->status);
-}
-
 int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 {
+	t_shell_context	ctx;
 	t_token			*token;
-	t_parse_context	ctx;
+	t_parse_context	pctx;
 
 	g_signal = 0;
+	ctx.exec = exec;
+	ctx.pipex = pipex;
 	ctx.cmd_lst = cmd_lst;
-	ft_init_proc(ctx, lst, exec);
-	exec->input = readline("minishell> ");
-	if (!exec->input)
-		return (ft_printf("exit\n"), -1);
-	if (ft_strcmp(exec->input, "") != 0)
-		add_history(exec->input);
+	ctx.lst = lst;
+	pctx.cmd_lst = cmd_lst;
+	ft_init_proc(pctx, lst, exec);
+	if (read_input(exec) == -1)
+		return (-1);
 	if (g_signal != 0)
 		*lst = g_signal;
 	token = ft_parse_token(exec->input, &exec->env_cpy, cmd_lst, lst);
 	if (!token)
 		return (free(exec->input), ft_free_commande_lst(*cmd_lst), 0);
-	if (ft_strcmp_shell(exec->input, "./minishell") == 0
-		|| ft_strcmp((*cmd_lst)->arg[0], "./minishell") == 0)
-	{
-		run_shell(exec);
-		ctx.exit_status = exec->status;
-		*lst = ctx.exit_status;
-		free_tab(exec->env);
-		ft_end_process(token, exec, pipex);
-		ft_free_commande_lst(*cmd_lst);
-		return (0);
-	}
-	check_heredoc(token, pipex);
-	if (*cmd_lst && (*cmd_lst)->arg)
-	{
-		process(pipex, *cmd_lst, exec, exec->env_cpy);
-		free_tab(exec->env);
-		ctx.exit_status = exec->status;
-		signal(SIGINT, signal_handler);
-		if (exec->exit_bh == 1)
-			return (ft_free_process_line(exec, pipex, cmd_lst, token));
-		*lst = ctx.exit_status;
-	}
+	if (is_minishell_call(&ctx))
+		return (handle_minishell_cmd(&ctx, token));
+	if (process_cmd(&ctx, token) == 1)
+		return (free(exec->input), 0);
 	return (ft_end_process(token, exec, pipex), ft_free_commande_lst(*cmd_lst),
-		*cmd_lst = NULL, 0);
+		*cmd_lst = NULL, free(exec->input), 0);
 }
 
 void	init_cmd_ctx(t_parse_context *ctx, t_command **cmd_lst,

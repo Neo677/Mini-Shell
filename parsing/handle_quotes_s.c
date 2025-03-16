@@ -43,10 +43,10 @@ static char	*append_char_to_result(char *result, char c)
 	return (result);
 }
 
-char *ft_missing_quote(char *content)
+char	*ft_missing_quote(char *content)
 {
-	char *tmp;
-	char *combined;
+	char	*tmp;
+	char	*combined;
 
 	tmp = ft_eof_single_quote();
 	if (!tmp)
