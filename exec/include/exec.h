@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/13 07:32:49 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/16 22:53:14 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 # define CMD_EXEC2 "usage: . filename [arguments]\n"
 # define HD_1 "bash: warning: here-document at line %d "
 # define HD_2 "delimited by end-of-file (wanted `%s')\n"
+# define PATH_1 "bash: [%s]: No such file or directory\nbash: sed: No such "
+# define PATH_2 "file or directory\nbash: logger: No such file or directory\n"
 
 typedef struct s_env
 {
@@ -46,8 +48,8 @@ typedef struct s_env
 typedef struct s_built_in
 {
 	t_env						*env_cpy;
+	char						**env;
 	t_env						*export_cpy;
-	char						**env_dup;
 	char						**tab;
 	char						*input;
 	int							cd;
@@ -214,7 +216,8 @@ int								change_dir_in(t_buit_in *exec,
 									t_redirections *current);
 int								change_dir_out(t_buit_in *exec,
 									t_redirections *current);
-int								change_dir(t_buit_in *exec, t_command *cmd);
+int								change_dir(t_buit_in *exec, t_command *cmd,
+									t_pipex *pipex);
 
 /*  CHECK_DIR  */
 int								check_dir_out(t_command *cmd);
@@ -228,7 +231,7 @@ char							*find_cmd(t_buit_in *exec, t_pipex *pipex,
 char							*find_path(t_buit_in *exec, t_pipex *pipex,
 									char *cmd, char **envp);
 void							execute_cmd(t_buit_in *exec, t_pipex *pipex,
-									char **arg, char **envp);
+									char **arg, char **env);
 
 /*  FREE_EXEC  */
 void							free_tab(char **tab);
@@ -259,11 +262,7 @@ int								more_commands(t_pipex *pipex,
 									t_command *current, t_buit_in *exec,
 									char **env);
 void							process(t_pipex *pipex, t_command *cmd,
-									t_buit_in *exec, char **env);
-
-/*  PROCESS  */
-int								no_built_in(t_pipex *pipex, t_buit_in *exec,
-									char **env, t_command *current);
+									t_buit_in *exec, t_env *env_cpy);
 
 /*  REDIR  */
 void							check_redir_2(t_buit_in *exec, t_pipex *pipex,
@@ -286,9 +285,24 @@ char							**ft_split_init_pipex(t_pipex *pipex, char *str,
 char							**ft_split_pipex(t_pipex *pipex, char *str,
 									char c);
 
+/*  UTILS_CMD  */
+int								check_slash(char *str, char c);
+void							error_file(t_buit_in *exec, t_pipex *pipex,
+									char *cmd);
+void							error_access(t_buit_in *exec, t_pipex *pipex,
+									char *cmd);
+char							*error_execute_cmd(t_buit_in *exec,
+									t_pipex *pipex, char *cmd);
+
 /*  UTILS_ERROR  */
 char							*ft_join_pipex(char *join, char *s1, char *s2);
 char							*ft_strjoin_pipex(char *s1, char *s2);
+
+/*  UTILS_PROCESS  */
+int								no_built_in(t_pipex *pipex, t_buit_in *exec,
+									char **env, t_command *current);
+int								count_t_env(t_env *env_cpy);
+char							**change_t_env_to_tab(t_env *env_cpy);
 
 /*  UTILS  */
 int								ft_strchr_exec(char *str, char c);

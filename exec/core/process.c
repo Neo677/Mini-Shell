@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:50 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/13 07:41:45 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/16 23:06:20 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
-	if (change_dir(exec, current) == 1)
+	if (change_dir(exec, current, pipex) == 1)
 		return (1);
 	redir_input(exec, current, pipex);
 	redir_output(exec, current, pipex);
@@ -40,7 +40,7 @@ int	child_process(t_pipex *pipex, t_buit_in *exec, char **env,
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, signal_handler);
-	if (change_dir(exec, current) == 1)
+	if (change_dir(exec, current, pipex) == 1)
 		exit(1);
 	if (current->redirections && check_dir_in(current) != 0)
 		redir_input(exec, current, pipex);
@@ -115,7 +115,7 @@ int	more_commands(t_pipex *pipex, t_command *current, t_buit_in *exec,
 	return (exec->status);
 }
 
-void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
+void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, t_env *env_cpy)
 {
 	t_command	*current;
 
@@ -126,8 +126,9 @@ void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 	if (init_process(pipex, cmd) != 0)
 		return ;
 	exec->status = 0;
+	exec->env = change_t_env_to_tab(env_cpy);
 	if (pipex->cmd_count == 1)
-		one_command(pipex, exec, env, current);
+		one_command(pipex, exec, exec->env, current);
 	else
-		more_commands(pipex, current, exec, env);
+		more_commands(pipex, current, exec, exec->env);
 }

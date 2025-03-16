@@ -1,0 +1,14 @@
+built-in
+
+- cd
+- cpy-env
+- exit
+/_\ - export /_\
+- pwd
+
+
+core
+
+- check-file
+- heredoc_
+/_\ - process /_\
