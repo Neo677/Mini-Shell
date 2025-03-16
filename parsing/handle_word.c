@@ -51,13 +51,72 @@ int	ft_handle_wds(t_parse_context *ctx, char *token_value, t_token *new)
 	return (1);
 }
 
+
+static int	is_valid_var_char(char c)
+{
+	return (ft_isalnum(c) || c == '_');
+}
+
+
+char	*ft_expand_variables(const char *str, t_parse_context *ctx)
+{
+	size_t	i;
+	char	*result;
+	char	*temp;
+	char	*var_value;
+	char	*var_name;
+	char	c[2];
+
+	i = 0;
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			i++;
+			if (!str[i])
+				break ;
+			{
+				size_t	start = i;
+				while (str[i] && is_valid_var_char(str[i]))
+					i++;
+				var_name = ft_substr(str, start, i - start);
+				if (!var_name)
+					return (free(result), NULL);
+				var_value = print_node_by_key(ctx->env_cpy, var_name);
+				free(var_name);
+				if (!var_value)
+					var_value = "";
+			}
+			temp = result;
+			result = ft_strjoin(result, var_value);
+			free(temp);
+			if (!result)
+				return (NULL);
+		}
+		else
+		{
+			c[0] = str[i];
+			c[1] = '\0';
+			temp = result;
+			result = ft_strjoin(result, c);
+			free(temp);
+			if (!result)
+				return (NULL);
+			i++;
+		}
+	}
+	return (result);
+}
+
 int	ft_handle_words(t_parse_context *ctx)
 {
 	char	*token_value;
 	t_token	*new;
+	char	*expanded_value;
 
-	if (!ctx || !ctx->input)
-		return (0);
 	token_value = ft_get_next_token(ctx->input);
 	if (!token_value)
 		return (0);
@@ -65,6 +124,14 @@ int	ft_handle_words(t_parse_context *ctx)
 	{
 		if (!ft_handle_wave(ctx, token_value))
 			return (free(token_value), 0);
+	}
+	if (ft_strchr(token_value, '$'))
+	{
+		expanded_value = ft_expand_variables(token_value, ctx);
+		free(token_value);
+		if (!expanded_value)
+			return (0);
+		token_value = expanded_value;
 	}
 	if (token_value && *token_value != '\0')
 	{
