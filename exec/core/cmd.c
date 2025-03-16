@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:32 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/14 17:51:22 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/16 23:03:32 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,11 @@ char	*find_path(t_buit_in *exec, t_pipex *pipex, char *cmd, char **env)
 
 void	execute_cmd(t_buit_in *exec, t_pipex *pipex, char **arg, char **env)
 {
+	if (ft_strcmp(arg[0], "./minishell") == 0)
+	{
+			ft_printf_fd(2, "%s: command not found\n", arg[0]);
+			free_error(pipex, exec->status = 127);
+	}
 	pipex->path = find_path(exec, pipex, arg[0], env);
 	if (execve(pipex->path, arg, env) == -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:52:09 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/14 18:45:55 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/16 20:57:19 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ int	ft_strcmp_shell(char *s1, char *s2)
 			return (s1[i] - s2[j]);
 		i++;
 		j++;
+	}
+	while (s1[i])
+	{
+		if (s1[i] != ' ')
+			return (1);
+		i++;
 	}
 	return (0);
 }

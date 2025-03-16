@@ -6,11 +6,46 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:26:55 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/14 18:23:52 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/16 23:03:52 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_signal = 0;
+
+void	signal_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_signal = 130;
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else if (sig == SIGQUIT)
+	{
+		g_signal = 131;
+		printf("Quit (core dumped)\n");
+	}
+}
+
+void	signal_handler2(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_signal = 130;
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if (sig == SIGQUIT)
+	{
+		g_signal = 131;
+		printf("Quit (core dumped)\n");
+	}
+}
 
 static int	ft_free_process_line(t_buit_in *exec, t_pipex *pipex,
 		t_command **cmd_lst, t_token *token)
@@ -27,16 +62,20 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 	t_token			*token;
 	t_parse_context	ctx;
 
+	g_signal = 0;
 	ctx.cmd_lst = cmd_lst;
 	ft_init_proc(ctx, lst, exec);
 	exec->input = readline("minishell> ");
 	if (!exec->input)
 		return (ft_printf("exit\n"), -1);
-	add_history(exec->input);
+	if (ft_strcmp(exec->input, "") != 0)
+		add_history(exec->input);
+	if (g_signal != 0)
+		*lst = g_signal;
 	token = ft_parse_token(exec->input, &exec->env_cpy, cmd_lst, lst);
 	if (!token)
 		return (free(exec->input), ft_free_commande_lst(*cmd_lst), 0);
-	if (ft_strcmp_shell(exec->input, "./minishell") == 0)
+	if (ft_strcmp_shell(exec->input, "./minishell") == 0 || ft_strcmp((*cmd_lst)->arg[0], "./minishell") == 0)
 	{
 		run_shell(exec);
 		ctx.exit_status = exec->status;

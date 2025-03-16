@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:24:46 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/14 18:26:49 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/16 20:49:35 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int ac, char **av, char **env)
 	init_var_builtin(&exec);
 	init_var(&pipex);
 	ft_setup_signal();
+	// signal(SIGINT, SIG_IGN);
 	ft_setup_env(&exec, env);
 	// ft_intro();
 	while (1)
