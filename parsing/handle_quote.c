@@ -100,5 +100,6 @@ int	ft_handle_quotes(t_parse_context *ctx)
 	if (!quote)
 		return (0);
 	ret = add_quote_as_new_token(ctx, quote);
+	ctx->last_token = ft_last_token(*ctx->head);
 	return (ret);
 }

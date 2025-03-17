@@ -79,7 +79,7 @@ int	ft_handle_words(t_parse_context *ctx)
 	char *token_value;
 	t_token *new;
 
-	token_value = ft_get_next_token(ctx->input);
+	token_value = ft_get_next_token(ctx->input, ctx);
 	if (!token_value)
 		return (0);
 	if (!process_token(&token_value, ctx))

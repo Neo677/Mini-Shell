@@ -328,7 +328,7 @@ int							ft_handle_operator(t_token **head,
 t_token_type				ft_identify_token(char *str);
 t_token						*ft_create_token(t_token_type type, char *value);
 void						ft_add_token(t_token **head, t_token *new_token);
-char						*ft_get_next_token(const char **input);
+char						*ft_get_next_token(const char **input, t_parse_context *ctx);
 t_token						*ft_last_token(t_token *head);
 
 void						ft_clean_up(t_token **token, char **input);

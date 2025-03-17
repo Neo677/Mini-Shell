@@ -70,9 +70,9 @@ int	ft_handle_operators(t_parse_context *ctx)
 		if (!*ctx->current)
 			return (ft_err_split_ope(*ctx->current, *ctx->head), 0);
 	}
-	else if (**ctx->input == '>' || **ctx->input == '<')
+	if ((**ctx->input == '>' || **ctx->input == '<'))
 	{
-		file = ft_get_next_token(ctx->input);
+		file = ft_get_next_token(ctx->input, ctx);
 		if (!file)
 			return (ft_err_bad_redirec(*ctx->cmd_lst, *ctx->head), 0);
 		if (!*ctx->current)
@@ -81,6 +81,7 @@ int	ft_handle_operators(t_parse_context *ctx)
 				ft_identify_token((char *)(*ctx->input)), file))
 			return (free(file), ft_err_split_ope(*ctx->cmd_lst, *ctx->head), 0);
 		free(file);
+		ctx->last_token = ft_last_token(*ctx->head);
 	}
 	return (1);
 }

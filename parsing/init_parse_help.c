@@ -37,14 +37,16 @@ int	read_input(t_buit_in *exec)
 
 int	is_minishell_call(t_shell_context *ctx)
 {
-	if (ctx->exec->input && (*ctx->cmd_lst)->arg)
-	{	
-		if (ft_strcmp_shell(ctx->exec->input, "./minishell") == 0)
-			return (1);
-		if (*(ctx->cmd_lst) && (*(ctx->cmd_lst))->arg && ft_strcmp((*(ctx->cmd_lst))->arg[0], "./minishell") == 0 && !((*ctx->cmd_lst)->arg[1]))
-			return (1);
-	}
-	return (0);
+    if (!ctx || !ctx->exec || !ctx->cmd_lst || !(*ctx->cmd_lst))
+        return (0);
+    if (ctx->exec->input && (*ctx->cmd_lst)->arg)
+    {	
+        if (ft_strcmp_shell(ctx->exec->input, "./minishell") == 0)
+            return (1);
+        if ((*ctx->cmd_lst)->arg[0] && ft_strcmp((*ctx->cmd_lst)->arg[0], "./minishell") == 0 && !((*ctx->cmd_lst)->arg[1]))
+            return (1);
+    }
+    return (0);
 }
 
 int	handle_minishell_cmd(t_shell_context *ctx, t_token *token)

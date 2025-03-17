@@ -52,7 +52,7 @@ int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 			if (!ft_handle_operators(ctx))
 				return (ft_let_go_split(*ctx, last_exit_status), 0);
 		}
-		if (**ctx->input == '$')
+		if (**ctx->input == '$' && ctx->last_token->type != TOKEN_HEREDOC)
 			ft_handle_env_vars(ctx, last_exit_status);
 		else
 		{

@@ -47,6 +47,7 @@ void	signal_handler2(int sig)
 	}
 }
 
+
 int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 {
 	t_shell_context	ctx;
@@ -70,7 +71,7 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 	if (is_minishell_call(&ctx))
 		return (handle_minishell_cmd(&ctx, token));
 	if (process_cmd(&ctx, token) == 1)
-		return (free(exec->input), 0);
+		return (free(exec->input), exec->status);
 	return (ft_end_process(token, exec, pipex), ft_free_commande_lst(*cmd_lst),
 		*cmd_lst = NULL, 0);
 }
