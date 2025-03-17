@@ -180,6 +180,12 @@ void						ft_init_proc(t_parse_context ctx, int *lst,
 int							process_line(t_buit_in *exec, t_pipex *pipex,
 								t_command **cmd_lst, int *lst);
 
+int							is_valid_var_char(char c);
+char						*handle_dollar(const char *str, size_t *i,
+								t_parse_context *ctx, char *result);
+char						*ft_expand_variables(const char *str,
+								t_parse_context *ctx);
+
 int							ft_free_process_line(t_buit_in *exec,
 								t_pipex *pipex, t_command **cmd_lst,
 								t_token *token);

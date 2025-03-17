@@ -72,7 +72,7 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 	if (process_cmd(&ctx, token) == 1)
 		return (free(exec->input), 0);
 	return (ft_end_process(token, exec, pipex), ft_free_commande_lst(*cmd_lst),
-		*cmd_lst = NULL, free(exec->input), 0);
+		*cmd_lst = NULL, 0);
 }
 
 void	init_cmd_ctx(t_parse_context *ctx, t_command **cmd_lst,

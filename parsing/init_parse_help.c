@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_parse_help.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/17 11:31:01 by thobenel          #+#    #+#             */
+/*   Updated: 2025/03/17 11:31:02 by thobenel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_free_process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst,
@@ -25,11 +37,13 @@ int	read_input(t_buit_in *exec)
 
 int	is_minishell_call(t_shell_context *ctx)
 {
-	if (ft_strcmp_shell(ctx->exec->input, "./minishell") == 0)
-		return (1);
-	if (*(ctx->cmd_lst) && (*(ctx->cmd_lst))->arg
-		&& ft_strcmp((*(ctx->cmd_lst))->arg[0], "./minishell") == 0)
-		return (1);
+	if (ctx->exec->input && (*ctx->cmd_lst)->arg)
+	{	
+		if (ft_strcmp_shell(ctx->exec->input, "./minishell") == 0)
+			return (1);
+		if (*(ctx->cmd_lst) && (*(ctx->cmd_lst))->arg && ft_strcmp((*(ctx->cmd_lst))->arg[0], "./minishell") == 0 && !((*ctx->cmd_lst)->arg[1]))
+			return (1);
+	}
 	return (0);
 }
 
@@ -64,5 +78,7 @@ int	process_cmd(t_shell_context *ctx, t_token *token)
 		}
 		*(ctx->lst) = pctx.exit_status;
 	}
+	if ((*ctx->cmd_lst)->redirections && !((*ctx->cmd_lst)->arg))
+		change_dir(ctx->exec, *ctx->cmd_lst, ctx->pipex);
 	return (0);
 }

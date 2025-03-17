@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 09:28:48 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/06 13:38:46 by dpascal          ###   ########.fr       */
+/*   Created: 2025/03/17 11:27:26 by thobenel          #+#    #+#             */
+/*   Updated: 2025/03/17 11:28:06 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,82 +51,7 @@ int	ft_handle_wds(t_parse_context *ctx, char *token_value, t_token *new)
 	return (1);
 }
 
-static int	is_valid_var_char(char c)
-{
-	return (ft_isalnum(c) || c == '_');
-}
-
-static char	*append_char_to_result(char *result, char c)
-{
-	char	buf[2];
-	char	*tmp;
-
-	buf[0] = c;
-	buf[1] = '\0';
-	tmp = result;
-	result = ft_strjoin(result, buf);
-	free(tmp);
-	return (result);
-}
-
-static char	*handle_dollar(const char *str, size_t *i, t_parse_context *ctx,
-		char *result)
-{
-	size_t	start;
-	char	*var_name;
-	char	*var_value;
-	char	*tmp;
-
-	start = *i;
-	while (str[*i] && is_valid_var_char(str[*i]))
-		(*i)++;
-	var_name = ft_substr(str, start, *i - start);
-	if (!var_name)
-	{
-		free(result);
-		return (NULL);
-	}
-	var_value = print_node_by_key(ctx->env_cpy, var_name);
-	free(var_name);
-	if (!var_value)
-		var_value = "";
-	tmp = result;
-	result = ft_strjoin(result, var_value);
-	free(tmp);
-	return (result);
-}
-
-char	*ft_expand_variables(const char *str, t_parse_context *ctx)
-{
-	size_t	i;
-	char	*result;
-
-	i = 0;
-	result = ft_strdup("");
-	if (!result)
-		return (NULL);
-	while (str[i])
-	{
-		if (str[i] == '$')
-		{
-			if (!str[i++])
-				break ;
-			result = handle_dollar(str, &i, ctx, result);
-			if (!result)
-				return (NULL);
-		}
-		else
-		{
-			result = append_char_to_result(result, str[i]);
-			if (!result)
-				return (NULL);
-			i++;
-		}
-	}
-	return (result);
-}
-
-static int	process_token(char **token_value, t_parse_context *ctx)
+int	process_token(char **token_value, t_parse_context *ctx)
 {
 	char	*expanded_value;
 
