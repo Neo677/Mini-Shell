@@ -12,6 +12,18 @@
 
 #include "../include/exec.h"
 
+void setup_heredoc_signals(void)
+{
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_IGN);
+}
+
+void restore_shell_signals(void)
+{
+    signal(SIGINT, signal_handler);
+    signal(SIGQUIT, SIG_IGN);
+}
+
 char	*heredoc_name(int i)
 {
 	char	*name;
@@ -89,6 +101,7 @@ void	set_while_hd(t_pipex *pipex, t_token *current)
 	int		i;
 
 	i = 0;
+	setup_heredoc_signals();
 	while (current)
 	{
 		if (current->type == 5)
@@ -108,6 +121,7 @@ void	set_while_hd(t_pipex *pipex, t_token *current)
 		}
 		current = current->next;
 	}
+	restore_shell_signals();
 }
 
 int	check_heredoc(t_token *token, t_pipex *pipex)

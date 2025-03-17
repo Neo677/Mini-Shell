@@ -82,7 +82,7 @@ int	ft_handle_words(t_parse_context *ctx)
 	token_value = ft_get_next_token(ctx->input);
 	if (!token_value)
 		return (0);
-	if (!process_token(&token_value, ctx))
+	if (ctx->flag_heredoc == 0 && !process_token(&token_value, ctx))
 		return (0);
 	if (token_value && *token_value != '\0')
 	{

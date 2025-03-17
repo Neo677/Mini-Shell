@@ -20,8 +20,8 @@ void	signal_handler(int sig)
 	{
 		g_signal = 130;
 		printf("\n");
-		// rl_replace_line("", 0);
-		// rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_on_new_line();
 		rl_redisplay();
 	}
 	else if (sig == SIGQUIT)
@@ -31,14 +31,40 @@ void	signal_handler(int sig)
 	}
 }
 
+void signal_handler_exec(int sig)
+{
+    if (sig == SIGINT)  // Ctrl-C
+    {
+        g_signal = 130;
+        printf("\n"); // Ne pas redisplay le prompt ici
+    }
+    else if (sig == SIGQUIT)
+    {
+        g_signal = 131;
+        printf("Quit (core dumped)\n");
+    }
+}
+
+void setup_exec_signals(void)
+{
+    signal(SIGINT, signal_handler_exec);
+    signal(SIGQUIT, signal_handler_exec);
+}
+
+void setup_child_signals(void)
+{
+    signal(SIGINT, SIG_DFL);  // Restaurer le comportement par défaut
+    signal(SIGQUIT, SIG_DFL);
+}
+
+
+
 void	signal_handler2(int sig)
 {
 	if (sig == SIGINT)
 	{
 		g_signal = 130;
 		printf("\n");
-		// rl_replace_line("", 0);
-		rl_redisplay();
 	}
 	else if (sig == SIGQUIT)
 	{
