@@ -88,6 +88,7 @@ typedef struct s_token
 typedef struct s_redirections
 {
 	int						type;
+	int						is_literal;
 	char					*file;
 	struct s_redirections	*next;
 }							t_redirections;
@@ -135,7 +136,7 @@ typedef struct s_shell_context
 int							ft_add_arguments(t_command *cmd, const char *arg);
 
 int							ft_add_redirections_struct(t_command *cmd, int type,
-								const char *file);
+								const char *file, t_parse_context *ctx);
 
 int							run_shell(t_buit_in *exec);
 int							ft_strcmp_shell(char *s1, char *s2);
@@ -144,13 +145,14 @@ void						ft_free_command(t_command *cmd);
 void						ft_free_command_list(t_command **lst);
 t_command					*ft_init_command(t_command **lst);
 int							ft_create_command_lst(t_token *token,
-								t_command **lst);
+								t_command **lst, t_parse_context *ctx);
 
 void						ft_create_cmd_pipe(t_command **current);
 int							ft_create_cmd_word(t_command **current,
 								t_token *token, t_command **lst);
 int							ft_create_cmd_redirect(t_command **current,
-								t_token *token, t_command **lst);
+								t_token *token, t_command **lst,
+								t_parse_context *ctx);
 int							ft_create_cmd_env(t_command **current,
 								t_token *token, t_command **lst);
 
@@ -324,7 +326,7 @@ void						ft_pass_this_bro(t_parse_context *ctx);
 
 int							ft_is_redirection(t_token *token);
 int							ft_handle_operator(t_token **head,
-								const char **input);
+								const char **input, t_parse_context *ctx);
 
 t_token_type				ft_identify_token(char *str);
 t_token						*ft_create_token(t_token_type type, char *value);

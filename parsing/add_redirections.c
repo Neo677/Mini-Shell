@@ -31,7 +31,8 @@
 	5) return a true (1)
 */
 
-int	ft_add_redirections_struct(t_command *cmd, int type, const char *file)
+int	ft_add_redirections_struct(t_command *cmd, int type, const char *file,
+		t_parse_context *ctx)
 {
 	t_redirections	*new_redir;
 	t_redirections	*current;
@@ -42,7 +43,14 @@ int	ft_add_redirections_struct(t_command *cmd, int type, const char *file)
 	if (!new_redir)
 		return (ft_printf_fd(2, "minishell: allocation error\n"), 0);
 	new_redir->type = type;
-	new_redir->file = ft_strdup_v2(file);
+	if (type == TOKEN_HEREDOC)
+		new_redir->is_literal = 1;
+	else
+		new_redir->is_literal = 0;
+	if (new_redir->is_literal)
+		new_redir->file = ft_strdup_v2(file);
+	else
+		new_redir->file = ft_expand_variables(file, ctx);
 	if (!new_redir->file)
 		return (ft_printf_fd(2, "minishell: memory allocation error\n"), 0);
 	new_redir->next = NULL;

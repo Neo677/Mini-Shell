@@ -68,7 +68,7 @@ int	handle_pipe(t_token **head, const char **input)
 	return (1);
 }
 
-int	handle_redirection(t_token **head, const char **input)
+int	handle_redirection(t_token **head, const char **input, t_parse_context *ctx)
 {
 	char	operateur[3];
 	t_token	*new_token;
@@ -89,16 +89,19 @@ int	handle_redirection(t_token **head, const char **input)
 	new_token = ft_create_token(ft_identify_token(operateur), operateur);
 	if (!new_token)
 		return (ft_free_token(new_token), *head = NULL, 0);
+
+	if (ft_identify_token(operateur) == TOKEN_HEREDOC)
+		ctx->flag_heredoc = 1;
 	ft_add_token(head, new_token);
 	return (1);
 }
 
-int	ft_handle_operator(t_token **head, const char **input)
+int	ft_handle_operator(t_token **head, const char **input, t_parse_context *ctx)
 {
 	if (**input == '|')
 		return (handle_pipe(head, input));
 	else if (**input == '>' || **input == '<')
-		return (handle_redirection(head, input));
+		return (handle_redirection(head, input, ctx));
 	return (1);
 }
 

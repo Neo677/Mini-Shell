@@ -49,12 +49,20 @@ int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 			return (ft_handle_exclam(ctx, last_exit_status), 0);
 		if (ft_is_redirec_pipe(ctx) == 0)
 		{
-			printf("enter heredoc \n");	
 			if (!ft_handle_operators(ctx))
 				return (ft_let_go_split(*ctx, last_exit_status), 0);
 		}
-		if (**ctx->input == '$' && ctx->flag_heredoc == 0)
-			ft_handle_env_vars(ctx, last_exit_status);
+		if (**ctx->input == '$')
+		{
+			if (ctx->flag_heredoc == 1)
+			{
+				if (!ft_handle_words(ctx))
+					return (ft_let_go_split(*ctx, last_exit_status), 0);
+				ctx->flag_heredoc = 0;
+			}
+			else
+				ft_handle_env_vars(ctx, last_exit_status);
+		}
 		else
 		{
 			if (!ft_handle_words(ctx))
