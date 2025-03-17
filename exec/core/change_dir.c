@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:25 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/14 17:11:16 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:58:24 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	change_dir_in(t_buit_in *exec, t_redirections *current)
 {
 	int	infile;
 
-	if ((current->type == 2 || current->type == 5) && current->file)
+	if ((current->type == 2) && current->file)
 	{
 		if (access(current->file, F_OK) != 0)
 		{
@@ -106,6 +106,8 @@ int	change_dir(t_buit_in *exec, t_command *cmd, t_pipex *pipex)
 	current = cmd->redirections;
 	while (current)
 	{
+		if (current->type == 5)
+			return (free(pipex->pid), 0);
 		if (change_dir_in(exec, current) == EXIT_FAILURE)
 			return (free(pipex->pid), exec->status = EXIT_FAILURE);
 		if (change_dir_out_3(exec, current) == EXIT_FAILURE)

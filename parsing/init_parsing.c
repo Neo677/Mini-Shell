@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:26:55 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/17 10:33:49 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:17:27 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 			return (0);
 		}
 	}
-	if (*cmd_lst && (*cmd_lst)->arg)
+	if (*cmd_lst && ((*cmd_lst)->arg || (*cmd_lst)->redirections))
 	{
 		process(pipex, *cmd_lst, exec, exec->env_cpy);
 		free_tab(exec->env);
@@ -99,8 +99,6 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 			return (ft_free_process_line(exec, pipex, cmd_lst, token));
 		*lst = ctx.exit_status;
 	}
-	if ((*cmd_lst)->redirections && !((*cmd_lst)->arg))
-		change_dir(exec, *cmd_lst, pipex);
 	return (ft_end_process(token, exec, pipex), ft_free_commande_lst(*cmd_lst),
 		*cmd_lst = NULL, 0);
 }

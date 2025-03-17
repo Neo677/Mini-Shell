@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:25:08 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/06 13:36:14 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/17 13:13:23 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_token	*ft_parse_token(const char *input, t_env **env_cpy,
 		return (NULL);
 	if (!ft_split_token(&token, input, env_cpy, last_exit_status))
 		return (NULL);
+	// ft_print_tokens(token);
 	if (ft_create_command_lst(token, cmd_lst) == 0)
 	{
 		ft_printf_fd(2, "minishell: parser error: failed to \
@@ -31,6 +32,7 @@ t_token	*ft_parse_token(const char *input, t_env **env_cpy,
 		ft_free_commande_lst(*cmd_lst);
 		return (NULL);
 	}
+	// ft_print_command_lst(*cmd_lst);
 	return (token);
 }
 
