@@ -34,6 +34,18 @@ void	ft_handle_exclam(t_parse_context *ctx, int *last_exit_status)
 	*last_exit_status = ctx->exit_status;
 }
 
+void	ft_handle_env_heredoc(t_parse_context *ctx, int *last_exit_status)
+{
+	if (ctx->flag_heredoc == 1)
+	{
+		if (!ft_handle_words(ctx))
+			return (ft_let_go_split(*ctx, last_exit_status), 0);
+		ctx->flag_heredoc = 0;
+	}
+	else
+		ft_handle_env_vars(ctx, last_exit_status);
+}
+
 int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 {
 	while (**ctx->input)
@@ -53,16 +65,7 @@ int	process_tokens(t_parse_context *ctx, int *last_exit_status)
 				return (ft_let_go_split(*ctx, last_exit_status), 0);
 		}
 		if (**ctx->input == '$')
-		{
-			if (ctx->flag_heredoc == 1)
-			{
-				if (!ft_handle_words(ctx))
-					return (ft_let_go_split(*ctx, last_exit_status), 0);
-				ctx->flag_heredoc = 0;
-			}
-			else
-				ft_handle_env_vars(ctx, last_exit_status);
-		}
+			ft_handle_env_heredoc(ctx, last_exit_status);
 		else
 		{
 			if (!ft_handle_words(ctx))

@@ -168,6 +168,8 @@ void							ft_pwd(t_env **env, int cd);
 /*  SIGNAL  */
 void							signal_handler(int sig);
 void							signal_handler2(int sig);
+void							setup_heredoc_signals(void);
+void							restore_shell_signals(void);
 
 /*  SPLIT_VAR  */
 int								ft_strlen_c(char *str, int i, char c);

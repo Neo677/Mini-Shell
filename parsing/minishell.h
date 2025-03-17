@@ -144,12 +144,15 @@ int							ft_strcmp_shell(char *s1, char *s2);
 void						ft_free_command(t_command *cmd);
 void						ft_free_command_list(t_command **lst);
 t_command					*ft_init_command(t_command **lst);
-int	ft_create_command_lst(t_token *token, t_command **lst, t_parse_context *ctx);
+int							ft_create_command_lst(t_token *token,
+								t_command **lst, t_parse_context *ctx);
 
 void						ft_create_cmd_pipe(t_command **current);
 int							ft_create_cmd_word(t_command **current,
 								t_token *token, t_command **lst);
-int	ft_create_cmd_redirect(t_command **current, t_token *token, t_command **lst, t_parse_context *ctx);
+int							ft_create_cmd_redirect(t_command **current,
+								t_token *token, t_command **lst,
+								t_parse_context *ctx);
 int							ft_create_cmd_env(t_command **current,
 								t_token *token, t_command **lst);
 
@@ -169,16 +172,14 @@ void						ft_free_commande_lst(t_command *command);
 void						ft_main_free(t_command *cmd, t_redirections *redir,
 								t_token *head);
 
-// parsing/minishell.h
-void signal_handler(int sig);
-void setup_shell_signals(void);
+void						signal_handler(int sig);
+void						setup_shell_signals(void);
 
-// exec/include/exec.h
-void signal_handler_exec(int sig);
-void setup_exec_signals(void);
-void setup_child_signals(void);
-void setup_heredoc_signals(void);
-void restore_shell_signals(void);
+void						signal_handler_exec(int sig);
+void						setup_exec_signals(void);
+void						setup_child_signals(void);
+void						setup_heredoc_signals(void);
+void						restore_shell_signals(void);
 
 void						ft_setup_env(t_buit_in *exec, char **env);
 void						util_proc(t_buit_in *exec, t_token *token,

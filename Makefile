@@ -37,6 +37,7 @@ SRCS =	parsing/add_arguments.c \
 		parsing/main_use.c \
 		parsing/parse_token.c \
 		parsing/prompt.c \
+		parsing/init_parsing_two.c \
 		parsing/init_parsing.c \
 		parsing/init_parse_help.c \
 		parsing/process_token.c \
@@ -88,6 +89,7 @@ SRCS =	parsing/add_arguments.c \
 		exec/core/check_dir.c \
 		exec/core/cmd.c \
 		exec/core/free_exec.c \
+		exec/core/heredoc_two.c \
 		exec/core/here_doc.c \
 		exec/core/init_var.c \
 		exec/core/process.c \

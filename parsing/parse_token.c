@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-t_token	*ft_parse_token(const char *input, t_env **env_cpy,
-		t_command **cmd_lst, int *last_exit_status)
+t_token	*ft_parse_token(const char *input, t_env **env_cpy, t_command **cmd_lst,
+		int *last_exit_status)
 {
-	t_token	*token;
-	t_parse_context ctx;
+	t_token			*token;
+	t_parse_context	ctx;
 
 	*cmd_lst = NULL;
 	token = NULL;

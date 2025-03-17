@@ -12,39 +12,6 @@
 
 #include "../include/exec.h"
 
-void setup_heredoc_signals(void)
-{
-    signal(SIGINT, SIG_DFL);
-    signal(SIGQUIT, SIG_IGN);
-}
-
-void restore_shell_signals(void)
-{
-    signal(SIGINT, signal_handler);
-    signal(SIGQUIT, SIG_IGN);
-}
-
-char	*heredoc_name(int i)
-{
-	char	*name;
-	char	*num;
-	char	*filename;
-
-	name = "/tmp/heredoc_";
-	num = ft_itoa_exec(i);
-	filename = malloc(sizeof(char) * (ft_strlen_dp(name) + ft_strlen_dp(num)
-				+ 1));
-	if (!filename)
-	{
-		free(num);
-		return (NULL);
-	}
-	ft_strcpy(filename, name);
-	ft_strcat(filename, num);
-	free(num);
-	return (filename);
-}
-
 void	init_hd(t_token *token, t_pipex *pipex)
 {
 	t_token	*current;
@@ -94,11 +61,25 @@ void	while_hd(t_pipex *pipex, t_token *current, int heredoc_fd)
 	}
 }
 
-void	set_while_hd(t_pipex *pipex, t_token *current)
+void	process_heredoc_token(t_pipex *pipex, t_token *current, int *i)
 {
 	int		heredoc_fd;
 	char	*filename;
-	int		i;
+
+	filename = heredoc_name(*i);
+	if (access(filename, F_OK) == 0)
+		unlink(filename);
+	heredoc_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	while_hd(pipex, current, heredoc_fd);
+	close(heredoc_fd);
+	pipex->filename_hd[*i] = ft_strdup(filename);
+	(*i)++;
+	free(filename);
+}
+
+void	set_while_hd(t_pipex *pipex, t_token *current)
+{
+	int	i;
 
 	i = 0;
 	setup_heredoc_signals();
@@ -106,18 +87,8 @@ void	set_while_hd(t_pipex *pipex, t_token *current)
 	{
 		if (current->type == 5)
 		{
-			if (current->next->type == 0)
-			{
-				filename = heredoc_name(i);
-				if (access(filename, F_OK) == 0)
-					unlink(filename);
-				heredoc_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-				while_hd(pipex, current, heredoc_fd);
-				close(heredoc_fd);
-				pipex->filename_hd[i] = ft_strdup(filename);
-				i++;
-				free(filename);
-			}
+			if (current->next && current->next->type == 0)
+				process_heredoc_token(pipex, current, &i);
 		}
 		current = current->next;
 	}
