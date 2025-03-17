@@ -76,8 +76,8 @@ int	process_token(char **token_value, t_parse_context *ctx)
 
 int	ft_handle_words(t_parse_context *ctx)
 {
-	char *token_value;
-	t_token *new;
+	char	*token_value;
+	t_token	*new;
 
 	token_value = ft_get_next_token(ctx->input, ctx);
 	if (!token_value)

@@ -21,7 +21,7 @@
 		3) check if this is > redirec OUT
 		4) check if this is >> Append mode
 		5) check if this is  << heredoc
-		6) handle if this is a quote 
+		6) handle if this is a quote
 		(do we need to verify if there is a end ???)
 		7) and of course add an end (TOKEN_END)
 	while we verrify this we gonna check if the token is valid
@@ -31,7 +31,7 @@
 		1) create token
 		2) identifier le token
 	if we got 2 pipe ex : (ls -a | pwd | cat < hello)
-	for the pipe we can agree that there is 
+	for the pipe we can agree that there is
 	3 state of the input that we need to parse
 
 	need to return the name of the heredoc
@@ -106,7 +106,8 @@ void	ft_add_token(t_token **head, t_token *new_token)
 char	*ft_get_next_token(const char **input, t_parse_context *ctx)
 {
 	const char	*start;
-	char	*var_name;
+	char		*var_name;
+	char		*token;
 
 	start = *input;
 	while (**input && **input != ' ' && **input != '\t' && **input != '|'
@@ -117,10 +118,9 @@ char	*ft_get_next_token(const char **input, t_parse_context *ctx)
 	{
 		start++;
 		var_name = ft_expand_variables(start, ctx);
-		char *token = ft_strndup(var_name, *input - var_name);
+		token = ft_strndup(var_name, *input - var_name);
 		free(var_name);
 		return (token);
-
 	}
 	return (ft_strndup(start, *input - start));
 }
