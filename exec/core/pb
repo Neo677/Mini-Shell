@@ -21,6 +21,13 @@ Leaks
 signaux dans un nouveau minishell
 
 
+16/03/25
+
+cat ./minishell  ~~~~~~
+
+./minishell | ./minishell | ./minishell
+
+
 
 
 
