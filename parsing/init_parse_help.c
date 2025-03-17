@@ -82,6 +82,6 @@ int	process_cmd(t_shell_context *ctx, t_token *token)
 		*(ctx->lst) = pctx.exit_status;
 	}
 	if ((*ctx->cmd_lst)->redirections && !((*ctx->cmd_lst)->arg))
-		change_dir(ctx->exec, *ctx->cmd_lst, ctx->pipex);
+			change_dir(ctx->exec, *ctx->cmd_lst, ctx->pipex);
 	return (0);
 }

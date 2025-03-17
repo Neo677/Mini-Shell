@@ -47,6 +47,7 @@ void	signal_handler2(int sig)
 	}
 }
 
+
 int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 {
 	t_shell_context	ctx;

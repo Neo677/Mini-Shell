@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:50 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/17 10:31:00 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:57:49 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
-	if (change_dir(exec, current, pipex) == 1)
+	if (change_dir(exec, current, pipex) == 1 || !(current->arg))
 		return (1);
 	redir_input(exec, current, pipex);
 	redir_output(exec, current, pipex);
@@ -40,7 +40,7 @@ int	child_process(t_pipex *pipex, t_buit_in *exec, char **env,
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, signal_handler);
-	if (change_dir(exec, current, pipex) == 1)
+	if (change_dir(exec, current, pipex) == 1 || !(current->arg))
 		exit(1);
 	if (current->redirections && check_dir_in(current) != 0)
 		redir_input(exec, current, pipex);
