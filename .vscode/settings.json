@@ -2,6 +2,7 @@
     "files.associations": {
         "cstdlib": "c",
         "ostream": "c",
-        "minishell.h": "c"
+        "minishell.h": "c",
+        "random": "c"
     }
 }

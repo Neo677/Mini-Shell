@@ -39,7 +39,7 @@ void	ft_handle_env_heredoc(t_parse_context *ctx, int *last_exit_status)
 	if (ctx->flag_heredoc == 1)
 	{
 		if (!ft_handle_words(ctx))
-			return (ft_let_go_split(*ctx, last_exit_status), 0);
+			return (ft_let_go_split(*ctx, last_exit_status));
 		ctx->flag_heredoc = 0;
 	}
 	else
