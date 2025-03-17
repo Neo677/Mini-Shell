@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/16 22:53:14 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/17 09:28:59 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,8 @@ void							error_access(t_buit_in *exec, t_pipex *pipex,
 									char *cmd);
 char							*error_execute_cmd(t_buit_in *exec,
 									t_pipex *pipex, char *cmd);
+void							err_execve(t_buit_in *exec, t_pipex *pipex,
+									char **arg);
 
 /*  UTILS_ERROR  */
 char							*ft_join_pipex(char *join, char *s1, char *s2);

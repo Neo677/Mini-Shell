@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:32 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/16 23:03:32 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/17 07:59:32 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,32 +60,11 @@ void	execute_cmd(t_buit_in *exec, t_pipex *pipex, char **arg, char **env)
 {
 	if (ft_strcmp(arg[0], "./minishell") == 0)
 	{
-			ft_printf_fd(2, "%s: command not found\n", arg[0]);
-			free_error(pipex, exec->status = 127);
+		if (arg[1])
+			ft_printf_fd(2, "%s: command not found\n", arg[1]);
+		free_error(pipex, exec->status = 127);
 	}
 	pipex->path = find_path(exec, pipex, arg[0], env);
 	if (execve(pipex->path, arg, env) == -1)
-	{
-		if (ft_strcmp(arg[0], ".") == 0)
-		{
-			if (!arg[1])
-			{
-				ft_printf_fd(2, CMD_EXEC CMD_EXEC2);
-				free_error(pipex, 2);
-			}
-			else
-			{
-				ft_printf_fd(2, "%s: command not found\n", arg[0]);
-				free_error(pipex, exec->status = 127);
-			}
-		}
-		else if (ft_strcmp(arg[0], "..") == 0 || ft_strchr_exec(arg[0],
-				'/') != 0)
-		{
-			ft_printf_fd(2, "%s: command not found\n", arg[0]);
-			free_error(pipex, exec->status = 127);
-		}
-		ft_printf_fd(2, "bash: %s: Is a directory\n", arg[0]);
-		free_error(pipex, exec->status = 126);
-	}
+		err_execve(exec, pipex, arg);
 }

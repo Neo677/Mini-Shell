@@ -46,6 +46,7 @@ SRCS =	parsing/add_arguments.c \
 		parsing/handle_quote.c \
 		parsing/build_quote.c \
 		parsing/handle_word.c \
+		parsing/handle_word_expand.c \
 		parsing/split_token.c \
 		parsing/token_handle.c \
 		parsing/token_utils.c \
