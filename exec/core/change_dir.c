@@ -106,8 +106,6 @@ int	change_dir(t_buit_in *exec, t_command *cmd, t_pipex *pipex)
 	current = cmd->redirections;
 	while (current)
 	{
-		// if (current->type == 5)
-		// 	return (free(pipex->pid), 0);
 		if (change_dir_in(exec, current) == EXIT_FAILURE)
 			return (free(pipex->pid), exec->status = EXIT_FAILURE);
 		if (change_dir_out_3(exec, current) == EXIT_FAILURE)

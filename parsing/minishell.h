@@ -121,6 +121,7 @@ typedef struct s_parse_context
 	t_env					**env_cpy;
 	int						exit_status;
 	int						*last_exit_status;
+	int						flag_heredoc;
 }							t_parse_context;
 
 typedef struct s_shell_context
@@ -328,8 +329,7 @@ int							ft_handle_operator(t_token **head,
 t_token_type				ft_identify_token(char *str);
 t_token						*ft_create_token(t_token_type type, char *value);
 void						ft_add_token(t_token **head, t_token *new_token);
-char						*ft_get_next_token(const char **input,
-								t_parse_context *ctx);
+char						*ft_get_next_token(const char **input);
 t_token						*ft_last_token(t_token *head);
 
 void						ft_clean_up(t_token **token, char **input);

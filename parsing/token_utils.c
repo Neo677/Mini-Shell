@@ -103,25 +103,15 @@ void	ft_add_token(t_token **head, t_token *new_token)
 
 //      find the limits of a token base on spaces or delim
 
-char	*ft_get_next_token(const char **input, t_parse_context *ctx)
+char	*ft_get_next_token(const char **input)
 {
 	const char	*start;
-	char		*var_name;
-	char		*token;
 
 	start = *input;
 	while (**input && **input != ' ' && **input != '\t' && **input != '|'
 		&& **input != '<' && **input != '>' && **input != '\"'
 		&& **input != '\'')
 		(*input)++;
-	if (start[1] == '$')
-	{
-		start++;
-		var_name = ft_expand_variables(start, ctx);
-		token = ft_strndup(var_name, *input - var_name);
-		free(var_name);
-		return (token);
-	}
 	return (ft_strndup(start, *input - start));
 }
 

@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "cstdlib": "c",
-        "ostream": "c"
+        "ostream": "c",
+        "minishell.h": "c"
     }
 }
