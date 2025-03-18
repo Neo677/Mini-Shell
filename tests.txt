@@ -1,3 +1,0 @@
-cat | cat | ls
-cat /dev/urandom | head -n5
-sleep 1 | sleep 2

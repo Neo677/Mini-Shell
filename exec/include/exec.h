@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/18 14:06:33 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:22:14 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_built_in
 	char						**tab_export;
 	char						*value_export;
 	int							status;
+	int							i;
 }								t_buit_in;
 
 typedef struct s_pipex
@@ -267,7 +268,7 @@ void							process(t_pipex *pipex, t_command *cmd,
 void							check_redir_2(t_buit_in *exec, t_pipex *pipex,
 									t_redirections *redirection);
 void							check_dir_5(t_buit_in *exec, t_pipex *pipex,
-									t_redirections *redirection, int *i);
+									t_redirections *redirection);
 int								redir_input(t_buit_in *exec, t_command *cmd,
 									t_pipex *pipex);
 void							check_n_change_out(t_buit_in *exec,
@@ -310,6 +311,8 @@ int								no_built_in(t_pipex *pipex, t_buit_in *exec,
 									char **env, t_command *current);
 int								count_t_env(t_env *env_cpy);
 char							**change_t_env_to_tab(t_env *env_cpy);
+int								count_heredoc(t_buit_in *exec,
+									t_command *current);
 
 /*  UTILS  */
 int								ft_strchr_exec(char *str, char c);

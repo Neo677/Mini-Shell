@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:50 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/18 14:42:19 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:21:47 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 int	child_process(t_pipex *pipex, t_buit_in *exec, char **env,
 		t_command *current)
 {
-	printf("test\n");
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, signal_handler);
 	if (change_dir(exec, current, pipex) == 1 || !(current->arg))
@@ -76,6 +75,7 @@ int	while_commands(t_pipex *pipex, t_buit_in *exec, char **env,
 			return (exec->status = EXIT_FAILURE);
 		}
 	}
+	exec->i = count_heredoc(exec, *current);
 	pipex->pid[pipex->i] = fork();
 	if (pipex->pid[pipex->i] < 0)
 	{
@@ -126,6 +126,7 @@ void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, t_env *env_cpy)
 	current = cmd;
 	if (init_process(pipex, cmd) != 0)
 		return ;
+	exec->i = -1;
 	exec->status = 0;
 	exec->env = change_t_env_to_tab(env_cpy);
 	if (pipex->cmd_count == 1)

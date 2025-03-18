@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:40 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/18 14:41:52 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:20:23 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,10 @@ void	process_heredoc_token(t_buit_in *exec, t_pipex *pipex, t_token *current,
 		exit(0);
 	}
 	else if (pid > 0)
+	{
 		waitpid(pid, NULL, 0);
+		close(heredoc_fd);
+	}
 	exec->status = g_signal;
 	pipex->filename_hd[*i] = ft_strdup(filename);
 	(*i)++;
