@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:24:27 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/16 22:11:00 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/03 09:18:54 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_command	*ft_init_command(t_command **lst)
 	return (new_cmd);
 }
 
-int	ft_create_command_lst(t_token *token, t_command **lst)
+int	ft_create_command_lst(t_token *token, t_command **lst, t_parse_context *ctx)
 {
 	t_command	*current;
 
@@ -65,7 +65,7 @@ int	ft_create_command_lst(t_token *token, t_command **lst)
 			ft_create_cmd_env(&current, token, lst);
 		else if (ft_is_redirection(token))
 		{
-			ft_create_cmd_redirect(&current, token, lst);
+			ft_create_cmd_redirect(&current, token, lst, ctx);
 			token = token->next;
 			if (token)
 				token = token->next;

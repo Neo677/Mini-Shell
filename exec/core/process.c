@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:50 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/17 12:57:49 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 14:42:19 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 int	child_process(t_pipex *pipex, t_buit_in *exec, char **env,
 		t_command *current)
 {
+	printf("test\n");
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, signal_handler);
 	if (change_dir(exec, current, pipex) == 1 || !(current->arg))

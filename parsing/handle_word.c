@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 09:28:48 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/06 13:38:46 by dpascal          ###   ########.fr       */
+/*   Created: 2025/03/17 11:27:26 by thobenel          #+#    #+#             */
+/*   Updated: 2025/03/17 11:28:06 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,28 +51,54 @@ int	ft_handle_wds(t_parse_context *ctx, char *token_value, t_token *new)
 	return (1);
 }
 
+int	process_token(char **token_value, t_parse_context *ctx)
+{
+	char	*expanded_value;
+
+	if (ft_strcmp(*token_value, "~") == 0)
+	{
+		if (!ft_handle_wave(ctx, *token_value))
+		{
+			free(*token_value);
+			return (0);
+		}
+	}
+	if (ft_strchr(*token_value, '$'))
+	{
+		expanded_value = ft_expand_variables(*token_value, ctx);
+		free(*token_value);
+		if (!expanded_value)
+			return (0);
+		*token_value = expanded_value;
+	}
+	return (1);
+}
+
 int	ft_handle_words(t_parse_context *ctx)
 {
 	char	*token_value;
 	t_token	*new;
 
-	if (!ctx || !ctx->input)
-		return (0);
 	token_value = ft_get_next_token(ctx->input);
 	if (!token_value)
 		return (0);
-	if (ft_strcmp(token_value, "~") == 0)
-	{
-		if (!ft_handle_wave(ctx, token_value))
-			return (free(token_value), 0);
-	}
+	if (ctx->flag_heredoc == 0 && !process_token(&token_value, ctx))
+		return (0);
 	if (token_value && *token_value != '\0')
 	{
 		new = ft_create_token(TOKEN_WORD, token_value);
 		if (!new)
-			return (free(token_value), 0);
+		{
+			free(token_value);
+			return (0);
+		}
 		if (!ft_handle_wds(ctx, token_value, new))
-			return (free(token_value), ft_free_token(new), 0);
+		{
+			free(token_value);
+			ft_free_token(new);
+			return (0);
+		}
 	}
-	return (free(token_value), 1);
+	free(token_value);
+	return (1);
 }

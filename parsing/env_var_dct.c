@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:24:32 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/16 22:10:43 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/06 13:00:25 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,9 @@ char	*ft_extract_env_var(const char **input)
 		return (ft_extract_digit_var(input));
 	if (!ft_isalpha(**input) && **input != '_')
 		return (ft_strdup("$"));
-	return (ft_extract_alpha_var(input));
+	if (**input != '"' || **input != '\'')
+	{
+		return (ft_extract_alpha_var(input));
+	}
+	return (NULL);
 }

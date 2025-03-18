@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eof_quote.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:33:00 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/16 22:10:32 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/03 09:33:02 by thobenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,27 +84,26 @@ char	*ft_read_until_s_quote(void)
 	return (free(tmp), acc);
 }
 
-char	*ft_eof_single_quote(t_parse_context *ctx)
+char	*ft_eof_single_quote(void)
 {
-	char	*extra;
-	char	*history;
-	char	**parts;
-	char	*new_str2;
+	char	*line;
+	char	*new_str;
 
-	new_str2 = ft_strdup_v2(ctx->input_exec);
-	if (!new_str2)
+	new_str = ft_strdup("");
+	if (!new_str)
 		return (NULL);
-	extra = ft_read_until_s_quote();
-	if (!extra)
+	while (1)
 	{
-		ft_printf_fd(2,
-			"bash: unexpected EOF while looking for matching `\''\n");
-		return (free(new_str2), NULL);
+		line = readline("> ");
+		if (!line)
+			return (free(new_str), NULL);
+		if (ft_strcmp(line, "\'") == 0)
+		{
+			free(line);
+			break ;
+		}
+		new_str = append_line(new_str, line);
+		free(line);
 	}
-	history = ft_strjoin(new_str2, extra);
-	free(new_str2);
-	parts = ft_split_built(history, '\'');
-	add_history(history);
-	free(history);
-	return (parts[1]);
+	return (new_str);
 }

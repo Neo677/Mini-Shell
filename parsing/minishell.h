@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/16 20:37:55 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 14:12:42 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 # include "../exec/include/exec.h"
 # include "../libft_2.0/libft.h"
-# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/types.h>
@@ -76,7 +76,7 @@ typedef enum e_token_type
 	TOKEN_DBL_QUOTE,
 	TOKEN_END,
 	TOKEN_ERROR,
-}				t_token_type;
+}							t_token_type;
 
 typedef struct s_token
 {
@@ -88,6 +88,7 @@ typedef struct s_token
 typedef struct s_redirections
 {
 	int						type;
+	int						is_literal;
 	char					*file;
 	struct s_redirections	*next;
 }							t_redirections;
@@ -121,24 +122,37 @@ typedef struct s_parse_context
 	t_env					**env_cpy;
 	int						exit_status;
 	int						*last_exit_status;
+	int						flag_heredoc;
 }							t_parse_context;
+
+typedef struct s_shell_context
+{
+	t_buit_in				*exec;
+	t_pipex					*pipex;
+	t_command				**cmd_lst;
+	int						*lst;
+}							t_shell_context;
 
 int							ft_add_arguments(t_command *cmd, const char *arg);
 
 int							ft_add_redirections_struct(t_command *cmd, int type,
-								const char *file);
+								const char *file, t_parse_context *ctx);
+
+int							run_shell(t_buit_in *exec);
+int							ft_strcmp_shell(char *s1, char *s2);
 
 void						ft_free_command(t_command *cmd);
 void						ft_free_command_list(t_command **lst);
 t_command					*ft_init_command(t_command **lst);
 int							ft_create_command_lst(t_token *token,
-								t_command **lst);
+								t_command **lst, t_parse_context *ctx);
 
 void						ft_create_cmd_pipe(t_command **current);
 int							ft_create_cmd_word(t_command **current,
 								t_token *token, t_command **lst);
 int							ft_create_cmd_redirect(t_command **current,
-								t_token *token, t_command **lst);
+								t_token *token, t_command **lst,
+								t_parse_context *ctx);
 int							ft_create_cmd_env(t_command **current,
 								t_token *token, t_command **lst);
 
@@ -158,7 +172,16 @@ void						ft_free_commande_lst(t_command *command);
 void						ft_main_free(t_command *cmd, t_redirections *redir,
 								t_token *head);
 
-void						ft_setup_signal(void);
+void						signal_handler(int sig);
+void						signal_handler2(int sig);
+void						setup_shell_signals(void);
+
+void						signal_handler_exec(int sig);
+void						setup_exec_signals(void);
+void						setup_child_signals(void);
+void						setup_heredoc_signals(void);
+void						restore_shell_signals(void);
+
 void						ft_setup_env(t_buit_in *exec, char **env);
 void						util_proc(t_buit_in *exec, t_token *token,
 								t_pipex *pipex);
@@ -168,6 +191,24 @@ void						ft_init_proc(t_parse_context ctx, int *lst,
 								t_buit_in *exec);
 int							process_line(t_buit_in *exec, t_pipex *pipex,
 								t_command **cmd_lst, int *lst);
+
+int							is_valid_var_char(char c);
+char						*handle_dollar(const char *str, size_t *i,
+								t_parse_context *ctx, char *result);
+char						*ft_expand_variables(const char *str,
+								t_parse_context *ctx);
+
+int							ft_free_process_line(t_buit_in *exec,
+								t_pipex *pipex, t_command **cmd_lst,
+								t_token *token);
+int							read_input(t_buit_in *exec);
+
+int							is_minishell_call(t_shell_context *ctx);
+
+int							handle_minishell_cmd(t_shell_context *ctx,
+								t_token *token);
+int							process_cmd(t_buit_in *exec, t_shell_context *ctx,
+								t_token *token);
 
 void						ft_free_split(t_token **head, t_command **cmd_lst,
 								const char *error_msg, const char *token);
@@ -191,7 +232,7 @@ char						*ft_strjoin_free(char *s1, char *s2);
 char						*ft_space_swap(char *acc, char *tmp, char *line);
 
 char						*ft_eof_double_quote(void);
-char						*ft_eof_single_quote(t_parse_context *ctx);
+char						*ft_eof_single_quote(void);
 
 int							ft_handle_env_vars_quote(t_parse_context *ctx);
 
@@ -295,7 +336,7 @@ void						ft_pass_this_bro(t_parse_context *ctx);
 
 int							ft_is_redirection(t_token *token);
 int							ft_handle_operator(t_token **head,
-								const char **input);
+								const char **input, t_parse_context *ctx);
 
 t_token_type				ft_identify_token(char *str);
 t_token						*ft_create_token(t_token_type type, char *value);
@@ -334,8 +375,5 @@ int							add_quote_as_new_token(t_parse_context *ctx,
 int							ft_handle_alones(t_parse_context *ctx,
 								char *var_name);
 // void						ft_introw(void);
-
-int							run_shell(t_buit_in *exec);
-int							ft_strcmp_shell(char *s1, char *s2);
 
 #endif

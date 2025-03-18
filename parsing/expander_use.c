@@ -78,10 +78,7 @@ char	*get_var_value(const char *input, size_t var_len, t_parse_context *ctx)
 	if (!var_name)
 		return (NULL);
 	if (ft_strcmp_dollar(var_name) == 0)
-	{
-		var_value = ft_strdup("$");
-		return (var_value);
-	}
+		return (var_name);
 	if (ft_get_this_digit(var_name) == 1)
 	{
 		ft_extract_digit_var_quote(var_name);
