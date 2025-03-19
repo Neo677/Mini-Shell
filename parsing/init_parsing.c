@@ -6,13 +6,13 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:26:55 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/11 10:47:48 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:57:28 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		g_signal = 0;
+int	g_signal = 0;
 
 void	signal_handler(int sig)
 {
@@ -81,7 +81,7 @@ int	process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst, int *lst)
 		return (free(exec->input), ft_free_commande_lst(*cmd_lst), 0);
 	if (is_minishell_call(&ctx))
 		return (handle_minishell_cmd(&ctx, token));
-	if (process_cmd(&ctx, token) == 1)
+	if (process_cmd(exec, &ctx, token) == 1)
 		return (exec->status);
 	return (ft_end_process(token, exec, pipex), ft_free_commande_lst(*cmd_lst),
 		*cmd_lst = NULL, 0);

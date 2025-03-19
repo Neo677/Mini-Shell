@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_parse_help.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 11:31:01 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/17 11:31:02 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/18 19:18:36 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	ft_free_process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst,
 		t_token *token)
 {
 	util_proc(exec, token, pipex);
-	clear_history();
+	rl_clear_history();
 	ft_free_commande_lst(*cmd_lst);
 	*cmd_lst = NULL;
 	return (exec->status);
@@ -63,11 +63,12 @@ int	handle_minishell_cmd(t_shell_context *ctx, t_token *token)
 	return (0);
 }
 
-int	process_cmd(t_shell_context *ctx, t_token *token)
+int	process_cmd(t_buit_in *exec, t_shell_context *ctx, t_token *token)
 {
 	t_parse_context	pctx;
 
-	check_heredoc(token, ctx->pipex);
+	check_heredoc(exec, token, ctx->pipex);
+	*(ctx->lst) = exec->status;
 	if (*(ctx->cmd_lst) && (*(ctx->cmd_lst))->arg)
 	{
 		process(ctx->pipex, *(ctx->cmd_lst), ctx->exec, ctx->exec->env_cpy);

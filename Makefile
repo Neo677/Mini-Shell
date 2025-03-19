@@ -6,7 +6,7 @@
 #    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 17:24:52 by thobenel          #+#    #+#              #
-#    Updated: 2025/03/12 08:34:11 by dpascal          ###   ########.fr        #
+#    Updated: 2025/03/18 14:06:56 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,11 @@ LIBFT_MATE = $(LIBFT_DIR_MATE)/libftprintf.a
 READLINE = -lreadline
 
 SRCS =	parsing/add_arguments.c \
+		parsing/init_parsing.c \
+		parsing/init_parsing_two.c \
+		parsing/init_parse_help.c \
+		parsing/main.c \
+		parsing/main_use.c \
 		parsing/add_redirections.c \
 		parsing/create_command.c \
 		parsing/env_var_dct.c \
@@ -32,14 +37,9 @@ SRCS =	parsing/add_arguments.c \
 		parsing/expander_double.c \
 		parsing/eof_quote.c \
 		parsing/expander_use.c \
-		parsing/main.c \
 		parsing/shell_process.c \
-		parsing/main_use.c \
 		parsing/parse_token.c \
 		parsing/prompt.c \
-		parsing/init_parsing_two.c \
-		parsing/init_parsing.c \
-		parsing/init_parse_help.c \
 		parsing/process_token.c \
 		parsing/handle_env.c \
 		parsing/handle_env_two.c \
@@ -52,7 +52,6 @@ SRCS =	parsing/add_arguments.c \
 		parsing/token_handle.c \
 		parsing/token_utils.c \
 		parsing/utils_main.c \
-		parsing/utils_main2.c \
 		parsing/utils.c \
 		parsing/utils_2.c \
 		parsing/syntax_before.c \
@@ -77,7 +76,6 @@ SRCS =	parsing/add_arguments.c \
 		exec/built-in/free_bh.c \
 		exec/built-in/init.c \
 		exec/built-in/pwd.c \
-		exec/built-in/signal.c \
 		exec/built-in/split_var.c \
 		exec/built-in/split.c \
 		exec/built-in/unset.c \
@@ -89,7 +87,6 @@ SRCS =	parsing/add_arguments.c \
 		exec/core/check_dir.c \
 		exec/core/cmd.c \
 		exec/core/free_exec.c \
-		exec/core/heredoc_two.c \
 		exec/core/here_doc.c \
 		exec/core/init_var.c \
 		exec/core/process.c \
@@ -97,6 +94,7 @@ SRCS =	parsing/add_arguments.c \
 		exec/core/split.c \
 		exec/core/utils_cmd.c \
 		exec/core/utils_error.c \
+		exec/core/utils_heredoc.c \
 		exec/core/utils_process.c \
 		exec/core/utils.c \
 		exec/core/utils2.c \

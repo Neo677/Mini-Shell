@@ -33,7 +33,7 @@
  3) allocate memory dynamicilly to a chain list wo can
   contain the str betwin the quote
 ex = input = "hello my name is tom"
-				0------------------\0
+			 0------------------\0
 */
 
 int	ft_is_redirection(t_token *token)
@@ -103,60 +103,3 @@ int	ft_handle_operator(t_token **head, const char **input, t_parse_context *ctx)
 		return (handle_redirection(head, input, ctx));
 	return (1);
 }
-
-// int ft_handle_operator(t_token **head, const char **input)
-// {
-//     char operateur[3];
-//     t_token *new_token;
-
-//     if (**input == '|') 				// Gestion des pipes
-//     {
-//         if (*(*input + 1) == '|')		// Double pipe (||)
-//         {
-//             ft_error_pipe("||");
-//             (*input) += 2;
-//             ft_free_token(*head);		// Libère les tokens déjà créés
-//             *head = NULL;				// Réinitialise la liste
-//             return (0);						// Arrête immédiatement
-//         }
-//         (*input)++;
-//         new_token = ft_create_token(TOKEN_PIPE, "|");
-//         if (!new_token)
-//         {
-//             ft_free_token(new_token);
-//             *head = NULL;
-//             return (0);
-//         }
-//         ft_add_token(head, new_token);
-//     }
-//     else if (**input == '>' || **input == '<')
-//     {
-//         operateur[0] = **input;
-//         operateur[1] = 0;
-//         operateur[2] = 0;
-//         (*input)++;
-//         if (**input == operateur[0])
-//         {
-//             operateur[1] = **input;
-//             (*input)++;
-//             operateur[2] = '\0';
-//         }
-//         if (!**input || **input == '|' || **input == '<' || **input == '>')
-//         {
-//             ft_error_redirections(operateur);
-//             ft_free_token(*head);
-//             *head = NULL;
-//             (*input)++;
-//             return (0);
-//         }
-//         new_token = ft_create_token(ft_identify_token(operateur), operateur);
-//         if (!new_token)
-//         {
-//             ft_free_token(new_token);
-//             *head = NULL;
-//             return (0);
-//         }
-//         ft_add_token(head, new_token);
-//     }
-//     return (1);
-// }
