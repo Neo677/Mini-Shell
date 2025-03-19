@@ -12,8 +12,6 @@
 
 #include "../include/exec.h"
 
-extern int	g_signal;
-
 void	signal_handler3(int sig)
 {
 	if (sig == SIGINT)

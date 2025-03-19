@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int		g_signal = 0;
+int	g_signal = 0;
 
 void	signal_handler(int sig)
 {

@@ -63,6 +63,8 @@ the easyes way to split the input is :
 	struct s_command *next == ptr for the next command (pipeline)
 */
 
+extern int		g_signal;
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -374,6 +376,5 @@ int							add_quote_as_new_token(t_parse_context *ctx,
 
 int							ft_handle_alones(t_parse_context *ctx,
 								char *var_name);
-// void						ft_introw(void);
 
 #endif

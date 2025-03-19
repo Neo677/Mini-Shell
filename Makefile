@@ -20,6 +20,11 @@ LIBFT_MATE = $(LIBFT_DIR_MATE)/libftprintf.a
 READLINE = -lreadline
 
 SRCS =	parsing/add_arguments.c \
+		parsing/init_parsing.c \
+		parsing/init_parsing_two.c \
+		parsing/init_parse_help.c \
+		parsing/main.c \
+		parsing/main_use.c \
 		parsing/add_redirections.c \
 		parsing/create_command.c \
 		parsing/env_var_dct.c \
@@ -32,14 +37,9 @@ SRCS =	parsing/add_arguments.c \
 		parsing/expander_double.c \
 		parsing/eof_quote.c \
 		parsing/expander_use.c \
-		parsing/main.c \
 		parsing/shell_process.c \
-		parsing/main_use.c \
 		parsing/parse_token.c \
 		parsing/prompt.c \
-		parsing/init_parsing_two.c \
-		parsing/init_parsing.c \
-		parsing/init_parse_help.c \
 		parsing/process_token.c \
 		parsing/handle_env.c \
 		parsing/handle_env_two.c \
