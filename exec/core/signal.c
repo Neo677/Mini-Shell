@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal .c                                          :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 18:32:43 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/19 18:33:51 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 22:05:52 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,17 @@ void	signal_handler3(int sig)
 		g_signal = 130;
 		printf("\n");
 		close(STDIN_FILENO);
+	}
+}
+
+void	signal_handler4(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_signal = 0;
+	}
+	else if (sig == SIGQUIT)
+	{
+		g_signal = 0;
 	}
 }

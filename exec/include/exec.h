@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/18 19:22:14 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 22:00:48 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,6 @@ void							close_file(t_pipex *pipex);
 void							free_error(t_pipex *pipex, int key_error);
 
 /*  HERE_DOC  */
-void							signal_handler3(int sig);
 void							while_hd(t_pipex *pipex, t_token *current,
 									int heredoc_fd);
 void							process_heredoc_token(t_buit_in *exec,
@@ -276,6 +275,13 @@ void							check_n_change_out(t_buit_in *exec,
 									t_redirections *redirection);
 int								redir_output(t_buit_in *exec, t_command *cmd,
 									t_pipex *pipex);
+
+/*  SIGNAL  */
+void							signal_handler_exec(int sig);
+void							signal_handler(int sig);
+void							signal_handler2(int sig);
+void							signal_handler3(int sig);
+void							signal_handler4(int sig);
 
 /*  SPLIT  */
 int								ft_count_pipex(char *s, char c);

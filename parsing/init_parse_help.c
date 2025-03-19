@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 11:31:01 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/18 19:18:36 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 20:50:10 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,10 @@ int	process_cmd(t_buit_in *exec, t_shell_context *ctx, t_token *token)
 		free_tab(ctx->exec->env);
 		pctx.exit_status = ctx->exec->status;
 		signal(SIGINT, signal_handler);
-		if (ctx->exec->exit_bh == 1)
+		if (ctx->exec->exit_bh == 1 || ctx->exec->exit_bh == 2)
 		{
+			if (ctx->exec->exit_bh == 2)
+				exec->status = *(ctx->lst);
 			ft_free_process_line(ctx->exec, ctx->pipex, ctx->cmd_lst, token);
 			return (1);
 		}

@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:50 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/19 18:31:09 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 22:04:47 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 	saved_stdin = dup(STDIN_FILENO);
 	if (change_dir(exec, current, pipex) == 1 || !(current->arg))
 		return (1);
+	exec->i = count_heredoc(exec, current);
 	redir_input(exec, current, pipex);
 	redir_output(exec, current, pipex);
 	if (check_built_in(current->arg[0]) == 1)
@@ -38,8 +39,8 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 int	child_process(t_pipex *pipex, t_buit_in *exec, char **env,
 		t_command *current)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, signal_handler);
+	signal(SIGQUIT, signal_handler4);
+	signal(SIGINT, signal_handler4);
 	if (change_dir(exec, current, pipex) == 1 || !(current->arg))
 		exit(1);
 	if (current->redirections && check_dir_in(current) != 0)
@@ -135,4 +136,6 @@ void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, t_env *env_cpy)
 		one_command(pipex, exec, exec->env, current);
 	else
 		more_commands(pipex, current, exec, exec->env);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, signal_handler);
 }

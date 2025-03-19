@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:52:09 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/16 20:57:19 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 20:54:09 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ int	run_shell(t_buit_in *exec)
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			exec->status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			exec->status = 128 + WTERMSIG(status);
 	}
+	signal(SIGINT, signal_handler);
 	return (exec->status);
 }
 

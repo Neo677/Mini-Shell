@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:47:28 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 10:47:29 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 19:13:28 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,10 @@ int	ft_exit(t_buit_in *exec, char **tab)
 			if (num < 0)
 				num += 256;
 		}
+		exec->exit_bh = 1;
+		exec->status = num;
+		return (num);
 	}
-	exec->exit_bh = 1;
-	exec->status = num;
+	exec->exit_bh = 2;
 	return (num);
 }

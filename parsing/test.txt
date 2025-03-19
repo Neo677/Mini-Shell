@@ -1,0 +1,51 @@
+CTRL_C
+
+ctrl-C -> ctrl-D -> echo $? -> 130
+
+ctrl-C -> exit -> echo $? -> 130
+
+ctrl-C -> exit 55 -> echo $? -> 55
+
+ctrl-C -> exit aa -> echo $? -> 2
+
+
+COMMAND_NOT_FOUND
+
+lsss -> ctrl-D -> echo $? -> 127
+
+lsss -> exit -> echo $? -> 127
+
+lsss -> exit 55 -> echo $? -> 55
+
+lsss -> exit aa -> echo $? -> 2
+
+
+HERE_DOC
+
+<< 1 -> ctrl-C -> ctrl->D -> echo $? -> 130
+
+<< 1 -> ctrl-D -> ctrl->D -> echo $? -> 0
+
+
+CAT
+
+cat -> ctrl-C -> ctrl->D -> echo $? -> 130
+
+cat -> ctrl-\ -> ctrl->D -> echo $? -> 131
+
+
+MINISHELL
+
+./minishell -> ctrl-C -> ctrl-D -> echo $? -> 130
+
+./minishell -> ctrl-C -> exit -> echo $? -> 130
+
+./minishell -> ctrl-C -> exit 55 -> echo $? -> 55
+
+./minishell -> ctrl-C -> exit aa -> echo $? -> 2
+
+
+./minishell -> ctrl-C -> ctrl-D -> ctrl-D -> echo $? -> 130
+
+
+lors d'un heredoc ajouter le texte a l'interieur a l'historique

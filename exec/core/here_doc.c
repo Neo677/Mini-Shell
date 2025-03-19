@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:40 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/19 18:32:54 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 18:46:56 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,9 @@ void	process_heredoc_token(t_buit_in *exec, t_pipex *pipex, t_token *current,
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-	{
 		exec->status = WEXITSTATUS(status);
-		g_signal = exec->status;
-	}
+	else if (WIFSIGNALED(status))
+		exec->status = 128 + WTERMSIG(status);
 	pipex->filename_hd[*i] = ft_strdup(filename);
 	(*i)++;
 	free(filename);

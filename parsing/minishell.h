@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/19 18:37:07 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 22:01:15 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,11 +173,8 @@ void						ft_free_commande_lst(t_command *command);
 void						ft_main_free(t_command *cmd, t_redirections *redir,
 								t_token *head);
 
-void						signal_handler(int sig);
-void						signal_handler2(int sig);
 void						setup_shell_signals(void);
 
-void						signal_handler_exec(int sig);
 void						setup_exec_signals(void);
 void						setup_child_signals(void);
 void						setup_heredoc_signals(void);
