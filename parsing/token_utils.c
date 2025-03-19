@@ -101,8 +101,6 @@ void	ft_add_token(t_token **head, t_token *new_token)
 	current->next = new_token;
 }
 
-//      find the limits of a token base on spaces or delim
-
 char	*ft_get_next_token(const char **input)
 {
 	const char	*start;

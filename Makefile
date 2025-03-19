@@ -52,7 +52,6 @@ SRCS =	parsing/add_arguments.c \
 		parsing/token_handle.c \
 		parsing/token_utils.c \
 		parsing/utils_main.c \
-		parsing/utils_main2.c \
 		parsing/utils.c \
 		parsing/utils_2.c \
 		parsing/syntax_before.c \

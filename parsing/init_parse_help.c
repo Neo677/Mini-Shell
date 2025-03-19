@@ -16,7 +16,7 @@ int	ft_free_process_line(t_buit_in *exec, t_pipex *pipex, t_command **cmd_lst,
 		t_token *token)
 {
 	util_proc(exec, token, pipex);
-	clear_history();
+	rl_clear_history();
 	ft_free_commande_lst(*cmd_lst);
 	*cmd_lst = NULL;
 	return (exec->status);
