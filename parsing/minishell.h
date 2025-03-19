@@ -63,7 +63,7 @@ the easyes way to split the input is :
 	struct s_command *next == ptr for the next command (pipeline)
 */
 
-extern int		g_signal;
+extern int					g_signal;
 
 typedef enum e_token_type
 {
