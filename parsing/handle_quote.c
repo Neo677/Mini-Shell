@@ -92,8 +92,8 @@ char	*ft_strdup_v2_quote(const char *src)
 
 int	ft_handle_quotes(t_parse_context *ctx)
 {
-	char	*quote;
-	int		ret;
+	char		*quote;
+	int			ret;
 
 	ret = 0;
 	quote = build_quote_content(ctx);

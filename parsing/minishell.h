@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 05:01:29 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/18 14:12:42 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 18:37:07 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <time.h>
 # include <unistd.h>
 
+extern int					g_signal;
 /*
 https://segfault42.github.io/posts/minishell/
 				🚨    🚨    🚨
@@ -62,8 +63,6 @@ the easyes way to split the input is :
 	int 	p_pipe ==  1 si un pipe suit cette commande
 	struct s_command *next == ptr for the next command (pipeline)
 */
-
-extern int					g_signal;
 
 typedef enum e_token_type
 {

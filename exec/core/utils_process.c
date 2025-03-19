@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:54 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/18 19:22:39 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 18:30:07 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	no_built_in(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 	}
 	if (WIFEXITED(pipex->status))
 		exec->status = WEXITSTATUS(pipex->status);
+	else if (WIFSIGNALED(pipex->status))
+		exec->status = 128 + WTERMSIG(pipex->status);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
 	return (0);

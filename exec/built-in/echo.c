@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:47:19 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/14 17:52:25 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 11:27:22 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	check_option_echo(char *str)
 	if (str[0] == '-')
 	{
 		i++;
+		if (!str[i])
+			return (1);
 		while (str[i])
 		{
 			if (str[i] != 'n' && str[i] != 'e')

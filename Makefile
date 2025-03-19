@@ -6,7 +6,7 @@
 #    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 17:24:52 by thobenel          #+#    #+#              #
-#    Updated: 2025/03/18 14:06:56 by dpascal          ###   ########.fr        #
+#    Updated: 2025/03/19 18:34:16 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,6 +91,7 @@ SRCS =	parsing/add_arguments.c \
 		exec/core/init_var.c \
 		exec/core/process.c \
 		exec/core/redir.c \
+		exec/core/signal.c \
 		exec/core/split.c \
 		exec/core/utils_cmd.c \
 		exec/core/utils_error.c \

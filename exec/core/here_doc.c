@@ -6,25 +6,11 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:40 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/18 19:20:23 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 18:32:54 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/exec.h"
-
-void	signal_handler3(int sig)
-{
-	if (sig == SIGINT)
-	{
-		g_signal = 130;
-		printf("\n");
-		close(STDIN_FILENO);
-	}
-	else if (sig == SIGQUIT)
-	{
-		printf("Quit (core dumped)\n");
-	}
-}
 
 void	while_hd(t_pipex *pipex, t_token *current, int heredoc_fd)
 {
@@ -56,6 +42,7 @@ void	process_heredoc_token(t_buit_in *exec, t_pipex *pipex, t_token *current,
 {
 	pid_t	pid;
 	int		heredoc_fd;
+	int		status;
 	char	*filename;
 
 	filename = heredoc_name(*i);
@@ -67,14 +54,14 @@ void	process_heredoc_token(t_buit_in *exec, t_pipex *pipex, t_token *current,
 	{
 		while_hd(pipex, current, heredoc_fd);
 		close(heredoc_fd);
-		exit(0);
+		exit(g_signal);
 	}
-	else if (pid > 0)
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
 	{
-		waitpid(pid, NULL, 0);
-		close(heredoc_fd);
+		exec->status = WEXITSTATUS(status);
+		g_signal = exec->status;
 	}
-	exec->status = g_signal;
 	pipex->filename_hd[*i] = ft_strdup(filename);
 	(*i)++;
 	free(filename);
