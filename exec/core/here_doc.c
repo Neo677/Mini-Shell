@@ -6,11 +6,13 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:40 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/18 19:20:23 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 11:25:50 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/exec.h"
+
+extern int	g_signal;
 
 void	signal_handler3(int sig)
 {
@@ -40,6 +42,7 @@ void	while_hd(t_pipex *pipex, t_token *current, int heredoc_fd)
 		line = readline(">");
 		if (g_signal == 130)
 		{
+			printf("signal1 = %d\n", g_signal);
 			if (line)
 				free(line);
 			break ;
@@ -47,6 +50,7 @@ void	while_hd(t_pipex *pipex, t_token *current, int heredoc_fd)
 		if (end_while_hd(pipex, current, heredoc_fd, line) == 1)
 			return ;
 	}
+	printf("signal2 = %d\n", g_signal);
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdin);
 }
@@ -56,6 +60,7 @@ void	process_heredoc_token(t_buit_in *exec, t_pipex *pipex, t_token *current,
 {
 	pid_t	pid;
 	int		heredoc_fd;
+	int		status;
 	char	*filename;
 
 	filename = heredoc_name(*i);
@@ -67,14 +72,14 @@ void	process_heredoc_token(t_buit_in *exec, t_pipex *pipex, t_token *current,
 	{
 		while_hd(pipex, current, heredoc_fd);
 		close(heredoc_fd);
-		exit(0);
+		exit(g_signal);
 	}
-	else if (pid > 0)
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
 	{
-		waitpid(pid, NULL, 0);
-		close(heredoc_fd);
+		exec->status = WEXITSTATUS(status);
+		g_signal = exec->status;
 	}
-	exec->status = g_signal;
 	pipex->filename_hd[*i] = ft_strdup(filename);
 	(*i)++;
 	free(filename);
