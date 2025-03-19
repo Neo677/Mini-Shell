@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:50 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/19 22:04:47 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 22:56:24 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 int	child_process(t_pipex *pipex, t_buit_in *exec, char **env,
 		t_command *current)
 {
-	signal(SIGQUIT, signal_handler4);
-	signal(SIGINT, signal_handler4);
 	if (change_dir(exec, current, pipex) == 1 || !(current->arg))
 		exit(1);
 	if (current->redirections && check_dir_in(current) != 0)
@@ -71,11 +69,9 @@ int	while_commands(t_pipex *pipex, t_buit_in *exec, char **env,
 	if (pipex->i < pipex->cmd_count - 1)
 	{
 		if (pipe(pipex->pipe_fd) == -1)
-		{
-			perror("pipe");
-			return (exec->status = EXIT_FAILURE);
-		}
+			return (perror("pipe"), exec->status = EXIT_FAILURE);
 	}
+	setup_signal_more(*current);
 	exec->i = count_heredoc(exec, *current);
 	pipex->pid[pipex->i] = fork();
 	if (pipex->pid[pipex->i] < 0)
@@ -115,7 +111,6 @@ int	more_commands(t_pipex *pipex, t_command *current, t_buit_in *exec,
 		pipex->i++;
 	}
 	free(pipex->pid);
-	signal(SIGQUIT, SIG_IGN);
 	return (exec->status);
 }
 
@@ -123,7 +118,6 @@ void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, t_env *env_cpy)
 {
 	t_command	*current;
 
-	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, signal_handler);
 	signal(SIGINT, signal_handler2);
 	current = cmd;
@@ -136,6 +130,6 @@ void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, t_env *env_cpy)
 		one_command(pipex, exec, exec->env, current);
 	else
 		more_commands(pipex, current, exec, exec->env);
-	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 }

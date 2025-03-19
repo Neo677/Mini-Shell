@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/19 22:00:48 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 22:56:50 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,6 +319,7 @@ int								count_t_env(t_env *env_cpy);
 char							**change_t_env_to_tab(t_env *env_cpy);
 int								count_heredoc(t_buit_in *exec,
 									t_command *current);
+void							setup_signal_more(t_command *current);
 
 /*  UTILS  */
 int								ft_strchr_exec(char *str, char c);

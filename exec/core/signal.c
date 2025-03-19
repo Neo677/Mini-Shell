@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 18:32:43 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/19 22:05:52 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 22:52:04 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ void	signal_handler4(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_signal = 0;
+		g_signal = 130;
 	}
 	else if (sig == SIGQUIT)
 	{
-		g_signal = 0;
+		g_signal = 131;
 	}
 }

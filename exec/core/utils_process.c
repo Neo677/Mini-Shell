@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:54 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/19 21:33:05 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 22:57:09 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,13 @@ int	count_heredoc(t_buit_in *exec, t_command *current)
 		redirection = redirection->next;
 	}
 	return (exec->i);
+}
+
+void	setup_signal_more(t_command *current)
+{
+	if (ft_strcmp(current->arg[0], "more") == 0)
+	{
+		signal(SIGQUIT, signal_handler4);
+		signal(SIGINT, signal_handler4);
+	}
 }
