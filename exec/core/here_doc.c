@@ -6,63 +6,55 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:40 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/17 10:22:44 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:20:23 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/exec.h"
 
-void	init_hd(t_token *token, t_pipex *pipex)
+void	signal_handler3(int sig)
 {
-	t_token	*current;
-	int		i;
-
-	current = token;
-	i = 0;
-	while (current)
+	if (sig == SIGINT)
 	{
-		if (current->type == 5 && current->next->type == 0)
-			i++;
-		current = current->next;
+		g_signal = 130;
+		printf("\n");
+		close(STDIN_FILENO);
 	}
-	if (i > 0)
+	else if (sig == SIGQUIT)
 	{
-		pipex->filename_hd = malloc(sizeof(char *) * (i + 1));
-		if (!pipex->filename_hd)
-			return ;
-		pipex->filename_hd[i] = NULL;
+		printf("Quit (core dumped)\n");
 	}
-	else
-		pipex->filename_hd = NULL;
 }
 
 void	while_hd(t_pipex *pipex, t_token *current, int heredoc_fd)
 {
+	int		saved_stdin;
 	char	*line;
 
+	signal(SIGINT, signal_handler3);
+	saved_stdin = dup(STDIN_FILENO);
+	g_signal = 0;
 	while (1)
 	{
 		pipex->line_hd++;
 		line = readline(">");
-		if (line == NULL)
+		if (g_signal == 130)
 		{
-			ft_printf_fd(2, HD_1 HD_2, pipex->line_hd, current->next->value);
-			free(line);
-			return ;
+			if (line)
+				free(line);
+			break ;
 		}
-		if (ft_strcmp(line, current->next->value) == 0)
-		{
-			free(line);
+		if (end_while_hd(pipex, current, heredoc_fd, line) == 1)
 			return ;
-		}
-		write(heredoc_fd, line, ft_strlen_dp(line));
-		write(heredoc_fd, "\n", 1);
-		free(line);
 	}
+	dup2(saved_stdin, STDIN_FILENO);
+	close(saved_stdin);
 }
 
-void	process_heredoc_token(t_pipex *pipex, t_token *current, int *i)
+void	process_heredoc_token(t_buit_in *exec, t_pipex *pipex, t_token *current,
+		int *i)
 {
+	pid_t	pid;
 	int		heredoc_fd;
 	char	*filename;
 
@@ -70,37 +62,53 @@ void	process_heredoc_token(t_pipex *pipex, t_token *current, int *i)
 	if (access(filename, F_OK) == 0)
 		unlink(filename);
 	heredoc_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	while_hd(pipex, current, heredoc_fd);
-	close(heredoc_fd);
+	pid = fork();
+	if (pid == 0)
+	{
+		while_hd(pipex, current, heredoc_fd);
+		close(heredoc_fd);
+		exit(0);
+	}
+	else if (pid > 0)
+	{
+		waitpid(pid, NULL, 0);
+		close(heredoc_fd);
+	}
+	exec->status = g_signal;
 	pipex->filename_hd[*i] = ft_strdup(filename);
 	(*i)++;
 	free(filename);
 }
 
-void	set_while_hd(t_pipex *pipex, t_token *current)
+void	set_while_hd(t_buit_in *exec, t_pipex *pipex, t_token *current)
 {
 	int	i;
 
 	i = 0;
-	setup_heredoc_signals();
 	while (current)
 	{
 		if (current->type == 5)
 		{
 			if (current->next && current->next->type == 0)
-				process_heredoc_token(pipex, current, &i);
+				process_heredoc_token(exec, pipex, current, &i);
+			if (g_signal == 130)
+			{
+				pipex->filename_hd[i] = NULL;
+				break ;
+			}
 		}
 		current = current->next;
 	}
-	restore_shell_signals();
 }
 
-int	check_heredoc(t_token *token, t_pipex *pipex)
+int	check_heredoc(t_buit_in *exec, t_token *token, t_pipex *pipex)
 {
 	t_token	*current;
 
+	signal(SIGINT, SIG_IGN);
 	current = token;
 	init_hd(token, pipex);
-	set_while_hd(pipex, current);
+	set_while_hd(exec, pipex, current);
+	signal(SIGINT, signal_handler);
 	return (0);
 }

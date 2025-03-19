@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/17 09:28:59 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:22:14 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_built_in
 	char						**tab_export;
 	char						*value_export;
 	int							status;
+	int							i;
 }								t_buit_in;
 
 typedef struct s_pipex
@@ -165,12 +166,6 @@ void							init_var_builtin(t_buit_in *exec);
 int								pwd_with_cd(t_env **env, int cd);
 void							ft_pwd(t_env **env, int cd);
 
-/*  SIGNAL  */
-void							signal_handler(int sig);
-void							signal_handler2(int sig);
-void							setup_heredoc_signals(void);
-void							restore_shell_signals(void);
-
 /*  SPLIT_VAR  */
 int								ft_strlen_c(char *str, int i, char c);
 char							**init_split_in_two(char *str, char c);
@@ -242,12 +237,15 @@ void							close_file(t_pipex *pipex);
 void							free_error(t_pipex *pipex, int key_error);
 
 /*  HERE_DOC  */
-char							*heredoc_name(int i);
-void							init_hd(t_token *token, t_pipex *pipex);
+void							signal_handler3(int sig);
 void							while_hd(t_pipex *pipex, t_token *current,
 									int heredoc_fd);
-void							set_while_hd(t_pipex *pipex, t_token *current);
-int								check_heredoc(t_token *token, t_pipex *pipex);
+void							process_heredoc_token(t_buit_in *exec,
+									t_pipex *pipex, t_token *current, int *i);
+void							set_while_hd(t_buit_in *exec, t_pipex *pipex,
+									t_token *current);
+int								check_heredoc(t_buit_in *exec, t_token *token,
+									t_pipex *pipex);
 
 /*  INIT_VAR  */
 void							init_var(t_pipex *pipex);
@@ -270,7 +268,7 @@ void							process(t_pipex *pipex, t_command *cmd,
 void							check_redir_2(t_buit_in *exec, t_pipex *pipex,
 									t_redirections *redirection);
 void							check_dir_5(t_buit_in *exec, t_pipex *pipex,
-									t_redirections *redirection, int *i);
+									t_redirections *redirection);
 int								redir_input(t_buit_in *exec, t_command *cmd,
 									t_pipex *pipex);
 void							check_n_change_out(t_buit_in *exec,
@@ -302,11 +300,19 @@ void							err_execve(t_buit_in *exec, t_pipex *pipex,
 char							*ft_join_pipex(char *join, char *s1, char *s2);
 char							*ft_strjoin_pipex(char *s1, char *s2);
 
+/*  UTILS_HEREDOC  */
+void							init_hd(t_token *token, t_pipex *pipex);
+int								end_while_hd(t_pipex *pipex, t_token *current,
+									int heredoc_fd, char *line);
+char							*heredoc_name(int i);
+
 /*  UTILS_PROCESS  */
 int								no_built_in(t_pipex *pipex, t_buit_in *exec,
 									char **env, t_command *current);
 int								count_t_env(t_env *env_cpy);
 char							**change_t_env_to_tab(t_env *env_cpy);
+int								count_heredoc(t_buit_in *exec,
+									t_command *current);
 
 /*  UTILS  */
 int								ft_strchr_exec(char *str, char c);

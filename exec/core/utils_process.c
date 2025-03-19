@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:54 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/17 07:46:02 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:22:39 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,20 @@ char	**change_t_env_to_tab(t_env *env_cpy)
 	}
 	tab[i] = NULL;
 	return (tab);
+}
+
+int	count_heredoc(t_buit_in *exec, t_command *current)
+{
+	t_redirections	*redirection;
+
+	redirection = current->redirections;
+	if (!redirection)
+		return (0);
+	while (redirection)
+	{
+		if (redirection->type == 5)
+			exec->i++;
+		redirection = redirection->next;
+	}
+	return (exec->i);
 }
