@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:00 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 10:49:01 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:22:21 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,22 @@ void	check_redir_2(t_buit_in *exec, t_pipex *pipex,
 }
 
 void	check_dir_5(t_buit_in *exec, t_pipex *pipex,
-		t_redirections *redirection, int *i)
+		t_redirections *redirection)
 {
 	if (redirection->type == 5)
 	{
-		if (pipex->filename_hd && pipex->filename_hd[*i])
+		if (pipex->filename_hd && pipex->filename_hd[exec->i])
 		{
-			pipex->infile = open(pipex->filename_hd[*i], O_RDONLY,
-					0644);
+			pipex->infile = open(pipex->filename_hd[exec->i], O_RDONLY, 0644);
 			if (pipex->infile < 0)
 			{
-				perror(pipex->filename_hd[*i]);
+				perror(pipex->filename_hd[exec->i]);
 				exec->status = EXIT_FAILURE;
 				return ;
 			}
 			dup2(pipex->infile, STDIN_FILENO);
 			close(pipex->infile);
-			(*i)++;
+			exec->i++;
 		}
 	}
 }
@@ -53,9 +52,7 @@ void	check_dir_5(t_buit_in *exec, t_pipex *pipex,
 int	redir_input(t_buit_in *exec, t_command *cmd, t_pipex *pipex)
 {
 	t_redirections	*redirection;
-	int				i;
 
-	i = 0;
 	redirection = cmd->redirections;
 	if (!redirection)
 		return (EXIT_FAILURE);
@@ -64,7 +61,7 @@ int	redir_input(t_buit_in *exec, t_command *cmd, t_pipex *pipex)
 		check_redir_2(exec, pipex, redirection);
 		if (exec->status == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		check_dir_5(exec, pipex, redirection, &i);
+		check_dir_5(exec, pipex, redirection);
 		if (exec->status == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		redirection = redirection->next;
@@ -87,7 +84,7 @@ void	check_n_change_out(t_buit_in *exec, t_pipex *pipex, t_redirections *dir)
 	}
 	if (dir->type == 4)
 	{
-		pipex->outfile = open(dir->file, O_CREAT | O_APPEND | O_WRONLY, 0644);
+		pipex->outfile = open(dir->file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 		if (pipex->outfile < 0)
 		{
 			exec->status = EXIT_FAILURE;

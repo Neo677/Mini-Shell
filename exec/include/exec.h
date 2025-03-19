@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 10:54:07 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:22:14 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 # include "../libft/printf/ft_printf.h"
 # include <errno.h>
 # include <fcntl.h>
-# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/stat.h>
@@ -34,6 +34,8 @@
 # define CMD_EXEC2 "usage: . filename [arguments]\n"
 # define HD_1 "bash: warning: here-document at line %d "
 # define HD_2 "delimited by end-of-file (wanted `%s')\n"
+# define PATH_1 "bash: [%s]: No such file or directory\nbash: sed: No such "
+# define PATH_2 "file or directory\nbash: logger: No such file or directory\n"
 
 typedef struct s_env
 {
@@ -46,8 +48,8 @@ typedef struct s_env
 typedef struct s_built_in
 {
 	t_env						*env_cpy;
+	char						**env;
 	t_env						*export_cpy;
-	char						**env_dup;
 	char						**tab;
 	char						*input;
 	int							cd;
@@ -60,13 +62,13 @@ typedef struct s_built_in
 	char						**tab_export;
 	char						*value_export;
 	int							status;
+	int							i;
 }								t_buit_in;
 
 typedef struct s_pipex
 {
 	int							infile;
 	int							outfile;
-	int							one_cmd;
 	char						**paths;
 	char						*path;
 	char						*paths_cmd;
@@ -77,7 +79,7 @@ typedef struct s_pipex
 	int							prev_pipe;
 	int							cmd_count;
 	int							status;
-	pid_t						pid;
+	pid_t						*pid;
 	int							i;
 }								t_pipex;
 
@@ -164,10 +166,6 @@ void							init_var_builtin(t_buit_in *exec);
 int								pwd_with_cd(t_env **env, int cd);
 void							ft_pwd(t_env **env, int cd);
 
-/*  SIGNAL  */
-void							signal_handler(int sig);
-void							signal_handler2(int sig);
-
 /*  SPLIT_VAR  */
 int								ft_strlen_c(char *str, int i, char c);
 char							**init_split_in_two(char *str, char c);
@@ -215,7 +213,8 @@ int								change_dir_in(t_buit_in *exec,
 									t_redirections *current);
 int								change_dir_out(t_buit_in *exec,
 									t_redirections *current);
-int								change_dir(t_buit_in *exec, t_command *cmd);
+int								change_dir(t_buit_in *exec, t_command *cmd,
+									t_pipex *pipex);
 
 /*  CHECK_DIR  */
 int								check_dir_out(t_command *cmd);
@@ -229,7 +228,7 @@ char							*find_cmd(t_buit_in *exec, t_pipex *pipex,
 char							*find_path(t_buit_in *exec, t_pipex *pipex,
 									char *cmd, char **envp);
 void							execute_cmd(t_buit_in *exec, t_pipex *pipex,
-									char **arg, char **envp);
+									char **arg, char **env);
 
 /*  FREE_EXEC  */
 void							free_tab(char **tab);
@@ -238,16 +237,19 @@ void							close_file(t_pipex *pipex);
 void							free_error(t_pipex *pipex, int key_error);
 
 /*  HERE_DOC  */
-char							*heredoc_name(int i);
-void							init_hd(t_token *token, t_pipex *pipex);
+void							signal_handler3(int sig);
 void							while_hd(t_pipex *pipex, t_token *current,
 									int heredoc_fd);
-void							set_while_hd(t_pipex *pipex, t_token *current);
-int								check_heredoc(t_token *token, t_pipex *pipex);
+void							process_heredoc_token(t_buit_in *exec,
+									t_pipex *pipex, t_token *current, int *i);
+void							set_while_hd(t_buit_in *exec, t_pipex *pipex,
+									t_token *current);
+int								check_heredoc(t_buit_in *exec, t_token *token,
+									t_pipex *pipex);
 
 /*  INIT_VAR  */
 void							init_var(t_pipex *pipex);
-void							init_process(t_pipex *pipex, t_command *cmd);
+int								init_process(t_pipex *pipex, t_command *cmd);
 
 /*  PROCESS  */
 int								one_command(t_pipex *pipex, t_buit_in *exec,
@@ -260,17 +262,13 @@ int								more_commands(t_pipex *pipex,
 									t_command *current, t_buit_in *exec,
 									char **env);
 void							process(t_pipex *pipex, t_command *cmd,
-									t_buit_in *exec, char **env);
-
-/*  PROCESS  */
-int								no_built_in(t_pipex *pipex, t_buit_in *exec,
-									char **env, t_command *current);
+									t_buit_in *exec, t_env *env_cpy);
 
 /*  REDIR  */
 void							check_redir_2(t_buit_in *exec, t_pipex *pipex,
 									t_redirections *redirection);
 void							check_dir_5(t_buit_in *exec, t_pipex *pipex,
-									t_redirections *redirection, int *i);
+									t_redirections *redirection);
 int								redir_input(t_buit_in *exec, t_command *cmd,
 									t_pipex *pipex);
 void							check_n_change_out(t_buit_in *exec,
@@ -287,9 +285,34 @@ char							**ft_split_init_pipex(t_pipex *pipex, char *str,
 char							**ft_split_pipex(t_pipex *pipex, char *str,
 									char c);
 
+/*  UTILS_CMD  */
+int								check_slash(char *str, char c);
+void							error_file(t_buit_in *exec, t_pipex *pipex,
+									char *cmd);
+void							error_access(t_buit_in *exec, t_pipex *pipex,
+									char *cmd);
+char							*error_execute_cmd(t_buit_in *exec,
+									t_pipex *pipex, char *cmd);
+void							err_execve(t_buit_in *exec, t_pipex *pipex,
+									char **arg);
+
 /*  UTILS_ERROR  */
 char							*ft_join_pipex(char *join, char *s1, char *s2);
 char							*ft_strjoin_pipex(char *s1, char *s2);
+
+/*  UTILS_HEREDOC  */
+void							init_hd(t_token *token, t_pipex *pipex);
+int								end_while_hd(t_pipex *pipex, t_token *current,
+									int heredoc_fd, char *line);
+char							*heredoc_name(int i);
+
+/*  UTILS_PROCESS  */
+int								no_built_in(t_pipex *pipex, t_buit_in *exec,
+									char **env, t_command *current);
+int								count_t_env(t_env *env_cpy);
+char							**change_t_env_to_tab(t_env *env_cpy);
+int								count_heredoc(t_buit_in *exec,
+									t_command *current);
 
 /*  UTILS  */
 int								ft_strchr_exec(char *str, char c);

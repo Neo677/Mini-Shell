@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:50 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 11:45:36 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/19 18:31:09 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
-	if (change_dir(exec, current) == 1)
+	if (change_dir(exec, current, pipex) == 1 || !(current->arg))
 		return (1);
 	redir_input(exec, current, pipex);
 	redir_output(exec, current, pipex);
@@ -31,6 +31,7 @@ int	one_command(t_pipex *pipex, t_buit_in *exec, char **env, t_command *current)
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdout);
 	close(saved_stdin);
+	free(pipex->pid);
 	return (0);
 }
 
@@ -39,7 +40,7 @@ int	child_process(t_pipex *pipex, t_buit_in *exec, char **env,
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, signal_handler);
-	if (change_dir(exec, current) == 1)
+	if (change_dir(exec, current, pipex) == 1 || !(current->arg))
 		exit(1);
 	if (current->redirections && check_dir_in(current) != 0)
 		redir_input(exec, current, pipex);
@@ -74,13 +75,14 @@ int	while_commands(t_pipex *pipex, t_buit_in *exec, char **env,
 			return (exec->status = EXIT_FAILURE);
 		}
 	}
-	pipex->pid = fork();
-	if (pipex->pid < 0)
+	exec->i = count_heredoc(exec, *current);
+	pipex->pid[pipex->i] = fork();
+	if (pipex->pid[pipex->i] < 0)
 	{
 		perror("fork");
 		return (exec->status = EXIT_FAILURE);
 	}
-	if (pipex->pid == 0)
+	if (pipex->pid[pipex->i] == 0)
 		child_process(pipex, exec, env, *current);
 	if (pipex->prev_pipe != -1)
 		close(pipex->prev_pipe);
@@ -103,16 +105,20 @@ int	more_commands(t_pipex *pipex, t_command *current, t_buit_in *exec,
 	pipex->i = 0;
 	while (pipex->i < pipex->cmd_count)
 	{
-		wait(&pipex->status);
-		if (WIFEXITED(pipex->status))
+		if (waitpid(pipex->pid[pipex->i], &pipex->status, 0) == -1)
+			perror("waitpid");
+		else if (WIFEXITED(pipex->status))
 			exec->status = WEXITSTATUS(pipex->status);
+		else if (WIFSIGNALED(pipex->status))
+			exec->status = 128 + WTERMSIG(pipex->status);
 		pipex->i++;
 	}
+	free(pipex->pid);
 	signal(SIGQUIT, SIG_IGN);
 	return (exec->status);
 }
 
-void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
+void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, t_env *env_cpy)
 {
 	t_command	*current;
 
@@ -120,10 +126,13 @@ void	process(t_pipex *pipex, t_command *cmd, t_buit_in *exec, char **env)
 	signal(SIGQUIT, signal_handler);
 	signal(SIGINT, signal_handler2);
 	current = cmd;
-	init_process(pipex, cmd);
+	if (init_process(pipex, cmd) != 0)
+		return ;
+	exec->i = -1;
 	exec->status = 0;
+	exec->env = change_t_env_to_tab(env_cpy);
 	if (pipex->cmd_count == 1)
-		one_command(pipex, exec, env, current);
+		one_command(pipex, exec, exec->env, current);
 	else
-		more_commands(pipex, current, exec, env);
+		more_commands(pipex, current, exec, exec->env);
 }

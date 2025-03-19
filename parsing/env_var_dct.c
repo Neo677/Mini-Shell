@@ -87,5 +87,9 @@ char	*ft_extract_env_var(const char **input)
 		return (ft_extract_digit_var(input));
 	if (!ft_isalpha(**input) && **input != '_')
 		return (ft_strdup("$"));
-	return (ft_extract_alpha_var(input));
+	if (**input != '"' || **input != '\'')
+	{
+		return (ft_extract_alpha_var(input));
+	}
+	return (NULL);
 }

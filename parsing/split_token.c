@@ -62,7 +62,7 @@ int	ft_handle_operators(t_parse_context *ctx)
 {
 	char	*file;
 
-	if (!ft_handle_operator(ctx->head, ctx->input))
+	if (!ft_handle_operator(ctx->head, ctx->input, ctx))
 		return (0);
 	if (**ctx->input == '|')
 	{
@@ -70,7 +70,7 @@ int	ft_handle_operators(t_parse_context *ctx)
 		if (!*ctx->current)
 			return (ft_err_split_ope(*ctx->current, *ctx->head), 0);
 	}
-	else if (**ctx->input == '>' || **ctx->input == '<')
+	if ((**ctx->input == '>' || **ctx->input == '<'))
 	{
 		file = ft_get_next_token(ctx->input);
 		if (!file)
@@ -78,7 +78,7 @@ int	ft_handle_operators(t_parse_context *ctx)
 		if (!*ctx->current)
 			*ctx->current = ft_init_command(ctx->cmd_lst);
 		if (!ft_add_redirections_struct(*ctx->current,
-				ft_identify_token((char *)(*ctx->input)), file))
+				ft_identify_token((char *)(*ctx->input)), file, ctx))
 			return (free(file), ft_err_split_ope(*ctx->cmd_lst, *ctx->head), 0);
 		free(file);
 	}
@@ -113,6 +113,7 @@ int	ft_split_token(t_token **head, const char *input, t_env **env_cpy,
 	ctx.input_exec = input;
 	ctx.env_cpy = env_cpy;
 	ctx.last_token = NULL;
+	ctx.flag_heredoc = 0;
 	init_cmd_ctx(&ctx, &cmd_lst, &current);
 	ctx.exit_status = *last_exit_status;
 	if (!ft_check_syntax(input, &ctx))

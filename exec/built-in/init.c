@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:47:45 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 10:47:46 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/18 18:14:58 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,5 @@ void	init_var_builtin(t_buit_in *exec)
 	exec->tab_export = NULL;
 	exec->value_export = NULL;
 	exec->status = 0;
+	exec->i = 0;
 }

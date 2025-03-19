@@ -20,7 +20,6 @@ void	ft_setup_signal(void)
 
 void	ft_setup_env(t_buit_in *exec, char **env)
 {
-	exec->env_dup = env;
 	copy_env(env, &exec->env_cpy);
 	modify_node_value(&exec->env_cpy, "_", "/usr/bin/env");
 }

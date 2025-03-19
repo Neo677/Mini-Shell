@@ -36,10 +36,12 @@ int	ft_create_cmd_word(t_command **current, t_token *token, t_command **lst)
 	return (1);
 }
 
-int	ft_create_cmd_redirect(t_command **current, t_token *token, t_command **lst)
+int	ft_create_cmd_redirect(t_command **current, t_token *token, t_command **lst,
+		t_parse_context *ctx)
 {
-	const char	*file = token->next->value;
+	const char	*file;
 
+	file = token->next->value;
 	if (!current || !token || !lst)
 		return (0);
 	if (!(*current))
@@ -56,7 +58,7 @@ int	ft_create_cmd_redirect(t_command **current, t_token *token, t_command **lst)
 		ft_free_command_list(lst);
 		return (0);
 	}
-	if (!ft_add_redirections_struct(*current, token->type, file))
+	if (!ft_add_redirections_struct(*current, token->type, file, ctx))
 	{
 		ft_free_command_list(lst);
 		return (0);

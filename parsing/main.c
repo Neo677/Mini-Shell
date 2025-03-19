@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+void	setup_shell_signals(void)
+{
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_buit_in	exec;
@@ -26,7 +32,7 @@ int	main(int ac, char **av, char **env)
 	cmd_lst = NULL;
 	init_var_builtin(&exec);
 	init_var(&pipex);
-	ft_setup_signal();
+	setup_shell_signals();
 	ft_setup_env(&exec, env);
 	ft_intro();
 	while (1)
@@ -37,5 +43,5 @@ int	main(int ac, char **av, char **env)
 		else if (ret != 0 || exec.exit_bh == 1)
 			return (ret);
 	}
-	return (free_all(&exec), clear_history(), 0);
+	return (free_all(&exec), clear_history(), exec.status);
 }

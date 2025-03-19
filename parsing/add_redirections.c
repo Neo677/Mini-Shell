@@ -31,21 +31,50 @@
 	5) return a true (1)
 */
 
-int	ft_add_redirections_struct(t_command *cmd, int type, const char *file)
+static t_redirections	*create_redirection(int type, const char *file,
+		t_parse_context *ctx)
+{
+	t_redirections	*redir;
+
+	redir = malloc(sizeof(t_redirections));
+	if (!redir)
+	{
+		ft_printf_fd(2, "minishell: allocation error\n");
+		return (NULL);
+	}
+	redir->type = type;
+	if (type == TOKEN_HEREDOC)
+		redir->is_literal = 1;
+	else
+		redir->is_literal = 0;
+	if (redir->is_literal)
+		redir->file = ft_strdup_v2(file);
+	else
+		redir->file = ft_expand_variables(file, ctx);
+	if (!redir->file)
+	{
+		ft_printf_fd(2, "minishell: memory allocation error\n");
+		free(redir);
+		return (NULL);
+	}
+	redir->next = NULL;
+	return (redir);
+}
+
+int	ft_add_redirections_struct(t_command *cmd, int type, const char *file,
+		t_parse_context *ctx)
 {
 	t_redirections	*new_redir;
 	t_redirections	*current;
 
 	if (!cmd || !file)
-		return (ft_printf_fd(2, "minishell: syntax error near token\n"), 0);
-	new_redir = malloc(sizeof(t_redirections));
+	{
+		ft_printf_fd(2, "minishell: syntax error near token\n");
+		return (0);
+	}
+	new_redir = create_redirection(type, file, ctx);
 	if (!new_redir)
-		return (ft_printf_fd(2, "minishell: allocation error\n"), 0);
-	new_redir->type = type;
-	new_redir->file = ft_strdup_v2(file);
-	if (!new_redir->file)
-		return (ft_printf_fd(2, "minishell: memory allocation error\n"), 0);
-	new_redir->next = NULL;
+		return (0);
 	if (!cmd->redirections)
 		cmd->redirections = new_redir;
 	else

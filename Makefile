@@ -6,7 +6,7 @@
 #    By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 17:24:52 by thobenel          #+#    #+#              #
-#    Updated: 2025/03/12 08:34:11 by dpascal          ###   ########.fr        #
+#    Updated: 2025/03/19 18:34:16 by dpascal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,11 @@ LIBFT_MATE = $(LIBFT_DIR_MATE)/libftprintf.a
 READLINE = -lreadline
 
 SRCS =	parsing/add_arguments.c \
+		parsing/init_parsing.c \
+		parsing/init_parsing_two.c \
+		parsing/init_parse_help.c \
+		parsing/main.c \
+		parsing/main_use.c \
 		parsing/add_redirections.c \
 		parsing/create_command.c \
 		parsing/env_var_dct.c \
@@ -32,11 +37,9 @@ SRCS =	parsing/add_arguments.c \
 		parsing/expander_double.c \
 		parsing/eof_quote.c \
 		parsing/expander_use.c \
-		parsing/main.c \
-		parsing/main_use.c \
+		parsing/shell_process.c \
 		parsing/parse_token.c \
 		parsing/prompt.c \
-		parsing/init_parsing.c \
 		parsing/process_token.c \
 		parsing/handle_env.c \
 		parsing/handle_env_two.c \
@@ -44,11 +47,11 @@ SRCS =	parsing/add_arguments.c \
 		parsing/handle_quote.c \
 		parsing/build_quote.c \
 		parsing/handle_word.c \
+		parsing/handle_word_expand.c \
 		parsing/split_token.c \
 		parsing/token_handle.c \
 		parsing/token_utils.c \
 		parsing/utils_main.c \
-		parsing/utils_main2.c \
 		parsing/utils.c \
 		parsing/utils_2.c \
 		parsing/syntax_before.c \
@@ -58,7 +61,6 @@ SRCS =	parsing/add_arguments.c \
 		parsing/valid_token_two.c \
 		parsing/replace_env.c \
 		parsing/creat_command_utils.c \
-		parsing/matrix.c \
 		parsing/quote_utils.c \
 		parsing/pid.c \
 		parsing/create_command_use.c \
@@ -74,7 +76,6 @@ SRCS =	parsing/add_arguments.c \
 		exec/built-in/free_bh.c \
 		exec/built-in/init.c \
 		exec/built-in/pwd.c \
-		exec/built-in/signal.c \
 		exec/built-in/split_var.c \
 		exec/built-in/split.c \
 		exec/built-in/unset.c \
@@ -89,12 +90,15 @@ SRCS =	parsing/add_arguments.c \
 		exec/core/here_doc.c \
 		exec/core/init_var.c \
 		exec/core/process.c \
-		exec/core/process2.c \
 		exec/core/redir.c \
+		exec/core/signal.c \
 		exec/core/split.c \
+		exec/core/utils_cmd.c \
 		exec/core/utils_error.c \
+		exec/core/utils_heredoc.c \
+		exec/core/utils_process.c \
 		exec/core/utils.c \
-		exec/core/utils2.c
+		exec/core/utils2.c \
 
 OBJS = $(SRCS:.c=.o)
 
