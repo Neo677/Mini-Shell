@@ -6,13 +6,14 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:48:40 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/19 18:46:56 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/20 10:33:36 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/exec.h"
 
-void	while_hd(t_pipex *pipex, t_token *current, int heredoc_fd)
+void	while_hd(t_pipex *pipex, t_token *current, int heredoc_fd,
+		char *filename)
 {
 	int		saved_stdin;
 	char	*line;
@@ -26,12 +27,13 @@ void	while_hd(t_pipex *pipex, t_token *current, int heredoc_fd)
 		line = readline(">");
 		if (g_signal == 130)
 		{
+			heredoc_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 			if (line)
 				free(line);
 			break ;
 		}
 		if (end_while_hd(pipex, current, heredoc_fd, line) == 1)
-			return ;
+			break ;
 	}
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdin);
@@ -52,7 +54,7 @@ void	process_heredoc_token(t_buit_in *exec, t_pipex *pipex, t_token *current,
 	pid = fork();
 	if (pid == 0)
 	{
-		while_hd(pipex, current, heredoc_fd);
+		while_hd(pipex, current, heredoc_fd, filename);
 		close(heredoc_fd);
 		exit(g_signal);
 	}
@@ -77,9 +79,9 @@ void	set_while_hd(t_buit_in *exec, t_pipex *pipex, t_token *current)
 		{
 			if (current->next && current->next->type == 0)
 				process_heredoc_token(exec, pipex, current, &i);
-			if (g_signal == 130)
+			if (exec->status == 130)
 			{
-				pipex->filename_hd[i] = NULL;
+				exec->hd = 1;
 				break ;
 			}
 		}
@@ -91,6 +93,7 @@ int	check_heredoc(t_buit_in *exec, t_token *token, t_pipex *pipex)
 {
 	t_token	*current;
 
+	exec->hd = 0;
 	signal(SIGINT, SIG_IGN);
 	current = token;
 	init_hd(token, pipex);

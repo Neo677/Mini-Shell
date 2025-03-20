@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:20 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/12 10:49:21 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/20 10:32:07 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	clear_file(char **filename)
 		return ;
 	while (filename[i])
 	{
-		if (access(filename[i], F_OK) == 0)
+		if (filename[i] && access(filename[i], F_OK) == 0)
 			unlink(filename[i]);
 		free(filename[i]);
 		i++;

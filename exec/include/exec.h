@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:33 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/19 22:56:50 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/20 09:39:29 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_built_in
 	char						*value_export;
 	int							status;
 	int							i;
+	int							hd;
 }								t_buit_in;
 
 typedef struct s_pipex
@@ -238,7 +239,7 @@ void							free_error(t_pipex *pipex, int key_error);
 
 /*  HERE_DOC  */
 void							while_hd(t_pipex *pipex, t_token *current,
-									int heredoc_fd);
+									int heredoc_fd, char	*filename);
 void							process_heredoc_token(t_buit_in *exec,
 									t_pipex *pipex, t_token *current, int *i);
 void							set_while_hd(t_buit_in *exec, t_pipex *pipex,

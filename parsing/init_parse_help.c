@@ -6,7 +6,7 @@
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 11:31:01 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/19 20:50:10 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/20 09:43:40 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	process_cmd(t_buit_in *exec, t_shell_context *ctx, t_token *token)
 
 	check_heredoc(exec, token, ctx->pipex);
 	*(ctx->lst) = exec->status;
-	if (*(ctx->cmd_lst) && (*(ctx->cmd_lst))->arg)
+	if (*(ctx->cmd_lst) && (*(ctx->cmd_lst))->arg && exec->hd == 0)
 	{
 		process(ctx->pipex, *(ctx->cmd_lst), ctx->exec, ctx->exec->env_cpy);
 		free_tab(ctx->exec->env);

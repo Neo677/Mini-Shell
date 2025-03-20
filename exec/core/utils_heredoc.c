@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_heredoc                                      :+:      :+:    :+:   */
+/*   utils_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:01:18 by dpascal           #+#    #+#             */
-/*   Updated: 2025/03/18 14:01:21 by dpascal          ###   ########.fr       */
+/*   Updated: 2025/03/20 10:37:28 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	init_hd(t_token *token, t_pipex *pipex)
 		pipex->filename_hd = malloc(sizeof(char *) * (i + 1));
 		if (!pipex->filename_hd)
 			return ;
-		pipex->filename_hd[i] = NULL;
+		ft_memset(pipex->filename_hd, 0, sizeof(char *) * (i + 1));
 	}
 	else
 		pipex->filename_hd = NULL;

@@ -49,3 +49,10 @@ MINISHELL
 
 
 lors d'un heredoc ajouter le texte a l'interieur a l'historique
+
+
+
+
+echo << 1 test > test1
+> 1
+affiche test dans test1
