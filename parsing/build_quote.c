@@ -83,6 +83,7 @@ int	merge_with_next(t_parse_context *ctx, char *quote)
 	char	*merged;
 
 	merged = ft_get_next_token(ctx->input);
+	printf("merged == %s\n", merged);
 	free(quote);
 	if (!merged)
 		return (0);
