@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_quote.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thobenel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dpascal <dpascal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:32:43 by thobenel          #+#    #+#             */
-/*   Updated: 2025/03/03 09:32:44 by thobenel         ###   ########.fr       */
+/*   Updated: 2025/03/20 12:15:10 by dpascal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	add_quote_as_new_token(t_parse_context *ctx, char *quote_content)
 		ft_err_split(*ctx->cmd_lst, *ctx->head);
 		return (0);
 	}
+	ctx->last_token = ft_last_token(*ctx->head);
 	return (free(quote_content), 1);
 }
 
@@ -92,14 +93,28 @@ char	*ft_strdup_v2_quote(const char *src)
 
 int	ft_handle_quotes(t_parse_context *ctx)
 {
+	const char	*qstart;
+	char		pr;
+	char		next;
 	char		*quote;
 	int			ret;
 
-	ret = 0;
+	pr = ' ';
+	next = ' ';
+	qstart = *ctx->input;
 	quote = build_quote_content(ctx);
 	if (!quote)
 		return (0);
-	ret = add_quote_as_new_token(ctx, quote);
-	ctx->last_token = ft_last_token(*ctx->head);
+	if (qstart > ctx->input_exec)
+		pr = *(qstart - 1);
+	if (**ctx->input)
+		next = **ctx->input;
+	ret = 0;
+	if (!ft_isspace(pr) && !ft_isspace(next) && (pr != '<' && pr != '>'))
+		ret = merge_with_next(ctx, quote);
+	else if (!ft_isspace(pr) && ft_isspace(next) && (pr != '<' && pr != '>'))
+		ret = merge_quote_with_last(ctx, quote);
+	else
+		ret = add_quote_as_new_token(ctx, quote);
 	return (ret);
 }
